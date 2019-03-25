@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="DevInt2.External" Environment="DevInt2" Config="DevInt2" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonProductionServerRoles.xml</CommonRoleFile>
+  <machine Id="4" Name="FZDC2CAS300" ExternalIP="10.107.200.126" Role="CAS Server External 1">
+    <!--<ServerRole Include="IISSetup.CAS" Description="IIS Setup" Groups="CASC,Notifications" />-->
+    <ServerRole Description="FTP.EventLog.For.External.CASC" Include="FTP.EventLog.For.External.CASC" />
+    <ServerRole Description="CSC External Token Status Service" Include="CACC.External.TokenStatus.Service" />
+    <ServerRole Description="CSC External Authorisation Service" Include="CACC.External.Authorisation.Service" />
+    <ServerRole Description="CSC External Customer Service" Include="CACC.External.Customer.Service" />
+    <ServerRole Description="Notification Processor External Service" Include="Notification.Processor.ExternalService" />
+  </machine>
+  <machine Id="5" Name="FZDC2CAS301" ExternalIP="10.107.200.127" Role="CAS Server External 2">
+    <!--<ServerRole Include="IISSetup.CAS" Description="IIS Setup" Groups="CASC,Notifications" /> -->
+    <ServerRole Description="FTP.EventLog.For.External.CASC" Include="FTP.EventLog.For.External.CASC" /> 
+    <ServerRole Description="CSC External Token Status Service" Include="CACC.External.TokenStatus.Service" />
+    <ServerRole Description="CSC External Authorisation Service" Include="CACC.External.Authorisation.Service" />
+    <ServerRole Description="CSC External Customer Service" Include="CACC.External.Customer.Service" />
+    <ServerRole Description="Notification Processor External Service" Include="Notification.Processor.ExternalService" />
+  </machine>
+  <machine Id="6" Name="FZDC2CAS302" ExternalIP="10.107.200.128" Role="CAS Server External 3">
+    <!--<ServerRole Include="IISSetup.CAS" Description="IIS Setup" Groups="CASC,Notifications" /> -->
+    <ServerRole Description="FTP.EventLog.For.External.CASC" Include="FTP.EventLog.For.External.CASC" /> 
+    <ServerRole Description="CSC External Token Status Service" Include="CACC.External.TokenStatus.Service" />
+    <ServerRole Description="CSC External Authorisation Service" Include="CACC.External.Authorisation.Service" />
+    <ServerRole Description="CSC External Customer Service" Include="CACC.External.Customer.Service" />
+    <ServerRole Description="Notification Processor External Service" Include="Notification.Processor.ExternalService" />
+  </machine>
+  <machine Id="7" Name="FZDC2CAS303" ExternalIP="10.107.200.129" Role="CAS Server External 4">
+    <!--<ServerRole Include="IISSetup.CAS" Description="IIS Setup" Groups="CASC,Notifications" /> -->
+    <ServerRole Description="FTP.EventLog.For.External.CASC" Include="FTP.EventLog.For.External.CASC" /> 
+    <ServerRole Description="CSC External Token Status Service" Include="CACC.External.TokenStatus.Service" />
+    <ServerRole Description="CSC External Authorisation Service" Include="CACC.External.Authorisation.Service" />
+    <ServerRole Description="CSC External Customer Service" Include="CACC.External.Customer.Service" />
+    <ServerRole Description="Notification Processor External Service" Include="Notification.Processor.ExternalService" />
+  </machine>
+  <machine Id="8" Name="FZDC2CAS304" ExternalIP="10.107.200.130" Role="CAS Server External 5">
+    <!--<ServerRole Include="IISSetup.CAS" Description="IIS Setup" Groups="CASC,Notifications" /> -->
+    <ServerRole Description="FTP.EventLog.For.External.CASC" Include="FTP.EventLog.For.External.CASC" />
+    <ServerRole Description="CSC External Token Status Service" Include="CACC.External.TokenStatus.Service" />
+    <ServerRole Description="CSC External Authorisation Service" Include="CACC.External.Authorisation.Service" />
+    <ServerRole Description="CSC External Customer Service" Include="CACC.External.Customer.Service" />
+    <ServerRole Description="Notification Processor External Service" Include="Notification.Processor.ExternalService" />
+  </machine>
+  <machine Id="9" Name="FZDC2CAS305" ExternalIP="10.107.200.131" Role="CAS Server External 6">
+    <!--<ServerRole Include="IISSetup.CAS" Description="IIS Setup" Groups="CASC,Notifications" /> -->
+    <ServerRole Description="FTP.EventLog.For.External.CASC" Include="FTP.EventLog.For.External.CASC" /> 
+    <ServerRole Description="CSC External Token Status Service" Include="CACC.External.TokenStatus.Service" />
+    <ServerRole Description="CSC External Authorisation Service" Include="CACC.External.Authorisation.Service" />
+    <ServerRole Description="CSC External Customer Service" Include="CACC.External.Customer.Service" />
+    <ServerRole Description="Notification Processor External Service" Include="Notification.Processor.ExternalService" />
+  </machine>
+  <machine Id="10" Name="FZDC2CAS306" ExternalIP="10.107.200.132" Role="CAS Server External 7">
+    <!--<ServerRole Include="IISSetup.CAS" Description="IIS Setup" Groups="CASC,Notifications" /> -->
+    <ServerRole Description="FTP.EventLog.For.External.CASC" Include="FTP.EventLog.For.External.CASC" />
+    <ServerRole Description="CSC External Token Status Service" Include="CACC.External.TokenStatus.Service" />
+    <ServerRole Description="CSC External Authorisation Service" Include="CACC.External.Authorisation.Service" />
+    <ServerRole Description="CSC External Customer Service" Include="CACC.External.Customer.Service" />
+    <ServerRole Description="Notification Processor External Service" Include="Notification.Processor.ExternalService" />
+  </machine>
+  <machine Id="11" Name="FZDC2CAS307" ExternalIP="10.107.200.133" Role="CAS Server External 8">
+    <!--<ServerRole Include="IISSetup.CAS" Description="IIS Setup" Groups="CASC,Notifications" /> -->
+    <ServerRole Description="FTP.EventLog.For.External.CASC" Include="FTP.EventLog.For.External.CASC" />
+    <ServerRole Description="CSC External Token Status Service" Include="CACC.External.TokenStatus.Service" />
+    <ServerRole Description="CSC External Authorisation Service" Include="CACC.External.Authorisation.Service" />
+    <ServerRole Description="CSC External Customer Service" Include="CACC.External.Customer.Service" />
+    <ServerRole Description="Notification Processor External Service" Include="Notification.Processor.ExternalService" />
+  </machine>
+</configuration>

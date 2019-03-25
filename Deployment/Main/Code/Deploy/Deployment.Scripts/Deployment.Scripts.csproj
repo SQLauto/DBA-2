@@ -1,0 +1,906 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3DA47D64-C6F7-4C44-86DE-06914A00B32F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Deployment.Scripts</RootNamespace>
+    <AssemblyName>Deployment.Scripts</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Scripts|AnyCPU'">
+    <OutputPath>bin\Scripts\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DeploymentLogic|AnyCPU'">
+    <OutputPath>bin\DeploymentLogic\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DeploymentTool|AnyCPU'">
+    <OutputPath>bin\DeploymentTool\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Accounts\BaseLine.ServiceAccounts.xml">
+      <Link>Accounts\BaseLine.ServiceAccounts.xml</Link>
+    </Content>
+    <Content Include="..\Accounts\CASC.Azure.ServiceAccounts.xml">
+      <Link>Accounts\CASC.Azure.ServiceAccounts.xml</Link>
+    </Content>
+    <Content Include="..\Accounts\CubicA.ServiceAccounts.xml">
+      <Link>Accounts\CubicA.ServiceAccounts.xml</Link>
+    </Content>
+    <Content Include="..\Accounts\CubicB.ServiceAccounts.xml">
+      <Link>Accounts\CubicB.ServiceAccounts.xml</Link>
+    </Content>
+    <Content Include="..\Accounts\CubicC.ServiceAccounts.xml">
+      <Link>Accounts\CubicC.ServiceAccounts.xml</Link>
+    </Content>
+    <Content Include="..\Accounts\CubicD.ServiceAccounts.xml">
+      <Link>Accounts\CubicD.ServiceAccounts.xml</Link>
+    </Content>
+    <Content Include="..\Accounts\Dev.ServiceAccounts.xml">
+      <Link>Accounts\Dev.ServiceAccounts.xml</Link>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="..\Accounts\DevInt2.ServiceAccounts.xml">
+      <Link>Accounts\DevInt2.ServiceAccounts.xml</Link>
+    </Content>
+    <Content Include="..\Accounts\DevIntPerf.ServiceAccounts.xml">
+      <Link>Accounts\DevIntPerf.ServiceAccounts.xml</Link>
+    </Content>
+    <Content Include="..\Accounts\OneLondon.ServiceAccounts.xml">
+      <Link>Accounts\OneLondon.ServiceAccounts.xml</Link>
+    </Content>
+    <Content Include="..\Accounts\PreProd.ServiceAccounts.xml">
+      <Link>Accounts\PreProd.ServiceAccounts.xml</Link>
+    </Content>
+    <Content Include="..\Accounts\SiteA.ServiceAccounts.xml">
+      <Link>Accounts\SiteA.ServiceAccounts.xml</Link>
+    </Content>
+    <Content Include="..\Accounts\SiteB.ServiceAccounts.xml">
+      <Link>Accounts\SiteB.ServiceAccounts.xml</Link>
+    </Content>
+    <Content Include="..\Accounts\SoloMachine.ServiceAccounts.xml">
+      <Link>Accounts\SoloMachine.ServiceAccounts.xml</Link>
+    </Content>
+    <Content Include="..\Accounts\SSO.PreProd.ServiceAccounts.xml">
+      <Link>Accounts\SSO.PreProd.ServiceAccounts.xml</Link>
+    </Content>
+    <Content Include="..\Accounts\SSOProd.ServiceAccounts.xml">
+      <Link>Accounts\SSOProd.ServiceAccounts.xml</Link>
+    </Content>
+    <Content Include="..\Accounts\SSOProdB.ServiceAccounts.xml">
+      <Link>Accounts\SSOProdB.ServiceAccounts.xml</Link>
+    </Content>
+    <Content Include="..\Accounts\Staging.ServiceAccounts.xml">
+      <Link>Accounts\Staging.ServiceAccounts.xml</Link>
+    </Content>
+    <Content Include="..\Accounts\TestRig.ServiceAccounts.xml">
+      <Link>Accounts\TestRig.ServiceAccounts.xml</Link>
+    </Content>
+    <Content Include="..\Accounts\TSRig.ServiceAccounts.xml">
+      <Link>Accounts\TSRig.serviceaccounts.xml</Link>
+    </Content>
+    <Content Include="..\DynamicConfig\PlaceholderMappings\TSRig.PlaceholderMappings.xml">
+      <Link>DynamicConfig\PlaceholderMappings\TSRig.PlaceholderMappings.xml</Link>
+    </Content>
+    <Content Include="..\DynamicConfig\UniqueEnvironmentConfig\FOAM1.Config.xml">
+      <Link>DynamicConfig\UniqueEnvironmentConfig\FOAM1.Config.xml</Link>
+    </Content>
+    <Content Include="..\DynamicConfig\UniqueEnvironmentConfig\FOAM2.Config.xml">
+      <Link>DynamicConfig\UniqueEnvironmentConfig\FOAM2.Config.xml</Link>
+    </Content>
+    <Content Include="..\DynamicConfig\UniqueEnvironmentConfig\FOAM3.Config.xml">
+      <Link>DynamicConfig\UniqueEnvironmentConfig\FOAM3.Config.xml</Link>
+    </Content>
+    <Content Include="..\DynamicConfig\UniqueEnvironmentConfig\FOAM4.Config.xml">
+      <Link>DynamicConfig\UniqueEnvironmentConfig\FOAM4.Config.xml</Link>
+    </Content>
+    <Content Include="..\DynamicConfig\UniqueEnvironmentConfig\FTP.Main.Top10.RTN.Config.xml">
+      <SubType>Designer</SubType>
+      <Link>DynamicConfig\UniqueEnvironmentConfig\FTP.Main.Top10.RTN.Config.xml</Link>
+    </Content>
+    <Content Include="..\DynamicConfig\UniqueEnvironmentConfig\FTP.Main.Top100P1.RTN.Config.xml">
+      <Link>DynamicConfig\UniqueEnvironmentConfig\FTP.Main.Top100P1.RTN.Config.xml</Link>
+    </Content>
+    <Content Include="..\DynamicConfig\UniqueEnvironmentConfig\FTP.Main.Top100P2.RTN.Config.xml">
+      <Link>DynamicConfig\UniqueEnvironmentConfig\FTP.Main.Top100P2.RTN.Config.xml</Link>
+    </Content>
+    <Content Include="..\DynamicConfig\UniqueEnvironmentConfig\FTP.Stab.Top10.RTN.Config.xml">
+      <Link>DynamicConfig\UniqueEnvironmentConfig\FTP.Stab.Top10.RTN.Config.xml</Link>
+    </Content>
+    <Content Include="..\DynamicConfig\UniqueEnvironmentConfig\FTP.Stab.Top100P1.RTN.Config.xml">
+      <Link>DynamicConfig\UniqueEnvironmentConfig\FTP.Stab.Top100P1.RTN.Config.xml</Link>
+    </Content>
+    <Content Include="..\DynamicConfig\UniqueEnvironmentConfig\FTP.Stab.Top100P2.RTN.Config.xml">
+      <Link>DynamicConfig\UniqueEnvironmentConfig\FTP.Stab.Top100P2.RTN.Config.xml</Link>
+    </Content>
+    <Content Include="..\DynamicConfig\UniqueEnvironmentConfig\Integration.config.xml">
+      <Link>DynamicConfig\UniqueEnvironmentConfig\Integration.config.xml</Link>
+    </Content>
+    <Content Include="..\DynamicConfig\UniqueEnvironmentConfig\SSO.Release.FOAM1.Config.xml">
+      <Link>DynamicConfig\UniqueEnvironmentConfig\SSO.Release.FOAM1.Config.xml</Link>
+    </Content>
+    <Content Include="..\DynamicConfig\UniqueEnvironmentConfig\SSO.Release.FOAM2.Config.xml">
+      <Link>DynamicConfig\UniqueEnvironmentConfig\SSO.Release.FOAM2.Config.xml</Link>
+    </Content>
+    <Content Include="..\DynamicConfig\UniqueEnvironmentConfig\SSO.Release.FOAM3.Config.xml">
+      <Link>DynamicConfig\UniqueEnvironmentConfig\SSO.Release.FOAM3.Config.xml</Link>
+    </Content>
+    <Content Include="..\DynamicConfig\UniqueEnvironmentConfig\SSO.Release.FOAM4.Config.xml">
+      <Link>DynamicConfig\UniqueEnvironmentConfig\SSO.Release.FOAM4.Config.xml</Link>
+    </Content>
+    <Content Include="..\Groups\DeploymentGroups.BuildPortal.xml">
+      <Link>Groups\DeploymentGroups.BuildPortal.xml</Link>
+    </Content>
+    <Content Include="..\Groups\DeploymentGroups.DeploymentBaseline.xml">
+      <Link>Groups\DeploymentGroups.DeploymentBaseline.xml</Link>
+    </Content>
+    <Content Include="..\Groups\DeploymentGroups.FTP.xml">
+      <Link>Groups\DeploymentGroups.FTP.xml</Link>
+    </Content>
+    <Content Include="..\Groups\DeploymentGroups.Refunds.xml">
+      <Link>Groups\DeploymentGroups.Refunds.xml</Link>
+    </Content>
+    <Content Include="..\Groups\DeploymentGroups.SSO.xml">
+      <Link>Groups\DeploymentGroups.SSO.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\Baseline.Global.parameters.xml">
+      <Link>Parameters\Baseline.Global.parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\CubicA.Global.Parameters.xml">
+      <Link>Parameters\CubicA.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\CubicA_Oyster.Global.Parameters.xml">
+      <Link>Parameters\CubicA_Oyster.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\CubicB.Global.Parameters.xml">
+      <Link>Parameters\CubicB.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\CubicB_Oyster.Global.Parameters.xml">
+      <Link>Parameters\CubicB_Oyster.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\CubicC.Global.Parameters.xml">
+      <Link>Parameters\CubicC.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\CubicC_Oyster.Global.Parameters.xml">
+      <Link>Parameters\CubicC_Oyster.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\CubicD.Global.Parameters.xml">
+      <Link>Parameters\CubicD.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\CubicD_Oyster.Global.Parameters.xml">
+      <Link>Parameters\CubicD_Oyster.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\CycleHire.Dev.Parameters.xml">
+      <Link>Parameters\CycleHire.Dev.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\DevInt.Global.Parameters.xml">
+      <Link>Parameters\DevInt.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\DevInt2.Global.Parameters.xml">
+      <Link>Parameters\DevInt2.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\DevIntPerf.Global.Parameters.xml">
+      <Link>Parameters\DevIntPerf.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\MiniProd1A.Global.Parameters.xml">
+      <Link>Parameters\MiniProd1A.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\OAE.DevInt2_Oyster.Parameters.xml">
+      <Link>Parameters\OAE.DevInt2_Oyster.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\PreProd.Global.Parameters.xml">
+      <Link>Parameters\PreProd.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\PreProd_IM.Global.Parameters.xml">
+      <Link>Parameters\PreProd_IM.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\PreProd_Oyster.Global.Parameters.xml">
+      <Link>Parameters\PreProd_Oyster.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\SiteA.Global.Parameters.xml">
+      <Link>Parameters\SiteA.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\SiteA_IM.Global.Parameters.xml">
+      <Link>Parameters\SiteA_IM.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\SiteA_Oyster.Global.Parameters.xml">
+      <Link>Parameters\SiteA_Oyster.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\SiteB.Global.Parameters.xml">
+      <Link>Parameters\SiteB.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\SiteB_IM.Global.Parameters.xml">
+      <Link>Parameters\SiteB_IM.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\SiteB_Oyster.Global.Parameters.xml">
+      <Link>Parameters\SiteB_Oyster.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\Staging.Global.Parameters.xml">
+      <Link>Parameters\Staging.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\Staging_Internal.Global.Parameters.xml">
+      <Link>Parameters\Staging_Internal.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\Staging_Oyster.Global.Parameters.xml">
+      <Link>Parameters\Staging_Oyster.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\TestRig.FAE.Global.Parameters.xml">
+      <Link>Parameters\TestRig.FAE.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\TestRig.FG.Parameters.xml">
+      <Link>Parameters\TestRig.FG.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\TestRig.OyBo.Global.Parameters.xml">
+      <Link>Parameters\TestRig.OyBo.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\TestRig.RAE.Global.Parameters.xml">
+      <Link>Parameters\TestRig.RAE.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\TSRig.Global.Parameters.xml">
+      <Link>Parameters\TSRig.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\TSRig_IM.Global.Parameters.xml">
+      <Link>Parameters\TSRig_IM.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Parameters\TSRig_Oyster.Global.Parameters.xml">
+      <Link>Parameters\TSRig_Oyster.Global.Parameters.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\Baseline.Apps.config.xml">
+      <Link>Config\Baseline.Apps.config.xml</Link>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="..\Scripts\Baseline.CommonRoles.xml">
+      <Link>Config\Baseline.CommonRoles.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\Baseline.DB.config.xml">
+      <Link>Config\Baseline.DB.config.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\BuildPortal.CommonRoles.xml">
+      <Link>Config\BuildPortal.CommonRoles.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\BuildPortal.Dev.xml">
+      <Link>Config\BuildPortal.Dev.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\BuildPortal.Prod.xml">
+      <Link>Config\BuildPortal.Prod.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\CASC.Functional.FromConfig.xml">
+      <Link>Config\CASC.Functional.FromConfig.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\CommonDatabaseRoles.xml">
+      <Link>Config\CommonDatabaseRoles.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\CommonLabDatabaseRoles.xml">
+      <Link>Config\CommonLabDatabaseRoles.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\CommonLabServerRoles.xml">
+      <Link>Config\CommonLabServerRoles.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\CommonMJTDeltasRole.xml">
+      <Link>Config\CommonMJTDeltasRole.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\CommonPareServiceDeploy.xml">
+      <Link>Config\CommonPareServiceDeploy.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\CommonServerRoles.xml">
+      <Link>Config\CommonServerRoles.xml</Link>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="..\Scripts\CommonUninstallRoles.xml">
+      <Link>Config\CommonUninstallRoles.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\DevInt2.Database.xml">
+      <Link>Config\DevInt2.Database.xml</Link>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="..\Scripts\DevInt2.External.xml">
+      <Link>Config\DevInt2.Database.xml</Link>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="..\Scripts\DevInt2.FAE.Internal.xml">
+      <Link>Config\DevInt2.FAE.Internal.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\DevInt2.FTM.Internal.xml">
+      <Link>Config\DevInt2.FTM.Internal.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\DevInt2.Internal.xml">
+      <Link>Config\DevInt2.Database.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\DevInt2.MasterData.db.Internal.xml">
+      <Link>Config\DevInt2.MasterData.db.Internal.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\DevInt2.MasterData.Internal.xml">
+      <Link>Config\DevInt2.MasterData.Internal.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\DevInt2.OAE.Internal.xml">
+      <Link>Config\DevInt2.OAE.Internal.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\DevInt2.OyBO.External.xml">
+      <Link>Config\DevInt2.OyBO.External.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\DevInt2.OyBO.Internal.xml">
+      <Link>Config\DevInt2.OyBO.Internal.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\DevInt2.PaRE.Internal.Apps.xml">
+      <Link>Config\DevInt2.PaRE.Internal.Apps.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\DevInt2.PaRE.Internal.DB.xml">
+      <Link>Config\DevInt2.PaRE.Internal.DB.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\DevInt2.RAE.Internal.xml">
+      <Link>Config\DevInt2.RAE.Internal.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\DevInt2.TJSDistributor.Internal.xml">
+      <Link>Config\DevInt2.TJSDistributor.Internal.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\FAE.Functional.xml">
+      <Link>Config\FAE.Functional.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\FAE_DevInt_Internal_NoDB.xml">
+      <Link>Config\FAE_DevInt_Internal_NoDB.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\FG2.Functional.FromConfig.xml">
+      <Link>Config\FG2.Functional.FromConfig.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\FTM.Functional.xml">
+      <Link>Config\FTM.Functional.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\FTM.TestRig.xml">
+      <Link>Config\FTM.TestRig.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\Integration.CubicA.Database.xml">
+      <Link>Config\Integration.CubicA.Database.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\Integration.CubicA.xml">
+      <Link>Config\Integration.CubicA.xml</Link>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="..\Scripts\Integration.CubicB.Database.xml">
+      <Link>Config\Integration.CubicB.Database.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\Integration.CubicB.xml">
+      <Link>Config\Integration.CubicB.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\Integration.CubicC.Database.xml">
+      <Link>Config\Integration.CubicC.Database.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\Integration.CubicD.Database.xml">
+      <Link>Config\Integration.CubicD.Database.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\Integration.CubicD.xml">
+      <Link>Config\Integration.CubicD.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\Integration.CubicC.xml">
+      <Link>Config\Integration.CubicC.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\Integration.TSRig.FAEOnlyForMD.xml">
+      <Link>Config\Integration.TSRig.FAEOnlyForMD.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\Integration.TSRig.Uninstall.VC.xml">
+      <Link>Config\Integration.TSRig.Uninstall.VC.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\Integration.TSRig.VC.PostDeployOnly.xml">
+      <Link>Config\Integration.TSRig.VC.PostDeployOnly.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\Integration.TSRig.VC.VanillaDbOnly.xml">
+      <Link>Config\Integration.TSRig.VC.VanillaDbOnly.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\Integration.TSRig.VC.xml">
+      <Link>Config\Integration.TSRig.VC.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\MasterData.Functional.xml">
+      <Link>Config\MasterData.Functional.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\Modules\TFL.Powershell.Logging\en-US\about_PowerShellLogging.help.txt">
+      <Link>Powershell\Modules\TFL.PowerShell.Logging\en-US\about_PowerShellLogging.help.txt</Link>
+    </Content>
+    <Content Include="..\Scripts\Modules\TFL.Powershell.Logging\en-US\PowerShellLoggingModule.dll-help.xml">
+      <Link>Powershell\Modules\TFL.PowerShell.Logging\en-US\PowerShellLoggingModule.dll-help.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\Notification.Functional.Config.xml">
+      <Link>Config\Notification.Functional.Config.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\OneLondon.xml">
+      <Link>Config\OneLondon.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\PARE.TestRig.xml">
+      <Link>Config\PARE.TestRig.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\PreProd.Database.xml">
+      <Link>Config\PreProd.Database.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\PreProd.External.xml">
+      <Link>Config\PreProd.External.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\PreProd.Internal.xml">
+      <Link>Config\PreProd.Internal.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\RealyIpList.txt">
+      <Link>Powershell\Resource\RealyIpList.txt</Link>
+    </Content>
+    <Content Include="..\Scripts\SDM.Functional.Config.xml">
+      <Link>Config\SDM.Functional.Config.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SDR.Functional.xml">
+      <Link>Config\SDR.Functional.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SDR.PreProd.Dual.xml">
+      <Link>Config\SDR.PreProd.Dual.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SDR.Prod.Dual.xml">
+      <Link>Config\SDR.Prod.Dual.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SiteA.Database.xml">
+      <Link>Config\SiteA.Database.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SiteA.External.xml">
+      <Link>Config\SiteA.External.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SiteA.Internal.xml">
+      <Link>Config\SiteA.Internal.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SiteB.Database.xml">
+      <Link>Config\SiteB.Database.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SiteB.External.xml">
+      <Link>Config\SiteB.External.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SiteB.Internal.xml">
+      <Link>Config\SiteB.Internal.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SSO.CommonDatabaseRoles.xml">
+      <Link>Config\SSO.CommonDatabaseRoles.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SSO.CommonExternalServerRoles.xml">
+      <Link>Config\SSO.CommonExternalServerRoles.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SSO.CommonInternalServerRoles.xml">
+      <Link>Config\SSO.CommonInternalServerRoles.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SSO.CommonLabDatabaseRoles.xml">
+      <Link>Config\SSO.CommonLabDatabaseRoles.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SSO.CommonServerRoles.Azure.xml">
+      <Link>Config\SSO.CommonServerRoles.Azure.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SSO.Functional.xml">
+      <Link>Config\SSO.Functional.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SSO.Integration.CubicA.xml">
+      <Link>Config\SSO.Integration.CubicA.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SSO.Integration.CubicB.xml">
+      <Link>Config\SSO.Integration.CubicB.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SSO.Integration.CubicC.xml">
+      <Link>Config\SSO.Integration.CubicC.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SSO.Integration.CubicD.xml">
+      <Link>Config\SSO.Integration.CubicD.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SSO.PreProd.External.xml">
+      <Link>Config\SSO.PreProd.External.xml</Link>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="..\Scripts\SSO.PreProd.Internal.xml">
+      <Link>Config\SSO.PreProd.Internal.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SSO.Prod.Database.xml">
+      <Link>Config\SSO.Prod.Database.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SSO.Prod.External.xml">
+      <Link>Config\SSO.Prod.External.xml</Link>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="..\Scripts\SSO.Prod.Internal.xml">
+      <Link>Config\SSO.Prod.Internal.xml</Link>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="..\Scripts\SSO.ProdB.Database.xml">
+      <Link>Config\SSO.ProdB.Database.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\SSO.ProdB.External.xml">
+      <Link>Config\SSO.ProdB.External.xml</Link>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="..\Scripts\SSO.ProdB.Internal.xml">
+      <Link>Config\SSO.ProdB.Internal.xml</Link>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="..\Scripts\Staging.Database.xml">
+      <Link>Config\Staging.Database.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\Staging.External.xml">
+      <Link>Config\Staging.External.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\Staging.Internal.xml">
+      <Link>Config\Staging.Internal.xml</Link>
+    </Content>
+    <Content Include="..\FileInclude\RoleToParameterMappings.xml">
+      <Link>FileInclude\RoleToParameterMappings.xml</Link>
+    </Content>
+    <Content Include="..\Scripts\TJSDistributor.Functional.xml">
+      <Link>Config\TJSDistributor.Functional.xml</Link>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Scripts\Add-RigVariables.ps1">
+      <Link>Powershell\Add-RigVariables.ps1</Link>
+    </None>
+    <None Include="..\Scripts\AppPoolValidationTest.ps1">
+      <Link>Powershell\AppPoolValidationTest.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Create-ResourceGroup.ps1">
+      <Link>Powershell\Create-ResourceGroup.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Create-Subnet.ps1">
+      <Link>Powershell\Create-Subnet.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Deploy-MachineFromConfig.ps1">
+      <Link>Powershell\Deploy-MachineFromConfig.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Deploy-MachinePostRolesFromConfig.ps1">
+      <Link>Powershell\Deploy-MachinePostRolesFromConfig.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Deploy-MachinePreReqsFromConfig.ps1">
+      <Link>Powershell\Deploy-MachinePreReqsFromConfig.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Deploy-MachinePreRolesFromConfig.ps1">
+      <Link>Powershell\Deploy-MachinePreRolesFromConfig.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Deploy-RigFromConfig2.Helper.psm1">
+      <Link>Powershell\Deploy-RigFromConfig2.Helper.psm1</Link>
+    </None>
+    <None Include="..\Scripts\Deploy-RigFromConfig2.ps1">
+      <Link>Powershell\Deploy-RigFromConfig2.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Deploy-SqlInstanceFromConfig.ps1">
+      <Link>Powershell\Deploy-SqlInstanceFromConfig.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Execute-RefreshVApp.ps1">
+      <Link>Powershell\Execute-RefreshVApp.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Get-FileVersions.ps1">
+      <Link>Powershell\Get-FileVersions.ps1</Link>
+    </None>
+    <None Include="..\Scripts\LinkCASC.Functional.ps1">
+      <Link>Powershell\LinkCASC.Functional.ps1</Link>
+    </None>
+    <None Include="..\Scripts\LinkNotificaitons.Functional.ps1">
+      <Link>Powershell\LinkNotificaitons.Functional.ps1</Link>
+    </None>
+    <None Include="..\Scripts\LinkSDM.Functional.ps1">
+      <Link>Powershell\LinkSDM.Functional.ps1</Link>
+    </None>
+    <None Include="..\Scripts\LinkSSO.Functional.ps1">
+      <Link>Powershell\LinkSSO.Functional.ps1</Link>
+    </None>
+    <None Include="..\Scripts\LinkSSOFTPRigs.VC.2015.ps1">
+      <Link>Powershell\LinkSSOFTPRigs.VC.2015.ps1</Link>
+    </None>
+    <None Include="..\Scripts\ManageNetUseConnections.ps1">
+      <Link>Powershell\ManageNetUseConnections.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.Deployment.Azure.Utilities\TFL.Deployment.Azure.Utilities.psd1">
+      <Link>Powershell\Modules\TFL.Deployment.Azure.Utilities\TFL.Deployment.Azure.Utilities.psd1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.Deployment.Azure.Utilities\TFL.Deployment.Azure.Utilities.psm1">
+      <Link>Powershell\Modules\TFL.Deployment.Azure.Utilities\TFL.Deployment.Azure.Utilities.psm1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.Deployment.Azure\TFL.Deployment.Azure.psd1">
+      <Link>Powershell\Modules\TFL.Deployment.Azure\TFL.Deployment.Azure.psd1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.Deployment.Azure\TFL.Deployment.Azure.psm1">
+      <Link>Powershell\Modules\TFL.Deployment.Azure\TFL.Deployment.Azure.psm1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.Deployment.Database\TFL.Deployment.Database.psd1">
+      <Link>Powershell\Modules\TFL.Deployment.Database\TFL.Deployment.Database.psd1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.Deployment.Database\TFL.Deployment.Database.psm1">
+      <Link>Powershell\Modules\TFL.Deployment.Database\TFL.Deployment.Database.psm1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.Deployment.VCloud\TFL.Deployment.VCloud.psd1">
+      <Link>Powershell\Modules\TFL.Deployment.VCloud\TFL.Deployment.VCloud.psd1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.Deployment.VCloud\TFL.Deployment.VCloud.psm1">
+      <Link>Powershell\Modules\TFL.Deployment.VCloud\TFL.Deployment.VCloud.psm1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.Deployment.Web\TFL.Deployment.Web.psd1">
+      <Link>Powershell\Modules\TFL.Deployment.Web\TFL.Deployment.Web.psd1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.Deployment.Web\TFL.Deployment.Web.psm1">
+      <Link>Powershell\Modules\TFL.Deployment.Web\TFL.Deployment.Web.psm1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.Deployment\Tfl.Deployment.psd1">
+      <Link>Powershell\Modules\TFL.Deployment\Tfl.Deployment.psd1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.Deployment\Tfl.Deployment.psm1">
+      <Link>Powershell\Modules\TFL.Deployment\Tfl.Deployment.psm1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.FileShare\TFL.FileShare.psd1">
+      <Link>Powershell\Modules\TFL.FileShare\TFL.FileShare.psd1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.FileShare\TFL.FileShare.psm1">
+      <Link>Powershell\Modules\TFL.FileShare\TFL.FileShare.psm1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.Powershell.Logging\Tfl.PowerShell.Logging.psd1">
+      <Link>Powershell\Modules\TFL.PowerShell.Logging\Tfl.PowerShell.Logging.psd1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.Powershell.Logging\Tfl.PowerShell.Logging.psm1">
+      <Link>Powershell\Modules\TFL.PowerShell.Logging\Tfl.PowerShell.Logging.psm1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.ScheduledTask\TFL.ScheduledTask.psd1">
+      <Link>Powershell\Modules\TFL.ScheduledTask\TFL.ScheduledTask.psd1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.ScheduledTask\TFL.ScheduledTask.psm1">
+      <Link>Powershell\Modules\TFL.ScheduledTask\TFL.ScheduledTask.psm1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.Utilities\TFL.Utilities.psd1">
+      <Link>Powershell\Modules\TFL.Utilities\TFL.Utilities.psd1</Link>
+    </None>
+    <None Include="..\Scripts\Modules\TFL.Utilities\TFL.Utilities.psm1">
+      <Link>Powershell\Modules\TFL.Utilities\TFL.Utilities.psm1</Link>
+    </None>
+    <None Include="..\Scripts\MsiStatusVerification.ps1">
+      <Link>Powershell\MsiStatusVerification.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Set-EnvironmentModulePath.ps1">
+      <Link>Powershell\Set-EnvironmentModulePath.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Setup-Deployment-2015.ps1">
+      <Link>Powershell\Setup-Deployment-2015.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Setup-DeploymentPackaging.ps1">
+      <Link>Powershell\Setup-DeploymentPackaging.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Setup-GetFileVersions.ps1">
+      <Link>Powershell\Setup-GetFileVersions.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Setup-PostDeployment.ps1">
+      <Link>Powershell\Setup-PostDeployment.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Setup-PreDeployment.ps1">
+      <Link>Powershell\Setup-PreDeployment.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Setup-VCloud.ps1">
+      <Link>Powershell\Setup-VCloud.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Shutdown-Azure.ps1">
+      <Link>Powershell\Shutdown-Azure.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Shutdown-VCloud.ps1">
+      <Link>Powershell\Shutdown-VCloud.ps1</Link>
+    </None>
+    <None Include="..\Scripts\StopProcesses-OnRig.ps1">
+      <Link>Powershell\StopProcesses-OnRig.ps1</Link>
+    </None>
+    <None Include="..\Scripts\TFL.DataDeploy.ps1">
+      <Link>Powershell\TFL.DataDeploy.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Tfl.EventLogDeploy.ps1">
+      <Link>Powershell\Tfl.EventLogDeploy.ps1</Link>
+    </None>
+    <None Include="..\Scripts\TFL.FileShare.ps1">
+      <Link>Powershell\TFL.FileShare.ps1</Link>
+    </None>
+    <None Include="..\Scripts\TFL.FileSystem.ps1">
+      <Link>Powershell\TFL.FileSystem.ps1</Link>
+    </None>
+    <None Include="..\Scripts\TFL.IISSetup.ps1">
+      <Link>Powershell\TFL.IISSetup.ps1</Link>
+    </None>
+    <None Include="..\Scripts\TFL.MasterDataDeltas.ps1">
+      <Link>Powershell\TFL.MasterDataDeltas.ps1</Link>
+    </None>
+    <None Include="..\Scripts\TFL.MsiDeploy.Install.ps1">
+      <Link>Powershell\TFL.MsiDeploy.Install.ps1</Link>
+    </None>
+    <None Include="..\Scripts\TFL.MsiDeploy.ps1">
+      <Link>Powershell\TFL.MsiDeploy.ps1</Link>
+    </None>
+    <None Include="..\Scripts\TFL.MsiDeploy.Uninstall.ps1">
+      <Link>Powershell\TFL.MsiDeploy.Uninstall.ps1</Link>
+    </None>
+    <None Include="..\Scripts\TfL.ScheduledTaskDeploy.ps1">
+      <Link>Powershell\TfL.ScheduledTaskDeploy.ps1</Link>
+    </None>
+    <None Include="..\Scripts\TFL.ServiceDeploy.ps1">
+      <Link>Powershell\TFL.ServiceDeploy.ps1</Link>
+    </None>
+    <None Include="..\Scripts\TFL.SMTPDeploy.ps1">
+      <Link>Powershell\TFL.SMTPDeploy.ps1</Link>
+    </None>
+    <None Include="..\Scripts\TFL.SMTPDeploy.Remote.ps1">
+      <Link>Powershell\TFL.SMTPDeploy.Remote.ps1</Link>
+    </None>
+    <None Include="..\Scripts\TFL.SsisSetup.ps1">
+      <Link>Powershell\TFL.SsisSetup.ps1</Link>
+    </None>
+    <None Include="..\Scripts\TFL.SsisDeploy.ps1">
+      <Link>Powershell\TFL.SsisDeploy.ps1</Link>
+    </None>
+    <None Include="..\Scripts\TFL.StateServiceSetup.ps1">
+      <Link>Powershell\TFL.StateServiceSetup.ps1</Link>
+    </None>
+    <None Include="..\Scripts\TFL.WebDeploy.AppPool.ps1">
+      <Link>Powershell\TFL.WebDeploy.AppPool.ps1</Link>
+    </None>
+    <None Include="..\Scripts\TFL.WebDeploy.ps1">
+      <Link>Powershell\TFL.WebDeploy.ps1</Link>
+    </None>
+    <None Include="..\Scripts\TFL.WebDeploy.WebSite.ps1">
+      <Link>Powershell\TFL.WebDeploy.WebSite.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Update-LocalModules.ps1">
+      <Link>Powershell\Update-LocalModules.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Update-NuSpecVersion.ps1">
+      <Link>Powershell\Update-NuSpecVersion.ps1</Link>
+    </None>
+    <None Include="..\Scripts\Update-PsManifestVersion.ps1">
+      <Link>Powershell\Update-PsManifestVersion.ps1</Link>
+    </None>
+    <None Include="..\Scripts\VAppAdUsersCopy.ps1">
+      <Link>Powershell\VAppAdUsersCopy.ps1</Link>
+    </None>
+    <None Include="..\Scripts\LaunchVAppAdUsersCopy.ps1">
+      <Link>Powershell\LaunchVAppAdUsersCopy.ps1</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\HelperScripts\FTPHelper2.ps1">
+      <Link>HelperScripts\FTPHelper2.ps1</Link>
+    </None>
+    <None Include="..\HelperScripts\Repoint SB Routes - PARE.sql">
+      <Link>HelperScripts\Repoint SB Routes - PARE.sql</Link>
+    </None>
+    <None Include="..\HelperScripts\Repoint SB Routes - PCS.sql">
+      <Link>HelperScripts\Repoint SB Routes - PCS.sql</Link>
+    </None>
+    <None Include="..\HelperScripts\SQL_Backup_To_NUL.sql">
+      <Link>HelperScripts\SQL_Backup_To_NUL.sql</Link>
+    </None>
+    <None Include="..\HelperScripts\ServiceBrokerConfiguration.Pare.sql">
+      <Link>HelperScripts\ServiceBrokerConfiguration.Pare.sql</Link>
+    </None>
+    <None Include="..\HelperScripts\FixSsbRoutes_DuplicateDBs.sql">
+      <Link>HelperScripts\FixSsbRoutes_DuplicateDBs.sql</Link>
+    </None>
+    <None Include="..\HelperScripts\ChangeWebsitePort.ps1">
+      <Link>HelperScripts\ChangeWebsitePort.ps1</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Scheduling\FAE_Persistance.xml">
+      <Link>Scheduling\FAE_Persistance.xml</Link>
+    </None>
+    <None Include="..\Scheduling\PARE EodContoller to complete settlement Part1 and Part2.xml">
+      <Link>Scheduling\PARE EodContoller to complete settlement Part1 and Part2.xml</Link>
+    </None>
+    <None Include="..\Scheduling\PARE SettlementFile Generation for amex.xml">
+      <Link>Scheduling\PARE SettlementFile Generation for amex.xml</Link>
+    </None>
+    <None Include="..\Scheduling\PARE SettlementFile Generation for barclays.xml">
+      <Link>Scheduling\PARE SettlementFile Generation for barclays.xml</Link>
+    </None>
+    <None Include="..\Scheduling\Summary Ledger and Reconciliation.xml">
+      <Link>Scheduling\Summary Ledger and Reconciliation.xml</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Powershell\Modules\TFL.Deployment\en-US\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="AfterBuild">
+  </Target>-->
+  <Target Name="BeforeBuild">
+    <Message Text="Starting Before build" Importance="High" />
+    <ItemGroup>
+      <scriptFiles Include="$(MSBuildProjectDir)..\Scripts\**\*.*" />
+      <helperScriptFiles Include="$(MSBuildProjectDir)..\HelperScripts\*.*" />
+      <postDeployScriptFiles Include="$(MSBuildProjectDir)..\PostDeployScripts\*.*" />
+      <sqlHelperScriptFiles Include="$(MSBuildProjectDir)..\HelperScripts\SQLHelpers\DeploymentHelpers\*.*" />
+      <groupFiles Include="$(MSBuildProjectDir)..\Groups\*.*" />
+      <accountFiles Include="$(MSBuildProjectDir)..\Accounts\*.*" />
+      <parameterFiles Include="$(MSBuildProjectDir)..\Parameters\*.*" />
+      <fileIncludeFiles Include="$(MSBuildProjectDir)..\FileInclude\*.*" />
+      <toolFiles Include="$(MSBuildProjectDir)..\Tools\PSExec*.exe" />
+      <wcfFiles Include="$(MSBuildProjectDir)..\Tools\WCFTestClient\*.*" />
+      <softwareFiles Include="$(MSBuildProjectDir)..\Software\Common\WebDeploy_3_0_amd64_en-US.msi" />
+      <DeploymentDlls Include="$(OutDir)\Deployment.*.dll" />
+      <deploymentSchemaScripts Include="$(MSBuildProjectDir)..\..\Build\DeploymentSchema.Scripts\**\*.*" />
+      <dynamicConfigFiles Include="$(MSBuildProjectDir)..\DynamicConfig\UniqueEnvironmentConfig\*.*" />
+      <dynamicConfigMappings Include="$(MSBuildProjectDir)..\DynamicConfig\PlaceholderMappings\*.*" />
+    </ItemGroup>
+    <MakeDir Directories="$(OutDir)\DeploymentSchema.Scripts" />
+    <Message Text="Copy Scripts directory to bin" Importance="High" />
+    <Copy SourceFiles="@(scriptFiles)" DestinationFolder="$(OutDir)\Deployment\Scripts\%(RecursiveDir)" />
+    <Copy SourceFiles="@(helperScriptFiles)" DestinationFolder="$(OutDir)\Deployment\HelperScripts" />
+    <Copy SourceFiles="@(postDeployScriptFiles)" DestinationFolder="$(OutDir)\Deployment\PostDeployScripts" />
+    <Copy SourceFiles="@(sqlHelperScriptFiles)" DestinationFolder="$(OutDir)\Deployment\HelperScripts\SQLHelpers\DeploymentHelpers" />
+    <Copy SourceFiles="@(groupFiles)" DestinationFolder="$(OutDir)\Deployment\Groups" />
+    <Copy SourceFiles="@(accountFiles)" DestinationFolder="$(OutDir)\Deployment\Accounts" />
+    <Copy SourceFiles="@(parameterFiles)" DestinationFolder="$(OutDir)\Deployment\Parameters" />
+    <Copy SourceFiles="@(fileIncludeFiles)" DestinationFolder="$(OutDir)\Deployment\FileInclude" />
+    <Copy SourceFiles="@(toolFiles)" DestinationFolder="$(OutDir)\Deployment\Tools" />
+    <Copy SourceFiles="@(wcfFiles)" DestinationFolder="$(OutDir)\Deployment\Tools\WCFTestClient" />
+    <Copy SourceFiles="@(softwareFiles)" DestinationFolder="$(OutDir)\Deployment\Software\Common" />
+    <Copy SourceFiles="@(DeploymentDlls)" DestinationFolder="$(OutDir)\Deployment\Scripts" />
+    <Copy SourceFiles="@(deploymentSchemaScripts)" DestinationFolder="$(OutDir)\DeploymentSchema.Scripts\%(RecursiveDir)" />
+    <Copy SourceFiles="@(dynamicConfigFiles)" DestinationFolder="$(OutDir)\Deployment\DynamicConfig\UniqueEnvironmentConfig\" />
+    <Copy SourceFiles="@(dynamicConfigMappings)" DestinationFolder="$(OutDir)\Deployment\DynamicConfig\PlaceholderMappings\" />
+  </Target>
+</Project>

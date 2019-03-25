@@ -1,0 +1,51 @@
+﻿@using MonitoringDashboard.Helpers
+@using MonitoringDashboard.Models
+@using MonitoringService
+<html>
+<head>
+    <title>Database Insight</title>
+    
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="@Url.Content("favicon.ico")" type="image/x-icon" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--[if lte IE 8]><script src="~\assets/js/ie/html5shiv.js"></script><![endif]-->
+    <link rel="stylesheet" href="~\assets/css/main.css" />
+    <link rel="stylesheet" href="~\assets/css/RadarChart.css" />
+    <link rel="stylesheet" href="~\assets/css/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="~\assets/css/jquery.datetimepicker.css" /> 
+    <link rel="stylesheet" type="text/css" href="~\assets/css/UserParameters.css" /> 
+    <!--[if lte IE 8]><link rel="stylesheet" href="~\assets/css/ie8.css" /><![endif]-->
+    <!--[if lte IE 9]><link rel="stylesheet" href="~\assets/css/ie9.css" /><![endif]-->    
+</head>
+    <body>     
+        <!-- Scripts -->
+        <script src="~\assets/js/jquery.min.js"></script>
+        <script src="~\assets/js/jquery.scrolly.min.js"></script>
+        <!--<script src="~\assets/js/jquery.scrollzer.min.js"></script>-->
+        <script src="~\assets/js/skel.min.js"></script>
+        <script src="~\assets/js/util.js"></script>
+        <!--[if lte IE 8]><script src="~\assets/js/ie/respond.min.js"></script><![endif]-->
+        <script src="~\assets/js/main.js"></script>
+        <script src="~\assets/js/jquery.datetimepicker.js"></script>
+        <script src="~\assets/js/jquery-ui.js"></script>
+        <script src="~\assets/js/UserParameters.js"></script>
+   
+        <!-- Main -->
+        <div id="main">            
+            <a><img id="HomePageIcon" src="@Url.Content("~/favicon.ico")" alt="Click here to go to the homepage"/></a>
+        
+            <script type="text/javascript">
+                $('#HomePageIcon').click(function () {
+                    window.location = '@Url.Action("Index", "Home")';
+                });                             
+            </script>
+                          
+            @RenderBody()
+            
+            <form id="mainForm" action="@Url.Action("GetRadarRedirect", "Home")"></form>
+        </div>
+        <!--Not loading in fae domain in IE  spent longer than I want investigating it so force browser to load-->
+        <img scr="@Url.Content("~/favicon.ico")" style="visability:hidden"/>
+    </body>
+</html>

@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="TestRig" Environment="TestRig" Config="TestRig.RAE" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+
+  <!--RAE machine-->
+  <machine Id ="1" Name="TS-FAE1" ExternalIP="">
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv"/>
+	  <!-- Stop RAE Service(s) -->
+    <PreDeployRole Description="StopRaeService" Include ="StopRaeService" />
+    <PreDeployRole Description="StopRaeCpcService" Include ="StopRaeCpcService" />
+    
+    <!--Creates Event Sources for both CPC and Oyster-->
+    <ServerRole Description="FTP.EventLog.For.RAE.RaeService" Include="FTP.EventLog.For.RAE.RaeService" />
+
+	  <!-- BEGIN Functional environment only (Need to go before RAE services to enable them to start-->
+    <ServerRole Description="RAE Functional Rig Admin Utils" Include="RAE.DeployFunctionalRigAdminUtils" />
+    <ServerRole Description="RAE MasterData Stub for functional tests" Include="RAE.MasterData.Stub.Install"  Config="TestRig.RAE_Oyster"/>
+    <!-- END Functional environment only -->
+    
+
+    <!-- Set up Oyster RAE-->
+    <ServerRole Description="RAE RSP Output Folder" Include="RAE.Service.RSP.Folders" />
+    <ServerRole Description="RAE Service Installer" Include="RAE.Service.Install" Config="TestRig.RAE_Oyster"/>
+    
+    <!-- Set up CPC RAE-->
+    <ServerRole Description="RAE_CPC RSP Output Folder" Include="RAE.CPC.Service.RSP.Folders" />
+    <ServerRole Description="RAE_CPC Service Installer" Include="RAE.CPC.Service.Install" Config="TestRig.RAE_CPC"/>
+   </machine>
+  
+  <!--RAE DB machine-->
+  <machine Id="2" Name="TS-DB1" ExternalIP="" DeploymentMachine="true">
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices1" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices2" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices3" />
+    <PreDeployRole Description="CheckSqlAgentServiceInst1" Include="CheckSqlAgentServiceInst1" />
+    <PreDeployRole Description="CheckSqlIntegrationService" Include="CheckSqlIntegrationService" />
+   
+    <!-- SQL Extension Events Folder Structure -->
+    <ServerRole Include="SQL.Extension.Events.Folder" Description="SQL Extension Events Output Folder Creation" />
+
+    <!-- RAE DB for Oyster -->
+    <DatabaseRole Description='RAE Baseline' Include="RAE.Baseline.Database" DatabaseInstance="Inst1" TargetDatabase="RAE" />
+    <DatabaseRole Description="RAE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="RAE" />
+    <DatabaseRole Description="RAE Database" Include="RAE.Database" DatabaseInstance="Inst1" TargetDatabase="RAE"/>
+    <DatabaseRole Description="RAE Partitioning" Include="RAE.Partitioning" DatabaseInstance="Inst1" TargetDatabase="RAE" />
+    
+    <!-- RAE DB for CPC-->
+    <DatabaseRole Description='RAE Baseline' Include="RAE.Baseline.Database" DatabaseInstance="Inst1" TargetDatabase="RAE_CPC" />
+    <DatabaseRole Description="RAE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="RAE_CPC" />
+    <DatabaseRole Description="RAE Database" Include="RAE.Database" DatabaseInstance="Inst1" TargetDatabase="RAE_CPC"/>
+    <DatabaseRole Description="RAE Partitioning" Include="RAE.Partitioning" DatabaseInstance="Inst1" TargetDatabase="RAE_CPC"/>
+
+    <!-- The RAE database schema for functional environments only -->
+    <DatabaseRole Description="RAE Functional schema increment" Include="RAE.DB.Functional" Groups="RAE,Database" />
+	<DatabaseRole Description="RAE Functional schema increment" Include="RAE_CPC.DB.Functional" Groups="RAE,Database" />
+	
+
+    <!-- SQL Extension Events Database Deployment -->
+    <DatabaseRole Include="SQL.Extension.Events" Description="SQL Extension Events Deployment Role" TargetDatabase="Master" DatabaseInstance="Inst1"/>
+  </machine>
+</configuration>

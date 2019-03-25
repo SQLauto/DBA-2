@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="DevInt2.FTM" Environment="DevInt2" Config="DevInt2" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+
+  <PostDeploymentTestIdentity>DeploymentAccount.Internal</PostDeploymentTestIdentity>
+
+  <machine Id="0" Name="FTDC2MGT360" ExternalIP="10.107.200.186" DeploymentMachine="true"  />
+
+ <!--SFTP Server -->
+  <machine Id="FTDC2FTP369" Name="FTDC2FTP369"  ExternalIP="10.107.200.218" >
+	<ServerRole Include="FTM.Testing.Filesystem.SFTP" />
+  </machine>
+
+  <machine Id="FTDC2FTM338" Name="FTDC2FTM338"  ExternalIP="10.107.200.164" Role="File Transfer Manager Server">
+	<PreDeployRole Description="Stop FTM Service" Include="StopFTMService" />
+	<ServerRole Include="FTM.Testing.Filesystem.Win" />
+    <ServerRole Description="FTM EventLog Entry" Include="FTP.EventLog.For.Internal.FTM" />
+    <ServerRole Description="FTM Service" Include="FTM.Service" Config="DevInt2" />
+  </machine>
+
+  <machine Id="FTDC2FTM339" Name="FTDC2FTM339"  ExternalIP="10.107.200.165" Role="File Transfer Manager Server">
+	<PreDeployRole Description="Stop FTM Service" Include="StopFTMService" />
+	<ServerRole Include="FTM.Testing.Filesystem.Win" />
+    <ServerRole Description="FTM EventLog Entry" Include="FTP.EventLog.For.Internal.FTM" />
+    <ServerRole Description="FTM Service" Include="FTM.Service" Config="DevInt2_FTMX" />
+  </machine>
+
+   <!--OyBO FTM Server -->
+  <!-- <machine Id="FTDC2FTM368" Name="FTDC2FTM368"  ExternalIP="10.107.200.215"> -->
+    <!-- <PreDeployRole Description="Stop FTM Service" Include="StopFTMService" /> -->
+    <!-- <ServerRole Description="FTM EventLog Entry" Include="FTP.EventLog.For.Internal.FTM" /> -->
+    <!-- <ServerRole Description="FTM Service (FTP-OyBo)" Include="FTM.Service" Config="DevInt_OYBO" /> -->
+  <!-- </machine> -->
+
+</configuration>

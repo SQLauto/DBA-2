@@ -1,0 +1,172 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualNetworkResourceGroup": {
+      "type": "string",
+      "defaultValue": "Tfltestresourcegroup"
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "defaultValue": "CE-MOB-TEST-DEV-NE-ARM-VNET"
+    },
+    "subnetName": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "releaseName": {
+      "type": "string"
+    },
+    "sasTokencustomscripts": {
+      "type": "securestring"
+    },
+    "sasTokenArmTemplate": {
+      "type": "securestring"
+    }
+  },
+  "variables": {
+    "copy": [
+      {
+        "name": "db",
+        "count": 2,
+        "input": {
+          "name": "[concat('TS-DB', copyIndex('db',1))]",
+          "preFix": "[concat('DB', copyIndex('db', 1))]",
+          "templateUri": "[concat('https://ftptemplatesandconfigs.blob.core.windows.net/armtemplates/sql.template.json', parameters('sasTokenArmTemplate'))]"
+        }
+      },
+      {
+        "name": "fae",
+        "count": 4,
+        "input": {
+          "name": "[concat('TS-FAE', copyIndex('fae', 1))]",
+          "preFix": "[concat('FAE', copyIndex('fae', 1))]",
+          "templateUri": "[concat('https://ftptemplatesandconfigs.blob.core.windows.net/armtemplates/core.template.json', parameters('sasTokenArmTemplate'))]"
+        }
+      }
+    ],
+    "childMachineName": [
+      {
+        "name": "TS-CAS1",
+        "preFix": "CAS",
+        "templateUri": "[concat('https://ftptemplatesandconfigs.blob.core.windows.net/armtemplates/webservercore.template.json', parameters('sasTokenArmTemplate'))]"
+      },
+      {
+        "name": "TS-CIS1",
+        "preFix": "CIS",
+        "templateUri": "[concat('https://ftptemplatesandconfigs.blob.core.windows.net/armtemplates/webservercore.template.json', parameters('sasTokenArmTemplate'))]"
+      },
+      {
+        "name": "TS-FTM1",
+        "preFix": "FTM",
+        "templateUri": "[concat('https://ftptemplatesandconfigs.blob.core.windows.net/armtemplates/core.template.json', parameters('sasTokenArmTemplate'))]"
+      },
+      {
+        "name": "TS-PARE1",
+        "preFix": "PARE",
+        "templateUri": "[concat('https://ftptemplatesandconfigs.blob.core.windows.net/armtemplates/core.template.json', parameters('sasTokenArmTemplate'))]"
+      },
+      {
+        "name": "TS-SAS1",
+        "preFix": "SAS",
+        "templateUri": "[concat('https://ftptemplatesandconfigs.blob.core.windows.net/armtemplates/core.template.json', parameters('sasTokenArmTemplate'))]"
+      },
+      {
+        "name": "TS-OYBO1",
+        "preFix": "OYBO",
+        "templateUri": "[concat('https://ftptemplatesandconfigs.blob.core.windows.net/armtemplates/core.template.json', parameters('sasTokenArmTemplate'))]"
+      },
+      {
+        "name": "TS-SFTP1",
+        "preFix": "SFTP",
+        "templateUri": "[concat('https://ftptemplatesandconfigs.blob.core.windows.net/armtemplates/sftp.template.json', parameters('sasTokenArmTemplate'))]"
+      }
+    ],
+    "vmList": "[union(variables('childMachineName'), variables('db'), variables('fae'))]",
+    "adDeploymentName": "[concat('AD-', deployment().name)]",
+    "patchResourceGroup": "[concat(parameters('releaseName'), '_Template')]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2015-01-01",
+      "type": "Microsoft.Resources/deployments",
+      "name": "[variables('adDeploymentName')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat('https://ftptemplatesandconfigs.blob.core.windows.net/armtemplates/ad.template.json', parameters('sasTokenArmTemplate'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "computerName": { "value": "faeadg001" },
+          "virtualNetworkResourceGroup": { "value": "[parameters('virtualNetworkResourceGroup')]" },
+          "virtualNetworkName": { "value": "[parameters('virtualNetworkName')]" },
+          "subnetName": { "value": "[parameters('subnetName')]" },
+          "patchResourceGroup": { "value": "[variables('patchResourceGroup')]" },
+          "sasToken": { "value": "[parameters('sasTokenArmTemplate')]"}
+        }
+      }
+    },
+    {
+      "apiVersion": "2015-01-01",
+      "type": "Microsoft.Resources/deployments",
+      "name": "[concat(variables('vmList')[copyindex()].preFix, '-', deployment().name)]",
+      "dependsOn": [
+        "[variables('adDeploymentName')]"
+      ],
+      "copy": {
+        "name": "nodatadiskvmdisksLoop",
+        "count": "[length(variables('vmList'))]"
+      },
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('vmList')[copyindex()].templateUri]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "computerName": { "value": "[variables('vmList')[copyindex()].name]" },
+          "virtualNetworkResourceGroup": { "value": "[parameters('virtualNetworkResourceGroup')]" },
+          "virtualNetworkName": { "value": "[parameters('virtualNetworkName')]" },
+          "subnetName": { "value": "[parameters('subnetName')]" },
+          "patchResourceGroup": { "value": "[variables('patchResourceGroup')]" },
+          "adComputerIP": { "value": "[reference(variables('adDeploymentName')).outputs.adComputerIP.value]" }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "condition": "[or(equals(variables('vmList')[copyIndex()].name,'TS-DB1'), equals(variables('vmList')[copyIndex()].name,'TS-DB2'))]",
+      "name": "[concat(variables('vmList')[copyIndex()].name, '/', 'CopyCertsScriptExtension')]",
+      "apiVersion": "2017-03-30",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "SvcName": "FTP",
+        "SvcOwner": "ROLE-G-CEBUILD",
+        "Environment": "Development",
+        "CrgCostCode": "RCE02.CT.AZURE"
+      },
+      "scale": null,
+      "copy": {
+        "name": "CopyCertsScriptExtensionLoop",
+        "count": "[length(variables('vmList'))]"
+      },
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "CustomScriptExtension",
+        "typeHandlerVersion": "1.4",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "fileUris": [
+            "[concat('https://ftptemplatesandconfigs.blob.core.windows.net/customscripts/ServiceBrokerConfiguration.ps1', parameters('sasTokencustomscripts'))]"
+          ],
+          "commandToExecute": "powershell -ExecutionPolicy Unrestricted -file ServiceBrokerConfiguration.ps1 "
+        },
+        "protectedSettings": {}
+      },
+      "dependsOn": [
+        "nodatadiskvmdisksLoop"
+      ]
+    }
+  ]
+}

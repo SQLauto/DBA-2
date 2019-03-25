@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+  <parameter name="Baseline_TestValueA" value="aSettingXNS"/>
+  <parameter name="Baseline_TestValueB" value="bSettingXNS"/>
+  <parameter name="Baseline_TestValueC" value="cSettingXNS"/>
+  <parameter name="Baseline_SimpleDBConnectionString" value="data source=TS-DB1\Inst1;initial catalog=SimpleDBXNS;"/>
+  <parameter name="Baseline_WebServiceEndpoint" value="http://TS-CIS1:8710/SimpleServiceXNS.svc"/>
+  <parameter name="Global_BaselineParam" value="BaselineXNS_Param" />
+</parameters>

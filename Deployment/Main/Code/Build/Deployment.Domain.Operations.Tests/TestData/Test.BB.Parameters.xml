@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+  <!--Uncomment parts below to make fail-->
+  <!--<parameter name="Param1" value="BBValue1" />
+  <parameter name="Param2" value="BBValue2" />-->
+
+  <parameter name="Param10" value="BBValue10" />
+  <parameter name="Param11" value="BBValue11" />
+</parameters>

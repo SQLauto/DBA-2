@@ -1,0 +1,1 @@
+﻿.\LabEnvLogHarvester.ps1 -RigName Build.Main.FTP.DTN -RigRelativePath Integration.TSRig.VC.xml -OutputDir D:\LogVcloud -NumThreads 4

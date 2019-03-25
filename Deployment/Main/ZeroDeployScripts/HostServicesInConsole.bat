@@ -1,0 +1,27 @@
+REM Start FTP Windows services
+start .\console2\console.exe -c ".\ZD_ConsoleConfig_CI.xml" ^
+-w "FTP Services hosted in Topshelf" ^
+-ts 4500 ^
+-t "OyBO Transaction File Processor" ^
+-t "OyBO Azure Uploader" ^
+-t "MjtService" ^
+-t "FareService" ^
+-t "RevenueStatusListFileServiceHost" ^
+-t "SettlementResponseFileServiceHost" ^
+-t "TapFileServiceHost" ^
+-t "TravelDayRevisionServiceHost" ^
+-t "Tfl.Ft.Notifications.FileProcessor" ^
+-t "SendEmailService" ^
+-t "AuthorisationGatewayServiceHost" ^
+-t "EodControllerServiceHost" ^
+-t "IdraServiceHost" ^
+-t "DirectPaymentServiceHost" ^
+-t "SettlementValidationResultFileServiceHost" ^
+-t "StatusListServiceHost" ^
+-t "RefundFileServiceHost" ^
+-t "PipelineHost" ^
+-t "EngineControllerHost" ^
+-t "PcsMockServiceHost" ^
+-t "RiskAssessmentServiceHost" ^
+-t "ChargeCalculationServiceHost" ^
+-t "SDM.ControllerService" /c

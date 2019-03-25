@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="DevInt.Internal" Environment="DevInt" Config="DevInt" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonPareServiceDeploy.xml</CommonRoleFile>
+  <CommonRoleFile>CommonProductionServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+
+  <PostDeploymentTestIdentity>DeploymentAccount.Internal</PostDeploymentTestIdentity>
+
+  <machine Id="0" Name="TDC2BLD008" ExternalIP="10.107.197.61" DeploymentMachine="true" />
+
+  <!--
+  <machine Id="0" Name="TDC2FAE029" ExternalIP="10.107.238.160" Role="CIS Server 1">
+    <ServerRole Include="IISSetup.CIS" Description="IIS" />
+    <ServerRole Description="Travel Token Service" Include="PARE.TravelToken.Service" />
+    <ServerRole Description="Pare.TravelTokenInfoService" Include="PARE.TravelToken.InfoService" />
+    <ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+    <ServerRole Description="Journey Usage Service" Include="FAE.JourneyUsage.Service" />
+    <ServerRole Description="Notification Processor Service" Include="Notification.Processor.Service" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+	<ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+	<ServerRole Description="FAE VoidService" Include="FAE.Void.Service" />
+  </machine>
+  <machine Id="1" Name="TDC2FAE030" ExternalIP="10.107.238.170" Role="CIS Server 2">
+    <ServerRole Include="IISSetup.CIS" Description="IIS" />
+    <ServerRole Description="Travel Token Service" Include="PARE.TravelToken.Service" />
+    <ServerRole Description="Pare.TravelTokensInfoService" Include="PARE.TravelToken.InfoService" />
+    <ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+    <ServerRole Description="Journey Usage Service" Include="FAE.JourneyUsage.Service" />
+    <ServerRole Description="Notification Processor Service" Include="Notification.Processor.Service" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+	<ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+	<ServerRole Description="FAE VoidService" Include="FAE.Void.Service" />
+  </machine>
+
+  <machine Id="1" Name="TDC2FAE032" ExternalIP="10.107.238.161" Role="CIS Server 3">
+    <ServerRole Include="IISSetup.CIS" Description="IIS" />
+    <ServerRole Description="Travel Token Service" Include="PARE.TravelToken.Service" />
+    <ServerRole Description="Pare.TravelTokenInfoService" Include="PARE.TravelToken.InfoService" />
+    <ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+    <ServerRole Description="Journey Usage Service" Include="FAE.JourneyUsage.Service" />
+    <ServerRole Description="Notification Processor Service" Include="Notification.Processor.Service" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+	<ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+	<ServerRole Description="FAE VoidService" Include="FAE.Void.Service" />
+  </machine>
+  <machine Id="1" Name="TDC2FAE033" ExternalIP="10.107.238.163" Role="CIS Server 4">
+    <ServerRole Include="IISSetup.CIS" Description="IIS" />
+    <ServerRole Description="Travel Token Service" Include="PARE.TravelToken.Service" />
+    <ServerRole Description="Pare.TravelTokenInfoService" Include="PARE.TravelToken.InfoService" />
+    <ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+    <ServerRole Description="Journey Usage Service" Include="FAE.JourneyUsage.Service" />
+    <ServerRole Description="Notification Processor Service" Include="Notification.Processor.Service" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+	<ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+	<ServerRole Description="FAE VoidService" Include="FAE.Void.Service" />
+  </machine>-->
+
+  <machine Id="4" Name="TDC2FAE012" ExternalIP="10.107.238.137" Role="FAE Controller 1">
+    <ServerRole Description="FAE Controller" Include="FAE.Engine.Controller.CPC.Stateless" />
+  </machine>
+  <machine Id="5" Name="TDC2FAE004" ExternalIP="10.107.238.131">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" />
+  </machine>
+  <machine Id="6" Name="TDC2FAE005" ExternalIP="10.107.238.130">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" />
+  </machine>
+  <machine Id="7" Name="TDC2FAE006" ExternalIP="10.107.238.132">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" />
+  </machine>
+  <machine Id="8" Name="TDC2FAE007" ExternalIP="10.107.238.133">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" />
+  </machine>
+  <machine Id="9" Name="TDC2FAE008" ExternalIP="10.107.238.134">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" />
+  </machine>
+  <machine Id="10" Name="TDC2FAE009" ExternalIP="10.107.238.135">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" />
+  </machine>
+  <machine Id="11" Name="TDC2FAE010" ExternalIP="10.107.238.136">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" />
+  </machine>
+  <machine Id="12" Name="TDC2FAE011" ExternalIP="10.107.238.141">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" />
+  </machine>
+  <machine Id="13" Name="TDC2FAE014" ExternalIP="10.107.238.139">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" />
+  </machine>
+  <machine Id="14" Name="TDC2FAE015" ExternalIP="10.107.238.140">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" />
+  </machine>
+  <machine Id="15" Name="TDC2FAE016" ExternalIP="10.107.238.142">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" />
+  </machine>
+  <machine Id="16" Name="TDC2FAE017" ExternalIP="10.107.238.144">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" />
+  </machine>
+  <machine Id="17" Name="TDC2FAE018" ExternalIP="10.107.238.143">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" />
+  </machine>
+  <machine Id="18" Name="TDC2FAE019" ExternalIP="10.107.238.145">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" />
+  </machine>
+  <machine Id="19" Name="TDC2FAE020" ExternalIP="10.107.238.149">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" />
+  </machine>
+  <machine Id="20" Name="TDC2FAE021" ExternalIP="10.107.238.148">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" />
+  </machine>
+  <machine Id="21" Name="TDC2FAE022" ExternalIP="10.107.238.147">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" />
+  </machine>
+  <machine Id="22" Name="TDC2FAE023" ExternalIP="10.107.238.146">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" />
+  </machine>
+
+  <machine Id="23" Name="TDC2FAE029" ExternalIP="10.107.238.160" Role="CIS Server 1">
+    <ServerRole Include="IISSetup.CIS" Description="IIS" Groups="FAE" />
+    <ServerRole Description="FAE Journey Usage" Include="FAE.JourneyUsage.Service" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+	<ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+	<ServerRole Description="FAE VoidService" Include="FAE.Void.Service" />
+  </machine>
+  <machine Id="24" Name="TDC2FAE030" ExternalIP="10.107.238.170" Role="CIS Server 2">
+    <ServerRole Include="IISSetup.CIS" Description="IIS" Groups="FAE" />
+    <ServerRole Description="FAE Journey Usage" Include="FAE.JourneyUsage.Service" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+	<ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+	<ServerRole Description="FAE VoidService" Include="FAE.Void.Service" />
+  </machine>
+  <machine Id="25" Name="TDC2FAE032" ExternalIP="10.107.238.161" Role="CIS Server 3">
+    <ServerRole Include="IISSetup.CIS" Description="IIS" Groups="FAE" />
+    <ServerRole Description="FAE Journey Usage" Include="FAE.JourneyUsage.Service" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+	<ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+	<ServerRole Description="FAE VoidService" Include="FAE.Void.Service" />
+      </machine>
+  <machine Id="26" Name="TDC2FAE033" ExternalIP="10.107.238.163" Role="CIS Server 4">
+    <ServerRole Include="IISSetup.CIS" Description="IIS" Groups="FAE" />
+    <ServerRole Description="FAE Journey Usage" Include="FAE.JourneyUsage.Service" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+	<ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+	<ServerRole Description="FAE VoidService" Include="FAE.Void.Service" />
+  </machine>
+  <!--
+  <machine Id="24" Name="TDC2FAEC02V01" ExternalIP="10.107.203.232">
+
+   <DatabaseRole Description="FAE Deployment Schema" Include="">
+      <TargetDatabase>FAE_Dev_Int</TargetDatabase>
+      <DatabaseInstance>vins001</DatabaseInstance>
+      <PatchDeployment>DeploymentSchema.Scripts\Patching\DeploymentSchema.Patching.sql</PatchDeployment>
+    </DatabaseRole>
+    <DatabaseRole Description="FAE Database" Include="">
+      <TargetDatabase>FAE_Dev_Int</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <PreDeployment></PreDeployment>
+      <PatchDeployment></PatchDeployment>
+      <PostDeployment></PostDeployment>
+      <PatchDeploymentFolder>FAE.DataMigrationScripts\Common\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+    <DatabaseRole Description='FAE PreProduction Schema Increment' Include=''>
+      <TargetDatabase>FAE_Dev_Int</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <PreDeployment></PreDeployment>
+      <PatchDeployment></PatchDeployment>
+      <PostDeployment></PostDeployment>
+      <PatchDeploymentFolder>FAE.DataMigrationScripts\Preprod\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      </machine>
+	</DatabaseRole> -->
+<!--
+  </machine>
+  <SqlParameters>
+    <add name="FAEDatabaseName" value="FAE_DevInt_New" />
+    <add name="PareSchemaName" value="pare" />
+    <add name="PareDatabaseServer" value="TDC2SQLC02V01\VINS001" />
+  </SqlParameters>  -->
+
+</configuration>

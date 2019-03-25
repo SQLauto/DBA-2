@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="DevInt2.TJSDistributor.Internal" Environment="DevInt2" Config="DevInt2" ProductGroup="FTP">
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+
+  <PostDeploymentTestIdentity>DeploymentAccount.Internal</PostDeploymentTestIdentity>
+
+  <machine Id="FTDC2MGT360" Name="FTDC2MGT360" ExternalIP="10.107.200.186" DeploymentMachine="true" />
+
+ 
+
+  <machine Id="TDC2FAEC04V01" Name="TDC2FAEC04V01" ExternalIP="10.107.200.196">
+    <!-- TJS Store -->
+    <DatabaseRole Description='TJS Baseline' Include="TJS.Baseline.Database" DatabaseInstance="VINS001" TargetDatabase="TJS" />
+    <DatabaseRole Description="TJS Deployment Schema" Include="Deployment.Schema" DatabaseInstance="VINS001" TargetDatabase="TJS" />
+    <DatabaseRole Description="TJS Main Schema" Include="TJS.Database" DatabaseInstance="VINS001" TargetDatabase="TJS" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="VINS001" TargetDatabase="TJS" />
+    <DatabaseRole Description="TJS Partitioning" Include="TJS.Partitioning" DatabaseInstance="VINS001" TargetDatabase="TJS" />
+
+    <!-- TJS Store for CPC -->
+    <DatabaseRole Description='TJS Baseline' Include="TJS.Baseline.Database" DatabaseInstance="VINS001" TargetDatabase="TJS_CPC" Config="DevInt2_CPC" />
+    <DatabaseRole Description="TJS Deployment Schema" Include="Deployment.Schema" DatabaseInstance="VINS001" TargetDatabase="TJS_CPC" Config="DevInt2_CPC" />
+    <DatabaseRole Description="TJS Main Schema" Include="TJS.Database" DatabaseInstance="VINS001" TargetDatabase="TJS_CPC" Config="DevInt2_CPC" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="VINS001" TargetDatabase="TJS_CPC" Config="DevInt2_CPC" />
+    <DatabaseRole Description="TJS Partitioning" Include="TJS.Partitioning" DatabaseInstance="VINS001" TargetDatabase="TJS_CPC" Config="DevInt2_CPC" />
+	
+	
+	
+  </machine>
+
+</configuration>

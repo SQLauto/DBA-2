@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="TestRig" Environment="TSRig" Config="TSRig" ProductGroup="FTP">
+
+  <CommonRoleFile>Invalid.CommonRoles.xml</CommonRoleFile>
+
+  <machine Id="6" Name="TS-FAE4"   ExternalIP="2">
+    <!-- Includes Can't have child Elements -->
+    <ServerRole Description="Invalid Test Case - 3" Include="FAE.Engine.Service.Invalid3">
+      <ServiceDeploy Name="FAEPipelineHost">
+        <MSI>
+          <id>C915AC1B-9A4F-4CCC-9297-FD992362F99D</id>
+          <name>PipelineHost.msi</name>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\FAE\PipelineHost\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>PipelineHost.exe</Name>
+            <Credentials>FAEServiceAccount</Credentials>
+            <StartUpType>Automatic Delayed Start</StartUpType>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="PipelineHost.exe.config" target="\tfl\FAE\PipelineHost"/>
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+  </machine>
+</configuration>

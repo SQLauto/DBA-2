@@ -1,0 +1,17 @@
+﻿@using System.Globalization
+@{
+    ViewBag.Title = "RadarError";
+}
+@model List<string>
+
+<h2>RadarError</h2>
+<p>There was a problem creating the radar chart. Please check below for details</p>
+<div>
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li>@Html.DisplayFor(i => item)</li>
+        }
+    </ul>
+</div>
+<p>Check the URL for spelling errors or missing criteria</p>

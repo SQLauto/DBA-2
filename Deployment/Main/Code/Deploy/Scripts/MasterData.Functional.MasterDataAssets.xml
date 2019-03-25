@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="MasterData.FMJT.Shared.Functional" Environment="TestRig"  Config="TestRig.MasterData" ProductGroup="FTP">
+  <!--  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>-->
+  <CommonRoleFile>CommonMJTDeltasRole.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>  
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+
+  <machine Id="1" Name="TS-DB1" ExternalIP="" DeploymentMachine="true">
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices1" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices2" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices3" />
+    <PreDeployRole Description="CheckSqlAgentServiceInst1" Include="CheckSqlAgentServiceInst1" />
+	<PreDeployRole Description="CheckSqlAgentServiceInst1" Include="CheckSqlAgentServiceInst2" />
+
+    <!-- Copy MasterData backup Files -->
+    <ServerRole Description="MasterData.ProjectionStore file system" Include="MasterData.ProjectionStoreRestore.FileSystem.INT" />
+
+    <DatabaseRole Description="System Deployment Schema"  Include="System.Deployment.Schema" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="Dba.System" Include="Dba.System" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="MasterData.ProjectionStore.Restore" Include="MasterData.ProjectionStore.Restore" DatabaseInstance="Inst3" />
+  </machine>
+
+  <machine Id="2" Name="TS-SAS1" ExternalIP="">
+    <PreDeployRole Include="MasterData.MJTService.Service.Stop" />
+    <PreDeployRole Include="MasterData.Fares.Service.Stop" />
+
+    <ServerRole Description="Copy MJT Files" Include="MasterData.MJTService.Assets.Last13Weeks" />
+    <ServerRole Description="Copy Fares Files" Include="MasterData.FareService.Assets.Last13Weeks" />
+
+    <PostDeployRole Description="Start MasterData MJT Services" Include="MasterData.Services.MJT.Start" />
+    <PostDeployRole Description="Start MasterData Fares Services" Include="MasterData.Services.Fares.Start" />
+  </machine>
+
+</configuration>

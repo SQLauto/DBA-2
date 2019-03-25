@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/CommonRoles">
+  <CommonRoles>
+    <!-- Database Roles for Integration-->
+     <DatabaseRole Name="FromConfig" Description="SSO Deployment Schema"  Include="SSO.DBDeploymentSchema" Groups="SSO,Database">
+      <TargetDatabase>SingleSignOn</TargetDatabase>
+      <DatabaseInstance>Inst3</DatabaseInstance>
+      <PatchDeployment>DeploymentSchema.Scripts\Patching\DeploymentSchema.Patching.sql</PatchDeployment>
+      <PostDeployment></PostDeployment>
+    </DatabaseRole>
+    <DatabaseRole Name="FromConfig" Description="SSO Database" Include="SSO.Database" Groups="SSO,Database">
+      <TargetDatabase>SingleSignOn</TargetDatabase>
+      <DatabaseInstance>Inst3</DatabaseInstance>
+      <PreDeployment/>
+      <PatchDeployment />
+      <PostDeployment/>
+      <PatchDeploymentFolder>SSO.DatabaseArtifacts\Common\Scripts\Patching\</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+    <DatabaseRole Name="FromConfig" Description="SSO Database Dev" Include="SSO.Database.Dev" Groups="SSO,Database">
+      <TargetDatabase>SingleSignOn</TargetDatabase>
+      <DatabaseInstance>Inst3</DatabaseInstance>
+      <PreDeployment/>
+      <PatchDeployment />
+      <PostDeployment/>
+      <PatchDeploymentFolder>SSO.DatabaseArtifacts\Dev\Scripts\Patching\</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+    <!-- Database roles for Cubic ABCD -->
+    <DatabaseRole Name="FromConfig" Description="SSO Database PreProd" Include="SSO.Database.PreProdCubic" Groups="SSO,Database">
+      <TargetDatabase>SingleSignOn</TargetDatabase>
+      <DatabaseInstance>Inst1</DatabaseInstance>
+      <BaselineDeployment></BaselineDeployment>
+      <PreDeployment></PreDeployment>
+      <PatchDeployment>SSO.DatabaseArtifacts\PreProd\Patching.sql</PatchDeployment>
+      <PostDeployment></PostDeployment>
+      <PatchDeploymentFolder>SSO.DatabaseArtifacts\PreProd\</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+    
+  </CommonRoles>
+</configuration>

@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaselineDal", "BaselineDal\BaselineDal.csproj", "{7F512FA5-A6E3-4003-871C-1382680771B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoringDashboard", "MonitoringDashboard\MonitoringDashboard.csproj", "{FDE7C232-2CD4-4CC8-A2DB-E4A475A083ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dto", "Dto\Dto.csproj", "{851530EE-2DD3-4D3E-AB61-C53D05BB4CCF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoringService", "MonitoringService\MonitoringService.csproj", "{486B0C20-92D4-4E29-8560-49AB50AFB9F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication", "ConsoleApplication\ConsoleApplication.csproj", "{00291259-7FA5-4AD7-8692-92D8023021CF}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://tfs:8080/tfs/ftpdev
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = BaselineDal\\BaselineDal.csproj
+		SccProjectName1 = BaselineDal
+		SccLocalPath1 = BaselineDal
+		SccProjectUniqueName2 = MonitoringDashboard\\MonitoringDashboard.csproj
+		SccProjectName2 = MonitoringDashboard
+		SccLocalPath2 = MonitoringDashboard
+		SccProjectUniqueName3 = Dto\\Dto.csproj
+		SccProjectName3 = Dto
+		SccLocalPath3 = Dto
+		SccProjectUniqueName4 = MonitoringService\\MonitoringService.csproj
+		SccProjectName4 = MonitoringService
+		SccLocalPath4 = MonitoringService
+		SccProjectUniqueName5 = ConsoleApplication\\ConsoleApplication.csproj
+		SccProjectName5 = ConsoleApplication
+		SccLocalPath5 = ConsoleApplication
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7F512FA5-A6E3-4003-871C-1382680771B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F512FA5-A6E3-4003-871C-1382680771B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F512FA5-A6E3-4003-871C-1382680771B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F512FA5-A6E3-4003-871C-1382680771B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDE7C232-2CD4-4CC8-A2DB-E4A475A083ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDE7C232-2CD4-4CC8-A2DB-E4A475A083ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDE7C232-2CD4-4CC8-A2DB-E4A475A083ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDE7C232-2CD4-4CC8-A2DB-E4A475A083ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{851530EE-2DD3-4D3E-AB61-C53D05BB4CCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{851530EE-2DD3-4D3E-AB61-C53D05BB4CCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{851530EE-2DD3-4D3E-AB61-C53D05BB4CCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{851530EE-2DD3-4D3E-AB61-C53D05BB4CCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{486B0C20-92D4-4E29-8560-49AB50AFB9F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{486B0C20-92D4-4E29-8560-49AB50AFB9F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{486B0C20-92D4-4E29-8560-49AB50AFB9F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{486B0C20-92D4-4E29-8560-49AB50AFB9F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00291259-7FA5-4AD7-8692-92D8023021CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00291259-7FA5-4AD7-8692-92D8023021CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00291259-7FA5-4AD7-8692-92D8023021CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00291259-7FA5-4AD7-8692-92D8023021CF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

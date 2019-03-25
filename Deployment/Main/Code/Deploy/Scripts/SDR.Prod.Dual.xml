@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="SDR Production" Environment="SiteA" Config="SiteA" ProductGroup="FTP">
+
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+
+  <machine Id="0" Name="PDC2OJS001"  ExternalIP="10.106.44.6" DeploymentMachine="true">
+    <ServerRole Include="IISSetup" Description="IIS" Groups="Always" />
+    <ServerRole Include="SDR.Website" Groups="Always" />
+  </machine>
+
+  <machine Id="1" Name="PDC2OJS002"  ExternalIP="10.106.44.7">
+    <ServerRole Include="IISSetup" Description="IIS" Groups="Always" />
+    <ServerRole Include="SDR.Website" Groups="Always" />
+  </machine>
+
+</configuration>

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<package>
+  <metadata>
+    <id>Deployment.Domain</id>
+    <version>$version$</version>
+    <authors>FTP Build</authors>
+    <owners>FTP Build</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Deployment.Domain contains classes used to define the objects in a Deployment Configuration file</description>
+    <copyright>Copyright 2017</copyright>
+    <dependencies>
+      <dependency id="System.Collections.Immutable" version="1.4.0" />
+      <dependency id="Deployment.Common" version="1.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\Deployment.Domain.dll" target="lib\net452" />
+  </files>
+</package>

@@ -1,0 +1,225 @@
+﻿.radarChartContainer {
+    clear: both;
+}
+
+.radarChart {
+    float: left;
+    height: 750px;
+    width: 750px;
+}
+
+.radarLegend {
+    float: left;
+    clear: right;
+    margin-left: 10px;
+}
+.radarLegendItem {
+    color: #000000;
+    min-width: 100px;
+    min-height: 50px;
+    border-width: 10px;
+    border-style: solid;
+}
+
+.radarTable {
+    float: left;
+    clear: both;
+    color: #000;
+    border: 1px solid black;
+}
+
+.radarTable thead {
+    font-size: 0.8em;
+    color: #000;
+    border: 1px solid black;
+}
+
+.radarTable td {
+    color: #000;
+    border: 1px solid black;
+}
+
+.radarTable th {
+    color: #000;
+    border: 1px solid black;
+}
+
+.radarLegendItem0 {
+    background-color: rgba(212, 212, 106, 0.2);
+    border-color: rgba(212, 212, 106, 1);
+}
+
+.radarLegendItem1 {
+    background-color: rgba(165, 198, 99, 0.2);
+    border-color: rgba(165, 198, 99, 1);
+}
+
+.radarLegendItem2 {
+    background-color: rgba(136, 204, 136, 0.2);
+    border-color: rgba(136, 204, 136, 1);
+}
+
+.radarLegendItem3 {
+    background-color: rgba(212, 238, 159, 0.2);
+    border-color: rgba(212, 238, 159, 1);
+}
+
+.radarLegendItem4 {
+    background-color: rgba(255, 255, 170, 0.2);
+    border-color: rgba(255, 255, 170, 1);
+}
+
+.radarLegendItem5 {
+    background-color: rgba(102, 153, 153, 0.2);
+    border-color: rgba(102, 153, 153, 1);
+}
+
+.radarLegendItem6 {
+    background-color: rgba(120, 135, 171, 0.2);
+    border-color: rgba(120, 135, 171, 1);
+}
+
+.radarLegendItem7 {
+    background-color: rgba(146, 119, 172, 0.2);
+    border-color: rgba(146, 119, 172, 1);
+}
+
+.radarLegendItem8 {
+    background-color: rgba(173, 116, 168, 0.2);
+    border-color: rgba(173, 116, 168, 1);
+}
+
+.radarLegendItem9 {
+    background-color: rgba(219, 146, 175, 0.2);
+    border-color: rgba(219, 146, 175, 1);
+}
+
+.radarLegendItem10 {
+    background-color: rgba(255, 196, 170, 0.2);
+    border-color: rgba(255, 196, 170, 1);
+}
+
+
+.tableRowNameItem0 {
+    background-color: rgba(212, 212, 106, 1);
+}
+
+.tableRowNameItem1 {
+    background-color: rgba(165, 198, 99, 1);
+}
+
+.tableRowNameItem2 {
+    background-color: rgba(136, 204, 136, 1);
+}
+
+.tableRowNameItem3 {
+    background-color: rgba(212, 238, 159, 1);
+}
+
+.tableRowNameItem4 {
+    background-color: rgba(255, 255, 170, 1);
+}
+
+.tableRowNameItem5 {
+    background-color: rgba(102, 153, 153, 1);
+}
+
+.tableRowNameItem6 {
+    background-color: rgba(120, 135, 171, 1);
+}
+
+.tableRowNameItem7 {
+    background-color: rgba(146, 119, 172, 1);
+}
+
+.tableRowNameItem8 {
+    background-color: rgba(173, 116, 168, 1);
+}
+
+.tableRowNameItem9 {
+    background-color: rgba(219, 146, 175, 1);
+}
+
+.tableRowNameItem10 {
+    background-color: rgba(255, 196, 170, 1);
+}
+
+
+.radarPercentile10 {
+    background-color: rgba(255, 0, 0, 1);
+}
+
+.radarPercentile9 {
+    background-color: rgba(255, 0, 0, 0.9);
+}
+
+.radarPercentile8 {
+    background-color: rgba(255, 0, 0, 0.8);
+}
+
+.radarPercentile8 {
+    background-color: rgba(255, 0, 0, 0.65);
+}
+
+.radarPercentile7 {
+    background-color: rgba(255, 0, 0, 0.5);
+}
+
+.radarPercentile6 {
+    background-color: rgba(255, 92, 0, 1);
+}
+
+.radarPercentile5 {
+    background-color: rgba(255, 92, 0, 8);
+}
+
+.radarPercentile4 {
+    background-color: rgba(255, 92, 0, 0.65);
+}
+
+.radarPercentile3 {
+    background-color: rgba(255, 92, 0, 0.5);
+}
+
+.radarPercentile2 {
+    background-color: rgba(21, 171, 0, 0.2);
+}
+
+.radarPercentile1 {
+    background-color: rgba(21, 171, 0, 0.5);
+}
+
+.radarPercentile0 {
+    background-color: rgba(21, 171, 0, 1);
+}
+
+#main {
+    margin-left: 10px;
+}
+
+.executionContainer, .metricsContainer, .metricContainer {
+    clear: both;
+}
+
+.metricsContainer {
+    margin: auto;
+    width: 430px;
+}
+
+.metricTitle, .metricValue {
+    padding: 5px;
+    float: left;
+    border: 3px solid #000;
+}
+
+.metricTitle {
+    text-align: left;
+    width: 300px;
+}
+
+.metricValue {
+    text-align: right;
+    clear: right;
+    width: 120px;
+}
+

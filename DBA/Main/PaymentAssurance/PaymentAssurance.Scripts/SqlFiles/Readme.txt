@@ -1,0 +1,1 @@
+This needs to be kept as the initial deployment contains files here and the copyitem needs there to be a file in the folder to copy

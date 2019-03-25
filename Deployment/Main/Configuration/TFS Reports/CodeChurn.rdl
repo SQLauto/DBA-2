@@ -1,0 +1,955 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:cl="http://schemas.microsoft.com/sqlserver/reporting/2010/01/componentdefinition" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/reportdefinition">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="TFSData">
+      <DataSourceReference>/Tfs2010ReportDS</DataSourceReference>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>accb8c4d-b983-4651-a52e-c2bce26786f6</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="BuildMetrics">
+      <Query>
+        <DataSourceName>TFSData</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@StartDateParam">
+            <Value>=Parameters!StartDateParam.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@EndDateParam">
+            <Value>=Parameters!EndDateParam.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@BuildTypeParam">
+            <Value>=Parameters!BuildTypeParam.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>DECLARE @BuildList AS TABLE(
+	BuildBK NVARCHAR(64),
+	[DateTime] DATETIME,
+	BuildStartTime DATETIME,
+	TeamProjectProjectNodeName NVARCHAR(256) null,
+	BuildDefinitionName NVARCHAR(260) null,
+	BuildStatusName NVARCHAR(260) null,
+	BuildPlatformName NVARCHAR(64) null,
+	BuildFlavorName NVARCHAR(128) null
+)
+
+DECLARE @Results AS TABLE(
+	BuildBK NVARCHAR(64),
+	[DateTime] DATETIME,
+	BuildStartTime DATETIME,
+	TeamProjectProjectNodeName NVARCHAR(256) null,
+	BuildDefinitionName NVARCHAR(260) null,
+	BuildStatusName NVARCHAR(260) null,
+	BuildPlatformName NVARCHAR(64) null,
+	BuildFlavorName NVARCHAR(128) null,
+	NumBuilds INT,
+	FailedCount INT,
+	PassedCount INT,
+	BlocksCovered INT,
+	BlocksNotCovered INT
+)
+
+DECLARE @StartDate DATETIME, @EndDate DATETIME
+SET @StartDate = CAST(@StartDateParam AS DATETIME)
+SET @EndDate = DATEADD(dd, 1, CAST(@EndDateParam AS DATETIME))
+DECLARE @Stopped AS INT = 16
+
+--
+-- First get the set of builds for the project that are in the date range, and with the appropriate filters
+-- applied.
+--
+INSERT INTO @BuildList (BuildBK, [DateTime], BuildStartTime, TeamProjectProjectNodeName,
+						BuildDefinitionName, BuildStatusName, BuildPlatformName, BuildFlavorName)
+	  SELECT DISTINCT bd.BuildBK, bd.[DateTime], bd.BuildStartTime, bd.TeamProjectProjectNodeName,
+					  bd.BuildDefinitionName, bd.BuildStatusName, pv.BuildPlatformName, pv.BuildFlavorName
+		FROM BuildDetailsView bd
+	  LEFT OUTER JOIN BuildProjectView pv ON pv.BuildBK = bd.BuildBK
+	   WHERE bd.[DateTime] &gt;= @StartDate and bd.[DateTime] &lt; @EndDate
+		AND RTRIM(bd.TeamProjectProjectNodeName) &lt;&gt; ''
+		 AND (bd.BuildDefinitionName IN (@BuildTypeParam) OR '*' IN (@BuildTypeParam))
+		 AND (bd.BuildStatusNameId != @Stopped)
+
+
+--
+-- Get the last build for each day.
+--
+INSERT INTO @Results (BuildBK, [DateTime], BuildStartTime,TeamProjectProjectNodeName,
+					  BuildDefinitionName, BuildStatusName, BuildPlatformName, BuildFlavorName)
+	SELECT a.BuildBK, a.[DateTime], a.BuildStartTime, TeamProjectProjectNodeName,
+		   a.BuildDefinitionName, a.BuildStatusName, a.BuildPlatformName, a.BuildFlavorName
+	  FROM @BuildList a
+	 WHERE a.BuildBK IN
+		(SELECT TOP 1 b.BuildBK
+		   FROM @BuildList b
+		  WHERE b.BuildStartTime &gt;= a.[DateTime]
+			AND b.BuildStartTime &lt; DATEADD(dd, 1, a.[DateTime])
+			AND (b.BuildPlatformName = a.BuildPlatformName OR (b.BuildPlatformName IS NULL AND a.BuildPlatformName IS NULL))
+			AND (b.BuildFlavorName = a.BuildFlavorName OR (a.BuildFlavorName IS NULL AND b.BuildFlavorName IS NULL))
+			AND b.BuildDefinitionName = a.BuildDefinitionName
+			AND b.TeamProjectProjectNodeName = a.TeamProjectProjectNodeName
+		  ORDER BY b.BuildStartTime DESC
+		)
+
+--
+-- Update the number of builds in the results table
+--
+UPDATE @Results
+	SET NumBuilds = (
+		SELECT COUNT(*) 
+		  FROM @BuildList bl
+		 WHERE bl.[DateTime] = r.[DateTime]
+	)
+   FROM @Results r
+
+;WITH
+CodeCoverage AS
+(
+	SELECT BuildBK, BuildPlatformName, BuildFlavorName, SUM(BlocksCovered) AS BlocksCovered, SUM(BlocksNotCovered) AS BlocksNotCovered
+	  FROM BuildCoverageView
+	-- WHERE TeamProjectProjectNodeGUID = @ProjectGuid
+	GROUP BY BuildBK, BuildPlatformName, BuildFlavorName
+)
+
+UPDATE	@Results
+   SET	BlocksCovered = cc.BlocksCovered,
+		BlocksNotCovered = cc.BlocksNotCovered
+  FROM	@Results r 
+INNER JOIN CodeCoverage cc ON r.BuildBK = cc.Buildbk
+	AND r.BuildPlatformName = cc.BuildPlatformName
+	AND r.BuildFlavorName = cc.BuildFlavorName
+
+;WITH
+BuildOutcome AS
+(
+	SELECT [DateTime], BuildBK, BuildName, ResultOutcomeId, COUNT(ResultOutcomeId) AS OutcomeCount,
+		   BuildPlatformName, BuildFlavorName
+	  FROM TestResultView
+	-- WHERE TeamProjectProjectNodeGUID = @ProjectGuid
+	GROUP BY [DateTime], BuildBK, BuildName, ResultOutcomeId, BuildPlatformName, BuildFlavorName
+),
+
+FailedPassedCounts AS
+(
+	SELECT [DateTime], BuildBK, BuildName, OutcomeCount AS FailedCount, 0 as PassedCount, BuildPlatformName, BuildFlavorName
+	  FROM BuildOutcome
+	 WHERE ResultOutcomeId = 3	-- 'Failed'
+
+	UNION
+
+	SELECT [DateTime], BuildBK, BuildName, 0 as FailedCount, OutcomeCount AS PassedCount, BuildPlatformName, BuildFlavorName
+	  FROM BuildOutcome
+	 WHERE ResultOutcomeId = 2 -- 'Passed'
+),
+
+TestResultsByBuild AS
+(
+	SELECT [DateTime], BuildBK, BuildName, SUM(FailedCount) AS FailedCount, SUM(PassedCount) AS PassedCount, BuildPlatformName, BuildFlavorName
+	  FROM FailedPassedCounts
+	GROUP BY [DateTime], BuildBK, BuildName, BuildPlatformName, BuildFlavorName
+)
+
+UPDATE	@Results
+   SET	FailedCount = tr.FailedCount,
+		PassedCount = tr.PassedCount
+  FROM	@Results r 
+INNER JOIN TestResultsByBuild tr ON r.BuildBK = tr.BuildBK
+	AND r.BuildPlatformName = tr.BuildPlatformName
+	AND r.BuildFlavorName = tr.BuildFlavorName
+
+;WITH DateValues AS
+(
+	SELECT [DateTime] AS [DateTime] FROM DimDate WHERE [DateTime] &gt;= @StartDate and [DateTime] &lt; @EndDate
+)
+
+SELECT	dv.[DateTime], r.TeamProjectProjectNodeName , r.BuildDefinitionName,
+		r.BuildPlatformName, r.BuildFlavorName,
+		r.BuildStatusName, bs.BuildStatusNameId AS [Build Status], r.NumBuilds AS [Num Builds], r.FailedCount AS FailedCount,
+		r.PassedCount AS PassedCount, BlocksCovered / (BlocksCovered + BlocksNotCovered + 0.0) AS [Code Coverage]
+FROM DateValues dv
+	LEFT OUTER JOIN @Results r ON r.[DateTime] = dv.[DateTime]
+	LEFT OUTER JOIN DimBuildStatus bs ON bs.BuildStatusName = r.BuildStatusName</CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+      <Fields>
+        <Field Name="DateTime">
+          <DataField>DateTime</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="TeamProjectProjectNodeName">
+          <DataField>TeamProjectProjectNodeName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="BuildDefinitionName">
+          <DataField>BuildDefinitionName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="BuildPlatformName">
+          <DataField>BuildPlatformName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="BuildFlavorName">
+          <DataField>BuildFlavorName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="BuildStatusName">
+          <DataField>BuildStatusName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Build_Status">
+          <DataField>Build Status</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Num_Builds">
+          <DataField>Num Builds</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="FailedCount">
+          <DataField>FailedCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="PassedCount">
+          <DataField>PassedCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Code_Coverage">
+          <DataField>Code Coverage</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="PercentagePass">
+          <Value>=Fields!PassedCount.Value\(Fields!FailedCount.Value+Fields!PassedCount.Value)</Value>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="CodeChurn">
+      <Query>
+        <DataSourceName>TFSData</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@StartDateParam">
+            <Value>=Parameters!StartDateParam.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@EndDateParam">
+            <Value>=Parameters!EndDateParam.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>DECLARE @StartDate DATETIME, @EndDate DATETIME
+SET @StartDate = CAST(@StartDateParam AS DATETIME)
+SET @EndDate = DATEADD(dd, 1, CAST(@EndDateParam AS DATETIME))
+
+/****** Script for SelectTopNRows command from SSMS  ******/
+SELECT [CodeChurnBK]
+      ,[LinesAdded]
+      ,[LinesModified]
+      ,[LinesDeleted]
+      ,[NetLinesAdded]
+      ,[TeamProjectProjectNodeName]
+      ,[TeamProjectIsDeleted]
+      ,[DateTime]
+  FROM [Tfs_Warehouse].[dbo].[CodeChurnView]
+  WHERE [DateTime] &gt;= @StartDate and [DateTime] &lt; @EndDate
+AND FilenameFileExtension not in ('.txt','.csv','.rtf', '.xml', '.uitest','.testsettings')
+	  AND FileName NOT LIKE 'jquery%'
+	  AND FileName NOT LIKE 'UIMap%'
+      AND FilenameFilePath NOT LIKE '$/FAE/Branches%'
+AND [TeamProjectProjectNodeName] in ('PaRE','FAE','CACC','MCSFG')
+	  </CommandText>
+      </Query>
+      <Fields>
+        <Field Name="CodeChurnBK">
+          <DataField>CodeChurnBK</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="LinesAdded">
+          <DataField>LinesAdded</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="LinesModified">
+          <DataField>LinesModified</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="LinesDeleted">
+          <DataField>LinesDeleted</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="NetLinesAdded">
+          <DataField>NetLinesAdded</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TeamProjectProjectNodeName">
+          <DataField>TeamProjectProjectNodeName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TeamProjectIsDeleted">
+          <DataField>TeamProjectIsDeleted</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="DateTime">
+          <DataField>DateTime</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <ReportItems>
+          <Tablix Name="Tablix4">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>202.49235mm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>6.39687mm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox12">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Code Churn History</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox12</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>70.42604mm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Chart Name="Sparkline2">
+                          <ChartCategoryHierarchy>
+                            <ChartMembers>
+                              <ChartMember>
+                                <Group Name="Sparkline2_CategoryGroup">
+                                  <GroupExpressions>
+                                    <GroupExpression>=Fields!DateTime.Value</GroupExpression>
+                                  </GroupExpressions>
+                                </Group>
+                                <SortExpressions>
+                                  <SortExpression>
+                                    <Value>=Fields!DateTime.Value</Value>
+                                  </SortExpression>
+                                </SortExpressions>
+                                <Label>=Fields!DateTime.Value</Label>
+                              </ChartMember>
+                            </ChartMembers>
+                          </ChartCategoryHierarchy>
+                          <ChartSeriesHierarchy>
+                            <ChartMembers>
+                              <ChartMember>
+                                <Group Name="Sparkline2_SeriesGroup">
+                                  <GroupExpressions>
+                                    <GroupExpression>=Fields!TeamProjectProjectNodeName.Value</GroupExpression>
+                                  </GroupExpressions>
+                                </Group>
+                                <SortExpressions>
+                                  <SortExpression>
+                                    <Value>=Fields!TeamProjectProjectNodeName.Value</Value>
+                                  </SortExpression>
+                                </SortExpressions>
+                                <ChartMembers>
+                                  <ChartMember>
+                                    <Label>Lines Added</Label>
+                                  </ChartMember>
+                                  <ChartMember>
+                                    <Label>Lines Modified</Label>
+                                  </ChartMember>
+                                  <ChartMember>
+                                    <Label>Lines Deleted</Label>
+                                  </ChartMember>
+                                </ChartMembers>
+                                <Label>=Fields!TeamProjectProjectNodeName.Value</Label>
+                              </ChartMember>
+                            </ChartMembers>
+                          </ChartSeriesHierarchy>
+                          <ChartData>
+                            <ChartSeriesCollection>
+                              <ChartSeries Name="LinesAdded">
+                                <ChartDataPoints>
+                                  <ChartDataPoint>
+                                    <ChartDataPointValues>
+                                      <Y>=Sum(Fields!LinesAdded.Value)</Y>
+                                    </ChartDataPointValues>
+                                    <ChartDataLabel>
+                                      <Style />
+                                    </ChartDataLabel>
+                                    <Style />
+                                    <ChartMarker>
+                                      <Style />
+                                    </ChartMarker>
+                                    <DataElementOutput>Output</DataElementOutput>
+                                  </ChartDataPoint>
+                                </ChartDataPoints>
+                                <Subtype>Stacked</Subtype>
+                                <Style />
+                                <ChartEmptyPoints>
+                                  <Style />
+                                  <ChartMarker>
+                                    <Style />
+                                  </ChartMarker>
+                                  <ChartDataLabel>
+                                    <Style />
+                                  </ChartDataLabel>
+                                </ChartEmptyPoints>
+                                <ValueAxisName>Primary</ValueAxisName>
+                                <CategoryAxisName>Primary</CategoryAxisName>
+                                <ChartSmartLabel>
+                                  <CalloutLineColor>Black</CalloutLineColor>
+                                  <MinMovingDistance>0pt</MinMovingDistance>
+                                </ChartSmartLabel>
+                              </ChartSeries>
+                              <ChartSeries Name="LinesModified">
+                                <ChartDataPoints>
+                                  <ChartDataPoint>
+                                    <ChartDataPointValues>
+                                      <Y>=Sum(Fields!LinesModified.Value)</Y>
+                                    </ChartDataPointValues>
+                                    <ChartDataLabel>
+                                      <Style />
+                                    </ChartDataLabel>
+                                    <Style />
+                                    <ChartMarker>
+                                      <Style />
+                                    </ChartMarker>
+                                    <DataElementOutput>Output</DataElementOutput>
+                                  </ChartDataPoint>
+                                </ChartDataPoints>
+                                <Subtype>Stacked</Subtype>
+                                <Style />
+                                <ChartEmptyPoints>
+                                  <Style />
+                                  <ChartMarker>
+                                    <Style />
+                                  </ChartMarker>
+                                  <ChartDataLabel>
+                                    <Style />
+                                  </ChartDataLabel>
+                                </ChartEmptyPoints>
+                                <ValueAxisName>Primary</ValueAxisName>
+                                <CategoryAxisName>Primary</CategoryAxisName>
+                                <ChartSmartLabel>
+                                  <CalloutLineColor>Black</CalloutLineColor>
+                                  <MinMovingDistance>0pt</MinMovingDistance>
+                                </ChartSmartLabel>
+                              </ChartSeries>
+                              <ChartSeries Name="LinesDeleted">
+                                <ChartDataPoints>
+                                  <ChartDataPoint>
+                                    <ChartDataPointValues>
+                                      <Y>=-Sum(Fields!LinesDeleted.Value)</Y>
+                                    </ChartDataPointValues>
+                                    <ChartDataLabel>
+                                      <Style />
+                                    </ChartDataLabel>
+                                    <Style />
+                                    <ChartMarker>
+                                      <Style />
+                                    </ChartMarker>
+                                    <DataElementOutput>Output</DataElementOutput>
+                                  </ChartDataPoint>
+                                </ChartDataPoints>
+                                <Subtype>Stacked</Subtype>
+                                <Style />
+                                <ChartEmptyPoints>
+                                  <Style />
+                                  <ChartMarker>
+                                    <Style />
+                                  </ChartMarker>
+                                  <ChartDataLabel>
+                                    <Style />
+                                  </ChartDataLabel>
+                                </ChartEmptyPoints>
+                                <ValueAxisName>Primary</ValueAxisName>
+                                <CategoryAxisName>Primary</CategoryAxisName>
+                                <ChartSmartLabel>
+                                  <CalloutLineColor>Black</CalloutLineColor>
+                                  <MinMovingDistance>0pt</MinMovingDistance>
+                                </ChartSmartLabel>
+                              </ChartSeries>
+                            </ChartSeriesCollection>
+                          </ChartData>
+                          <ChartAreas>
+                            <ChartArea Name="Default">
+                              <ChartCategoryAxes>
+                                <ChartAxis Name="Primary">
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Format>dd/MMM</Format>
+                                  </Style>
+                                  <ChartAxisTitle>
+                                    <Caption />
+                                    <Style>
+                                      <FontSize>8pt</FontSize>
+                                    </Style>
+                                  </ChartAxisTitle>
+                                  <ChartMajorGridLines>
+                                    <Enabled>False</Enabled>
+                                    <Style>
+                                      <Border>
+                                        <Color>Gainsboro</Color>
+                                      </Border>
+                                    </Style>
+                                  </ChartMajorGridLines>
+                                  <ChartMinorGridLines>
+                                    <Style>
+                                      <Border>
+                                        <Color>Gainsboro</Color>
+                                        <Style>Dotted</Style>
+                                      </Border>
+                                    </Style>
+                                  </ChartMinorGridLines>
+                                  <ChartMinorTickMarks>
+                                    <Length>0.5</Length>
+                                  </ChartMinorTickMarks>
+                                  <CrossAt>NaN</CrossAt>
+                                  <Minimum>NaN</Minimum>
+                                  <Maximum>NaN</Maximum>
+                                  <ChartAxisScaleBreak>
+                                    <Style />
+                                  </ChartAxisScaleBreak>
+                                </ChartAxis>
+                                <ChartAxis Name="Secondary">
+                                  <Visible>False</Visible>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                  <ChartAxisTitle>
+                                    <Caption>Axis Title</Caption>
+                                    <Style>
+                                      <FontSize>8pt</FontSize>
+                                    </Style>
+                                  </ChartAxisTitle>
+                                  <ChartMajorGridLines>
+                                    <Enabled>False</Enabled>
+                                    <Style>
+                                      <Border>
+                                        <Color>Gainsboro</Color>
+                                      </Border>
+                                    </Style>
+                                  </ChartMajorGridLines>
+                                  <ChartMinorGridLines>
+                                    <Style>
+                                      <Border>
+                                        <Color>Gainsboro</Color>
+                                        <Style>Dotted</Style>
+                                      </Border>
+                                    </Style>
+                                  </ChartMinorGridLines>
+                                  <ChartMinorTickMarks>
+                                    <Length>0.5</Length>
+                                  </ChartMinorTickMarks>
+                                  <CrossAt>NaN</CrossAt>
+                                  <Location>Opposite</Location>
+                                  <Minimum>NaN</Minimum>
+                                  <Maximum>NaN</Maximum>
+                                  <ChartAxisScaleBreak>
+                                    <Style />
+                                  </ChartAxisScaleBreak>
+                                </ChartAxis>
+                              </ChartCategoryAxes>
+                              <ChartValueAxes>
+                                <ChartAxis Name="Primary">
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                  <ChartAxisTitle>
+                                    <Caption />
+                                    <Style>
+                                      <FontSize>8pt</FontSize>
+                                    </Style>
+                                  </ChartAxisTitle>
+                                  <ChartMajorGridLines>
+                                    <Style>
+                                      <Border>
+                                        <Color>Gainsboro</Color>
+                                      </Border>
+                                    </Style>
+                                  </ChartMajorGridLines>
+                                  <ChartMinorGridLines>
+                                    <Style>
+                                      <Border>
+                                        <Color>Gainsboro</Color>
+                                        <Style>Dotted</Style>
+                                      </Border>
+                                    </Style>
+                                  </ChartMinorGridLines>
+                                  <ChartMinorTickMarks>
+                                    <Length>0.5</Length>
+                                  </ChartMinorTickMarks>
+                                  <CrossAt>NaN</CrossAt>
+                                  <Minimum>NaN</Minimum>
+                                  <Maximum>NaN</Maximum>
+                                  <ChartAxisScaleBreak>
+                                    <Style />
+                                  </ChartAxisScaleBreak>
+                                </ChartAxis>
+                                <ChartAxis Name="Secondary">
+                                  <Visible>False</Visible>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                  <ChartAxisTitle>
+                                    <Caption>Axis Title</Caption>
+                                    <Style>
+                                      <FontSize>8pt</FontSize>
+                                    </Style>
+                                  </ChartAxisTitle>
+                                  <ChartMajorGridLines>
+                                    <Style>
+                                      <Border>
+                                        <Color>Gainsboro</Color>
+                                      </Border>
+                                    </Style>
+                                  </ChartMajorGridLines>
+                                  <ChartMinorGridLines>
+                                    <Style>
+                                      <Border>
+                                        <Color>Gainsboro</Color>
+                                        <Style>Dotted</Style>
+                                      </Border>
+                                    </Style>
+                                  </ChartMinorGridLines>
+                                  <ChartMinorTickMarks>
+                                    <Length>0.5</Length>
+                                  </ChartMinorTickMarks>
+                                  <CrossAt>NaN</CrossAt>
+                                  <Location>Opposite</Location>
+                                  <Minimum>NaN</Minimum>
+                                  <Maximum>NaN</Maximum>
+                                  <ChartAxisScaleBreak>
+                                    <Style />
+                                  </ChartAxisScaleBreak>
+                                </ChartAxis>
+                              </ChartValueAxes>
+                              <Style>
+                                <BackgroundColor>#00ffffff</BackgroundColor>
+                                <BackgroundGradientType>None</BackgroundGradientType>
+                              </Style>
+                            </ChartArea>
+                          </ChartAreas>
+                          <ChartLegends>
+                            <ChartLegend Name="Legend1">
+                              <Style>
+                                <BackgroundGradientType>None</BackgroundGradientType>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                              <Position>BottomLeft</Position>
+                              <Layout>Row</Layout>
+                              <ChartLegendTitle>
+                                <Caption />
+                                <Style>
+                                  <FontSize>8pt</FontSize>
+                                  <FontWeight>Bold</FontWeight>
+                                  <TextAlign>Center</TextAlign>
+                                </Style>
+                              </ChartLegendTitle>
+                              <HeaderSeparatorColor>Black</HeaderSeparatorColor>
+                              <ColumnSeparatorColor>Black</ColumnSeparatorColor>
+                            </ChartLegend>
+                          </ChartLegends>
+                          <Palette>BrightPastel</Palette>
+                          <ChartBorderSkin>
+                            <Style>
+                              <BackgroundColor>Gray</BackgroundColor>
+                              <BackgroundGradientType>None</BackgroundGradientType>
+                              <Color>White</Color>
+                            </Style>
+                          </ChartBorderSkin>
+                          <ChartNoDataMessage Name="NoDataMessage">
+                            <Caption>No Data Available</Caption>
+                            <Style>
+                              <BackgroundGradientType>None</BackgroundGradientType>
+                              <TextAlign>General</TextAlign>
+                              <VerticalAlign>Top</VerticalAlign>
+                            </Style>
+                          </ChartNoDataMessage>
+                          <DataSetName>CodeChurn</DataSetName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>White</BackgroundColor>
+                            <BackgroundGradientType>None</BackgroundGradientType>
+                          </Style>
+                        </Chart>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <TablixHeader>
+                    <Size>15.65348mm</Size>
+                    <CellContents>
+                      <Textbox Name="Textbox9">
+                        <CanGrow>true</CanGrow>
+                        <KeepTogether>true</KeepTogether>
+                        <Paragraphs>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>Project</Value>
+                                <Style>
+                                  <FontWeight>Bold</FontWeight>
+                                </Style>
+                              </TextRun>
+                            </TextRuns>
+                            <Style />
+                          </Paragraph>
+                        </Paragraphs>
+                        <rd:DefaultName>Textbox9</rd:DefaultName>
+                        <Style>
+                          <Border>
+                            <Color>LightGrey</Color>
+                            <Style>Solid</Style>
+                          </Border>
+                          <PaddingLeft>2pt</PaddingLeft>
+                          <PaddingRight>2pt</PaddingRight>
+                          <PaddingTop>2pt</PaddingTop>
+                          <PaddingBottom>2pt</PaddingBottom>
+                        </Style>
+                      </Textbox>
+                    </CellContents>
+                  </TablixHeader>
+                  <TablixMembers>
+                    <TablixMember />
+                  </TablixMembers>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="TeamProjectProjectNodeName">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!TeamProjectProjectNodeName.Value</GroupExpression>
+                    </GroupExpressions>
+                  </Group>
+                  <SortExpressions>
+                    <SortExpression>
+                      <Value>=Fields!TeamProjectProjectNodeName.Value</Value>
+                    </SortExpression>
+                  </SortExpressions>
+                  <TablixHeader>
+                    <Size>15.65348mm</Size>
+                    <CellContents>
+                      <Textbox Name="TeamProjectProjectNodeName">
+                        <CanGrow>true</CanGrow>
+                        <KeepTogether>true</KeepTogether>
+                        <Paragraphs>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>=Fields!TeamProjectProjectNodeName.Value</Value>
+                                <Style />
+                              </TextRun>
+                            </TextRuns>
+                            <Style />
+                          </Paragraph>
+                        </Paragraphs>
+                        <rd:DefaultName>TeamProjectProjectNodeName</rd:DefaultName>
+                        <Style>
+                          <Border>
+                            <Color>LightGrey</Color>
+                            <Style>Solid</Style>
+                          </Border>
+                          <PaddingLeft>2pt</PaddingLeft>
+                          <PaddingRight>2pt</PaddingRight>
+                          <PaddingTop>2pt</PaddingTop>
+                          <PaddingBottom>2pt</PaddingBottom>
+                        </Style>
+                      </Textbox>
+                    </CellContents>
+                  </TablixHeader>
+                  <TablixMembers>
+                    <TablixMember />
+                  </TablixMembers>
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>CodeChurn</DataSetName>
+            <Top>7.76389mm</Top>
+            <Left>0mm</Left>
+            <Height>76.82292mm</Height>
+            <Width>218.14583mm</Width>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
+          <Textbox Name="Textbox1">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Code Churn </Value>
+                    <Style>
+                      <FontSize>11pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>=Globals!ExecutionTime</Value>
+                    <Style>
+                      <FontSize>11pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                      <Format>D</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox1</rd:DefaultName>
+            <Top>0mm</Top>
+            <Left>0mm</Left>
+            <Height>6mm</Height>
+            <Width>172.50833mm</Width>
+            <ZIndex>1</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox16">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Please Note:</Value>
+                    <Style>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value />
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontWeight>Normal</FontWeight>
+                      <TextDecoration>None</TextDecoration>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox16</rd:DefaultName>
+            <Top>87.58542mm</Top>
+            <Left>0mm</Left>
+            <Height>13.67291mm</Height>
+            <Width>218.14583mm</Width>
+            <ZIndex>2</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+        </ReportItems>
+        <Height>102.58125mm</Height>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Body>
+      <Width>218.93958mm</Width>
+      <Page>
+        <PageHeight>297mm</PageHeight>
+        <PageWidth>210mm</PageWidth>
+        <LeftMargin>20mm</LeftMargin>
+        <RightMargin>20mm</RightMargin>
+        <TopMargin>20mm</TopMargin>
+        <BottomMargin>20mm</BottomMargin>
+        <ColumnSpacing>0.13cm</ColumnSpacing>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="StartDateParam">
+      <DataType>DateTime</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>=DateAdd("d",-60,Now())</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Start Date Param</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="EndDateParam">
+      <DataType>DateTime</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>=Now()</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>End Date Param</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="BuildTypeParam">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>Main.RollingBuild</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Build Type Param</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <rd:ReportUnitType>Mm</rd:ReportUnitType>
+  <rd:ReportServerUrl>http://tdc2tfs001/ReportServer</rd:ReportServerUrl>
+  <rd:ReportID>71fd601e-f74c-476e-a4f5-dbb54753234d</rd:ReportID>
+</Report>

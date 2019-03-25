@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="Build Portal Prod" Environment="BuildPortal.Prod" Config="BuildPortal.Prod" ProductGroup="BuildPortal">
+
+  <CommonRoleFile>BuildPortal.CommonRoles.xml</CommonRoleFile>
+
+  <machine Id="1" Name="FTDC2FAE019" ExternalIP="10.107.203.202" DeploymentMachine="true">
+
+    <ServerRole Include="IISSetup.BuildPortal" />
+    <!--<ServerRole Include="StateServiceSetup" />-->
+    <ServerRole Include="BuildPortal.WebSite" />
+  </machine>
+</configuration>

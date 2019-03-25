@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/CommonRoles">
+  <CommonRoles>
+
+    <ServerRole Name="TFL.IISSetup" Include="IISSetup.BuildPortal" Description="IIS" Groups="Always" />
+    <ServerRole Name="TFL.StateServiceSetup" Include="StateServiceSetup" Groups="Always" />
+    <ServerRole Name="TFL.WebDeploy" Include="BuildPortal.WebSite" Description="Simple Web Site" Groups="BuildPortal">
+      <WebDeploy Name="Build Portal"  RegistryKey="Software\TfL\BuildPortal" AssemblyToVersionFrom="BuildPortal.Website.dll">
+        <AppPool>
+          <Name>BuildPortal</Name>
+          <ServiceAccount>NetworkService</ServiceAccount>
+        </AppPool>
+        <Site>
+          <Name>BuildPortal</Name>
+          <Port>4254</Port>
+          <PhysicalPath>D:\TfL\BuildPortal\Website</PhysicalPath>
+        </Site>
+        <Package>
+          <Name>BuildPortal.Website</Name>
+        </Package>
+        <TestInfo>
+          <EndPoint></EndPoint>
+        </TestInfo>
+      </WebDeploy>
+    </ServerRole>
+  </CommonRoles>
+</configuration>

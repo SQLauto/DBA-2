@@ -1,0 +1,620 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="Production.Internal.SiteB" Environment="SiteB" Config="SiteB" ProductGroup="FTP">
+	<CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+	<CommonRoleFile>CommonPareServiceDeploy.xml</CommonRoleFile>
+	<CommonRoleFile>CommonMJTDeltasRole.xml</CommonRoleFile>
+
+	<machine Id="FPDC5MGT001" Name="FPDC5MGT001" ExternalIP="10.133.135.100" Role="Internal Jump Server 1" DeploymentMachine="true" />
+
+	<machine Id="FPDC5CAS001" Name="FPDC5CAS001" ExternalIP="10.133.196.1" Role="CAS Server Internal 1">
+    <ServerRole Description="TJS Api EventLog Entry" Include="FTP.EventLog.For.Internal.TJSApi" />
+    <ServerRole Include="FasterData.TJSApi.Service.Oyster" Config="SiteB_Oyster"/>
+    <ServerRole Include="FasterData.TJSApi.Service.CPC" />
+    <ServerRole Include="SDM.Portal" />
+	</machine>
+	<machine Id="FPDC5CAS002" Name="FPDC5CAS002" ExternalIP="10.133.196.2" Role="CAS Server Internal 2">
+    <ServerRole Description="TJS Api EventLog Entry" Include="FTP.EventLog.For.Internal.TJSApi" />
+    <ServerRole Include="FasterData.TJSApi.Service.Oyster" Config="SiteB_Oyster"/>
+    <ServerRole Include="FasterData.TJSApi.Service.CPC" />
+    <ServerRole Include="SDM.Portal" />
+	</machine>
+	<machine Id="FPDC5CAS003" Name="FPDC5CAS003" ExternalIP="10.133.196.22" Role="CAS Server Internal 3">
+    <ServerRole Description="TJS Api EventLog Entry" Include="FTP.EventLog.For.Internal.TJSApi" />
+    <ServerRole Include="FasterData.TJSApi.Service.Oyster" Config="SiteB_Oyster"/>
+    <ServerRole Include="FasterData.TJSApi.Service.CPC" />
+    <ServerRole Include="SDM.Portal" />
+	</machine>
+
+	<machine Id="FPDC5CIS001" Name="FPDC5CIS001" ExternalIP="10.133.200.1" Role="CIS Server">
+		<ServerRole Description="FTP.EventLog.For.FAE.JourneyUsageService" Include="FTP.EventLog.For.FAE.JourneyUsageService" />
+		<ServerRole Description="FTP.EventLog.For.MasterData.WebApi" Include="FTP.EventLog.For.MasterData.WebApi" />
+		<ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+		<ServerRole Description="Pare TravelTokenService" Include="PARE.TravelToken.Service" />
+		<ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+		<ServerRole Description="FAE JourneyUsageService" Include="FAE.JourneyUsage.Service" Config="SiteB_Legacy" />
+		<ServerRole Description="Notification Processor Service" Include="Notification.Processor.Service" />
+		<ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+		<ServerRole Description="FAE VoidService" Include="FAE.Void.Service" Config="SiteB_Oyster" />
+		<ServerRole Description="SDM Web Services"  Include="SDM.WebService" />
+		<ServerRole Description="MasterData Api" Include="MasterData.Api" />
+		<ServerRole Description="FAE Oyster ManualCorrections ApiService" Include="OysterManualCorrectionsReceiver.Api" Config="SiteB_Oyster"/>
+	</machine>
+	<machine Id="FPDC5CIS002" Name="FPDC5CIS002" ExternalIP="10.133.200.2" Role="CIS Server">
+		<ServerRole Description="FTP.EventLog.For.FAE.JourneyUsageService" Include="FTP.EventLog.For.FAE.JourneyUsageService" />
+		<ServerRole Description="FTP.EventLog.For.MasterData.WebApi" Include="FTP.EventLog.For.MasterData.WebApi" />
+		<ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+		<ServerRole Description="Pare TravelTokenService" Include="PARE.TravelToken.Service" />
+		<ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+		<ServerRole Description="FAE JourneyUsageService" Include="FAE.JourneyUsage.Service" Config="SiteB_Legacy" />
+		<ServerRole Description="Notification Processor Service" Include="Notification.Processor.Service" />
+		<ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+		<ServerRole Description="FAE VoidService" Include="FAE.Void.Service" Config="SiteB_Oyster" />
+		<ServerRole Description="SDM Web Services"  Include="SDM.WebService" />
+		<ServerRole Description="MasterData Api" Include="MasterData.Api" />
+	</machine>
+	<machine Id="FPDC5CIS003" Name="FPDC5CIS003" ExternalIP="10.133.200.3" Role="CIS Server">
+		<ServerRole Description="FTP.EventLog.For.FAE.JourneyUsageService" Include="FTP.EventLog.For.FAE.JourneyUsageService" />
+		<ServerRole Description="FTP.EventLog.For.MasterData.WebApi" Include="FTP.EventLog.For.MasterData.WebApi" />
+		<ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+		<ServerRole Description="Pare TravelTokenService" Include="PARE.TravelToken.Service" />
+		<ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+		<ServerRole Description="FAE JourneyUsageService" Include="FAE.JourneyUsage.Service" Config="SiteB_Legacy" />
+		<ServerRole Description="Notification Processor Service" Include="Notification.Processor.Service" />
+		<ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+		<ServerRole Description="FAE VoidService" Include="FAE.Void.Service" Config="SiteB_Oyster" />
+		<ServerRole Description="SDM Web Services"  Include="SDM.WebService" />
+		<ServerRole Description="MasterData Api" Include="MasterData.Api" />
+	</machine>
+	<machine Id="FPDC5CIS004" Name="FPDC5CIS004" ExternalIP="10.133.200.4" Role="CIS Server">
+		<ServerRole Description="FTP.EventLog.For.FAE.JourneyUsageService" Include="FTP.EventLog.For.FAE.JourneyUsageService" />
+		<ServerRole Description="FTP.EventLog.For.MasterData.WebApi" Include="FTP.EventLog.For.MasterData.WebApi" />
+		<ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+		<ServerRole Description="Pare TravelTokenService" Include="PARE.TravelToken.Service" />
+		<ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+		<ServerRole Description="FAE JourneyUsageService" Include="FAE.JourneyUsage.Service" Config="SiteB_Legacy" />
+		<ServerRole Description="Notification Processor Service" Include="Notification.Processor.Service" />
+		<ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+		<ServerRole Description="FAE VoidService" Include="FAE.Void.Service" Config="SiteB_Oyster" />
+		<ServerRole Description="SDM Web Services"  Include="SDM.WebService" />
+		<ServerRole Description="MasterData Api" Include="MasterData.Api" />
+	</machine>
+	<machine Id="FPDC5CIS005" Name="FPDC5CIS005" ExternalIP="10.133.200.5" Role="CIS Server">
+		<ServerRole Description="FTP.EventLog.For.FAE.JourneyUsageService" Include="FTP.EventLog.For.FAE.JourneyUsageService" />
+		<ServerRole Description="FTP.EventLog.For.MasterData.WebApi" Include="FTP.EventLog.For.MasterData.WebApi" />
+		<ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+		<ServerRole Description="Pare TravelTokenService" Include="PARE.TravelToken.Service" />
+		<ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+		<ServerRole Description="FAE JourneyUsageService" Include="FAE.JourneyUsage.Service" Config="SiteB_Legacy" />
+		<ServerRole Description="Notification Processor Service" Include="Notification.Processor.Service" />
+		<ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+		<ServerRole Description="FAE VoidService" Include="FAE.Void.Service" Config="SiteB_Oyster" />
+		<ServerRole Description="SDM Web Services"  Include="SDM.WebService" />
+		<ServerRole Description="MasterData Api" Include="MasterData.Api" />
+	</machine>
+
+	<machine Id="FPDC5PAI001" Name="FPDC5PAI001" ExternalIP="10.133.200.20" Role="Pare Importer 1">
+		<!-- Pare Command Line Exe's -->
+		<ServerRole Description="PareFullStatusList.Application.Installer" Include="PareFullStatusList.Application.Installer" />
+		<ServerRole Description="PareStatusListMaintenance.Application.Installer" Include="PareStatusListMaintenance.Application.Installer" />
+		<ServerRole Description="PareVerifyTapData.Application.Installer" Include="PareVerifyTapData.Application.Installer" />
+		<ServerRole Include="PareSettlement.Installer" />
+		<ServerRole Description="PareAuthorisationGateway.Util.Installer" Include="PareAuthorisationGateway.Util.Installer" />
+		<ServerRole Description="PareChargeCalculationPersist.Application.Installer" Include="PareChargeCalculationPersist.Application.Installer" />
+		<ServerRole Description="ParePostDeployment.Util.Installer" Include="ParePostDeployment.Util.Installer" />
+
+		<!--Scheduled Tasks-->
+		<ServerRole Include="PARERequestFullStatusList.ScheduledTask.Create" />
+		<ServerRole Include="PareVerifyTapData.ScheduledTask.Create" />
+		<ServerRole Include="PareStatusListMaintenanceApplication.ScheduledTask.Create" />
+		<ServerRole Include="PARESettlementFile.Amex.ScheduledTask.Create" />
+		<ServerRole Include="PARESettlementFile.Barclays.ScheduledTask.Create" />
+		<ServerRole Include="PareChargeCalculationPersist.ScheduledTask.Create" />
+
+		<ServerRole Description="TJS Distributor File Purger Install" Include="TJSDistributor.FilePurger.Install" />
+		<ServerRole Description="TJS Distributor File Purger CPC Install" Include="TJSDistributor.FilePurger.CPC.Install" Config="SiteB_CPC" />
+	</machine>
+
+	<!-- PARE Service Cluster -->
+	<machine Id="FPDC5PARC01N01" Name="FPDC5PARC01N01" ExternalIP="10.133.200.50" Role="PARE Cluster Server 1" Cluster="FPDC5PARC01">
+		<ServerRole Include="PareAuthorisationGatewayServiceInstaller" />
+		<ServerRole Include="PareRefundFileServiceInstaller" />
+		<ServerRole Include="PareRevenueFileService" />
+		<ServerRole Include="PareSettlementValidationResultServiceInstaller" />
+		<ServerRole Include="PareStatusListProcessorInstaller" />
+		<ServerRole Include="PareTapFileServiceInstaller" />
+		<ServerRole Include="PareTravelDayRevisionService" />
+		<ServerRole Include="SettlementFileResponseServiceInstaller" />
+		<ServerRole Include="PareDirectPaymentConfirmationServiceInstaller" />
+		<ServerRole Include="PareRiskEngineInstaller" />
+		<ServerRole Include="PareChargeCalculationInstaller" />
+	</machine>
+	<machine Id="FPDC5PARC01N02" Name="FPDC5PARC01N02" ExternalIP="10.133.200.51" Role="PARE Cluster Server 2" Cluster="FPDC5PARC01">
+		<ServerRole Include="PareAuthorisationGatewayServiceInstaller" />
+		<ServerRole Include="PareRefundFileServiceInstaller" />
+		<ServerRole Include="PareRevenueFileService" />
+		<ServerRole Include="PareSettlementValidationResultServiceInstaller" />
+		<ServerRole Include="PareStatusListProcessorInstaller" />
+		<ServerRole Include="PareTapFileServiceInstaller" />
+		<ServerRole Include="PareTravelDayRevisionService" />
+		<ServerRole Include="SettlementFileResponseServiceInstaller" />
+		<ServerRole Include="PareDirectPaymentConfirmationServiceInstaller" />
+		<ServerRole Include="PareRiskEngineInstaller" />
+		<ServerRole Include="PareChargeCalculationInstaller" />
+	</machine>
+	<machine Id="FPDC5PARC01N03" Name="FPDC5PARC01N03" ExternalIP="10.133.200.52" Role="PARE Cluster Server 3" Cluster="FPDC5PARC01">
+		<ServerRole Include="PareAuthorisationGatewayServiceInstaller" />
+		<ServerRole Include="PareRefundFileServiceInstaller" />
+		<ServerRole Include="PareRevenueFileService" />
+		<ServerRole Include="PareSettlementValidationResultServiceInstaller" />
+		<ServerRole Include="PareStatusListProcessorInstaller" />
+		<ServerRole Include="PareTapFileServiceInstaller" />
+		<ServerRole Include="PareTravelDayRevisionService" />
+		<ServerRole Include="SettlementFileResponseServiceInstaller" />
+		<ServerRole Include="PareDirectPaymentConfirmationServiceInstaller" />
+		<ServerRole Include="PareRiskEngineInstaller" />
+		<ServerRole Include="PareChargeCalculationInstaller" />
+	</machine>
+	<machine Id="FPDC5PARC01N04" Name="FPDC5PARC01N04" ExternalIP="10.133.200.53" Role="PARE Cluster Server 4" Cluster="FPDC5PARC01">
+		<ServerRole Include="PareAuthorisationGatewayServiceInstaller" />
+		<ServerRole Include="PareRefundFileServiceInstaller" />
+		<ServerRole Include="PareRevenueFileService" />
+		<ServerRole Include="PareSettlementValidationResultServiceInstaller" />
+		<ServerRole Include="PareStatusListProcessorInstaller" />
+		<ServerRole Include="PareTapFileServiceInstaller" />
+		<ServerRole Include="PareTravelDayRevisionService" />
+		<ServerRole Include="SettlementFileResponseServiceInstaller" />
+		<ServerRole Include="PareDirectPaymentConfirmationServiceInstaller" />
+		<ServerRole Include="PareRiskEngineInstaller" />
+		<ServerRole Include="PareChargeCalculationInstaller" />
+	</machine>
+	<machine Id="FPDC5PARC01N05" Name="FPDC5PARC01N05" ExternalIP="10.133.200.55" Role="PARE Cluster Server 5" Cluster="FPDC5PARC01">
+		<ServerRole Include="PareAuthorisationGatewayServiceInstaller" />
+		<ServerRole Include="PareRefundFileServiceInstaller" />
+		<ServerRole Include="PareRevenueFileService" />
+		<ServerRole Include="PareSettlementValidationResultServiceInstaller" />
+		<ServerRole Include="PareStatusListProcessorInstaller" />
+		<ServerRole Include="PareTapFileServiceInstaller" />
+		<ServerRole Include="PareTravelDayRevisionService" />
+		<ServerRole Include="SettlementFileResponseServiceInstaller" />
+		<ServerRole Include="PareDirectPaymentConfirmationServiceInstaller" />
+		<ServerRole Include="PareRiskEngineInstaller" />
+		<ServerRole Include="PareChargeCalculationInstaller" />
+	</machine>
+
+	<!--FAE-->
+	<machine Id="FPDC5FAC001" Name="FPDC5FAC001" ExternalIP="10.133.200.16" Role="FAE Controller 1">
+		<ServerRole Description="FAE Controller" Include="FAE.Engine.Controller.CPC.Stateful" Config="SiteB_Legacy" />
+		<ServerRole Description="FAE Engine Controller Util" Include="FAE.EngineControllerUtil.Install" Config="SiteB_Legacy" />
+		<ServerRole Description="FAE Travel Day Revision Exporter" Include="FAE.TravelDayRevisonExporter.Install" Config="SiteB_Legacy" />
+	</machine>
+	 <!--<machine Id="FPDC5FAC002" Name="FPDC5FAC002" ExternalIP="10.133.200.123">
+     <ServerRole Description="FAE Tap Importer Uninstall" Include="FAE.TapImporter.Service" Action="Uninstall" />
+	 </machine>-->
+
+	<machine Id="FPDC5LMEMC01N01" Name="FPDC5LMEMC01N01" ExternalIP="" Role="Low Memory Cluster 1 Node 1" Cluster="FPDC5LMEMC01">
+		<ServerRole Include="FTP.EventLog.For.RAE.RaeService" />
+		<ServerRole Include="FTP.EventLog.For.FAE.TapImporter" />
+		<ServerRole Include="FTP.EventLog.For.FAE.Controller" />
+		<ServerRole Include="FTP.EventLog.For.FAE.Disruptr" />
+		<ServerRole Description="Oyster Engine Controller Util" Include="FAE.EngineControllerUtil.Install" Config="SiteB_Oyster" Groups="OAE" />
+		<ServerRole Description="Oyster Controller Primary" Include="FAE.Engine.Controller.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEController" />
+		<ServerRole Description="CPC Engine Controller Unused" Include="FAE.Engine.Controller.CPC.Stateless" Config="SiteB_CPC" />
+		<ServerRole Description="Oyster RAE Service Primary" Include="RAE.Service.Install" Config="SiteB_Oyster"/>
+		<ServerRole Description="CPC RAE Service Unused" Include="RAE.CPC.Service.Install" Config="SiteB_CPC"/>
+		<ServerRole Description="Oyster Tap Importer Unused" Include="FAE.TapImporter.Service.Oyster" Config="SiteB_Oyster"/>
+		<ServerRole Description="CPC Tap Importer Unused" Include="FAE.TapImporter.Service.CPC" Config="SiteB_CPC" />
+		<ServerRole Description="FAE Disruptr Secondary" Include="FAE.Engine.Disruptr" />
+	</machine>
+	<machine Id="FPDC5LMEMC01N02" Name="FPDC5LMEMC01N02" ExternalIP="" Role="Low Memory Cluster 1 Node 2" Cluster="FPDC5LMEMC01">
+		<ServerRole Include="FTP.EventLog.For.RAE.RaeService" />
+		<ServerRole Include="FTP.EventLog.For.FAE.TapImporter" />
+		<ServerRole Include="FTP.EventLog.For.FAE.Controller" />
+		<ServerRole Include="FTP.EventLog.For.FAE.Disruptr" />
+		<ServerRole Description="Oyster Engine Controller Util" Include="FAE.EngineControllerUtil.Install" Config="SiteB_Oyster" />
+		<ServerRole Description="Oyster Controller Secondary" Include="FAE.Engine.Controller.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEController" />
+		<ServerRole Description="CPC Engine Controller Unused" Include="FAE.Engine.Controller.CPC.Stateless" Config="SiteB_CPC" />
+		<ServerRole Description="Oyster RAE Service Secondary" Include="RAE.Service.Install" Config="SiteB_Oyster" />
+		<ServerRole Description="CPC RAE Service Unused" Include="RAE.CPC.Service.Install" Config="SiteB_CPC"/>
+		<ServerRole Description="Oyster Tap Importer Primary" Include="FAE.TapImporter.Service.Oyster" Config="SiteB_Oyster"/>
+		<ServerRole Description="CPC Tap Importer Unused" Include="FAE.TapImporter.Service.CPC" Config="SiteB_CPC" />
+		<ServerRole Description="FAE Disruptr Unused" Include="FAE.Engine.Disruptr" />
+	</machine>
+	<machine Id="FPDC5LMEMC01N03" Name="FPDC5LMEMC01N03" ExternalIP="" Role="Low Memory Cluster 1 Node 3" Cluster="FPDC5LMEMC01">
+		<ServerRole Include="FTP.EventLog.For.RAE.RaeService" />
+		<ServerRole Include="FTP.EventLog.For.FAE.TapImporter" />
+		<ServerRole Include="FTP.EventLog.For.FAE.Controller" />
+		<ServerRole Include="FTP.EventLog.For.FAE.Disruptr" />
+		<ServerRole Description="Oyster Engine Controller Util" Include="FAE.EngineControllerUtil.Install" Config="SiteB_Oyster" />
+		<ServerRole Description="Oyster Engine Controller Unused" Include="FAE.Engine.Controller.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEController" />
+		<ServerRole Description="CPC Engine Controller Unused" Include="FAE.Engine.Controller.CPC.Stateless" Config="SiteB_CPC" />
+		<ServerRole Description="Oyster RAE Service Unused" Include="RAE.Service.Install" Config="SiteB_Oyster"/>
+		<ServerRole Description="CPC RAE Service Secondary" Include="RAE.CPC.Service.Install" Config="SiteB_CPC"/>
+		<ServerRole Description="Oyster Tap Importer Unused" Include="FAE.TapImporter.Service.Oyster" Config="SiteB_Oyster"/>
+		<ServerRole Description="CPC Tap Importer Primary" Include="FAE.TapImporter.Service.CPC" Config="SiteB_CPC" />
+		<ServerRole Description="FAE Disruptr Unused" Include="FAE.Engine.Disruptr" />
+	</machine>
+	<machine Id="FPDC5LMEMC01N04" Name="FPDC5LMEMC01N04" ExternalIP="" Role="Low Memory Cluster 1 Node 4" Cluster="FPDC5LMEMC01">
+		<ServerRole Include="FTP.EventLog.For.RAE.RaeService" />
+		<ServerRole Include="FTP.EventLog.For.FAE.TapImporter" />
+		<ServerRole Include="FTP.EventLog.For.FAE.Controller" />
+		<ServerRole Include="FTP.EventLog.For.FAE.Disruptr" />
+		<ServerRole Description="CPC Engine Controller Util" Include="FAE.EngineControllerUtil.Install" Config="SiteB_CPC" />
+		<ServerRole Description="Oyster Engine Controller Unused" Include="FAE.Engine.Controller.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEController" />
+		<ServerRole Description="CPC Engine Controller Secondary" Include="FAE.Engine.Controller.CPC.Stateless" Config="SiteB_CPC" />
+		<ServerRole Description="Oyster RAE Service Unused" Include="RAE.Service.Install" Config="SiteB_Oyster"/>
+		<ServerRole Description="CPC RAE Service Primary" Include="RAE.CPC.Service.Install" Config="SiteB_CPC"/>
+		<ServerRole Description="Oyster Tap Importer Unused" Include="FAE.TapImporter.Service.Oyster" Config="SiteB_Oyster"/>
+		<ServerRole Description="CPC Tap Importer Secondary" Include="FAE.TapImporter.Service.CPC" Config="SiteB_CPC" />
+		<ServerRole Description="FAE Disruptr Unused" Include="FAE.Engine.Disruptr" />
+	</machine>
+	<machine Id="FPDC5LMEMC01N05" Name="FPDC5LMEMC01N05" ExternalIP="" Role="Low Memory Cluster 1 Node 5" Cluster="FPDC5LMEMC01">
+		<ServerRole Include="FTP.EventLog.For.RAE.RaeService" />
+		<ServerRole Include="FTP.EventLog.For.FAE.TapImporter" />
+		<ServerRole Include="FTP.EventLog.For.FAE.Controller" />
+		<ServerRole Include="FTP.EventLog.For.FAE.Disruptr" />
+		<ServerRole Description="CPC Engine Controller Util" Include="FAE.EngineControllerUtil.Install" Config="SiteB_CPC"/>
+		<ServerRole Description="Oyster Engine Controller Unused" Include="FAE.Engine.Controller.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEController" />
+		<ServerRole Description="CPC Engine Controller Primary" Include="FAE.Engine.Controller.CPC.Stateless" Config="SiteB_CPC" />
+		<ServerRole Description="Oyster RAE Service Unused" Include="RAE.Service.Install" Config="SiteB_Oyster" />
+		<ServerRole Description="CPC RAE Service Unused" Include="RAE.CPC.Service.Install" Config="SiteB_CPC" />
+		<ServerRole Description="Oyster Tap Importer Unused" Include="FAE.TapImporter.Service.Oyster" Config="SiteB_Oyster"/>
+		<ServerRole Description="CPC Tap Importer Unused" Include="FAE.TapImporter.Service.CPC" Config="SiteB_CPC" />
+		<ServerRole Description="FAE Disruptr Primary" Include="FAE.Engine.Disruptr" />
+	</machine>
+
+	<machine Id="FPDC5FAE001" Name="FPDC5FAE001" ExternalIP="10.133.200.28" Role="FAE Engine 1">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="SiteB_Legacy" />
+	</machine>
+	<machine Id="FPDC5FAE002" Name="FPDC5FAE002" ExternalIP="10.133.200.29" Role="FAE Engine 2">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="SiteB_Legacy" />
+	</machine>
+	<machine Id="FPDC5FAE003" Name="FPDC5FAE003" ExternalIP="10.133.200.30" Role="FAE Engine 3">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="SiteB_Legacy" />
+	</machine>
+	<machine Id="FPDC5FAE004" Name="FPDC5FAE004" ExternalIP="10.133.200.31" Role="FAE Engine 4">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="SiteB_Legacy" />
+	</machine>
+	<machine Id="FPDC5FAE005" Name="FPDC5FAE005" ExternalIP="10.133.200.32" Role="FAE Engine 5">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="SiteB_Legacy" />
+	</machine>
+	<machine Id="FPDC5FAE006" Name="FPDC5FAE006" ExternalIP="10.133.200.33" Role="FAE Engine 6">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="SiteB_Legacy" />
+	</machine>
+	<machine Id="FPDC5FAE007" Name="FPDC5FAE007" ExternalIP="10.133.200.34" Role="FAE Engine 7">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="SiteB_Legacy" />
+	</machine>
+	<machine Id="FPDC5FAE008" Name="FPDC5FAE008" ExternalIP="10.133.200.35" Role="FAE Engine 8">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="SiteB_Legacy" />
+	</machine>
+	<machine Id="FPDC5FAE009" Name="FPDC5FAE009" ExternalIP="10.133.200.36" Role="FAE Engine 9">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="SiteB_Legacy" />
+	</machine>
+	<machine Id="FPDC5FAE010" Name="FPDC5FAE010" ExternalIP="10.133.200.37" Role="FAE Engine 10">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="SiteB_Legacy" />
+	</machine>
+	<machine Id="FPDC5FAE011" Name="FPDC5FAE011" ExternalIP="10.133.200.38" Role="FAE Engine 11">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="SiteB_Legacy" />
+	</machine>
+	<machine Id="FPDC5FAE012" Name="FPDC5FAE012" ExternalIP="10.133.200.39" Role="FAE Engine 12">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="SiteB_Legacy" />
+	</machine>
+	<machine Id="FPDC5FAE013" Name="FPDC5FAE013" ExternalIP="10.133.200.40" Role="FAE Engine 13">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="SiteB_Legacy" />
+	</machine>
+	<machine Id="FPDC5FAE014" Name="FPDC5FAE014" ExternalIP="10.133.200.41" Role="FAE Engine 14">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="SiteB_Legacy" />
+	</machine>
+	<machine Id="FPDC5FAE015" Name="FPDC5FAE015" ExternalIP="10.133.200.42" Role="FAE Engine 15">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="SiteB_Legacy" />
+	</machine>
+	<machine Id="FPDC5FAE016" Name="FPDC5FAE016" ExternalIP="10.133.200.43" Role="FAE Engine 16">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="SiteB_Legacy" />
+	</machine>
+	<machine Id="FPDC5FAE017" Name="FPDC5FAE017" ExternalIP="10.133.200.44" Role="FAE Engine 17">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="SiteB_Legacy" />
+	</machine>
+	<machine Id="FPDC5FAE018" Name="FPDC5FAE018" ExternalIP="10.133.200.45" Role="FAE Engine 18">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="SiteB_Legacy" />
+	</machine>
+
+	<!-- Oyster only (stateless mode) FAE Engines -->
+	<machine Id="FPDC5OAE001" Name="FPDC5OAE001" ExternalIP="" Role="Oyster FAE Engine 1">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEPipeline" />
+	</machine>
+	<machine Id="FPDC5OAE002" Name="FPDC5OAE002" ExternalIP="" Role="Oyster FAE Engine 2">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEPipeline" />
+	</machine>
+	<machine Id="FPDC5OAE003" Name="FPDC5OAE003" ExternalIP="" Role="Oyster FAE Engine 3">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEPipeline" />
+	</machine>
+	<machine Id="FPDC5OAE004" Name="FPDC5OAE004" ExternalIP="" Role="Oyster FAE Engine 4">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEPipeline" />
+	</machine>
+	<machine Id="FPDC5OAE005" Name="FPDC5OAE005" ExternalIP="" Role="Oyster FAE Engine 5">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEPipeline" />
+	</machine>
+	<machine Id="FPDC5OAE006" Name="FPDC5OAE006" ExternalIP="" Role="Oyster FAE Engine 6">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEPipeline" />
+	</machine>
+	<machine Id="FPDC5OAE007" Name="FPDC5OAE007" ExternalIP="" Role="Oyster FAE Engine 7">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEPipeline" />
+	</machine>
+	<machine Id="FPDC5OAE008" Name="FPDC5OAE008" ExternalIP="" Role="Oyster FAE Engine 8">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEPipeline" />
+	</machine>
+	<machine Id="FPDC5OAE009" Name="FPDC5OAE009" ExternalIP="" Role="Oyster FAE Engine 9">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEPipeline" />
+	</machine>
+	<machine Id="FPDC5OAE010" Name="FPDC5OAE010" ExternalIP="" Role="Oyster FAE Engine 10">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEPipeline" />
+	</machine>
+	<machine Id="FPDC5OAE011" Name="FPDC5OAE011" ExternalIP="" Role="Oyster FAE Engine 11">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEPipeline" />
+	</machine>
+	<machine Id="FPDC5OAE012" Name="FPDC5OAE012" ExternalIP="" Role="Oyster FAE Engine 12">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEPipeline" />
+	</machine>
+	<machine Id="FPDC5OAE013" Name="FPDC5OAE013" ExternalIP="" Role="Oyster FAE Engine 13">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEPipeline" />
+	</machine>
+	<machine Id="FPDC5OAE014" Name="FPDC5OAE014" ExternalIP="" Role="Oyster FAE Engine 14">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEPipeline" />
+	</machine>
+	<machine Id="FPDC5OAE015" Name="FPDC5OAE015" ExternalIP="" Role="Oyster FAE Engine 15">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEPipeline" />
+	</machine>
+	<machine Id="FPDC5OAE016" Name="FPDC5OAE016" ExternalIP="" Role="Oyster FAE Engine 16">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEPipeline" />
+	</machine>
+	<machine Id="FPDC5OAE017" Name="FPDC5OAE017" ExternalIP="" Role="Oyster FAE Engine 17">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEPipeline" />
+	</machine>
+	<machine Id="FPDC5OAE018" Name="FPDC5OAE018" ExternalIP="" Role="Oyster FAE Engine 18">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="SiteB_Oyster" Groups="OAEPipeline" />
+	</machine>
+	<!-- Stateless CPC FAE machines-->
+	<machine Id="FPDC5FAE201" Name="FPDC5FAE201" ExternalIP="">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateless" Config="SiteB_CPC" />
+	</machine>
+	<machine Id="FPDC5FAE202" Name="FPDC5FAE202" ExternalIP="">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateless" Config="SiteB_CPC" />
+	</machine>
+	<machine Id="FPDC5FAE203" Name="FPDC5FAE203" ExternalIP="">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateless" Config="SiteB_CPC" />
+	</machine>
+	<machine Id="FPDC5FAE204" Name="FPDC5FAE204" ExternalIP="">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateless" Config="SiteB_CPC" />
+	</machine>
+	<machine Id="FPDC5FAE205" Name="FPDC5FAE205" ExternalIP="">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateless" Config="SiteB_CPC" />
+	</machine>
+	<machine Id="FPDC5FAE206" Name="FPDC5FAE206" ExternalIP="">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateless" Config="SiteB_CPC" />
+	</machine>
+	<machine Id="FPDC5FAE207" Name="FPDC5FAE207" ExternalIP="">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateless" Config="SiteB_CPC" />
+	</machine>
+	<machine Id="FPDC5FAE208" Name="FPDC5FAE208" ExternalIP="">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateless" Config="SiteB_CPC" />
+	</machine>
+	<machine Id="FPDC5FAE209" Name="FPDC5FAE209" ExternalIP="">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateless" Config="SiteB_CPC" />
+	</machine>
+	<machine Id="FPDC5FAE210" Name="FPDC5FAE210" ExternalIP="">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateless" Config="SiteB_CPC" />
+	</machine>
+	<machine Id="FPDC5FAE211" Name="FPDC5FAE211" ExternalIP="">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateless" Config="SiteB_CPC" />
+	</machine>
+	<machine Id="FPDC5FAE212" Name="FPDC5FAE212" ExternalIP="">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateless" Config="SiteB_CPC" />
+	</machine>
+	<machine Id="FPDC5FAE213" Name="FPDC5FAE213" ExternalIP="">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateless" Config="SiteB_CPC" />
+	</machine>
+	<machine Id="FPDC5FAE214" Name="FPDC5FAE214" ExternalIP="">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateless" Config="SiteB_CPC" />
+	</machine>
+	<machine Id="FPDC5FAE215" Name="FPDC5FAE215" ExternalIP="">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateless" Config="SiteB_CPC" />
+	</machine>
+	<machine Id="FPDC5FAE216" Name="FPDC5FAE216" ExternalIP="">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateless" Config="SiteB_CPC" />
+	</machine>
+	<machine Id="FPDC5FAE217" Name="FPDC5FAE217" ExternalIP="">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateless" Config="SiteB_CPC" />
+	</machine>
+	<machine Id="FPDC5FAE218" Name="FPDC5FAE218" ExternalIP="">
+		<ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+		<ServerRole Include="FAE.Engine.Service.CPC.Stateless" Config="SiteB_CPC" />
+	</machine>
+
+	<!--FTM-->
+	<machine Id="FPDC5FTM001" Name="FPDC5FTM001" ExternalIP="10.133.200.26" Role="File Transfer Management Server">
+		<ServerRole Description="FTM EventLog Entry" Include="FTP.EventLog.For.Internal.FTM" />
+		<ServerRole Description="FTM Service" Include="FTM.Service" Config="SiteB" />
+	</machine>
+	<machine Id="FPDC5FTM002" Name="FPDC5FTM002" ExternalIP="10.133.200.70">
+		<ServerRole Include="FTM.PaymentAssurance.FileSystem" />
+		<ServerRole Include="FTP.EventLog.For.Internal.FTM" />
+		<ServerRole Description="FTM Service (FTP-IM)" Include="FTM.Service" Config="SiteA_IM" />
+		<ServerRole Include="FTM.LogArchive.ScheduledTask.Create" />
+		<ServerRole Include="PaymentAssurance.Common" />
+		<ServerRole Include="PaymentAssurance.Config.Copy" />
+		<ServerRole Include="PaymentAssurance.ScheduledTask.Create" />
+	</machine>
+	<machine Id="FPDC5FTM003" Name="FPDC5FTM003" ExternalIP="10.133.200.27" Role="File Transfer">
+		<ServerRole Description="FTM EventLog Entry" Include="FTP.EventLog.For.Internal.FTM" />
+		<ServerRole Description="FTM Service" Include="FTM.Service" Config="SiteB_OYBO"/>
+	</machine>
+
+	<machine Id="FPDC5SAS001" Name="FPDC5SAS001"  ExternalIP="10.133.200.91" Role="Notifications Send Mail Server">
+		<ServerRole Description="SendEmail Notifications File System" Include="SendEmail.FileSystem" />
+		<ServerRole Description="Send Email Installer" Include="SendEmail.Installer" />
+
+		<!--Notifications File Processor and Schedule Tasks-->
+		<ServerRole Description="Notifications File Processor File System" Include="Notifications.FileProcessor.FileSystem" />
+		<ServerRole  Description="Notifications File Processor" Include="Notifications.FileProcessor.Installer" />
+
+		<ServerRole Include="PaymentCardExpiryExtractTool.Install" />
+		<ServerRole Include="PaymentCardExpiryExtractTool.ScheduledTask.Create" />
+	</machine>
+
+	<machine Id="FPDC5SDM001" Name="FPDC5SDM001" Role="SDM Controller service" >
+		<ServerRole  Description="CSC.SDM.ControllerService" Include="CSC.SDM.ControllerService.Installer" />
+	</machine>
+
+	<!-- MasterData MJT Deployment Roles -->
+	<machine Id="FPDC5MDS001" Name="FPDC5MDS001" ExternalIP="10.133.200.80" Role="MasterData Application 1">
+		<ServerRole Include="MasterData.MJTService.Assets.Last13Weeks" />
+		<ServerRole Include="MasterData.FareService.Assets.Last13Weeks" />
+		<ServerRole Include="MasterData.MJTService.Install" />
+		<ServerRole Include="MasterData.FaresService.Install" />
+	</machine>
+	<machine Id="FPDC5MDS002" Name="FPDC5MDS002" ExternalIP="10.133.200.81" Role="MasterData Application 2">
+		<ServerRole Include="MasterData.MJTService.Assets.Last13Weeks" />
+		<ServerRole Include="MasterData.FareService.Assets.Last13Weeks" />
+		<ServerRole Include="MasterData.MJTService.Install" />
+		<ServerRole Include="MasterData.FaresService.Install" />
+	</machine>
+	<machine Id="FPDC5MDS003" Name="FPDC5MDS003" ExternalIP="10.133.200.82" Role="MasterData Application 3" >
+		<ServerRole Include="MasterData.MJTService.Assets.Last13Weeks" />
+		<ServerRole Include="MasterData.FareService.Assets.Last13Weeks" />
+		<ServerRole Include="MasterData.MJTService.Install" />
+		<ServerRole Include="MasterData.FaresService.Install" />
+	</machine>
+	<machine Id="FPDC5MDS004" Name="FPDC5MDS004" ExternalIP="10.133.200.83" Role="MasterData Application 4" >
+		<ServerRole Include="MasterData.MJTService.Assets.Last13Weeks" />
+		<ServerRole Include="MasterData.FareService.Assets.Last13Weeks" />
+		<ServerRole Include="MasterData.MJTService.Install" />
+		<ServerRole Include="MasterData.FaresService.Install" />
+	</machine>
+
+	<machine Id="FPDC5OTP001" Name="FPDC5OTP001" ExternalIP="10.133.200.130" Role="Tap File Processor" >
+		<ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.OTFP" />
+		<ServerRole Description="OyBO File System" Include="OyBO.FileSystem"/>
+		<ServerRole Description="Create FileShare For OyBO Services" Include="OyBO.FileShare"/>
+		<ServerRole Description="Oyster Back Office TFP Service" Include="OyBO.TFP.Install" />
+		<ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.FileCleanup" />
+		<ServerRole Description="Oyster Back Office File Cleanup Console App Install" Include="OyBO.FileCleanup.Install" />
+		<ServerRole Description="Oyster Back Office File Cleanup Scheduler" Include="OyBO.FileCleanup.ScheduledTask.Create" />
+
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.AzureMobileUploader" />
+    <ServerRole Description="Oyster Back Office TFP Azure Mobile Uploader Service" Include="OyBO.AzureMobileUploader.Install" />
+	</machine>
+
+	<machine Id="FPDC5LMEMC02N01" Name="FPDC5LMEMC02N01" ExternalIP="" Role="Low Memory Cluster 2 Node 1" Cluster="FPDC5LMEMC02">
+		<ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.Refunds" />
+		<ServerRole Description="OCAE EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.OCAE" />
+		<!--Uninstall role was added because of versioning issues with NuGet packages which resulted in dlls being deleted but not replaced. A uninstall / fresh install solves this.-->
+		<!--When each component is built in it's own directory on the build server, dll version clashes won't happen, so this role can be removed.-->
+		<ServerRole Description="OyBO Refunds Service Install" Include="OyBO.Refunds.Install" Action="Reinstall"/>
+		<ServerRole Description="Oyster Charge Adjustment Engine Service Install" Include="OyBO.Ocae.Install"/>
+	</machine>
+	<machine Id="FPDC5LMEMC02N02" Name="FPDC5LMEMC02N02" ExternalIP="" Role="Low Memory Cluster 2 Node 2" Cluster="FPDC5LMEMC02">
+		<ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.Refunds" />
+		<ServerRole Description="OCAE EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.OCAE" />
+		<!--Uninstall role was added because of versioning issues with NuGet packages which resulted in dlls being deleted but not replaced. A uninstall / fresh install solves this.-->
+		<!--When each component is built in it's own directory on the build server, dll version clashes won't happen, so this role can be removed.-->
+		<ServerRole Description="OyBO Refunds Service Install" Include="OyBO.Refunds.Install" Action="Reinstall"/>
+		<ServerRole Description="Oyster Charge Adjustment Engine Service Install" Include="OyBO.Ocae.Install"/>
+	</machine>
+	<machine Id="FPDC5LMEMC02N03" Name="FPDC5LMEMC02N03" ExternalIP="" Role="Low Memory Cluster 2 Node 3" Cluster="FPDC5LMEMC02">
+		<ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.Refunds" />
+		<ServerRole Description="OCAE EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.OCAE" />
+		<!--Uninstall role was added because of versioning issues with NuGet packages which resulted in dlls being deleted but not replaced. A uninstall / fresh install solves this.-->
+		<!--When each component is built in it's own directory on the build server, dll version clashes won't happen, so this role can be removed.-->
+		<ServerRole Description="OyBO Refunds Service Install" Include="OyBO.Refunds.Install" Action="Reinstall"/>
+		<ServerRole Description="Oyster Charge Adjustment Engine Service Install" Include="OyBO.Ocae.Install"/>
+	</machine>
+
+	<!-- TJS Distributor High Memory CLuster -->
+	<machine Id="FPDC5HMEMC01N01" Name="FPDC5HMEMC01N01" ExternalIP="" Role="TJS Distributor High Memory Cluster 1 Node 1" Cluster="FPDC5HMEMC01">
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSDistributor" />
+    <ServerRole Include="TJSDistributor.JulianService.Install" Config="SiteB_Oyster" />
+    <ServerRole Include="TJSDistributor.TJSHExtractor.Install" Config="SiteB_Oyster"/>
+    <ServerRole Include="TJSDistributor.JulianService.CPC.Install" />
+    <!--<ServerRole Include="TJSDistributor.TJSHExtractor.CPC.Install" />-->
+    <ServerRole Include="TJSDistributor.Oyster.TJS.ProcessedFileCleanup.ScheduledTask" Config="SiteB_Oyster" />
+	</machine>
+	<machine Id="FPDC5HMEMC01N02" Name="FPDC5HMEMC01N02" ExternalIP="" Role="TJS Distributor High Memory Cluster 1 Node 2" Cluster="FPDC5HMEMC01">
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSDistributor" />
+    <ServerRole Include="TJSDistributor.JulianService.Install" Config="SiteB_Oyster" />
+    <ServerRole Include="TJSDistributor.TJSHExtractor.Install" Config="SiteB_Oyster"/>
+    <ServerRole Include="TJSDistributor.JulianService.CPC.Install" />
+    <!--<ServerRole Include="TJSDistributor.TJSHExtractor.CPC.Install" />-->
+	</machine>
+	<machine Id="FPDC5HMEMC01N03" Name="FPDC5HMEMC01N03" ExternalIP="" Role="TJS Distributor High Memory Cluster 1 Node 3" Cluster="FPDC5HMEMC01">
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSDistributor" />
+    <ServerRole Include="TJSDistributor.JulianService.Install" Config="SiteB_Oyster" />
+    <ServerRole Include="TJSDistributor.TJSHExtractor.Install" Config="SiteB_Oyster"/>
+    <ServerRole Include="TJSDistributor.JulianService.CPC.Install" />
+    <!--<ServerRole Include="TJSDistributor.TJSHExtractor.CPC.Install" />-->
+    <ServerRole Include="TJSDistributor.CPC.Tap.ProcessedFileCleanup.ScheduledTask" />
+	</machine>
+
+  <machine Id="FPDC5HMEMC02N01" Name="FPDC5HMEMC02N01" ExternalIP="" Role="TJS Distributor High Memory Cluster 2 Node 1" Cluster="FPDC5HMEMC02">
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSDistributor" />
+    <ServerRole Include="TJSDistributor.JulianService.CPC.Install" Config="SiteB_TJS" />
+    <ServerRole Include="TJSDistributor.TJSHExtractor.CPC.Install" Config="SiteB_TJS" />
+    <ServerRole Include="TJSDistributor.CPC.TJS.ProcessedFileCleanup.ScheduledTask" Config="SiteB_TJS" />
+  </machine>
+  <machine Id="FPDC5HMEMC02N02" Name="FPDC5HMEMC02N02" ExternalIP="" Role="TJS Distributor High Memory Cluster 2 Node 2" Cluster="FPDC5HMEMC02">
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSDistributor" />
+    <ServerRole Include="TJSDistributor.JulianService.CPC.Install" Config="SiteB_TJS" />
+    <ServerRole Include="TJSDistributor.TJSHExtractor.CPC.Install" Config="SiteB_TJS" />
+  </machine>
+</configuration>

@@ -1,0 +1,8 @@
+<site name="MasterDataMockWebApi" id="18">
+        <application path="/" applicationPool="Clr4IntegratedAppPool">
+          <virtualDirectory path="/" physicalPath="..\..\..\PARE\Main\Code\MasterDataMockWebApi" />
+        </application>
+        <bindings>
+          <binding protocol="http" bindingInformation="*:52414:" />
+        </bindings>
+      </site>

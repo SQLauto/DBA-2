@@ -1,0 +1,1711 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:cl="http://schemas.microsoft.com/sqlserver/reporting/2010/01/componentdefinition" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/reportdefinition">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="TFSDataSource">
+      <DataSourceReference>DataSource1</DataSourceReference>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>29e586bd-b7c6-41f7-ad9f-8c5f6a32205f</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="Builds">
+      <Query>
+        <DataSourceName>TFSDataSource</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@pBuildDate">
+            <Value>=Parameters!BuildDate.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
+          </QueryParameter>
+          <QueryParameter Name="@pBuildDefinitions">
+            <Value>=Parameters!BuildDefinitions.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@pTeamProjects">
+            <Value>=Parameters!TeamProject.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
+          </QueryParameter>
+          <QueryParameter Name="@pBuildNameFilter">
+            <Value>=Parameters!BuildNameFilter.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
+          </QueryParameter>
+          <QueryParameter Name="@pShowBuildsThatDidNotRun">
+            <Value>=Parameters!ShowBuildsThatDidNotRun.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>CREATE TABLE #AllReportBuilds
+(
+	BuildDefinitionName nvarchar(256),
+	TeamProjectProjectNodeName nvarchar(256),
+	LastBuildTime datetime
+)
+CREATE TABLE #Builds
+(
+	BuildBK nvarchar(64)
+)
+--We want all builds for specific build.
+IF @pBuildNameFilter IS NULL OR @pBuildNameFilter = ''
+BEGIN
+	INSERT #AllReportBuilds
+	SELECT BuildDefinitionName, TeamProjectProjectNodeName, MAX(BuildStartTime)  FROM BuildDetailsView
+	WHERE BuildDefinitionName IN (@pBuildDefinitions) AND
+	TeamProjectProjectNodeName IN (@pTeamProjects)
+	GROUP BY BuildDefinitionName, TeamProjectProjectNodeName
+	ORDER BY BuildDefinitionName ASC
+
+	INSERT #Builds
+	SELECT BuildBK FROM (
+	SELECT  BuildBK, ROW_NUMBER() OVER 
+		(PARTITION BY BuildDefinitionName ORDER BY BuildStartTime DESC) AS Rank
+	 FROM BuildDetailsView
+	 WHERE BuildDefinitionName IN (@pBuildDefinitions) AND
+	 TeamProjectProjectNodeName IN (@pTeamProjects)
+	AND DATEDIFF(minute,BuildStartTime, @pBuildDate)/60 &lt;24) SQ
+	   WHERE rank=1
+END
+ELSE
+BEGIN
+	INSERT #AllReportBuilds
+	SELECT BuildDefinitionName, TeamProjectProjectNodeName ,MAX(BuildStartTime) 
+FROM BuildDetailsView
+	WHERE BuildDefinitionName LIKE @pBuildNameFilter AND
+	TeamProjectProjectNodeName IN (@pTeamProjects)
+	GROUP BY BuildDefinitionName, TeamProjectProjectNodeName
+	HAVING MAX(BuildStartTime) &gt; DATEADD(D,-20,GETDATE())
+	ORDER BY BuildDefinitionName ASC
+
+	INSERT #Builds
+	SELECT BuildBK FROM (
+	SELECT  BuildBK, ROW_NUMBER() OVER 
+		(PARTITION BY BuildDefinitionName ORDER BY BuildStartTime DESC) AS Rank
+	 FROM BuildDetailsView
+	 WHERE BuildDefinitionName LIKE @pBuildNameFilter AND
+	 TeamProjectProjectNodeName IN (@pTeamProjects)
+	AND DATEDIFF(minute,BuildStartTime, @pBuildDate)/60 &lt;24) SQ
+	   WHERE rank=1
+END
+
+--SELECT * FROM #AllReportBuilds
+--SELECT * FROM #Builds
+
+SELECT * FROM (
+SELECT
+ allblds.BuildDefinitionName
+,allblds.TeamProjectProjectNodeName
+,BuildName = case 
+	when  x.BuildName IS NULL then allblds.BuildDefinitionName --stop grouping up all builds that did not run
+	else x.BuildName
+	end
+,CONVERT(VARCHAR(17), x.BuildStartTime, 113) as BuildStartTime
+,CONVERT(VARCHAR(17), DATEADD(second, x.BuildDuration, x.BuildStartTime), 113) as BuildEndTime
+,dbo.ConvertTimeToHHMMSS(x.BuildDuration, 's') as BuildDuration
+,BuildStatusName = case 
+	when  x.BuildStatusName IS NULL then 'Did not run'
+	else x.BuildStatusName
+	end
+,BuildDidNotRun = case 
+	when  x.BuildStatusName IS NULL then 1
+	else 0
+	end 
+,x.ResultOutcome
+,x.ResultTest
+,x.ResultErrorMessage
+,x.ResultDuration
+,PassedCount = case 
+		when x.ResultOutcome = 'Passed' then 1
+		else 0
+		end
+,FailedCount = case 
+		when x.ResultOutcome = 'Passed' then 0
+		when x.ResultOutcome is null then 0
+		else 1
+		end
+ FROM #AllReportBuilds allblds LEFT OUTER JOIN
+(SELECT
+	bdv.TeamProjectProjectNodeName
+	,bdv.BuildDefinitionName
+	,bdv.BuildName
+	,bdv.BuildStartTime
+	,bdv.BuildDuration
+	,bdv.BuildStatusName
+	,trv.ResultOutcome
+	,trv.ResultTest
+	,trv.ResultErrorMessage
+	,trv.ResultDuration
+ FROM BuildDetailsView bdv 
+	INNER Join #Builds b on bdv.BuildBK = b.BuildBK
+	LEFT OUTER Join TestResultView trv on bdv.BuildBK = trv.BuildBK) x 
+ON allblds.BuildDefinitionName = x.BuildDefinitionName) y
+WHERE y.BuildDidNotRun = 0 OR -- always include builds that ran
+y.BuildDidNotRun = @pShowBuildsThatDidNotRun --optionally include builds that did not run
+ORDER BY y.BuildDidNotRun, y.BuildDefinitionName
+ 
+DROP TABLE #Builds 
+DROP TABLE #AllReportBuilds</CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+      <Fields>
+        <Field Name="TeamProjectProjectNodeName">
+          <DataField>TeamProjectProjectNodeName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="BuildDefinitionName">
+          <DataField>BuildDefinitionName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="BuildName">
+          <DataField>BuildName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="BuildStartTime">
+          <DataField>BuildStartTime</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="BuildDuration">
+          <DataField>BuildDuration</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="BuildEndTime">
+          <DataField>BuildEndTime</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ResultOutcome">
+          <DataField>ResultOutcome</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="BuildDidNotRun">
+          <DataField>BuildDidNotRun</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="BuildStatusName">
+          <DataField>BuildStatusName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ResultTest">
+          <DataField>ResultTest</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ResultErrorMessage">
+          <DataField>ResultErrorMessage</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ResultDuration">
+          <DataField>ResultDuration</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="PassedCount">
+          <DataField>PassedCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="FailedCount">
+          <DataField>FailedCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="BuildDefinitions">
+      <Query>
+        <DataSourceName>TFSDataSource</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@pBuildNameFilter">
+            <Value>=Parameters!BuildNameFilter.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
+          </QueryParameter>
+          <QueryParameter Name="@pTeamProjects">
+            <Value>=Parameters!TeamProject.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
+          </QueryParameter>
+          <QueryParameter Name="@pBuildDate">
+            <Value>=Parameters!BuildDate.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>IF @pBuildNameFilter IS NULL OR @pBuildNameFilter = ''
+BEGIN
+SELECT BuildDefinitionName
+FROM BuildDetailsView 
+WHERE TeamProjectProjectNodeName IN (@pTeamProjects) AND
+DATEDIFF(day, BuildStartTime, @pBuildDate) &lt; 120 -- just builds that ran in last 4 months
+GROUP BY BuildDefinitionName ORDER BY BuildDefinitionName 
+END
+ELSE
+BEGIN
+declare @Table Table ( BuildDefinitionName nvarchar(256));
+insert into @Table values ('Using Filter');
+select *
+from @Table
+END</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="BuildDefinitionName">
+          <DataField>BuildDefinitionName</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="TeamProjects">
+      <Query>
+        <DataSourceName>TFSDataSource</DataSourceName>
+        <CommandText>SELECT ProjectNodeName
+  FROM [TFS_Warehouse].[dbo].[DimTeamProject]
+  WHERE ProjectNodeType = 0 AND IsDeleted = 0
+  GROUP BY ProjectNodeName ORDER BY ProjectNodeName</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="ProjectNodeName">
+          <DataField>ProjectNodeName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <ReportItems>
+          <Textbox Name="ReportTitle">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>FTP Build Status Report</Value>
+                    <Style>
+                      <FontSize>20pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                      <Color>White</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>@</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                      <Color>White</Color>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>=Parameters!BuildDate.Value</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                      <Color>White</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:WatermarkTextbox>Title</rd:WatermarkTextbox>
+            <rd:DefaultName>ReportTitle</rd:DefaultName>
+            <Top>0mm</Top>
+            <Left>0.02646cm</Left>
+            <Height>15.45167mm</Height>
+            <Width>339.31246mm</Width>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <BackgroundColor>DarkBlue</BackgroundColor>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Tablix Name="Tablix18">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>15.475mm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>25mm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>3.03958mm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>28.175mm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>84.94373mm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>6mm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox187">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Passed</Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox187</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BackgroundColor>LightBlue</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox190">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Failed</Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox190</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BackgroundColor>LightBlue</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox206">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox206</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BackgroundColor>LightBlue</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox141">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Automated Test Results</Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox141</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BackgroundColor>LightBlue</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>7.5875mm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox188">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value xml:space="preserve"> </Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Label>Passed</Label>
+                                  <Value>=SUM(Fields!PassedCount.Value,"BuildName1")</Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox188</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>LightBlue</Color>
+                              <Style>Solid</Style>
+                              <Width>2.25pt</Width>
+                            </TopBorder>
+                            <BackgroundColor>White</BackgroundColor>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox191">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Label>Failed</Label>
+                                  <Value>=SUM(Fields!FailedCount.Value,"BuildName1")</Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox191</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>LightBlue</Color>
+                              <Style>Solid</Style>
+                              <Width>2.25pt</Width>
+                            </TopBorder>
+                            <BackgroundColor>White</BackgroundColor>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Chart Name="TestDataBar">
+                          <ChartCategoryHierarchy>
+                            <ChartMembers>
+                              <ChartMember>
+                                <Label />
+                              </ChartMember>
+                            </ChartMembers>
+                          </ChartCategoryHierarchy>
+                          <ChartSeriesHierarchy>
+                            <ChartMembers>
+                              <ChartMember>
+                                <Label>Passed Count</Label>
+                              </ChartMember>
+                              <ChartMember>
+                                <Label>Failed Count</Label>
+                              </ChartMember>
+                            </ChartMembers>
+                          </ChartSeriesHierarchy>
+                          <ChartData>
+                            <ChartSeriesCollection>
+                              <ChartSeries Name="PassedCount">
+                                <ChartDataPoints>
+                                  <ChartDataPoint>
+                                    <ChartDataPointValues>
+                                      <Y>=IIF(Fields!BuildStatusName.Value="Succeeded",1,Sum(Fields!PassedCount.Value))</Y>
+                                    </ChartDataPointValues>
+                                    <ChartDataLabel>
+                                      <Style />
+                                    </ChartDataLabel>
+                                    <Style>
+                                      <Color>LimeGreen</Color>
+                                      <BackgroundGradientType>None</BackgroundGradientType>
+                                    </Style>
+                                    <ChartMarker>
+                                      <Style />
+                                    </ChartMarker>
+                                    <DataElementOutput>Output</DataElementOutput>
+                                  </ChartDataPoint>
+                                </ChartDataPoints>
+                                <Type>Bar</Type>
+                                <Subtype>PercentStacked</Subtype>
+                                <Style />
+                                <ChartEmptyPoints>
+                                  <Style />
+                                  <ChartMarker>
+                                    <Style />
+                                  </ChartMarker>
+                                  <ChartDataLabel>
+                                    <Style />
+                                  </ChartDataLabel>
+                                </ChartEmptyPoints>
+                                <ValueAxisName>Primary</ValueAxisName>
+                                <CategoryAxisName>Primary</CategoryAxisName>
+                                <ChartSmartLabel>
+                                  <CalloutLineColor>Black</CalloutLineColor>
+                                  <MinMovingDistance>0pt</MinMovingDistance>
+                                </ChartSmartLabel>
+                              </ChartSeries>
+                              <ChartSeries Name="FailedCount">
+                                <ChartDataPoints>
+                                  <ChartDataPoint>
+                                    <ChartDataPointValues>
+                                      <Y>=IIF(Fields!BuildStatusName.Value="Failed",1,Sum(Fields!FailedCount.Value))</Y>
+                                    </ChartDataPointValues>
+                                    <ChartDataLabel>
+                                      <Style />
+                                    </ChartDataLabel>
+                                    <Style>
+                                      <Border>
+                                        <Style>None</Style>
+                                        <Width>0.25pt</Width>
+                                      </Border>
+                                      <Color>Red</Color>
+                                    </Style>
+                                    <ChartMarker>
+                                      <Style />
+                                    </ChartMarker>
+                                    <DataElementOutput>Output</DataElementOutput>
+                                  </ChartDataPoint>
+                                </ChartDataPoints>
+                                <Type>Bar</Type>
+                                <Subtype>PercentStacked</Subtype>
+                                <Style />
+                                <ChartEmptyPoints>
+                                  <Style />
+                                  <ChartMarker>
+                                    <Style />
+                                  </ChartMarker>
+                                  <ChartDataLabel>
+                                    <Style />
+                                  </ChartDataLabel>
+                                </ChartEmptyPoints>
+                                <ValueAxisName>Primary</ValueAxisName>
+                                <CategoryAxisName>Primary</CategoryAxisName>
+                                <ChartSmartLabel>
+                                  <CalloutLineColor>Black</CalloutLineColor>
+                                  <MinMovingDistance>0pt</MinMovingDistance>
+                                </ChartSmartLabel>
+                              </ChartSeries>
+                            </ChartSeriesCollection>
+                          </ChartData>
+                          <ChartAreas>
+                            <ChartArea Name="Default">
+                              <ChartCategoryAxes>
+                                <ChartAxis Name="Primary">
+                                  <Visible>False</Visible>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                  <ChartAxisTitle>
+                                    <Caption>Axis Title</Caption>
+                                    <Style>
+                                      <FontSize>8pt</FontSize>
+                                    </Style>
+                                  </ChartAxisTitle>
+                                  <Margin>False</Margin>
+                                  <ChartMajorGridLines>
+                                    <Enabled>False</Enabled>
+                                    <Style>
+                                      <Border>
+                                        <Color>Gainsboro</Color>
+                                      </Border>
+                                    </Style>
+                                  </ChartMajorGridLines>
+                                  <ChartMinorGridLines>
+                                    <Style>
+                                      <Border>
+                                        <Color>Gainsboro</Color>
+                                        <Style>Dotted</Style>
+                                      </Border>
+                                    </Style>
+                                  </ChartMinorGridLines>
+                                  <ChartMinorTickMarks>
+                                    <Length>0.5</Length>
+                                  </ChartMinorTickMarks>
+                                  <CrossAt>NaN</CrossAt>
+                                  <Minimum>NaN</Minimum>
+                                  <Maximum>NaN</Maximum>
+                                  <ChartAxisScaleBreak>
+                                    <Style />
+                                  </ChartAxisScaleBreak>
+                                </ChartAxis>
+                                <ChartAxis Name="Secondary">
+                                  <Visible>False</Visible>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                  <ChartAxisTitle>
+                                    <Caption>Axis Title</Caption>
+                                    <Style>
+                                      <FontSize>8pt</FontSize>
+                                    </Style>
+                                  </ChartAxisTitle>
+                                  <Margin>False</Margin>
+                                  <ChartMajorGridLines>
+                                    <Enabled>False</Enabled>
+                                    <Style>
+                                      <Border>
+                                        <Color>Gainsboro</Color>
+                                      </Border>
+                                    </Style>
+                                  </ChartMajorGridLines>
+                                  <ChartMinorGridLines>
+                                    <Style>
+                                      <Border>
+                                        <Color>Gainsboro</Color>
+                                        <Style>Dotted</Style>
+                                      </Border>
+                                    </Style>
+                                  </ChartMinorGridLines>
+                                  <ChartMinorTickMarks>
+                                    <Length>0.5</Length>
+                                  </ChartMinorTickMarks>
+                                  <CrossAt>NaN</CrossAt>
+                                  <Location>Opposite</Location>
+                                  <Minimum>NaN</Minimum>
+                                  <Maximum>NaN</Maximum>
+                                  <ChartAxisScaleBreak>
+                                    <Style />
+                                  </ChartAxisScaleBreak>
+                                </ChartAxis>
+                              </ChartCategoryAxes>
+                              <ChartValueAxes>
+                                <ChartAxis Name="Primary">
+                                  <Visible>False</Visible>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                  <ChartAxisTitle>
+                                    <Caption>Axis Title</Caption>
+                                    <Style>
+                                      <FontSize>8pt</FontSize>
+                                    </Style>
+                                  </ChartAxisTitle>
+                                  <ChartMajorGridLines>
+                                    <Style>
+                                      <Border>
+                                        <Color>Gainsboro</Color>
+                                      </Border>
+                                    </Style>
+                                  </ChartMajorGridLines>
+                                  <ChartMinorGridLines>
+                                    <Style>
+                                      <Border>
+                                        <Color>Gainsboro</Color>
+                                        <Style>Dotted</Style>
+                                      </Border>
+                                    </Style>
+                                  </ChartMinorGridLines>
+                                  <ChartMinorTickMarks>
+                                    <Length>0.5</Length>
+                                  </ChartMinorTickMarks>
+                                  <CrossAt>NaN</CrossAt>
+                                  <Minimum>0</Minimum>
+                                  <Maximum>NaN</Maximum>
+                                  <ChartAxisScaleBreak>
+                                    <Style />
+                                  </ChartAxisScaleBreak>
+                                  <rd:SyncScope>Tablix18</rd:SyncScope>
+                                  <rd:SyncMaximum>true</rd:SyncMaximum>
+                                </ChartAxis>
+                                <ChartAxis Name="Secondary">
+                                  <Visible>False</Visible>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                  <ChartAxisTitle>
+                                    <Caption>Axis Title</Caption>
+                                    <Style>
+                                      <FontSize>8pt</FontSize>
+                                    </Style>
+                                  </ChartAxisTitle>
+                                  <ChartMajorGridLines>
+                                    <Style>
+                                      <Border>
+                                        <Color>Gainsboro</Color>
+                                      </Border>
+                                    </Style>
+                                  </ChartMajorGridLines>
+                                  <ChartMinorGridLines>
+                                    <Style>
+                                      <Border>
+                                        <Color>Gainsboro</Color>
+                                        <Style>Dotted</Style>
+                                      </Border>
+                                    </Style>
+                                  </ChartMinorGridLines>
+                                  <ChartMinorTickMarks>
+                                    <Length>0.5</Length>
+                                  </ChartMinorTickMarks>
+                                  <CrossAt>NaN</CrossAt>
+                                  <Location>Opposite</Location>
+                                  <Minimum>NaN</Minimum>
+                                  <Maximum>NaN</Maximum>
+                                  <ChartAxisScaleBreak>
+                                    <Style />
+                                  </ChartAxisScaleBreak>
+                                </ChartAxis>
+                              </ChartValueAxes>
+                              <Style>
+                                <BackgroundColor>#00ffffff</BackgroundColor>
+                                <BackgroundGradientType>None</BackgroundGradientType>
+                              </Style>
+                              <ChartElementPosition>
+                                <Top>10</Top>
+                                <Left>3</Left>
+                                <Height>80</Height>
+                                <Width>96</Width>
+                              </ChartElementPosition>
+                            </ChartArea>
+                          </ChartAreas>
+                          <Palette>SemiTransparent</Palette>
+                          <ChartBorderSkin>
+                            <Style>
+                              <BackgroundColor>Gray</BackgroundColor>
+                              <BackgroundGradientType>None</BackgroundGradientType>
+                              <Color>White</Color>
+                            </Style>
+                          </ChartBorderSkin>
+                          <ChartNoDataMessage Name="NoDataMessage">
+                            <Caption>No Data Available</Caption>
+                            <Style>
+                              <BackgroundGradientType>None</BackgroundGradientType>
+                              <TextAlign>General</TextAlign>
+                              <VerticalAlign>Top</VerticalAlign>
+                            </Style>
+                          </ChartNoDataMessage>
+                          <rd:DesignerMode>DataBar</rd:DesignerMode>
+                          <DataSetName>Builds</DataSetName>
+                          <Visibility>
+                            <Hidden>=(Fields!BuildDidNotRun.Value=1)</Hidden>
+                          </Visibility>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>LightBlue</Color>
+                              <Style>Solid</Style>
+                              <Width>2.25pt</Width>
+                            </TopBorder>
+                            <BackgroundGradientType>None</BackgroundGradientType>
+                            <BackgroundHatchType>None</BackgroundHatchType>
+                          </Style>
+                        </Chart>
+                        <ColSpan>3</ColSpan>
+                        <rd:Selected>true</rd:Selected>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>4.67708mm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox189">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontSize>7pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox189</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Top</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox192">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontSize>7pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox192</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Top</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox208">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontSize>7pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox208</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Top</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="ResultOutcome">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>►</Value>
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>#000000</Color>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Fields!ResultOutcome.Value</Value>
+                                  <Style>
+                                    <FontSize>7pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>ResultOutcome</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Top</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="ResultTest">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!ResultTest.Value</Value>
+                                  <Style>
+                                    <FontSize>7pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>ResultTest</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Top</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <TablixHeader>
+                    <Size>67.8625mm</Size>
+                    <CellContents>
+                      <Textbox Name="Textbox145">
+                        <CanGrow>true</CanGrow>
+                        <KeepTogether>true</KeepTogether>
+                        <Paragraphs>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value> Build</Value>
+                                <Style>
+                                  <FontSize>9pt</FontSize>
+                                  <FontWeight>Bold</FontWeight>
+                                </Style>
+                              </TextRun>
+                            </TextRuns>
+                            <Style />
+                          </Paragraph>
+                        </Paragraphs>
+                        <rd:DefaultName>Textbox145</rd:DefaultName>
+                        <Style>
+                          <Border>
+                            <Style>None</Style>
+                          </Border>
+                          <BackgroundColor>LightBlue</BackgroundColor>
+                          <PaddingLeft>2pt</PaddingLeft>
+                          <PaddingRight>2pt</PaddingRight>
+                          <PaddingTop>2pt</PaddingTop>
+                          <PaddingBottom>2pt</PaddingBottom>
+                        </Style>
+                      </Textbox>
+                    </CellContents>
+                  </TablixHeader>
+                  <TablixMembers>
+                    <TablixMember>
+                      <TablixHeader>
+                        <Size>25mm</Size>
+                        <CellContents>
+                          <Textbox Name="Textbox1">
+                            <CanGrow>true</CanGrow>
+                            <KeepTogether>true</KeepTogether>
+                            <Paragraphs>
+                              <Paragraph>
+                                <TextRuns>
+                                  <TextRun>
+                                    <Value>Start Time</Value>
+                                    <Style>
+                                      <FontSize>9pt</FontSize>
+                                      <FontWeight>Bold</FontWeight>
+                                    </Style>
+                                  </TextRun>
+                                </TextRuns>
+                                <Style />
+                              </Paragraph>
+                            </Paragraphs>
+                            <rd:DefaultName>Textbox1</rd:DefaultName>
+                            <Style>
+                              <Border>
+                                <Style>None</Style>
+                              </Border>
+                              <BackgroundColor>LightBlue</BackgroundColor>
+                              <PaddingLeft>2pt</PaddingLeft>
+                              <PaddingRight>2pt</PaddingRight>
+                              <PaddingTop>2pt</PaddingTop>
+                              <PaddingBottom>2pt</PaddingBottom>
+                            </Style>
+                          </Textbox>
+                        </CellContents>
+                      </TablixHeader>
+                      <TablixMembers>
+                        <TablixMember>
+                          <TablixHeader>
+                            <Size>25mm</Size>
+                            <CellContents>
+                              <Textbox Name="Textbox4">
+                                <CanGrow>true</CanGrow>
+                                <KeepTogether>true</KeepTogether>
+                                <Paragraphs>
+                                  <Paragraph>
+                                    <TextRuns>
+                                      <TextRun>
+                                        <Value>End Time</Value>
+                                        <Style>
+                                          <FontSize>9pt</FontSize>
+                                          <FontWeight>Bold</FontWeight>
+                                        </Style>
+                                      </TextRun>
+                                    </TextRuns>
+                                    <Style />
+                                  </Paragraph>
+                                </Paragraphs>
+                                <rd:DefaultName>Textbox4</rd:DefaultName>
+                                <Style>
+                                  <Border>
+                                    <Style>None</Style>
+                                  </Border>
+                                  <BackgroundColor>LightBlue</BackgroundColor>
+                                  <PaddingLeft>2pt</PaddingLeft>
+                                  <PaddingRight>2pt</PaddingRight>
+                                  <PaddingTop>2pt</PaddingTop>
+                                  <PaddingBottom>2pt</PaddingBottom>
+                                </Style>
+                              </Textbox>
+                            </CellContents>
+                          </TablixHeader>
+                          <TablixMembers>
+                            <TablixMember>
+                              <TablixHeader>
+                                <Size>25mm</Size>
+                                <CellContents>
+                                  <Textbox Name="Textbox10">
+                                    <CanGrow>true</CanGrow>
+                                    <KeepTogether>true</KeepTogether>
+                                    <Paragraphs>
+                                      <Paragraph>
+                                        <TextRuns>
+                                          <TextRun>
+                                            <Value>Duration </Value>
+                                            <Style>
+                                              <FontSize>9pt</FontSize>
+                                              <FontWeight>Bold</FontWeight>
+                                            </Style>
+                                          </TextRun>
+                                        </TextRuns>
+                                        <Style />
+                                      </Paragraph>
+                                    </Paragraphs>
+                                    <rd:DefaultName>Textbox10</rd:DefaultName>
+                                    <Style>
+                                      <Border>
+                                        <Style>None</Style>
+                                      </Border>
+                                      <BackgroundColor>LightBlue</BackgroundColor>
+                                      <PaddingLeft>2pt</PaddingLeft>
+                                      <PaddingRight>2pt</PaddingRight>
+                                      <PaddingTop>2pt</PaddingTop>
+                                      <PaddingBottom>2pt</PaddingBottom>
+                                    </Style>
+                                  </Textbox>
+                                </CellContents>
+                              </TablixHeader>
+                              <TablixMembers>
+                                <TablixMember>
+                                  <TablixHeader>
+                                    <Size>39.81667mm</Size>
+                                    <CellContents>
+                                      <Textbox Name="Textbox162">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>Build Status </Value>
+                                                <Style>
+                                                  <FontSize>9pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox162</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <BackgroundColor>LightBlue</BackgroundColor>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixHeader>
+                                  <TablixMembers>
+                                    <TablixMember />
+                                  </TablixMembers>
+                                </TablixMember>
+                              </TablixMembers>
+                            </TablixMember>
+                          </TablixMembers>
+                        </TablixMember>
+                      </TablixMembers>
+                    </TablixMember>
+                  </TablixMembers>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="BuildDidNotRun">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!BuildDidNotRun.Value</GroupExpression>
+                    </GroupExpressions>
+                  </Group>
+                  <SortExpressions>
+                    <SortExpression>
+                      <Value>=Fields!BuildDidNotRun.Value</Value>
+                    </SortExpression>
+                  </SortExpressions>
+                  <TablixMembers>
+                    <TablixMember>
+                      <Group Name="TeamProjectProjectNodeName">
+                        <GroupExpressions>
+                          <GroupExpression>=Fields!TeamProjectProjectNodeName.Value</GroupExpression>
+                        </GroupExpressions>
+                      </Group>
+                      <SortExpressions>
+                        <SortExpression>
+                          <Value>=Fields!TeamProjectProjectNodeName.Value</Value>
+                        </SortExpression>
+                      </SortExpressions>
+                      <TablixMembers>
+                        <TablixMember>
+                          <Group Name="BuildName1">
+                            <GroupExpressions>
+                              <GroupExpression>=Fields!BuildName.Value</GroupExpression>
+                            </GroupExpressions>
+                          </Group>
+                          <SortExpressions>
+                            <SortExpression>
+                              <Value>=Fields!BuildName.Value</Value>
+                            </SortExpression>
+                          </SortExpressions>
+                          <TablixHeader>
+                            <Size>67.8625mm</Size>
+                            <CellContents>
+                              <Textbox Name="BuildName11">
+                                <CanGrow>true</CanGrow>
+                                <KeepTogether>true</KeepTogether>
+                                <Paragraphs>
+                                  <Paragraph>
+                                    <TextRuns>
+                                      <TextRun>
+                                        <Value xml:space="preserve"> </Value>
+                                        <Style>
+                                          <FontSize>9pt</FontSize>
+                                          <FontWeight>Bold</FontWeight>
+                                        </Style>
+                                      </TextRun>
+                                      <TextRun>
+                                        <Label>[BuildDefinition]</Label>
+                                        <Value>=Fields!BuildDefinitionName.Value</Value>
+                                        <Style>
+                                          <FontSize>9pt</FontSize>
+                                          <FontWeight>Bold</FontWeight>
+                                        </Style>
+                                      </TextRun>
+                                      <TextRun>
+                                        <Value xml:space="preserve">
+ </Value>
+                                        <Style>
+                                          <FontSize>9pt</FontSize>
+                                          <FontWeight>Bold</FontWeight>
+                                        </Style>
+                                      </TextRun>
+                                      <TextRun>
+                                        <Value>=Fields!BuildName.Value</Value>
+                                        <Style>
+                                          <FontSize>7pt</FontSize>
+                                          <FontWeight>Normal</FontWeight>
+                                        </Style>
+                                      </TextRun>
+                                    </TextRuns>
+                                    <Style />
+                                  </Paragraph>
+                                  <Paragraph>
+                                    <TextRuns>
+                                      <TextRun>
+                                        <Value />
+                                        <Style>
+                                          <FontSize>9pt</FontSize>
+                                          <FontWeight>Bold</FontWeight>
+                                        </Style>
+                                      </TextRun>
+                                    </TextRuns>
+                                    <Style />
+                                  </Paragraph>
+                                </Paragraphs>
+                                <rd:DefaultName>BuildName11</rd:DefaultName>
+                                <Style>
+                                  <Border>
+                                    <Style>None</Style>
+                                  </Border>
+                                  <TopBorder>
+                                    <Color>LightBlue</Color>
+                                    <Style>Solid</Style>
+                                    <Width>2.25pt</Width>
+                                  </TopBorder>
+                                  <VerticalAlign>Top</VerticalAlign>
+                                </Style>
+                              </Textbox>
+                            </CellContents>
+                          </TablixHeader>
+                          <TablixMembers>
+                            <TablixMember>
+                              <TablixHeader>
+                                <Size>25mm</Size>
+                                <CellContents>
+                                  <Textbox Name="BuildStartTime">
+                                    <CanGrow>true</CanGrow>
+                                    <KeepTogether>true</KeepTogether>
+                                    <Paragraphs>
+                                      <Paragraph>
+                                        <TextRuns>
+                                          <TextRun>
+                                            <Value>=Fields!BuildStartTime.Value</Value>
+                                            <Style>
+                                              <FontSize>9pt</FontSize>
+                                              <FontWeight>Bold</FontWeight>
+                                            </Style>
+                                          </TextRun>
+                                        </TextRuns>
+                                        <Style>
+                                          <TextAlign>Left</TextAlign>
+                                        </Style>
+                                      </Paragraph>
+                                    </Paragraphs>
+                                    <rd:DefaultName>BuildStartTime</rd:DefaultName>
+                                    <Style>
+                                      <Border>
+                                        <Style>None</Style>
+                                      </Border>
+                                      <TopBorder>
+                                        <Color>LightBlue</Color>
+                                        <Style>Solid</Style>
+                                        <Width>2.25pt</Width>
+                                      </TopBorder>
+                                      <VerticalAlign>Top</VerticalAlign>
+                                    </Style>
+                                  </Textbox>
+                                </CellContents>
+                              </TablixHeader>
+                              <TablixMembers>
+                                <TablixMember>
+                                  <TablixHeader>
+                                    <Size>25mm</Size>
+                                    <CellContents>
+                                      <Textbox Name="BuildEndTime">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>=Fields!BuildEndTime.Value</Value>
+                                                <Style>
+                                                  <FontSize>9pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style>
+                                              <TextAlign>Left</TextAlign>
+                                            </Style>
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>BuildEndTime</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <TopBorder>
+                                            <Color>LightBlue</Color>
+                                            <Style>Solid</Style>
+                                            <Width>2.25pt</Width>
+                                          </TopBorder>
+                                          <VerticalAlign>Top</VerticalAlign>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixHeader>
+                                  <TablixMembers>
+                                    <TablixMember>
+                                      <TablixHeader>
+                                        <Size>25mm</Size>
+                                        <CellContents>
+                                          <Textbox Name="BuildDuration">
+                                            <CanGrow>true</CanGrow>
+                                            <KeepTogether>true</KeepTogether>
+                                            <Paragraphs>
+                                              <Paragraph>
+                                                <TextRuns>
+                                                  <TextRun>
+                                                    <Value>=First(Fields!BuildDuration.Value)</Value>
+                                                    <Style>
+                                                      <FontSize>9pt</FontSize>
+                                                      <FontWeight>Bold</FontWeight>
+                                                    </Style>
+                                                  </TextRun>
+                                                </TextRuns>
+                                                <Style>
+                                                  <TextAlign>Left</TextAlign>
+                                                </Style>
+                                              </Paragraph>
+                                            </Paragraphs>
+                                            <rd:DefaultName>BuildDuration</rd:DefaultName>
+                                            <Style>
+                                              <Border>
+                                                <Style>None</Style>
+                                              </Border>
+                                              <TopBorder>
+                                                <Color>LightBlue</Color>
+                                                <Style>Solid</Style>
+                                                <Width>2.25pt</Width>
+                                              </TopBorder>
+                                              <VerticalAlign>Top</VerticalAlign>
+                                            </Style>
+                                          </Textbox>
+                                        </CellContents>
+                                      </TablixHeader>
+                                      <TablixMembers>
+                                        <TablixMember>
+                                          <Group Name="BuildStatusName">
+                                            <GroupExpressions>
+                                              <GroupExpression>=Fields!BuildStatusName.Value</GroupExpression>
+                                            </GroupExpressions>
+                                          </Group>
+                                          <SortExpressions>
+                                            <SortExpression>
+                                              <Value>=Fields!BuildStatusName.Value</Value>
+                                            </SortExpression>
+                                          </SortExpressions>
+                                          <TablixMembers>
+                                            <TablixMember>
+                                              <TablixHeader>
+                                                <Size>39.81667mm</Size>
+                                                <CellContents>
+                                                  <Textbox Name="BuildStatusName1">
+                                                    <CanGrow>true</CanGrow>
+                                                    <KeepTogether>true</KeepTogether>
+                                                    <Paragraphs>
+                                                      <Paragraph>
+                                                        <TextRuns>
+                                                          <TextRun>
+                                                            <Value>=Fields!BuildStatusName.Value</Value>
+                                                            <Style>
+                                                              <FontSize>9pt</FontSize>
+                                                              <FontWeight>Bold</FontWeight>
+                                                            </Style>
+                                                          </TextRun>
+                                                        </TextRuns>
+                                                        <Style />
+                                                      </Paragraph>
+                                                    </Paragraphs>
+                                                    <rd:DefaultName>BuildStatusName1</rd:DefaultName>
+                                                    <Style>
+                                                      <Border>
+                                                        <Style>None</Style>
+                                                      </Border>
+                                                      <TopBorder>
+                                                        <Color>LightBlue</Color>
+                                                        <Style>Solid</Style>
+                                                        <Width>2.25pt</Width>
+                                                      </TopBorder>
+                                                    </Style>
+                                                  </Textbox>
+                                                </CellContents>
+                                              </TablixHeader>
+                                              <TablixMembers>
+                                                <TablixMember>
+                                                  <KeepWithGroup>After</KeepWithGroup>
+                                                </TablixMember>
+                                                <TablixMember>
+                                                  <Group Name="Details1" />
+                                                  <TablixMembers>
+                                                    <TablixMember />
+                                                  </TablixMembers>
+                                                  <Visibility>
+                                                    <Hidden>=(Fields!ResultOutcome.Value="Passed" OR IsNothing(Fields!ResultOutcome.Value))</Hidden>
+                                                  </Visibility>
+                                                </TablixMember>
+                                              </TablixMembers>
+                                            </TablixMember>
+                                          </TablixMembers>
+                                        </TablixMember>
+                                      </TablixMembers>
+                                    </TablixMember>
+                                  </TablixMembers>
+                                </TablixMember>
+                              </TablixMembers>
+                            </TablixMember>
+                          </TablixMembers>
+                        </TablixMember>
+                      </TablixMembers>
+                    </TablixMember>
+                  </TablixMembers>
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>Builds</DataSetName>
+            <SortExpressions>
+              <SortExpression>
+                <Value>=Fields!ResultTest.Value</Value>
+              </SortExpression>
+            </SortExpressions>
+            <Top>17.21556mm</Top>
+            <Left>0.26458mm</Left>
+            <Height>18.26458mm</Height>
+            <Width>339.31248mm</Width>
+            <ZIndex>1</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
+          <Textbox Name="Textbox205">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Please note: </Value>
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>This report shows the Status and automated test results for Nightly Builds. Only automated tests that did not pass detailed in the report. Further information is available in TFS.</Value>
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox205</rd:DefaultName>
+            <Top>40.71408mm</Top>
+            <Left>0mm</Left>
+            <Height>9.05355mm</Height>
+            <Width>238.6479mm</Width>
+            <ZIndex>2</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+        </ReportItems>
+        <Height>50.2968mm</Height>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Body>
+      <Width>339.57706mm</Width>
+      <Page>
+        <PageHeight>297mm</PageHeight>
+        <PageWidth>210mm</PageWidth>
+        <InteractiveHeight>0mm</InteractiveHeight>
+        <InteractiveWidth>21cm</InteractiveWidth>
+        <LeftMargin>20mm</LeftMargin>
+        <RightMargin>20mm</RightMargin>
+        <TopMargin>20mm</TopMargin>
+        <BottomMargin>20mm</BottomMargin>
+        <ColumnSpacing>0.13cm</ColumnSpacing>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="BuildDate">
+      <DataType>DateTime</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>=Now</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Build Date</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TeamProject">
+      <DataType>String</DataType>
+      <Prompt>Team Project</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>TeamProjects</DataSetName>
+          <ValueField>ProjectNodeName</ValueField>
+          <LabelField>ProjectNodeName</LabelField>
+        </DataSetReference>
+      </ValidValues>
+      <MultiValue>true</MultiValue>
+    </ReportParameter>
+    <ReportParameter Name="BuildNameFilter">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Build Name Filter (Uses %)</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="BuildDefinitions">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>Using Filter</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>BuildDefinitions </Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>BuildDefinitions</DataSetName>
+          <ValueField>BuildDefinitionName</ValueField>
+          <LabelField>BuildDefinitionName</LabelField>
+        </DataSetReference>
+      </ValidValues>
+      <MultiValue>true</MultiValue>
+    </ReportParameter>
+    <ReportParameter Name="ShowBuildsThatDidNotRun">
+      <DataType>Boolean</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>true</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Show Builds That Did Not Run</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <rd:ReportUnitType>Mm</rd:ReportUnitType>
+  <rd:ReportServerUrl>http://tdc2tfs003/ReportServer</rd:ReportServerUrl>
+  <rd:ReportID>66e9104a-36ba-49af-8dd6-f22fbe369c00</rd:ReportID>
+</Report>

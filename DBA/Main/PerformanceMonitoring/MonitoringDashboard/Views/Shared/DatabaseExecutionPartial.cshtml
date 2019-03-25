@@ -1,0 +1,68 @@
+﻿@using MonitoringDashboard.Helpers
+@model Dto.DatabaseExecutionMetric
+
+<div class="executionContainer">
+    <h2>A Header </h2>
+    <div class="metricsContainer">
+        @if (string.IsNullOrWhiteSpace(Model.LatestExecutionPlan))
+        {
+            <p>The Latest Execution Plan is NOT available.</p>
+        }
+        else
+        {
+            <span>Latest Execution Plan: </span><a id="viewExecutionPlan">View Execution Plan</a>
+        }
+
+        
+        <div class='metricContainer'>
+            <div class="metricTitle">Total IOPs</div><div class="metricValue">@Model.TotalIops</div>
+        </div>
+        <div class='metricContainer'>
+            <div class="metricTitle">Total Number Of Executions</div><div class="metricValue">@Model.TotalNumberOfExecutions</div>
+        </div>
+        <div class='metricContainer'>
+            <div class="metricTitle">Total Worker Time(s)</div><div class="metricValue">@Model.TotalWorkerTimeSeconds</div>
+        </div>
+        <div class='metricContainer'>
+            <div class="metricTitle">Total Physical Reads</div><div class="metricValue">@Model.TotalPhysicalReads</div>
+        </div>
+        <div class='metricContainer'>
+            <div class="metricTitle">Total Logical Reads</div><div class="metricValue">@Model.TotalLogicalReads</div>
+        </div>
+        <div class='metricContainer'>
+            <div class="metricTitle">Total Logical Writes</div><div class="metricValue">@Model.TotalLogicalWrites</div>
+        </div>
+        <div class='metricContainer'>
+            <div class="metricTitle">Total Elapsed Time(s)</div><div class="metricValue">@Model.TotalElapsedTimeSeconds</div>
+        </div>
+        <div class='metricContainer'>
+            <div class="metricTitle">Longest Running Time(s)</div><div class="metricValue">@Model.LongestRunningTimeSeconds</div>
+        </div>
+        <div class='metricContainer'>
+            <div class="metricTitle">Average IOPs Per Call</div><div class="metricValue">@Model.AverageIopsPerCall</div>
+        </div>
+        <div class='metricContainer'>
+            <div class="metricTitle">Average Elapsed Time (ms)</div><div class="metricValue">@Model.AverageElapsedTimeMilliSeconds</div>
+        </div>
+    </div>
+</div>
+
+<iframe id="my_iframe" style="display:none;"></iframe>
+
+    <script type="text/javascript">
+
+        var $idown;  // Keep it outside of the function, so it's initialized once.
+        function downloadURL(url) {
+            if ($idown) {
+                $idown.attr('src',url);
+            } else {
+                $idown = $('<iframe>', { id:'idown', src:url }).hide().appendTo('body');
+            }
+        };
+
+        $('#viewExecutionPlan').click(function (e) {
+            // downloadURL('DatabaseExecution/GetExecutionPlan');
+            downloadURL('@Html.Raw(UrlBuilder.GetViewExecutionPlan(Model.Environment, Model.StartDate, Model.EndDate, Model.DatabaseOfInterest, Model.SqlOfInterest, Url))');
+        });
+
+    </script>

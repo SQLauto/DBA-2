@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+  
+ <configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="DevInt.Internal" Environment="DevInt" Config="DevInt.FAE" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+  
+  <PostDeploymentTestIdentity>DeploymentAccount.Internal</PostDeploymentTestIdentity>
+
+  <machine Id="1" Name="TDC2BLD010" ExternalIP="10.107.203.239" DeploymentMachine="true" />
+  
+  <machine Id="2" Name="tdc2faec02v01" ExternalIP="10.107.203.232" >
+    
+
+    <!-- FAE DB -->	
+		<DatabaseRole Description="FAE Baseline" Include="FAE.Baseline.Database" DatabaseInstance="VINS001" TargetDatabase="FAE" />
+		<DatabaseRole Description="FAE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="VINS001" TargetDatabase="FAE" />
+
+		<DatabaseRole Description="FAE Database" Include="FAE.Database" DatabaseInstance="VINS001" />
+		<DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="VINS001" TargetDatabase="FAE" />
+		<DatabaseRole Description="FAE Partitioning" Include="FAE.Partitioning" DatabaseInstance="VINS001" />
+		<!--<DatabaseRole Description="FAE LinkedServer PreProd" Include="FAE.LinkedServer.PreProd" DatabaseInstance="VINS001" />-->
+	
+	<!-- Travel Store db -->
+		<DatabaseRole Description="TravelStore Baseline" Include="TravelStore.Baseline.Database" DatabaseInstance="VINS001" TargetDatabase="TravelStore" />
+		<DatabaseRole Description="TravelStore Deployment Schema" Include="Deployment.Schema" DatabaseInstance="VINS001" TargetDatabase="TravelStore" />
+		<DatabaseRole Description="TravelStore Database" Include="TravelStore.Database" DatabaseInstance="VINS001" TargetDatabase="TravelStore" />
+		<DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="VINS001" TargetDatabase="TravelStore" />
+		<DatabaseRole Description="TravelStore Partitioning" Include="TravelStore.Partitioning" DatabaseInstance="VINS001" TargetDatabase="TravelStore" />
+	
+	<!-- The FAE database schema for functional environments only -->
+	  <DatabaseRole Description="FAE Dev Only Schema Increment" Include="FAE.DB.DevOnly" DatabaseInstance="VINS001" TargetDatabase="FAE" />
+	  <DatabaseRole Description="FAE Dev Int Only Schema Increment" Include="FAE.DB.DevInt" DatabaseInstance="VINS001" TargetDatabase="FAE" />
+
+	<!-- The FAE database schema for functional environments only -->
+	  <DatabaseRole Description="TravelStore Functional schema increment" Include="TravelStore.DB.Functional" DatabaseInstance="VINS001" TargetDatabase="TravelStore" />	
+
+  </machine>
+  
+</configuration>

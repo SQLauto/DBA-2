@@ -1,0 +1,15 @@
+﻿@using MonitoringDashboard.Models
+@using MonitoringService
+@model Dto.DatabaseMacroMetricSetNormalised
+
+
+@{
+    var service = new EnvironmentsService();
+    var environments = service.EnvironmentsGet();
+    var userParamsModel = new MonitoredEnvironments { EnvironmentsOfInterest = environments };
+}
+
+@{
+    Html.Partial("UserParameters", userParamsModel);
+    Html.RenderPartial("DatabaseRadarPartial", Model);
+}

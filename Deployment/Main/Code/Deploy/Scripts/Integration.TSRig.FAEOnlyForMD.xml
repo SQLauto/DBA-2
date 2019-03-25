@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="Integration.TSRig.FAEOnlyForMD" Environment="TSRig"  Config="TSRig" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonPareServiceDeploy.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+
+  <machine Id ="5" Name="TS-FAE1"   ExternalIP="" Role="FAE Controller">
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv"/>
+    <PreDeployRole Description="StopFaeController" Include="StopFaeController" />
+    <ServerRole Description="FAE Controller" Include ="FAE.Engine.Controller" StartUpType="AutomaticDelayed" />
+	  <ServerRole Description="FAE Tap Importer Service folders" Include="FAE.TapImporter.Service.Folders" />
+	  <ServerRole Description="Create FileShare For FAE Tap Queue" Include="FAE.TapQueue.FileShare" />
+    <ServerRole Description="FAE Tap Importer" Include="FAE.TapImporter.Service" />
+    <ServerRole Description="FAE Engine Controller Util" Include="FAE.EngineControllerUtil.Install" />
+    <ServerRole Description="FAE Travel Day Revision Exporter" Include="FAE.TravelDayRevisonExporter.Install" />
+    <ServerRole Description="FAE EOD Task Schedule Installer" Include="FAE.EOD.ScheduledTask.Create" />
+    <ServerRole Description="FAE Token Journey Summary folders" Include="FAE.TokenJourneySummary.Folders" />
+    <!-- We put this here because we don't want to create a new machine in the lab just to host this service-->
+  </machine>
+  <machine Id="6" Name="TS-FAE2"   ExternalIP="" Role="FAE Engine 1">
+	<PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv"/>
+    <PreDeployRole Description="StopFaeEngine" Include="StopFaeEngine" />
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" StartUpType="AutomaticDelayed" />
+  </machine>
+  <machine Id="7" Name="TS-FAE3"   ExternalIP="" Role="FAE Engine 2">
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv"/>
+    <PreDeployRole Description="StopFaeEngine" Include="StopFaeEngine" />
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" StartUpType="AutomaticDelayed" />
+  </machine>
+  <machine Id="8" Name="TS-FAE4"   ExternalIP="" Role="FAE Engine 3">
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv"/>
+    <PreDeployRole Description="StopFaeEngine" Include="StopFaeEngine" />
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service" StartUpType="AutomaticDelayed" />
+  </machine>
+  <machine Id="0" Name="TS-DB2"   ExternalIP="" Role="FTP Database Server" DeploymentMachine="true">
+
+  </machine>
+</configuration>

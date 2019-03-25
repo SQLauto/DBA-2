@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="SSO.Production.External.SiteB" Environment="SSOProdB" Config="SSO.ProdB" ProductGroup="SSO">
+	<CommonRoleFile>SSO.CommonExternalServerRoles.xml</CommonRoleFile>
+	<machine Id="1" Name="ZDC5SSW001"	ExternalIP="10.124.68.1">
+		<ServerRole Include="IISSetup.SSOext" />
+		<ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+		<ServerRole Description="SSO Website" Include="SSO.Website" />
+		<ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+	</machine>
+	<machine Id="2" Name="ZDC5SSW002"	ExternalIP="10.124.68.2">
+		<ServerRole Include="IISSetup.SSOext" />
+		<ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+		<ServerRole Description="SSO Website" Include="SSO.Website" />
+		<ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+	</machine>
+	<machine Id="3" Name="ZDC5SSW003"	ExternalIP="10.124.68.3">
+		<ServerRole Include="IISSetup.SSOext" />
+		<ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+		<ServerRole Description="SSO Website" Include="SSO.Website" />
+		<ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+	</machine>
+	<machine Id="4" Name="ZDC5SSW004"	ExternalIP="10.124.68.4">
+		<ServerRole Include="IISSetup.SSOext" />
+		<ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+		<ServerRole Description="SSO Website" Include="SSO.Website" />
+		<ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+	</machine>
+	<machine Id="5" Name="ZDC5SSW005"	ExternalIP="10.124.68.5">
+		<ServerRole Include="IISSetup.SSOext" />
+		<ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+		<ServerRole Description="SSO Website" Include="SSO.Website" />
+		<ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+	</machine>
+	<machine Id="6" Name="ZDC5SSW006"	ExternalIP="10.124.68.6">
+		<ServerRole Include="IISSetup.SSOext" />
+		<ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+		<ServerRole Description="SSO Website" Include="SSO.Website" />
+		<ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+	</machine>
+	<machine Id="7" Name="ZDC5SSW007"	ExternalIP="10.124.68.7">
+		<ServerRole Include="IISSetup.SSOext" />
+		<ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+		<ServerRole Description="SSO Website" Include="SSO.Website" />
+		<ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+	</machine>
+	<machine Id="8" Name="ZDC5SSW008"	ExternalIP="10.124.68.8">
+		<ServerRole Include="IISSetup.SSOext" />
+		<ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+		<ServerRole Description="SSO Website" Include="SSO.Website" />
+		<ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+	</machine>
+	<machine Id="9" Name="ZDC5SSW009"	ExternalIP="10.124.68.9">
+		<ServerRole Include="IISSetup.SSOext" />
+		<ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+		<ServerRole Description="SSO Website" Include="SSO.Website" />
+		<ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+	</machine>
+	<machine Id="10" Name="ZDC5SSW010"	ExternalIP="10.124.68.10">
+		<ServerRole Include="IISSetup.SSOext" />
+		<ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+		<ServerRole Description="SSO Website" Include="SSO.Website" />
+		<ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+	</machine>
+  <machine Id="11" Name="ZDC5SSM001" ExternalIP="10.124.68.102" DeploymentMachine="true" />
+</configuration>

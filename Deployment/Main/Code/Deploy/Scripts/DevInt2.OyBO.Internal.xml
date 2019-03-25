@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="DevInt2.OyBO.Internal" Environment="DevInt2" Config="DevInt2" ProductGroup="FTP">
+  <!--<CommonRoleFile>CommonMJTDeltasRole.xml</CommonRoleFile>-->
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+
+  <PostDeploymentTestIdentity>DeploymentAccount.Internal</PostDeploymentTestIdentity>
+
+  <machine Id="3" Name="FTDC2MGT360" ExternalIP="10.107.200.186" DeploymentMachine="true"  />
+
+  <!-- 1. OyBo DBs -->
+  <machine Id="4" Name="TDC2FAEC04V02" ExternalIP="10.107.200.197">
+    <!-- TapIdAllocator DB-->
+    <DatabaseRole Description="TapIdAllocator Database" Include="TapIdAllocator.Baseline.Database"  DatabaseInstance="VINS002" TargetDatabase="TapIdAllocator" />
+    <DatabaseRole Description="TapIdAllocator Deployment Schema" Include="Deployment.Schema" DatabaseInstance="VINS002" TargetDatabase="TapIdAllocator" />
+    <DatabaseRole Description="TapIdAllocator Database" Include="TapIdAllocator.Database" DatabaseInstance="VINS002" TargetDatabase="TapIdAllocator" />
+  </machine>
+
+  <machine Id="6" Name="TDC2FAEC04V03" ExternalIP="10.107.200.198">
+    <!-- OTFP DB-->
+    <DatabaseRole Description="OTFP Database" Include="OTFP.Baseline.Database" DatabaseInstance="VINS003" TargetDatabase="OTFP" />
+    <DatabaseRole Description="OTFP Deployment Schema" Include="Deployment.Schema" DatabaseInstance="VINS003" TargetDatabase="OTFP" />
+    <DatabaseRole Description="OTFP Database" Include="OTFP.Database" DatabaseInstance="VINS003" TargetDatabase="OTFP" />
+    <DatabaseRole Description="OTFP Database" Include="OTFP.PreProd.Database" DatabaseInstance="VINS003" TargetDatabase="OTFP" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="VINS003" TargetDatabase="OTFP" />
+    <DatabaseRole Description="OTFP Partitioning" Include="OTFP.Partitioning" DatabaseInstance="VINS003" TargetDatabase="OTFP" />
+
+    <!-- OCAE DB-->
+    <DatabaseRole Description="OCAE Database" Include="OCAE.Baseline.Database" DatabaseInstance="VINS003" TargetDatabase="OCAE" />
+    <DatabaseRole Description="OCAE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="VINS003" TargetDatabase="OCAE" />
+    <DatabaseRole Description="OCAE Database" Include="OCAE.Database" DatabaseInstance="VINS003" TargetDatabase="OCAE" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="VINS003" TargetDatabase="OCAE" />
+    <DatabaseRole Description="OCAE Partitioning" Include="OCAE.Partitioning" DatabaseInstance="VINS003" TargetDatabase="OCAE" />
+
+    <!-- Refunds DB-->
+    <DatabaseRole Description="Refunds Database" Include="Refunds.Baseline.Database" DatabaseInstance="VINS003" TargetDatabase="RefundManager" />
+    <DatabaseRole Description="Refunds Deployment Schema" Include="Deployment.Schema" DatabaseInstance="VINS003" TargetDatabase="RefundManager" />
+    <DatabaseRole Description="Refunds Database" Include="Refunds.Database" DatabaseInstance="VINS003" TargetDatabase="RefundManager" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="VINS003" TargetDatabase="RefundManager" />
+    <DatabaseRole Description="Refunds Partitioning" Include="Refunds.Partitioning" DatabaseInstance="VINS003" TargetDatabase="RefundManager"  />
+  </machine>
+
+  <!-- 2. SFTP Server -->
+  <machine Id="51" Name="FTDC2FTP369"  ExternalIP="10.107.200.218" >
+    <ServerRole Description="FTM OYBO File System" Include="OYBO.FTM.Filesystem" />
+  </machine>
+
+  <!-- 3. FTM Server -->
+  <machine Id="52" Name="FTDC2FTM368"  ExternalIP="10.107.200.215">
+    <!-- <ServerRole Description="StopFTMService" Include="StopFTMService" /> -->
+    <ServerRole Description="FTM EventLog Entry" Include="FTP.EventLog.For.Internal.FTM" />
+    <ServerRole Description="FTM Service (FTP-OyBo)" Include="FTM.Service" Config="DevInt2_OYBO" />
+  </machine>
+
+  <!-- 4. OFTP Server -->
+  <machine Id="50" Name="FTDC2OTP366" ExternalIP="10.107.200.217">
+    <PreDeployRole Description="Stop OyBO Services" Include="StopOyBOServices" />
+    <PreDeployRole Description="Stop OyBO AzureMobileUploader Service" Include="StopOyBOAzureMobileUploaderService" />
+    <ServerRole Description="OyBO File System" Include="OyBO.FileSystem" />
+    <ServerRole Description="Create FileShare For OyBO Services" Include="OyBO.FileShare" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.OTFP" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.AzureMobileUploader" />
+    <ServerRole Description="Oyster Back Office TFP Service" Include="OyBO.TFP.Install" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.FileCleanup" />
+    <ServerRole Description="Oyster Back Office File Cleanup Console App Install" Include="OyBO.FileCleanup.Install" />
+    <ServerRole Description="Oyster Back Office File Cleanup Scheduler" Include="OyBO.FileCleanup.ScheduledTask.Create" />    
+    <ServerRole Description="Oyster Back Office TFP Azure Mobile Uploader Cert Install" Include="OyBO.AzureMobileUploaderCert.Install" />
+    <ServerRole Description="Oyster Back Office TFP Azure Mobile Uploader Service" Include="OyBO.AzureMobileUploader.Install" />
+    
+    <PostDeployRole Description="Start Oyster Back Office Services" Include="StartOyBOServices" />    
+  </machine>
+
+  <!-- 5. DataGen & FUL Stub Server (previously OCAE server, repurposed when OCAE was moved to the cluster) -->
+  <machine Id="53" Name="FTDC2OCA370"  ExternalIP="10.107.200.121">
+    <PreDeployRole Description="Stop OyBO FUL Stub Services" Include="StopFulStubService" />
+    <ServerRole Description="OyBO DataGen Oyster File Generator Console App Install" Include="OyBO.DataGen.Install" />
+    <ServerRole Description="OYBO FUL Stub Service Install" Include="OyBO.FulStub.Install"/>
+    <PostDeployRole Description="Start OYBO FUL Stub Service" Include="StartOyboFulStubService" />
+  </machine>
+
+  <!-- Commenting out installation of FUL and Refund Manager on this box till the cluster is set up properly -->
+  <machine Id="54" Name="FTDC2LMEMC04N01" ExternalIP="" Role="Low Memory Cluster 2 Node 1">
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.Refunds" />
+    <ServerRole Description="Stop Refunds Service" Include="StopRefundsService" />
+    <!--Uninstall role was added because of versioning issues with NuGet packages which resulted in dlls being deleted but not replaced. A uninstall / fresh install solves this.-->
+    <!--When each component is built in it's own directory on the build server, dll version clashes won't happen, so this role can be removed.-->
+    <ServerRole Description="OyBO Refunds Service Uninstall" Include="OyBO.Refunds.Install" Action="Uninstall" DisableTests="true"/>
+    <ServerRole Description="OyBO Refunds Service Install" Include="OyBO.Refunds.Install"/>
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.OCAE" />
+    <ServerRole Description="Oyster Charge Adjustment Engine Install" Include="OyBO.Ocae.Install"/>
+  </machine>
+  <machine Id="55" Name="FTDC2LMEMC04N02" ExternalIP="" Role="Low Memory Cluster 2 Node 2">
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.Refunds" />
+    <ServerRole Description="Stop Refunds Service" Include="StopRefundsService" />
+    <!--Uninstall role was added because of versioning issues with NuGet packages which resulted in dlls being deleted but not replaced. A uninstall / fresh install solves this.-->
+    <!--When each component is built in it's own directory on the build server, dll version clashes won't happen, so this role can be removed.-->
+    <ServerRole Description="OyBO Refunds Service Uninstall" Include="OyBO.Refunds.Install" Action="Uninstall" DisableTests="true"/>
+    <ServerRole Description="OyBO Refunds Service Install" Include="OyBO.Refunds.Install"/>
+    <ServerRole Description="Oyster Charge Adjustment Engine Service Install" Include="OyBO.Ocae.Install"/>
+  </machine>
+  <machine Id="56" Name="FTDC2LMEMC04N03" ExternalIP="" Role="Low Memory Cluster 2 Node 3">
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.Refunds" />
+    <ServerRole Description="Stop Refunds Service" Include="StopRefundsService" />
+    <!--Uninstall role was added because of versioning issues with NuGet packages which resulted in dlls being deleted but not replaced. A uninstall / fresh install solves this.-->
+    <!--When each component is built in it's own directory on the build server, dll version clashes won't happen, so this role can be removed.-->
+    <ServerRole Description="OyBO Refunds Service Uninstall" Include="OyBO.Refunds.Install" Action="Uninstall" DisableTests="true"/>
+    <ServerRole Description="OyBO Refunds Service Install" Include="OyBO.Refunds.Install"/>
+    <ServerRole Description="Oyster Charge Adjustment Engine Service Install" Include="OyBO.Ocae.Install"/>
+  </machine>
+
+  <!-- END OyBO Machines -->
+</configuration>
+

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="DevInt2.TJSDistributor.Internal" Environment="DevInt2" Config="DevInt2" ProductGroup="FTP">
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+
+  <PostDeploymentTestIdentity>DeploymentAccount.Internal</PostDeploymentTestIdentity>
+
+  <machine Id="FTDC2MGT360" Name="FTDC2MGT360" ExternalIP="10.107.200.186" DeploymentMachine="true" />
+
+  <machine Id="FTDC2HMEMC01N01" Name="FTDC2HMEMC01N01" ExternalIP="10.107.200.112">
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSDistributor" />
+
+    <ServerRole Description="TJS Distributor Message Broker service" Include="TJSDistributor.JulianService.Install" Config="DevInt2_Oyster"/>
+    <ServerRole Description="TJS Distributor Message Broker CPC service" Include="TJSDistributor.JulianService.CPC.Install" />
+
+    <ServerRole Description="TJS Distributor TJSHExtractor service" Include="TJSDistributor.TJSHExtractor.Install" Config="DevInt2_Oyster"/>
+    <ServerRole Description="TJS Distributor TJSHExtractor CPC service" Include="TJSDistributor.TJSHExtractor.CPC.Install" />
+  </machine>
+  <machine Id="FTDC2HMEMC01N02" Name="FTDC2HMEMC01N02" ExternalIP="10.107.200.113">
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSDistributor" />
+
+    <ServerRole Description="TJS Distributor Message Broker service" Include="TJSDistributor.JulianService.Install" Config="DevInt2_Oyster" />
+    <ServerRole Description="TJS Distributor Message Broker CPC service" Include="TJSDistributor.JulianService.CPC.Install" />
+
+    <ServerRole Description="TJS Distributor TJSHExtractor service" Include="TJSDistributor.TJSHExtractor.Install" Config="DevInt2_Oyster" />
+    <ServerRole Description="TJS Distributor TJSHExtractor CPC service" Include="TJSDistributor.TJSHExtractor.CPC.Install" />
+  </machine>
+  <machine Id="FTDC2HMEMC01N03" Name="FTDC2HMEMC01N03" ExternalIP="10.107.200.114">
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSDistributor" />
+
+    <ServerRole Description="TJS Distributor Message Broker service" Include="TJSDistributor.JulianService.Install" Config="DevInt2_Oyster" />
+    <ServerRole Description="TJS Distributor Message Broker CPC service" Include="TJSDistributor.JulianService.CPC.Install" />
+
+    <ServerRole Description="TJS Distributor TJSHExtractor service" Include="TJSDistributor.TJSHExtractor.Install" Config="DevInt2_Oyster" />
+    <ServerRole Description="TJS Distributor TJSHExtractor CPC service" Include="TJSDistributor.TJSHExtractor.CPC.Install" />
+  </machine>
+
+  <machine Id="FTDC2PAI345" Name="FTDC2PAI345" ExternalIP="10.107.200.171" Role="TJS Server 1">
+    <ServerRole Description="TJS Distributor File Purger Install" Include="TJSDistributor.FilePurger.Install" Config="DevInt2_Oyster"/>
+    <ServerRole Description="TJS Distributor File Purger CPC Install" Include="TJSDistributor.FilePurger.CPC.Install" />
+    <ServerRole Description="TJS Distributor File Purge Scheduler" Include="TJSDistributor.FilePurger.ScheduledTask.Create" Config="DevInt2_Oyster" />
+    <ServerRole Description="TJS Distributor File Purger CPC Scheduler" Include="TJSDistributor.FilePurger.CPC.ScheduledTask.Create" />
+  </machine>
+
+  <machine Id="TDC2FAEC04V01" Name="TDC2FAEC04V01" ExternalIP="10.107.200.196">
+    <!-- TJS Store -->
+    <DatabaseRole Description='TJS Baseline' Include="TJS.Baseline.Database" DatabaseInstance="VINS001" TargetDatabase="TJS" Config="DevInt2_Oyster" />
+    <DatabaseRole Description="TJS Deployment Schema" Include="Deployment.Schema" DatabaseInstance="VINS001" TargetDatabase="TJS" Config="DevInt2_Oyster" />
+    <DatabaseRole Description="TJS Main Schema" Include="TJS.Database" DatabaseInstance="VINS001" TargetDatabase="TJS" Config="DevInt2_Oyster"/>
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="VINS001" TargetDatabase="TJS" Config="DevInt2_Oyster"/>
+    <DatabaseRole Description="TJS Partitioning" Include="TJS.Partitioning" DatabaseInstance="VINS001" TargetDatabase="TJS" Config="DevInt2_Oyster"/>
+
+    <!-- TJS Store for CPC -->
+    <DatabaseRole Description='TJS Baseline' Include="TJS.Baseline.Database" DatabaseInstance="VINS001" />
+    <DatabaseRole Description="TJS Deployment Schema" Include="Deployment.Schema" DatabaseInstance="VINS001" />
+    <DatabaseRole Description="TJS Main Schema" Include="TJS.Database" DatabaseInstance="VINS001" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="VINS001" />
+    <DatabaseRole Description="TJS Partitioning" Include="TJS.Partitioning" DatabaseInstance="VINS001" />
+  </machine>
+
+</configuration>

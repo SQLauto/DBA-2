@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="OneLondon" Environment="OneLondon" Config="OneLondon" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+
+  <machine Id="PDC2FTM001" Name="PDC2FTM001" ExternalIP="10.105.34.61" Role="FTM (OneLondon) Server" DeploymentMachine="true">
+	  <ServerRole Include="FTP.EventLog.For.Internal.FTM" />
+	  <ServerRole Description="FTM Service (OneLondon)" Include="FTM.Service" />
+    <ServerRole Include="FTM.LogArchive.ScheduledTask.Create" />
+  </machine>
+</configuration>

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="SSO.Production.Database.SiteA" Environment="SSOProd" Config="SSO.Prod" ProductGroup="SSO">
+	<CommonRoleFile>SSO.CommonDatabaseRoles.xml</CommonRoleFile>
+	<machine Id="9" Name="ZDC2APF002" ExternalIP="10.108.69.2" Role="App Fabric Server 2" DeploymentMachine="true" />
+	<machine Id="24" Name="alwaysonsso"	ExternalIP="10.108.50.36">
+		<DatabaseRole Description="SSO Deployment Schema" Include="SSO.DBDeploymentSchema" />
+		<DatabaseRole Description="SSO Database" Include="SSO.Database" DatabaseInstance="" />
+	</machine>
+</configuration>

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="TestRig" Environment="TSRig" Config="TSRig" ProductGroup="FTP">
+
+  <CommonRoleFile>Invalid.CommonRoles.xml</CommonRoleFile>
+
+  <machine Id="5" Name="TS-FAE1"   ExternalIP="2">
+    <ServerRole Include="FAE.Engine.Service.InvalidCase5" Description="Invalid Config - Test Case 5" />
+  </machine>
+
+</configuration>

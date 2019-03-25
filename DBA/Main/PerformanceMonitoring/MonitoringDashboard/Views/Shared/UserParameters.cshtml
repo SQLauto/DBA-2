@@ -1,0 +1,194 @@
+﻿@using System.Diagnostics
+@using Dto
+@using MonitoringDashboard.Helpers
+@using MonitoringDashboard.Models
+@model MonitoringDashboard.Models.MonitoredEnvironments
+           
+@{
+
+    string datetimeFormatString = "yyyy/MM/dd hh:mm";
+
+    var userPreferences = Session[SessionVariables.UserPreferences.ToString()] as UserPreferences;
+    bool criteria1Exists = userPreferences != null && userPreferences.Criteria1 != null && !string.IsNullOrWhiteSpace(userPreferences.Criteria1.EnvironmentName);
+
+    string criteria1StartText = string.Empty;
+    if (criteria1Exists && userPreferences.Criteria1.Start != default(DateTime))
+    {
+        criteria1StartText = userPreferences.Criteria1.Start.ToString(datetimeFormatString);
+    }
+    string criteria1EndText = string.Empty;
+    if (criteria1Exists && userPreferences.Criteria1.End != default(DateTime))
+    {
+        criteria1EndText = userPreferences.Criteria1.End.ToString(datetimeFormatString);
+    }
+
+    bool criteria2Exists = userPreferences != null && userPreferences.Criteria2 != null;
+    string criteria2StartText = string.Empty;
+    if (criteria2Exists && userPreferences.Criteria2.Start != default(DateTime))
+    {
+        criteria2StartText = userPreferences.Criteria2.Start.ToString(datetimeFormatString);
+    }
+    string criteria2EndText = string.Empty;
+    if (criteria2Exists && userPreferences.Criteria2.End != default(DateTime))
+    {
+        criteria2EndText = userPreferences.Criteria2.End.ToString(datetimeFormatString);
+    }
+
+    var modelAsJson = Json.Encode(Model);
+    if (criteria1Exists)
+    {
+        if (userPreferences.Criteria1.DatabasesOfInterest.Count == 0 || userPreferences.Criteria1.End == default(DateTime)
+              || userPreferences.Criteria1.Start == default(DateTime) || userPreferences.Criteria1.EnvironmentName == "none")
+        {
+            criteria1Exists = false;
+        }
+        
+    }
+    
+}
+<input id="environmentsAsJson" type="hidden"  value="@modelAsJson"/>
+<div id="userConfigurationsContainer">
+    <div id="environment1" class="environmentMetricContainer">
+        <div class="environmentTitle">
+            <span>Set 1:</span>
+        </div>
+        <div class="topRow">
+            <div class="environmentContainer">
+                <select id="environments1">
+                    @foreach (var environment in Model.EnvironmentsOfInterest)
+                    {
+                        string name = environment.EnvironmentName;
+                        string selected = string.Empty;
+                        if (criteria1Exists && userPreferences.Criteria1.EnvironmentName == name)
+                        {
+                            selected = "selected";
+                        }
+                        @Html.Raw(string.Format("<option value='{0}' {1}>{0}</option>", name, selected))
+                    }
+                    @if (!criteria1Exists)
+                    {
+                        <option value='none' selected>&nbsp;</option>
+                    }
+                </select>
+            </div>
+            <div class="environmentStartTimeContainer">
+                <input id="datetimepickerStart1" type="text" value="@criteria1StartText">
+            </div>
+            <div class="environmentEndTimeContainer">
+                <input id="datetimepickerEnd1" type="text" value="@criteria1EndText">
+            </div>
+        </div>
+        <div id="criteria1DatabasesContainer" class="bottomRow">
+            
+            @if (criteria1Exists)
+            {
+                string criteria1Environment = userPreferences.Criteria1.EnvironmentName;
+                var databases = Model.EnvironmentsOfInterest.Where(x => x.EnvironmentName == criteria1Environment).First().Databases;
+                foreach (var database in databases)
+                {
+                    string check = string.Empty;
+                    if (userPreferences.Criteria1.DatabasesOfInterest.Contains(database))
+                    {
+                        check = "checked";
+                    }
+                    @Html.Raw(string.Format("<div class='databaseOfInterestContainer'><input type='checkbox' value='{0}' {1}><span>{0}</span></div>", database, check))
+                }
+            }
+            else
+            {
+                <div class='databaseOfInterestContainer'><span>No databases to specify.</span></div>
+            }
+        </div>
+    </div>
+    <div id="updatePreferencesContainer">
+        <input type="button" id="updatePreferencesButton" value="Update">
+    </div>
+    <div id="environment2" class="environmentMetricContainer">
+        <div class="topRow">
+            <div class="environmentTitle">
+                <span>Set 2:</span>
+            </div>
+            <div class="environmentContainer">
+                <select id="environments2">
+                    @{
+                        foreach (var environment in Model.EnvironmentsOfInterest)
+                        {
+                            string name = environment.EnvironmentName;
+                            string selected = string.Empty;
+                            if (criteria2Exists && userPreferences.Criteria2.EnvironmentName == name)
+                            {
+                                selected = "selected";
+                            }
+                            @Html.Raw(string.Format("<option value='{0}' {1}>{0}</option>", name, selected))
+                        }
+
+                        string notRequiredSelected = criteria2Exists && userPreferences.Criteria2.EnvironmentName != "Not Required" ? string.Empty : "selected";
+                        @Html.Raw(string.Format("<option value='none' {0}>Not Required</option>", notRequiredSelected))
+                    }
+                </select>
+
+            </div>
+            <div class="environmentStartTimeContainer">
+                <input id="datetimepickerStart2" type="text" value="@criteria2StartText">
+            </div>
+            <div class="environmentEndTimeContainer">
+                <input id="datetimepickerEnd2" type="text" value="@criteria2EndText">
+            </div>
+        </div>
+        <div id="criteria2DatabasesContainer" class="bottomRow">
+            @if (criteria2Exists)
+            {
+                string criteria2Environment = userPreferences.Criteria2.EnvironmentName;
+                var databases = Model.EnvironmentsOfInterest.Where(x => x.EnvironmentName == criteria2Environment).First().Databases;
+                foreach (var database in databases)
+                {
+                    string check = string.Empty;
+                    if (userPreferences.Criteria2.DatabasesOfInterest.Contains(database))
+                    {
+                        check = "checked";
+                    }
+                    @Html.Raw(string.Format("<div class='databaseOfInterestContainer'><input type='checkbox' value='{0}' {1}><span>{0}</span></div>", database, check))
+                }
+            }
+            else
+            {
+                <div class='databaseOfInterestContainer'><span>No databases to specify.</span></div>
+            }
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('#updatePreferencesButton').click(function () {
+        var inputsAreValid = ValidateInputs();        
+
+        if (inputsAreValid) {
+            //create Json Object
+            var userPreferences = new UserPreferences();
+            var userPreferencesJson = JSON.stringify(userPreferences);
+
+            $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetRadarRedirect", "Home")',
+                    data: userPreferencesJson,
+                    contentType: "application/json; charset=utf-8",
+                    datatype: 'json',
+                    error: function (response) {
+                        alert("Error: " + response.responseText);
+                    },
+                    success: function (response) {
+                        if (response.IsValid) {
+                            window.location.replace(response.Url);
+                        } else {
+                            alert(response.ErrorMessage);
+                        }
+                    }
+                }
+            );          
+        } 
+    });
+       
+</script>
+<div id="dialog-validate-Input" title="Please Validate input">
+</div>

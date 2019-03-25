@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+  <parameter name="Param1" value="GlobalValue1" />
+  <parameter name="Param2" value="GlobalValue2" />
+  <parameter name="Param3" value="GlobalValue3" />
+  <parameter name="Param4" value="GlobalValue4" />
+  <parameter name="Param5" value="GlobalValue5" />
+</parameters>

@@ -1,0 +1,12 @@
+﻿@using Dto
+@using MonitoringDashboard.Helpers
+@using MonitoringDashboard.Models
+@using MonitoringService
+@model DatabaseScalarMetricSet
+@{
+
+    if (Model != null)
+    {
+        Html.RenderPartial("BarChartPartial", Model);
+    }
+}

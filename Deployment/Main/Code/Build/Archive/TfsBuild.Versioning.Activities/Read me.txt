@@ -1,0 +1,14 @@
+This is source code from http://tfsversioning.codeplex.com/
+
+The zip file contains the source to version 1.5.0.0
+
+It has been modified tp provide versioning of sqlproj file.
+
+The files modified are
+
+VersionAssemblyInfoFiles.xaml  Updated to version .sqlproj file
+UpdateSqlProjDacVersion.cs     Custom activity to actually upadte the physical .sqlproj files
+TestUpdateSqlProjDacVersion + test files added for unit testing
+
+Version updated to 1.6.0.0
+

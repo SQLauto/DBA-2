@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="SSO.PreProd.Internal" Environment="PreProd" Config="SSO.PreProd" ProductGroup="SSO">
+	<CommonRoleFile>SSO.CommonInternalServerRoles.xml</CommonRoleFile>
+  <machine Id="9" Name="FTDC2MGT002" ExternalIP="10.107.203.152" Role="Internal Jump Server 2" DeploymentMachine="true" />
+	<machine Id="11" Name="FTDC2SSO011"	ExternalIP="10.107.197.178">
+		<ServerRole Description="Customer Change NotificationWorker" Include="Customer.Change.NotificationWorker" />
+    <ServerRole Description="Customer Change NotificationWorker Oyster" Config="SSO.Notification.Oyster.PreProd" Include="Customer.Change.NotificationWorker.Oyster" />
+    <ServerRole Description="Customer Change NotificationWorker Tavel Alerts" Config="SSO.Notification.TravelAlerts.PreProd" Include="Customer.Change.NotificationWorker.TravelAlerts" />
+		<ServerRole Description="Customer Change QueueManager" Include="Customer.Change.QueueManager" />
+	</machine>
+	<machine Id="12" Name="FTDC2SSO012"	ExternalIP="10.107.197.179">
+    <!--<ServerRole Include="IISSetup.SSO" />-->
+		<ServerRole Description="Customer Services" Include="Customer.Services" />
+		<ServerRole Description="SingleSignOn Services" Include="SingleSignOn.Services" />
+		<ServerRole Description="SSO Validation Service" Include="Validation.Service" />
+	</machine>
+	<machine Id="13" Name="FTDC2SSO013"	ExternalIP="10.107.197.235">
+    <!--<ServerRole Include="IISSetup.SSO" />-->
+		<ServerRole Description="Customer Services" Include="Customer.Services" />
+		<ServerRole Description="SingleSignOn Services" Include="SingleSignOn.Services" />
+		<ServerRole Description="SSO Validation Service" Include="Validation.Service" />
+	</machine>
+	<machine Id="14" Name="FTDC2SSO014"	ExternalIP="10.107.197.195">
+    <!--<ServerRole Include="IISSetup.SSO" />-->
+		<ServerRole Description="Customer Services" Include="Customer.Services" />
+		<ServerRole Description="SingleSignOn Services" Include="SingleSignOn.Services" />
+		<ServerRole Description="SSO Validation Service" Include="Validation.Service" />
+	</machine>
+	<machine Id="15" Name="FTDC2SSO015"	ExternalIP="10.107.197.196">
+    <!--<ServerRole Include="IISSetup.SSO" />-->
+		<ServerRole Description="Customer Services" Include="Customer.Services" />
+		<ServerRole Description="SingleSignOn Services" Include="SingleSignOn.Services" />
+		<ServerRole Description="SSO Validation Service" Include="Validation.Service" />
+	</machine>
+	<machine Id="16" Name="FTDC2SSO016"	ExternalIP="10.107.197.197">
+    <!--<ServerRole Include="IISSetup.SSO" />-->
+		<ServerRole Description="Customer Services" Include="Customer.Services" />
+		<ServerRole Description="SingleSignOn Services" Include="SingleSignOn.Services" />
+		<ServerRole Description="SSO Validation Service" Include="Validation.Service" />
+	</machine>
+	<machine Id="17" Name="FTDC2SSO017"	ExternalIP="10.107.197.198">
+    <!--<ServerRole Include="IISSetup.SSO" />-->
+		<ServerRole Description="Customer Services" Include="Customer.Services" />
+		<ServerRole Description="SingleSignOn Services" Include="SingleSignOn.Services" />
+		<ServerRole Description="SSO Validation Service" Include="Validation.Service" />
+	</machine>
+	<machine Id="18" Name="FTDC2SSO018"	ExternalIP="10.107.197.199">
+    <!--<ServerRole Include="IISSetup.SSO" />-->
+		<ServerRole Description="Customer Services" Include="Customer.Services" />
+		<ServerRole Description="SingleSignOn Services" Include="SingleSignOn.Services" />
+		<ServerRole Description="SSO Validation Service" Include="Validation.Service" />
+	</machine>
+</configuration>

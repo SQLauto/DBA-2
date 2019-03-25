@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4F43C615-A37D-49C9-8C20-E5D889039391}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Deployment.Domain</RootNamespace>
+    <AssemblyName>Deployment.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Collections.Immutable.1.4.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Parameters\ParameterFile.cs" />
+    <Compile Include="Parameters\RawParamValue.cs" />
+    <Compile Include="Parameters\TryGetParam.cs" />
+    <Compile Include="SqlInstance.cs" />
+    <Compile Include="DeploymentManifest.cs" />
+    <Compile Include="Parameters\DeploymentParameter.cs" />
+    <Compile Include="Parameters\PlaceholderMapping.cs" />
+    <Compile Include="Parameters\PlaceholderMappings.cs" />
+    <Compile Include="Parameters\RigManifestVM.cs" />
+    <Compile Include="Parameters\RigManifest.cs" />
+    <Compile Include="Roles\Enumerations.cs" />
+    <Compile Include="Roles\SsisSetup.cs" />
+    <Compile Include="Roles\WindowsServiceActionType.cs" />
+    <Compile Include="Roles\WindowsServicePreDeploy.cs" />
+    <Compile Include="Roles\WindowsServiceStateType.cs" />
+    <Compile Include="TaskScheduler\Months.cs" />
+    <Compile Include="TaskScheduler\TaskAction.cs" />
+    <Compile Include="TaskScheduler\ScheduleInfo.cs" />
+    <Compile Include="TaskScheduler\ScheduleType.cs" />
+    <Compile Include="TaskScheduler\TaskInfo.cs" />
+    <Compile Include="TaskScheduler\WeekOfMonth.cs" />
+    <Compile Include="Roles\AppFabricTest.cs" />
+    <Compile Include="Roles\ServiceBrokerTest.cs" />
+    <Compile Include="Roles\AppFabricPostDeploy.cs" />
+    <Compile Include="Deployment.cs" />
+    <Compile Include="ArchiveEntry.cs" />
+    <Compile Include="GroupFilters.cs" />
+    <Compile Include="Roles\AspNetStateServiceDeploy.cs" />
+    <Compile Include="Roles\ConfigurationParameters.cs" />
+    <Compile Include="Parameters\DeploymentParameters.cs" />
+    <Compile Include="Roles\FileSystemDeploy.cs" />
+    <Compile Include="Machine.cs" />
+    <Compile Include="Parameter.cs" />
+    <Compile Include="Roles\BaseRole.cs" />
+    <Compile Include="Roles\CopyItem.cs" />
+    <Compile Include="Roles\IisSetupDeploy.cs" />
+    <Compile Include="Roles\MasterDataDeltas.cs" />
+    <Compile Include="Roles\DatabaseDeploy.cs" />
+    <Compile Include="Roles\EventLogDeploy.cs" />
+    <Compile Include="Roles\FileShareDeploy.cs" />
+    <Compile Include="Roles\PostDeployParameters.cs" />
+    <Compile Include="Roles\PreRequisiteDeploy.cs" />
+    <Compile Include="Roles\WebDeploy.cs" />
+    <Compile Include="Roles\MsiDeploy.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Roles\FolderDeploy.cs" />
+    <Compile Include="Roles\ScheduledTaskDeploy.cs" />
+    <Compile Include="ServiceAccount.cs" />
+    <Compile Include="Roles\ServiceDeploy.cs" />
+    <Compile Include="Roles\SmtpDeploy.cs" />
+    <Compile Include="Roles\SsisDeploy.cs" />
+    <Compile Include="Roles\WebServicePostDeploy.cs" />
+    <Compile Include="Roles\WindowsServicePostDeploy.cs" />
+    <Compile Include="Roles\WindowsServicePreRequisite.cs" />
+    <Compile Include="PingTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Deployment.Domain.nuspec" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Deployment.Common\Deployment.Common.csproj">
+      <Project>{C69CAB01-3ACD-46D0-96CF-F05B4962A262}</Project>
+      <Name>Deployment.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+  <!-- Base Data -->
+  <parameter name="BaseData_DatabaseConnectionString" value="Data Source=AlwaysOnFAE;MultiSubnetFailover=True;Initial Catalog=BaseData_Publish_FAE;Integrated Security=SSPI;Connect Timeout=200;"/>
+
+  <!-- Notifications -->
+  <parameter name="Notifications_Services_EfDatabaseConnectionString" value="Data Source=AlwaysOnCS;MultiSubnetFailover=True;initial catalog=Notification;Integrated Security=SSPI" />
+  <parameter name="Notifications_InternalApiUrl" value="http://InternalNotificationService.fpsstagingint.local/api/" />
+
+  <!--RSP-->
+  <parameter name ="RSP_ReportingRWDatabaseConnectionString" value="Data Source=FTDC5SQLC01V01\vins001;Initial Catalog=ReportingRW;Integrated Security=SSPI;Provider=SQLNCLI11.1;Auto Translate=False;"/>
+  <parameter name ="RSP_FAEDatabaseConnectionString" value="Data Source=FTDC5SQLC01V01\vins001;Initial Catalog=FAE;Integrated Security=SSPI;Provider=SQLNCLI11.1;Auto Translate=False;"/>
+
+  <!-- SQL parameters named to ensure backward compatibility with the old system-->
+  <parameter name="PareEndpoint" value="TCP://10.133.168.4:4022"/>
+  <parameter name="PcsEndpoint" value="TCP://10.28.41.195:4022"/>
+  <parameter name="NotificationsEndpoint" value="TCP://10.133.168.5:4023"/>
+  <!-- FAE/RSP variables -->
+  <parameter name="FAEDatabaseName" value="FAE"/>
+  <parameter name="RSPDatabaseName" value="ReportingRW"/>
+  <parameter name="PareSchemaName" value="dbo"/>
+  <parameter name="PareDatabaseServer" value="FTDC5SQLC01V02\VINS002"/>
+  <parameter name="FaeDatabaseServer" value="FTDC5SQLC01V01\VINS001"/>
+  <!-- Notifications Extract scripts ReportingRW database name -->
+  <parameter name="ReportingRWDatabaseName" value="ReportingRW"/>
+
+  <!-- SQL parameters named to ensure backward compatibility with the old system-->
+  <parameter name="TJSDatabaseName" value="TJS_CPC"/>
+  <parameter name="TJSDatabaseServer" value="FTDC5SQLC01V01\VINS001"/>
+  <parameter name="MDServiceAccount" value="fpsstagingint\zsvcMasterData" />
+  <parameter name="RAEServiceAccount" value="fpsstagingint\zsvcrae" />
+  <parameter name="FAEServiceAccount" value="fpsstagingint\zsvcfae" />
+  <parameter name="OYBOServiceAccount" value="fpsstagingint\zsvcOYBO" />
+  <parameter name="PAREServiceAccount" value="fpsstagingint\zsvcPARE" />
+
+  <!-- SSO -->
+  <parameter name="SSO_Website_BaseUrl" value="http://FTDC5CIS001:8728" />
+  <parameter name="SSO_Website_LoginPostUrl" value="Login" />
+  <parameter name="SSO_Website_LoginErrorUrl" value="http://SDMPortal.fpsstagingint.local" />
+
+  <parameter name="SSO_Service_BaseUrl" value="http://FTDC5CIS001:8728" />
+  <parameter name="SSO_Service_Username" value="MockSSOBasicAuthUsername" />
+  <parameter name="SSO_Service_Password" value="MockSSOBasicAuthPassword" />
+
+  <parameter name="SSO_ShowTestAccounts" value="false" />
+  <parameter name="MasterDataProjectionStoreRestorePath" value="\\FTDC5SQLC01V01\I$\FAE_SQLBKP01\Backup\ProjectionStore\" />
+  <parameter name="MasterDataProjectionStoreRestoreFile" value="\\FTDC5SQLC01V01\I$\FAE_SQLBKP01\Backup\ProjectionStore\MasterData_ProjectionStore.bak" />
+  
+</parameters>

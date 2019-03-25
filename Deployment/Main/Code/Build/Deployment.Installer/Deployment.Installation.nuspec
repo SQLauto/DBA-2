@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<package>
+  <metadata>
+    <id>Deployment.Installation</id>
+    <version>$version$</version>
+    <authors>FTP Build</authors>
+    <owners>FTP Build</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Deployment.Installation contains classes used to help with MSI Installations and Reading properties from MSIs</description>
+    <copyright>Copyright 2017</copyright>
+    <dependencies>
+      <dependency id="Castle.Core" version="4.0.0"/>
+      <dependency id="Deployment.Common" version="1.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\Deployment.Installation.dll" target="lib\net452" />
+  </files>
+</package>

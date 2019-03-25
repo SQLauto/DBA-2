@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="NPL.Functional.Config.xml" Environment="TestRig" Config="TestRig.NPL" ProductGroup="NPL">
+  <CommonRoleFile>Common.NPL.Roles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  
+  <machine Id="1" Name="TS-CAS1"  ExternalIP="">
+    <ServerRole Include="IISSetup.CAS" Description="IIS" />
+    <ServerRole Description="NPL File System" Include="NPL.FileSystem" />
+    <ServerRole Description="NPL Website" Include="NPL.WebSite" />
+    <ServerRole Description="NPL WebAPI" Include="NPL.WebAPI" />    
+  </machine>
+  
+  <machine Id="3" Name="TS-DB1" ExternalIP="" DeploymentMachine="true">
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices1" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices2" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices3" />
+    <PreDeployRole Description="CheckSqlAgentServiceInst1" Include="CheckSqlAgentServiceInst1" />
+    
+    <DatabaseRole Description="NPL Baseline" Include="NPL.Database.Baseline" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="NPL Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="NPL" />
+    <DatabaseRole Description="NPL Database" Include="NPL.Database.Patching" DatabaseInstance="Inst1" />
+    <!--<DatabaseRole Description="NPL ServerObjects" Include="NPL.ServerObjects" DatabaseInstance="Inst1" />-->
+  </machine>
+  
+</configuration>

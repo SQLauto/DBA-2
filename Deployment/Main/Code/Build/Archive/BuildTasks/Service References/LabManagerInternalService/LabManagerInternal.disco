@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
+  <contractRef ref="https://tdc2vlm001.onelondon.tfl.local/LabManager/SOAP/LabManagerInternal.asmx?wsdl" docRef="https://tdc2vlm001.onelondon.tfl.local/LabManager/SOAP/LabManagerInternal.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="https://tdc2vlm001.onelondon.tfl.local/LabManager/SOAP/LabManagerInternal.asmx" xmlns:q1="http://vmware.com/labmanager" binding="q1:LabManager_x005F_x0020_SOAP_x005F_x0020_interfaceSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="https://tdc2vlm001.onelondon.tfl.local/LabManager/SOAP/LabManagerInternal.asmx" xmlns:q2="http://vmware.com/labmanager" binding="q2:LabManager_x005F_x0020_SOAP_x005F_x0020_interfaceSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+</discovery>

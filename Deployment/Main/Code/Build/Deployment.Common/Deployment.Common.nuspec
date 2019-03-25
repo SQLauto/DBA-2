@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<package>
+  <metadata>
+    <id>Deployment.Common</id>
+    <version>1.0.0.0</version>
+    <title>Deployment.Common</title>
+    <authors>TFL</authors>
+    <owners>TFL</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Deployment.Common contains classes used by all of the packages in deployment solution</description>
+    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+    <copyright>(c) 2018 TFL. All rights reserved.</copyright>
+    <tags>TFL Deployment Common FTP SSO</tags>
+  </metadata>
+  <files>
+    <file src="bin\$configuration$\Deployment.Common.dll" target="lib\net452" />
+    <file src="bin\$configuration$\VcloudRestSchema_V5_5.dll" target="lib\net452" />
+    <file src="bin\$configuration$\VcloudSDK_V5_5.dll" target="lib\net452" />
+  </files>
+</package>

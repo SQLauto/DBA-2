@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="DevInt2.PaymentAssurance.Internal.Db" Environment="DevInt2" Config="DevInt2" ProductGroup="FTP">
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+
+   <PostDeploymentTestIdentity>DeploymentAccount.Internal</PostDeploymentTestIdentity>
+   
+  <machine Id="FTDC2MGT360" Name="FTDC2MGT360" ExternalIP="10.107.200.186" DeploymentMachine="true"  />
+
+    
+  
+  <machine Id="TDC2SQL005" Name="TDC2SQL005" ExternalIP="10.107.25.194">
+    
+   
+	
+	<!-- PaymentAssurance DB-->
+	<DatabaseRole Description="PaymentAssurance Deployment Schema" DatabaseInstance="" Include="Deployment.Schema" IsDefaultDatabaseInstance="true" TargetDatabase="PaymentAssurance" />
+    <DatabaseRole Description="PaymentAssurance Database" DatabaseInstance="" Include="PaymentAssurance.Database" IsDefaultDatabaseInstance="true" TargetDatabase="PaymentAssurance" />
+	
+  </machine>
+   
+</configuration>

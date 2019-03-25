@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="Integration.TSRig.PostDeployOnly" Environment="TSRig"  Config="TSRig" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonPareServiceDeploy.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonMJTDeltasRole.xml</CommonRoleFile>
+
+  <machine Id="1" Name="TS-DB1" ExternalIP="" Role="FTP Database Server" DeploymentMachine="true">
+    <PostDeployRole Description="Start AppFabric Cluster" Include="AppFabric.Integration.Start" />
+  </machine>
+
+  <!-- Need to deploy PARE db before the PCS db, due to linked server synonyms-->
+  <machine Id="2" Name="TS-DB2" ExternalIP="" Role="PCS Database Server">
+    <PostDeployRole Description="Start AppFabric Cluster" Include="AppFabric.Integration.Start" />
+  </machine>
+
+  <machine Id="4" Name="TS-CIS1"  ExternalIP="" Role="CIS Server 1">
+    <PostDeployRole Description="Start MasterData API" Include="MasterData.Api.Start" />
+  </machine>
+
+  <!-- Due to the dependency between FAE Pipeline and MJT services, we need to deploy TS-SAS1 before the FAE Servers-->
+  <machine Id="13" Name="TS-SAS1"  ExternalIP="">
+    <PostDeployRole Description="Start MasterData MJT Services" Include="MasterData.Services.MJT.Start" />
+    <PostDeployRole Description="Start MasterData Fares Services" Include="MasterData.Services.Fares.Start" />
+  </machine>
+
+  <machine Id="5" Name="TS-FAE1"   ExternalIP="" Role="FAE Controller">
+    <PostDeployRole Description="StartFaeController" Include="StartFaeController" />
+  </machine>
+
+  <!-- .net 4.5.2 Pipeline Servers -->
+  <machine Id="6" Name="TS-FAE2"   ExternalIP="" Role="FAE Engine 1">
+    <PostDeployRole Description="Start FAE Engine" Include="StartFaeEngine" />
+  </machine>
+  <machine Id="7" Name="TS-FAE3"   ExternalIP="" Role="FAE Engine 2">
+    <PostDeployRole Description="Start FAE Engine" Include="StartFaeEngine" />
+  </machine>
+  <machine Id="8" Name="TS-FAE4"   ExternalIP="" Role="FAE Engine 3">
+    <PostDeployRole Description="Start FAE Engine" Include="StartFaeEngine" />
+  </machine>
+
+  <machine Id="11" Name="TS-FTM1"  ExternalIP="" Role="File Transfer Manager Server">
+  </machine>
+</configuration>

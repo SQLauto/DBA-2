@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{602395C3-58F3-4018-BDE9-D46EFDDF9D52}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TFL.PowerShell.Logging</RootNamespace>
+    <AssemblyName>TFL.PowerShell.Logging</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Powershell.Commands.Utility, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Management.Automation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\WindowsPowerShell\v1.0\System.Management.Automation.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\PowerShellCommonAssemblyInfo.cs">
+      <Link>Properties\PowerShellCommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Commands\DisableLogTimestampCommand.cs" />
+    <Compile Include="Commands\RegisterHostCommand.cs" />
+    <Compile Include="Commands\RegisterOutputSubscriberCommand.cs" />
+    <Compile Include="Commands\UnregisterHostCommand.cs" />
+    <Compile Include="Commands\UnregisterLogFileCommand.cs" />
+    <Compile Include="Commands\UnregisterOutputSubscriberCommand.cs" />
+    <Compile Include="Commands\EnableLogTimestampCommand.cs" />
+    <Compile Include="Commands\GetLogFileCommand.cs" />
+    <Compile Include="Commands\GetOutputSubscriberCommand.cs" />
+    <Compile Include="Commands\ResumeConsoleCommand.cs" />
+    <Compile Include="Commands\ResumeLoggingCommand.cs" />
+    <Compile Include="Commands\SuspendConsoleCommand.cs" />
+    <Compile Include="Commands\SuspendLoggingCommand.cs" />
+    <Compile Include="Commands\WriteError2Command.cs" />
+    <Compile Include="Commands\WriteHeaderCommand.cs" />
+    <Compile Include="Commands\WriteHost2Command.cs" />
+    <Compile Include="Commands\ConsoleColorCmdlet.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="HostIoSubscriberBase.cs" />
+    <Compile Include="LogState.cs" />
+    <Compile Include="StatusType.cs" />
+    <Compile Include="StreamType.cs" />
+    <Compile Include="IHostIoSubscriber.cs" />
+    <Compile Include="Commands\RegisterLogFileCommand.cs" />
+    <Compile Include="LogFile.cs" />
+    <Compile Include="HostIoInterceptor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScriptBlockOutputSubscriber.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Deploy\Scripts\Modules\TFL.Powershell.Logging\TFL.PowerShell.Logging.psd1">
+      <Link>TFL.PowerShell.Logging.psd1</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Deploy\Scripts\Modules\TFL.Powershell.Logging\TFL.PowerShell.Logging.psm1">
+      <Link>TFL.PowerShell.Logging.psm1</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TableOutputTesting.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Testing.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Testing2.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Testing3.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Tfl.PowerShell.Logging.Module.nuspec" />
+    <None Include="UpdateManifest.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="doc\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Deploy\Scripts\Modules\TFL.Powershell.Logging\en-US\about_PowerShellLogging.help.txt">
+      <Link>en-US\about_PowerShellLogging.help.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Deploy\Scripts\Modules\TFL.Powershell.Logging\en-US\PowerShellLoggingModule.dll-help.xml">
+      <Link>en-US\PowerShellLoggingModule.dll-help.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="PostBuildMacros">
+    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
+      <Output TaskParameter="Assemblies" ItemName="Targets" />
+    </GetAssemblyIdentity>
+    <ItemGroup>
+      <VersionNumber Include="@(Targets->'%(Version)')" />
+    </ItemGroup>
+  </Target>
+  <PropertyGroup>
+    <PostBuildEventDependsOn>
+      $(PostBuildEventDependsOn);
+      PostBuildMacros;
+    </PostBuildEventDependsOn>
+    <PostBuildEvent>cmd /x /c mkdir "$(SolutionDir)Deploy\Scripts\Modules\Tfl.PowerShell.Logging\lib"
+xcopy $(TargetDir)*.dll $(SolutionDir)Deploy\Scripts\Modules\TFL.Powershell.Logging\lib /y
+if $(ConfigurationName) == Release cmd /x /c powershell -ExecutionPolicy Unrestricted .\UpdateManifest.ps1 -Path $(SolutionDir)Deploy\Scripts\Modules\TFL.Powershell.Logging -Version @(VersionNumber)</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

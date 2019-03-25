@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="SSO.CubicD" Environment="CubicD" Config="SSO.CubicD" ProductGroup="SSO">
+  <CommonRoleFile>SSO.CommonInternalServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>SSO.CommonExternalServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>SSO.CommonDatabaseRoles.xml</CommonRoleFile>
+  <machine Id="1" Name="FDDC5SCAS001.dtest.fpsstagingInt.local"  ExternalIP="10.133.188.233">
+    <!--<ServerRole Include="IISSetup.SSO" />-->
+	  <ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+    <ServerRole Description="SSO Website" Include="SSO.Website" />
+    <ServerRole Description="ServicesFacade Role" Include="Service.Facade.Functional" />
+  </machine>
+
+  <machine Id="2" Name="FDDC5SCIS001.dtest.fpsstagingInt.local"  ExternalIP="10.133.188.237">
+    <!--<ServerRole Include="IISSetup.SSO" />-->
+    <ServerRole Description="SSO.EventLog.For.Internal" Include="SSO.EventLogDeploy.Internal" />
+    <ServerRole Description="SSO File System" Include="SSO.FileSystem" />
+    <ServerRole Description="Customer Services" Include="Customer.Services" />
+    <ServerRole Description="SingleSignOn Services" Include="SingleSignOn.Services" />
+    <ServerRole Description="SSO Validation Service" Include="Validation.Service" />
+    <ServerRole Description="Customer Change NotificationWorker" Include="Customer.Change.NotificationWorker" />
+    <ServerRole Description="Customer Change QueueManager" Include="Customer.Change.QueueManager" />
+  </machine>
+
+  <machine Id="6" Name="FDDC5SQL001.dtest.fpsstagingInt.local" ExternalIP="10.133.188.205">
+    <DatabaseRole Description="SSO Deployment Schema for Cubic Env." Include="SSO.DBDeploymentSchema" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="SSO Database for Cubic"  Include="SSO.Database" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="SSO Database PreProd" Include="SSO.Database.PreProdCubic" />
+  </machine>
+</configuration>
+
+

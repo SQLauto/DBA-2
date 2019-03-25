@@ -1,0 +1,10 @@
+﻿@using MonitoringDashboard.Models
+@using MonitoringService
+@{
+    var service = new EnvironmentsService();
+    var environments = service.EnvironmentsGet();
+    var userParamsModel = new MonitoredEnvironments { EnvironmentsOfInterest = environments };
+}
+
+@Html.Partial("UserParameters", userParamsModel)
+

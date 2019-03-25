@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="SDR PreProd" Environment="PreProd" Config="PreProd" ProductGroup="FTP">
+
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  
+  <machine Id="0" Name="TDC2OJS001"  ExternalIP="10.107.44.2" DeploymentMachine="true">
+    <ServerRole Include="IISSetup" Description="IIS" Groups="Always" />
+    <ServerRole Include="SDR.Website" Groups="Always" />
+    </machine>
+  <machine Id="1" Name="TDC2OJS002"  ExternalIP="10.107.44.4">
+    <ServerRole Include="IISSetup" Description="IIS" Groups="Always" />
+    <ServerRole Include="SDR.Website" Groups="Always" />
+  </machine>
+</configuration>

@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/CommonRoles">
+  <CommonRoles>
+    <ServerRole Name="TFL.IISSetup" Include="IISSetup.SSO" Description="IIS" Groups="SSO" />
+	  <ServerRole Name="TFL.EventLogDeploy" Description="SSO.EventLog.For.Internal" Include="SSO.EventLogDeploy.Internal" Groups="SSO">
+      <EventLogDeploy EventLogName="SSO">
+        <Sources>
+          <Source Name="NotificationWorker" />
+          <Source Name="QueueManager" />
+		      <Source Name="MarketingPreferencesExporter" />
+		      <Source Name="ValidationService" />
+		      <Source Name="SSOServices" />
+		      <Source Name="CustomerServices" />
+        </Sources>
+      </EventLogDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.FileSystem" Description="SSO File System" Include="SSO.FileSystem.Cdrive" Groups="SSO">
+      <CreateFolder TargetPath="\c$\TFL\SSO\emailqueue" />
+    </ServerRole>
+    <ServerRole Name="TFL.FileSystem" Description="SSO File System" Include="SSO.FileSystem" Groups="SSO">
+      <CreateFolder TargetPath="\d$\TFL\SSO\emailqueue" />
+    </ServerRole>
+    <ServerRole Name="TFL.FileSystem" Description="For Marketing Preferences Files" Include="SSO.FileSystem.MarketPref" Groups="SSO">
+      <CreateFolder TargetPath="\d$\TFL\SSO\MarketingPreferencesFiles" />
+    </ServerRole>
+    <ServerRole Name="TFL.WebDeploy" Description="Customer Services" Include="Customer.Services" Groups="SSO,CustomerServices">
+      <WebDeploy Name="Customer Services" RegistryKey="Software\TfL\SSO\CustomerServices" AssemblyToVersionFrom="Customer.Services.dll">
+        <AppPool>
+          <Name>CustomerServices</Name>
+          <ServiceAccount>SSOServiceAccount</ServiceAccount>
+        </AppPool>
+        <Site>
+          <Name>CustomerServices</Name>
+          <Port>8085</Port>
+          <PhysicalPath>D:\TFL\SSO\CustomerServices</PhysicalPath>
+        </Site>
+        <Package>
+          <Name>Customer.Services</Name>
+        </Package>
+        <TestInfo>
+          <EndPoint ContentType="application/json; charset=utf-8" TestIdentity="SSOUser" Authentication="Basic">api/Static/getcountries</EndPoint>
+          <!--Just browse the root-->
+        </TestInfo>
+      </WebDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.WebDeploy" Description="SingleSignOn Services" Include="SingleSignOn.Services" Groups="SSO,SingleSignOnServices">
+      <WebDeploy Name="SingleSignOn Services" RegistryKey="Software\TfL\SSO\SingleSignOnServices" AssemblyToVersionFrom="SSO.Services.dll">
+        <AppPool>
+          <Name>SingleSignOnServices</Name>
+          <ServiceAccount>SSOServiceAccount</ServiceAccount>
+        </AppPool>
+        <Site>
+          <Name>SingleSignOnServices</Name>
+          <Port>8086</Port>
+          <PhysicalPath>D:\TFL\SSO\SingleSignOnServices</PhysicalPath>
+        </Site>
+        <Package>
+          <Name>SSO.Services</Name>
+        </Package>
+        <TestInfo>
+          <EndPoint ContentType="application/json; charset=utf-8" TestIdentity="SSOUser" Authentication="Basic">api/MembershipUser/GetMaxInvalidPasswordAttempts</EndPoint>
+        </TestInfo>
+      </WebDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.WebDeploy" Description="SSO Validation Service" Include="Validation.Service" Groups="SSO,ValidationServices">
+      <WebDeploy Name="SSO Validation Service" RegistryKey="Software\TfL\SSO\SSOValidationService" AssemblyToVersionFrom="SSO.Validation.Service.dll">
+        <AppPool>
+          <Name>SSOValidation</Name>
+          <ServiceAccount>SSOServiceAccount</ServiceAccount>
+        </AppPool>
+        <Site>
+          <Name>SSOValidation</Name>
+          <Port>8087</Port>
+          <PhysicalPath>D:\TFL\SSO\SSOValidation</PhysicalPath>
+        </Site>
+        <Package>
+          <Name>SSO.Validation.Service</Name>
+        </Package>
+        <TestInfo>
+          <EndPoint ContentType="application/json; charset=utf-8" TestIdentity="SSOUser" Authentication="Basic">api/Validation/ValidateToken?token=hfjkdsfhsd</EndPoint>
+        </TestInfo>
+      </WebDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.WebDeploy" Description="FTP Notifications Stub" Include="FtpNotifications.Stub" Groups="SSO">
+      <WebDeploy Name="FTP Notifications Stub" RegistryKey="Software\Tfl\FtpNotificationsStub" AssemblyToVersionFrom="FtpNotifications.Stub.dll">
+        <AppPool>
+          <Name>FtpNotificationsStub</Name>
+          <ServiceAccount>SSOServiceAccount</ServiceAccount>
+        </AppPool>
+        <Site>
+          <Name>FtpNotificationsStub</Name>
+          <Port>8082</Port>
+          <PhysicalPath>D:\TFL\SSO\FtpNotificationsStub</PhysicalPath>
+        </Site>
+        <Package>
+          <Name>FtpNotifications.Stub</Name>
+        </Package>
+        <TestInfo DisableTests="true" />
+      </WebDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="Customer Change NotificationWorker" Include="Customer.Change.NotificationWorker" Groups="SSO,NotificationWorker">
+      <ServiceDeploy Name="CustomerChangeNotificationWorker">
+        <MSI>
+          <name>Customer.Change.NotificationWorker.msi</name>
+          <UpgradeCode>54982507-14AE-4F38-B887-605576B58C09</UpgradeCode>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="D:\TFL\SSO\Customer.Change.NotificationWorker\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>MCSS FTP Notification Worker</Name>
+            <Credentials>SSOServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Customer.Change.NotificationWorker.exe.config" target="\TFL\SSO\Customer.Change.NotificationWorker" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="Customer Change NotificationWorker Oyster" Include="Customer.Change.NotificationWorker.Oyster"
+                Groups="SSO,OysterNotificationWorker">
+      <ServiceDeploy Name="CustomerChangeNotificationWorkerOyster">
+        <MSI>
+          <name>Customer.Change.NotificationWorker.Oyster.msi</name>
+          <UpgradeCode>FFCEF314-3E2D-427B-B654-7E41EF87DB02</UpgradeCode>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="D:\TFL\SSO\Customer.Change.NotificationWorkerOyster\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service StartUpType="Manual">
+            <Name>MCSS Oyster Notification Worker</Name>
+            <Credentials>SSOServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Customer.Change.NotificationWorker.exe.config" target="\TFL\SSO\Customer.Change.NotificationWorkerOyster" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="Customer Change NotificationWorker Tavel Alerts" Include="Customer.Change.NotificationWorker.TravelAlerts"
+                Groups="SSO,TravelAlertsNotificationWorker">
+      <ServiceDeploy Name="CustomerChangeNotificationWorkerTravelAlerts">
+        <MSI>
+          <name>Customer.Change.NotificationWorker.TravelAlerts.msi</name>
+          <UpgradeCode>6C2B39B5-016A-4F7B-A035-311E186EE75E</UpgradeCode>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="D:\TFL\SSO\Customer.Change.NotificationWorkerTravelAlerts\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>MCSS TravelAlerts Notification Worker</Name>
+            <Credentials>SSOServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Customer.Change.NotificationWorker.exe.config" target="\TFL\SSO\Customer.Change.NotificationWorkerTravelAlerts" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+	  <ServerRole Name="TFL.ServiceDeploy" Description="Customer Change QueueManager" Include="Customer.Change.QueueManager" Groups="SSO,QueueManager">
+      <ServiceDeploy Name="CustomerChangeQueueManager">
+        <MSI>
+          <name>Customer.Change.QueueManager.msi</name>
+          <UpgradeCode>9EF50B19-B32B-491A-8E3D-1FD2BC4E8D44</UpgradeCode>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="D:\TFL\SSO\Customer.Change.QueueManager\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>MCSS Queue Manager</Name>
+            <Credentials>SSOServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Customer.Change.QueueManager.exe.config" target="\TFL\SSO\Customer.Change.QueueManager" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.MsiDeploy" Description="Marketing Preferences Exporter" Include="Customer.Change.MarketingPreferences.Exporter" Groups="SSO">
+      <MsiDeploy Name="ExporterInstaller">
+        <MSI>
+          <name>Customer.Change.MarketingPreferencesExporter.msi</name>
+          <UpgradeCode>143963C2-78FE-471F-9F50-B96EE40446B3</UpgradeCode>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="D:\TFL\SSO\Customer.Change.MarketingPreferences.Exporter\" />
+          </parameters>
+        </MSI>
+        <Configs>
+          <config name="Customer.Change.MarketingPreferencesExporter.exe.config" target="\TFL\SSO\Customer.Change.MarketingPreferences.Exporter" />
+        </Configs>
+      </MsiDeploy>
+    </ServerRole>
+<!--	<ServerRole Name="TFL.ScheduledTaskDeploy" Description="Marketing Export Scheduled Task" Include="MarketingExporter.Task"  Groups="SSO">
+      <ScheduledTaskDeploy Action="Install">
+        <TaskName>Marketing Preferences Exporter</TaskName>
+        <Folder>SSO</Folder>
+        <ServiceAccount>SSOServiceAccount</ServiceAccount>
+        <Triggers>
+          <Trigger>
+            <Daily Interval="1">
+              <StartDate>01/01/2016</StartDate>
+              <StartTime>02:00:00</StartTime>
+            </Daily>
+          </Trigger>
+        </Triggers>
+        <Actions>
+          <Action>
+            <Command>D:\TFL\SSO\Customer.Change.MarketingPreferences.Exporter\Customer.Change.MarketingPreferencesExporter.exe</Command>
+            <Arguments />
+          </Action>
+        </Actions>
+      </ScheduledTaskDeploy>
+    </ServerRole>-->
+  </CommonRoles>
+</configuration>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+  <parameter name="exampleDBParameter" value="baselineDBrules"/>
+  <parameter name="exampleParameter" value="baselinerules"/>
+  <parameter name="Baseline_WebsiteURL_DB_Lookup" value="http://#_BaselineWebIP_#/baseline/db/lookup"/>
+  <parameter name="fae_ServiceAccount" value="fae\zsvcFae" />
+</parameters>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VersionSeed>
+  <Solution name="Deployment">
+    <AssemblyVersionPattern>3.60.J.B</AssemblyVersionPattern>
+    <AssemblyFileVersionPattern>3.60.J.B</AssemblyFileVersionPattern>
+    <AssemblyCompanyPattern>Transport for London</AssemblyCompanyPattern>
+    <AssemblyCopyrightPattern>Copyright © Transport for London 2014</AssemblyCopyrightPattern>
+  </Solution>
+  <Solution name="Build">
+    <AssemblyVersionPattern>0.0.J.B</AssemblyVersionPattern>
+    <AssemblyFileVersionPattern>0.0.J.B</AssemblyFileVersionPattern>
+    <AssemblyCompanyPattern>Transport for London</AssemblyCompanyPattern>
+    <AssemblyCopyrightPattern>Copyright © Transport for London 2014</AssemblyCopyrightPattern>
+  </Solution>
+</VersionSeed>

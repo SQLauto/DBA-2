@@ -1,0 +1,619 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/CommonRoles">
+  <CommonRoles>
+
+    <!-- Generic deployment schema with overriden DB name -->
+    <DatabaseRole Name="DbRole" Description="Common Deployment Schema" Include="Deployment.Schema" Groups="Database">
+      <TargetDatabase>must_be_overridden</TargetDatabase>
+      <DatabaseInstance>must_be_overridden</DatabaseInstance>
+      <PatchDeployment>DeploymentSchema.Scripts\Patching\DeploymentSchema.Patching.sql</PatchDeployment>
+    </DatabaseRole>
+
+    <DatabaseRole Name="DbRole" Description="Common Partitioning" Include="Common.Partitioning" Groups="Database">
+      <TargetDatabase>must_be_overridden</TargetDatabase>
+      <DatabaseInstance>must_be_overridden</DatabaseInstance>
+      <PatchDeploymentFolder>Partitioning.Database\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <TestInfo Ignore="true" />
+    </DatabaseRole>
+
+    <!-- RAE -->
+    <DatabaseRole Name="DbRole" Description="RAE Database" Include="RAE.Database" Groups="RAE,Database">
+      <TargetDatabase>RAE</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <PatchDeploymentFolder>RAE.DataMigrationScripts\Common\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <TestInfo Ignore="true" />
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="RAE Partitioning" Include="RAE.Partitioning" Groups="RAE,Database">
+      <TargetDatabase>RAE</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <PatchDeploymentFolder>RAE.DataMigrationScripts\PartitioningArtefacts\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <TestInfo Ignore="true" />
+    </DatabaseRole>
+
+    <!-- FAE -->
+    <DatabaseRole Name="DbRole" Description="FAE Database" Include="FAE.Database" Groups="FAE,Database">
+      <TargetDatabase>FAE</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <PatchDeploymentFolder>FAE.DataMigrationScripts\Common\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <TestInfo Ignore="true" />
+    </DatabaseRole>
+
+    <!-- Disruptr -->
+    <DatabaseRole Name="DbRole" Description="Disruptr Database" Include="Disruptr.Database" Groups="Disruptr,Database">
+      <TargetDatabase>Disruptr</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <PatchDeploymentFolder>Disruptr.DataMigrationScripts\Common\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <TestInfo Ignore="true" />
+    </DatabaseRole>
+
+    <!--config role-->
+    <DatabaseRole Name="DbRole" Description="Config Database" Include="Config.Database" Groups="FAE,Database">
+      <TargetDatabase/>
+      <!--FAE, TravelStore-->
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <PatchDeploymentFolder>FAE_Config.DataMigrationScripts\Common\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <TestInfo Ignore="true" />
+    </DatabaseRole>
+
+    <!-- FAE (Cpc) specific role-->
+    <DatabaseRole Name="DbRole" Description="FAE Config Database" Include="FAE_Config.Database" Groups="FAE,Database">
+      <TargetDatabase>FAE</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <PatchDeploymentFolder>FAE.DataMigrationScripts\Config\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <TestInfo Ignore="true" />
+    </DatabaseRole>
+
+    <!-- TravelStore (Oyster) specific role-->
+    <DatabaseRole Name="DbRole" Description="TravelStore Config Database" Include="TravelStore_Config.Database" Groups="FAE,Database">
+      <TargetDatabase>TravelStore</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <PatchDeploymentFolder>TravelStore.DataMigrationScripts\Config\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <TestInfo Ignore="true" />
+    </DatabaseRole>
+
+    <DatabaseRole Name="DbRole" Description="FAE Partitioning" Include="FAE.Partitioning" Groups="FAE,Database">
+      <TargetDatabase>FAE</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <PatchDeploymentFolder>FAE.DataMigrationScripts\PartitioningArtefacts\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <TestInfo Ignore="true" />
+    </DatabaseRole>
+
+    <!-- TravelStore -->
+    <DatabaseRole Name="DbRole" Description="TravelStore Database" Include="TravelStore.Database" Groups="FAE,Database">
+      <TargetDatabase>TravelStore</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <PatchDeploymentFolder>TravelStore.DataMigrationScripts\Common\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <TestInfo Ignore="true" />
+    </DatabaseRole>
+
+    <DatabaseRole Name="DbRole" Description="TravelStore Partitioning" Include="TravelStore.Partitioning" Groups="FAE,Database">
+      <TargetDatabase>TravelStore</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <PatchDeploymentFolder>TravelStore.DataMigrationScripts\PartitioningArtefacts\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <TestInfo Ignore="true" />
+    </DatabaseRole>
+
+    <!-- TJS -->
+    <DatabaseRole Name="DbRole" Description="TJS Database" Include="TJS.Database" Groups="FAE,Database">
+      <TargetDatabase>TJS_CPC</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <PatchDeploymentFolder>TJS.DataMigrationScripts\Common\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <TestInfo Ignore="true" />
+    </DatabaseRole>
+
+    <DatabaseRole Name="DbRole" Description="TJS Partitioning" Include="TJS.Partitioning" Groups="FAE,Database">
+      <TargetDatabase>TJS_CPC</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <PatchDeploymentFolder>TJS.DataMigrationScripts\PartitioningArtefacts\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <TestInfo Ignore="true" />
+    </DatabaseRole>
+
+    <!-- PARE -->
+    <DatabaseRole Name="DbRole" Description="PARE Main Schema" Include="PARE.Database" Groups="PARE,Database">
+      <TargetDatabase>PARE</TargetDatabase>
+      <DatabaseInstance>VINS002</DatabaseInstance>
+      <PatchDeploymentFolder>Pare.Database\Common\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="PARE PCS Common for PARE DB" Include="PARE.PCS.Common.PARE" Groups="PARE,Database">
+      <TargetDatabase>PARE</TargetDatabase>
+      <DatabaseInstance>VINS002</DatabaseInstance>
+      <PatchDeploymentFolder>Pare.Database\Pcs.Common\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="PARE PCS Common for PCS DB" Include="PARE.PCS.Common.PCS" Groups="PARE,Database">
+      <TargetDatabase>PCS</TargetDatabase>
+      <DatabaseInstance>VINS002</DatabaseInstance>
+      <PatchDeploymentFolder>Pare.Database\Pcs.Common\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="PCS Pare" Include="Pcs.Pare" Groups="PARE,Database" >
+      <TargetDatabase>PARE</TargetDatabase>
+      <DatabaseInstance>VINS002</DatabaseInstance>
+      <PatchDeploymentFolder>Pare.Database\Pcs.Pare\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+
+    <DatabaseRole Name="DbRole" Description="PARE Pre Production Schema" Include="PARE.PreProduction.Schema" Groups="PARE,Database">
+      <TargetDatabase>PARE</TargetDatabase>
+      <DatabaseInstance>VINS002</DatabaseInstance>
+      <PatchDeploymentFolder>Pare.Database\Preprod\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="Pare Authorisations Dialog - PARE" Include="Pare.Authorisations.Dialog.Pare" Groups="PARE,Database">
+      <TargetDatabase>Pare</TargetDatabase>
+      <DatabaseInstance>VINS002</DatabaseInstance>
+      <PreDeployment/>
+      <PatchDeployment>Pare.Database\Authorisations\Pare\Dialog\Dialog.Pare.sql</PatchDeployment>
+      <PostDeployment/>
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="Pare Authorisation Transport - PARE" Include="Pare.Authorisation.Transport.Pare" Groups="PARE,Database" >
+      <TargetDatabase>master</TargetDatabase>
+      <DatabaseInstance>VINS002</DatabaseInstance>
+      <PreDeployment/>
+      <PatchDeployment>Pare.Database\Authorisations\Pare\Transport\Transport.Pare.sql</PatchDeployment>
+      <PostDeployment/>
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="Pare Notifications Dialog - PARE" Include="Pare.Notifications.Dialog.Pare" Groups="PARE,Database">
+      <TargetDatabase>Pare</TargetDatabase>
+      <DatabaseInstance>VINS002</DatabaseInstance>
+      <PreDeployment/>
+      <PatchDeployment>Pare.Database\Notifications\Pare\Dialog\Dialog.Pare.sql</PatchDeployment>
+      <PostDeployment/>
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="Pare Notifications Transport - PARE" Include="Pare.Notifications.Transport.Pare" Groups="PARE,Database" >
+      <TargetDatabase>master</TargetDatabase>
+      <DatabaseInstance>VINS002</DatabaseInstance>
+      <PreDeployment/>
+      <PatchDeployment>Pare.Database\Notifications\Pare\Transport\Transport.Pare.sql</PatchDeployment>
+      <PostDeployment/>
+    </DatabaseRole>
+
+    <DatabaseRole Name="DbRole" Description="Notifications Common" Include="Notifications.Common" Groups="PARE,Database">
+      <TargetDatabase>PARE</TargetDatabase>
+      <DatabaseInstance>VINS002</DatabaseInstance>
+      <PatchDeploymentFolder>Pare.Database\Notifications.Common\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="Notifications Pare" Include="Notifications.Pare" Groups="PARE,Database">
+      <TargetDatabase>PARE</TargetDatabase>
+      <DatabaseInstance>VINS002</DatabaseInstance>
+      <PatchDeploymentFolder>Pare.Database\Notifications.Pare\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="Pare Partitioning" Include="Pare.Partitioning" Groups="PARE,Database">
+      <TargetDatabase>PARE</TargetDatabase>
+      <DatabaseInstance>VINS002</DatabaseInstance>
+      <PatchDeploymentFolder>Pare.Database\PartitioningArtefacts\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <TestInfo Ignore="true" />
+    </DatabaseRole>
+
+    <!-- PCS -->
+    <DatabaseRole Name="DbRole" Description="PCS Mock" Include="Pcs.Mock" Groups="PARE,Database">
+      <TargetDatabase>PCS</TargetDatabase>
+      <DatabaseInstance>VINS002</DatabaseInstance>
+      <PatchDeploymentFolder>Pare.Database\Pcs.Mock\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="PCS.Authorisation.Dialog.PCS" Include="Pcs.Authorisation.Dialog.Pcs" Groups="PARE,Database">
+      <TargetDatabase>PCS</TargetDatabase>
+      <DatabaseInstance>VINS002</DatabaseInstance>
+      <PreDeployment/>
+      <PatchDeployment>Pare.Database\Authorisations\PCS\Dialog\Dialog.PCS.sql</PatchDeployment>
+      <PostDeployment/>
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="PCS.Authorisation.Transport.PCS" Include="Pcs.Authorisation.Transport.Pcs" Groups="PARE,Database" >
+      <TargetDatabase>master</TargetDatabase>
+      <DatabaseInstance>VINS002</DatabaseInstance>
+      <PreDeployment/>
+      <PatchDeployment>Pare.Database\Authorisations\PCS\Transport\Transport.PCS.sql</PatchDeployment>
+      <PostDeployment/>
+    </DatabaseRole>
+
+    <!-- CACC -->
+    <DatabaseRole Name="DbRole" Description="CACC Database" Include="CSC.Database"  Groups="CASC,Database">
+      <TargetDatabase>CS</TargetDatabase>
+      <DatabaseInstance>VINS003</DatabaseInstance>
+      <PatchDeploymentFolder>CSC.DataMigrationScripts\Common\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <DisableAspnetSqlCacheDependency>
+        <OnTable>SecurityQuestion</OnTable>
+        <OnTable>Country</OnTable>
+        <OnTable>CustomerType</OnTable>
+        <OnTable>PaymentCardType</OnTable>
+        <OnTable>PaymentCardScheme</OnTable>
+        <OnTable>Title</OnTable>
+        <OnTable>SSRReason</OnTable>
+      </DisableAspnetSqlCacheDependency>
+    </DatabaseRole>
+
+    <!--OyBO-->
+    <DatabaseRole Name="DbRole" Description="OTFP Database" Include="OTFP.Database" Groups="OyBO,Database">
+      <TargetDatabase>OTFP</TargetDatabase>
+      <DatabaseInstance>VINS003</DatabaseInstance>
+      <PatchDeploymentFolder>OTFP.DataMigrationScripts\Common\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+
+    <DatabaseRole Name="DbRole" Description="OTFP Partitioning" Include="OTFP.Partitioning" Groups="OyBO,Database">
+      <TargetDatabase>OTFP</TargetDatabase>
+      <DatabaseInstance>VINS003</DatabaseInstance>
+      <PatchDeploymentFolder>OTFP.DataMigrationScripts\PartitioningArtefacts\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <!--<TestInfo Ignore="true"/>-->
+    </DatabaseRole>
+
+    <!--OCAE-->
+    <DatabaseRole Name="DbRole" Description="OCAE	Database" Include="OCAE.Database" Groups="OyBO,Database">
+      <TargetDatabase>OCAE</TargetDatabase>
+      <DatabaseInstance>VINS003</DatabaseInstance>
+      <PatchDeploymentFolder>OCAE.DataMigrationScripts\Common\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+
+    <DatabaseRole Name="DbRole" Description="OCAE Partitioning" Include="OCAE.Partitioning" Groups="OyBO,Database">
+      <TargetDatabase>OCAE</TargetDatabase>
+      <DatabaseInstance>VINS003</DatabaseInstance>
+      <PatchDeploymentFolder>OCAE.DataMigrationScripts\PartitioningArtefacts\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+
+    <!--Refunds-->
+    <DatabaseRole Name="DbRole" Description="Refunds Database" Include="Refunds.Database" Groups="OyBO,Database">
+      <TargetDatabase>RefundManager</TargetDatabase>
+      <DatabaseInstance>VINS003</DatabaseInstance>
+      <PatchDeploymentFolder>Refunds.DataMigrationScripts\Common\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+
+    <DatabaseRole Name="DbRole" Description="Refunds Partitioning" Include="Refunds.Partitioning" Groups="OyBO,Database">
+      <TargetDatabase>RefundManager</TargetDatabase>
+      <DatabaseInstance>VINS003</DatabaseInstance>
+      <PatchDeploymentFolder>Refunds.DataMigrationScripts\PartitioningArtefacts\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+
+    <!--TapIdAllocator-->
+    <DatabaseRole Name="DbRole" Description="TapIdAllocator	Database" Include="TapIdAllocator.Database" Groups="OyBO,Database">
+      <TargetDatabase>TapIdAllocator</TargetDatabase>
+      <DatabaseInstance>VINS002</DatabaseInstance>
+      <PatchDeploymentFolder>TapIdAllocator.DataMigrationScripts\Common\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+
+    <!--CardDiscounts-->
+    <DatabaseRole Name="DbRole" Description="CardDiscounts Database" Include="CardDiscounts.Database" Groups="OyBO,Database">
+      <TargetDatabase>CardDiscounts</TargetDatabase>
+      <DatabaseInstance>VINS003</DatabaseInstance>
+      <PatchDeploymentFolder>CardDiscounts.DataMigrationScripts\Common\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+
+    <!-- SDM-->
+    <DatabaseRole Name="DbRole" Description="SDM Database" Include="SDM.Database" Groups="SDM,Database">
+      <TargetDatabase>SDM</TargetDatabase>
+      <DatabaseInstance>VINS003</DatabaseInstance>
+      <PatchDeploymentFolder>SDM.DB.Scripts\Scripts\Common\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="SDM ServerObjects" Include="SDM.ServerObjects" Groups="SDM,Database">
+      <TargetDatabase>SDM</TargetDatabase>
+      <DatabaseInstance>VINS003</DatabaseInstance>
+      <PatchDeploymentFolder>SDM.DB.Scripts\Scripts\ServerObjects\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+
+    <!--Notifications -->
+    <DatabaseRole Name="DbRole" Description="PaymentCardExpiryExtract CSC DB Credentials" Include="PaymentCardExpiryExtract.CSC.DB"
+                  Groups="Notifications,CASC,Database">
+      <TargetDatabase>CS</TargetDatabase>
+      <DatabaseInstance>VINS003</DatabaseInstance>
+      <PatchDeployment>PaymentCardExpiryExtract.DataMigrationScripts\Common\Scripts\Patching\PaymentCardExpiryExtract.Patching.sql</PatchDeployment>
+      <PatchDeploymentFolder>PaymentCardExpiryExtract.DataMigrationScripts\Common\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="Notification Database" Include="Notification.DB" Groups="Notifications,Database">
+      <TargetDatabase>Notification</TargetDatabase>
+      <DatabaseInstance>VINS003</DatabaseInstance>
+      <PatchDeploymentFolder>Notification.DataMigrationScripts\Common\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="Pare Notifications Dialog - Notifications" Include="Pare.Notifications.Dialog.Notifications" Groups="Notifications,Database">
+      <TargetDatabase>Notification</TargetDatabase>
+      <DatabaseInstance>vins003</DatabaseInstance>
+      <PatchDeployment>Pare.Database\Notifications\CommonServices\Dialog\Dialog.Notifications.sql</PatchDeployment>
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="Pare Notifications Transport - Notifications" Include="Pare.Notifications.Transport.Notifications" Groups="Notifications,Database">
+      <TargetDatabase>master</TargetDatabase>
+      <DatabaseInstance>vins003</DatabaseInstance>
+      <PatchDeployment>Pare.Database\Notifications\CommonServices\Transport\Transport.Email.sql</PatchDeployment>
+    </DatabaseRole>
+
+    <!--RSP-->
+    <DatabaseRole Name="DbRole" Description="RSP Database" Include="RSP.DB" Groups="RSP,Database">
+      <TargetDatabase>ReportingRW</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <PatchDeploymentFolder>FAE.DataMigrationScripts\RSP\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+
+    <DatabaseRole Name="DbRole" Description="RSP Fix Collation Patch" Include="RSP.FixCollation.Patch" Groups="RSP,Database">
+      <TargetDatabase>ReportingRW</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <PatchDeployment>FAE.DataMigrationScripts\RspCollationFix\RspCollationFixPatching.sql</PatchDeployment>
+      <PostDeployment/>
+    </DatabaseRole>
+
+    <!--MasterData-->
+    <DatabaseRole Name="DbRole" Description="MasterData EventStore Database deployment" Include="MasterData.DB.EventStore" Groups="MasterData,Database">
+      <TargetDatabase>MasterData_EventStore</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <BaselineDeployment>DatabaseScripts\EventStore\EventStore_Baseline.sql</BaselineDeployment>
+      <PatchDeployment/>
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="MasterData Logging Database deployment" Include="MasterData.DB.Logging"  Groups="MasterData,Database">
+      <TargetDatabase>MasterData_Logging</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <BaselineDeployment>DatabaseScripts\Logging\Elmah_Baseline.sql</BaselineDeployment>
+      <PatchDeployment/>
+      <!--
+      <PreDeployment>FAE.DataMigrationScripts\Dev\BaseLines\Fae\Predeployment.sql</PreDeployment>
+      <PatchDeployment></PatchDeployment>
+      <PostDeployment></PostDeployment>
+      <PatchDeploymentFolder>FAE.DataMigrationScripts\Common\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      -->
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="MasterData Projections Database deployment" Include="MasterData.DB.ProjectionStore" Groups="MasterData,Database">
+      <TargetDatabase>MasterData.ProjectionStore</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <BaselineDeployment>DatabaseScripts\Projections\Projection_BaseLine.sql</BaselineDeployment>
+      <PatchDeployment/>
+      <TestInfo Ignore="false">
+        <Sql>
+          DECLARE @deploymentErrorCount INT
+          SELECT @deploymentErrorCount=COUNT(1) FROM [MasterData_Logging].[dbo].[Deployment_Errors]
+
+          DECLARE @errorLogCount INT
+          SELECT @errorLogCount=COUNT(1) FROM [MasterData_Logging].[dbo].ELMAH_Error
+          WHERE TimeUtc > DATEADD(MM, 10, GetDate())
+
+          IF (@deploymentErrorCount >=1)
+          BEGIN
+          DECLARE @message Varchar(100)=CAST(@deploymentErrorCount as varchar(5)) + ' deployment error(s) logged in the Deployment_Errors table';
+          THROW 50000, @message, 1;
+          END
+
+          IF (@errorLogCount >=1)
+          BEGIN
+          DECLARE @errorLogMessage Varchar(100)=CAST(@errorLogCount as varchar(5)) + ' errors logged in the Elmah_Error log table';
+          THROW 50000, @errorLogMessage , 1;
+          END
+        </Sql>
+      </TestInfo>
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="System Deployment Schema" Include="System.Deployment.Schema" Groups="DBA,Database">
+      <TargetDatabase>System</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <BaselineDeployment>DeploymentSchema.Scripts\Baseline\CreateDbIfNotExists.sql</BaselineDeployment>
+      <PatchDeployment>DeploymentSchema.Scripts\Patching\DeploymentSchema.Patching.sql</PatchDeployment>
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="Dba.System" Include="Dba.System" Groups="DBA,Database">
+      <TargetDatabase>System</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <BaselineDeployment>System.Database\Baseline\Baseline.sql</BaselineDeployment>
+      <PreDeployment/>
+      <PatchDeployment/>
+      <PostDeployment/>
+      <PatchDeploymentFolder>System.Database\Common\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+    <DatabaseRole Name="DbRole" Description="MasterData ProjectionStore Restore" Include="MasterData.ProjectionStore.Restore" Groups="MasterData,Database">
+      <TargetDatabase>System</TargetDatabase>
+      <DatabaseInstance>VINS001</DatabaseInstance>
+      <PreDeployment/>
+      <PatchDeployment/>
+      <PostDeployment/>
+      <PatchDeploymentFolder>MasterData.ProjectionStore.Restore\Common\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+    </DatabaseRole>
+
+	<!-- BaselineData -->
+
+	<DatabaseRole Name="DbRole" Description="BaselineData Database" Include="BaselineData.Database" Groups="DBA,Database">
+      <TargetDatabase>BaselineData</TargetDatabase>
+      <DatabaseInstance>must_be_overridden</DatabaseInstance>
+      <PatchDeploymentFolder>Baseline.Database\Common\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <TestInfo Ignore="true" />
+    </DatabaseRole>
+	<!-- BaselineData -->
+
+	<DatabaseRole Name="DbRole" Description="PaymenAssurance Database" Include="PaymentAssurance.Database" Groups="DBA,Database">
+      <TargetDatabase>PaymentAssurance</TargetDatabase>
+      <DatabaseInstance>must_be_overridden</DatabaseInstance>
+      <PatchDeploymentFolder>PaymentAssurance\PaymentAssurance.Database\Common\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <TestInfo Ignore="true" />
+    </DatabaseRole>
+
+  </CommonRoles>
+</configuration>

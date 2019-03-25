@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+  <!-- Base Data -->
+  <parameter name="BaseData_DatabaseConnectionString" value="Data Source=10.107.203.232\VINS001;Initial Catalog=BaseData_Publish_v19_0;User ID=fae;Password=fae;Connect Timeout=200;"/>
+    
+  <!-- Notifications -->
+  <parameter name="Notifications_Services_EfDatabaseConnectionString" value="Server=TDC2FAEC02V03\VINS003;initial catalog=Notification;Integrated Security=SSPI" />
+  <parameter name="Notifications_InternalApiUrl" value="http://InternalNotificationService.fae.tfl.local/api/" />
+
+  <!--RSP-->
+  <parameter name ="RSP_ReportingRWDatabaseConnectionString" value="Data Source=TDC2FAEC02V03\VINS003;Initial Catalog=ReportingRW;Integrated Security=SSPI;Provider=SQLNCLI11.1;Auto Translate=False;"/>
+  <parameter name ="RSP_FAEDatabaseConnectionString" value="Data Source=TDC2FAEC02V03\VINS001;Initial Catalog=FAE;Integrated Security=SSPI;Provider=SQLNCLI11.1;Auto Translate=False;"/>
+
+  <!-- SQL parameters named to ensure backward compatibility with the old system-->
+  <parameter name="PareEndpoint" value="TCP://10.107.203.233:4022" />
+  <!-- this is the endpoint notifications sends its pare messages to-->
+  <parameter name="PcsEndpoint" value="LOCAL" />
+  <parameter name="NotificationsEndpoint" value="TCP://10.107.203.234:4023"/>
+  <!-- FAE/RSP variables -->
+  <parameter name="FAEDatabaseName" value="FAE"/>
+  <parameter name="RSPDatabaseName" value="ReportingRW"/>
+  <parameter name="PareSchemaName" value="dbo"/>
+  <!-- Notifications Extract scripts ReportingRW database name -->
+  <parameter name="ReportingRWDatabaseName" value="ReportingRW"/>
+  <parameter name="PareDatabaseServer" value="TDC2FAEC02V02\VINS002"/>
+</parameters>

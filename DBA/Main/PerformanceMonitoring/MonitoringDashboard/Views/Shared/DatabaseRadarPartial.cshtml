@@ -1,0 +1,142 @@
+﻿@using System.Drawing
+@using System.Text
+@using MonitoringDashboard.Helpers
+@using MonitoringDashboard.Models
+@using MonitoringService
+@model Dto.DatabaseMacroMetricSetNormalised
+
+@{
+    RadarChartSet radarChartSet = Model.ToRadarChartSet();
+    StringBuilder builder = RadarChartBuilder.BuildRadarChart(radarChartSet);
+    string radarJscript = builder.ToString();
+    builder = RadarChartBuilder.BuildLegend(radarChartSet, "");
+    string legendHtml = builder.ToString();
+}
+<script src="\assets/js/Chart.js"></script>
+
+<script type="text/javascript">
+    @Html.Raw(radarJscript)
+</script>
+
+<input type="hidden" id="environment1Name" value="@Model.EnvironmentName1" />
+<input type="hidden" id="environment1Start" value="@Model.Start1"/>
+<input type="hidden" id="environment1End" value="@Model.End1" />
+<input type="hidden" id="environment1Count" value="@Model.CountMetricsSet1" />
+<input type="hidden" id="set2Exists" value="@Model.Set2Exists" />
+@if (@Model.Set2Exists)
+{
+    <input type="hidden" id="environment2Name" value="@Model.EnvironmentName2" />
+    <input type="hidden" id="environment2Start" value="@Model.Start2" />
+    <input type="hidden" id="environment2End" value="@Model.End2" />
+    <input type="hidden" id="environment2Count" value="@Model.CountMetricsSet2" />
+}
+@{
+    var service = new EnvironmentsService();
+    var environments = service.EnvironmentsGet();
+    var userParamsModel = new MonitoredEnvironments { EnvironmentsOfInterest = environments };
+}
+@Html.Partial("UserParameters", userParamsModel);
+
+<div class="radarChartContainer">
+
+    <div class="radarChart">
+        <canvas id="myChart" width="700" height="700"></canvas>
+    </div>
+
+    @Html.Raw(legendHtml)
+
+    <div class="radarTable">
+        <table>
+            <thead>
+                <th>Database</th>
+                @foreach (var name in radarChartSet.RadarDatasets.First().RadarPoints.Select(x => x.Name))
+                {
+                    <th>@name</th>
+                }
+            </thead>
+            <tbody>
+
+                @{ int count = 0;}
+                @foreach (var set in radarChartSet.RadarDatasets)
+                {
+                    <tr>
+                        @Html.Raw(string.Format("<td class='tableRowNameItem{0}'>{1}</td>", count, set.DisplayName))
+                        @foreach (var point in set.RadarPoints)
+                        {
+                            @Html.Raw(string.Format("<td class='radarPercentile{0}'>{1}</td>", point.Percentile, point.Value));
+                        }
+                    </tr>
+
+                    count++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function BarChartPreferences(userPreferences, databaseName, title, dataValue, isEnvironment1) {
+        this.Preferences = userPreferences;
+        this.DatabaseOfInterest = databaseName;
+        this.Title = title;
+        this.Value = dataValue;
+        this.IsEnvironment1 = isEnvironment1;
+    }
+
+    function RedirectToBarChart(databaseName, title, dataValue, isEnvironment1) {
+        //debugger;
+        var userPreferences = new UserPreferences();
+        var barChartPreferences = new BarChartPreferences(userPreferences, databaseName, title, dataValue, isEnvironment1);
+        var barChartPreferencesJson = JSON.stringify(barChartPreferences);       
+
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetScalarMetricRedirect", "Radar")',
+            data: barChartPreferencesJson,
+            contentType: "application/json; charset=utf-8",
+            datatype: 'json',
+            error: function (response) {
+                alert("Error: " + response.responseText);
+            },
+            success: function (response) {
+                if (response.IsValid) {
+                    window.location = response.Url;
+                } else {
+                    alert(response.ErrorMessage);
+                }
+            }
+        }
+        );
+    }   
+
+    $(function () {
+        var myRadar = new Chart(document.getElementById("myChart"), config);
+        Chart.defaults.global.responsive = true;
+        Chart.defaults.global.hover.mode = 'single';
+        document.getElementById("myChart").onclick = function (evt) {
+            var activePoint = myRadar.lastActive[0];
+            if (activePoint !== undefined) {
+                var datasetIndex = activePoint._datasetIndex;
+                var index = activePoint._index;
+                var databaseName = config.data.datasets[datasetIndex].label;
+                var title = config.data.labels[index];
+                var dataValue = config.data.datasets[datasetIndex].data[index];
+                var environment1MetricsCount = $("#environment1Count").val();
+                var isEnvironment1 = true;
+                if (datasetIndex >= environment1MetricsCount) {
+                    isEnvironment1 = false;
+                }
+                //alert("Database Name: [" + databaseName + "] title: [" + title + "] value: [" + dataValue + "]" + " dataset index: [" + datasetIndex + "] is environment: [" + isEnvironment1 + "]" );
+                RedirectToBarChart(databaseName, title, dataValue, isEnvironment1);
+            }
+        };
+
+        $("#myChart").hover(function () {
+            $(this).css('cursor', 'crosshair');
+        }, function () {
+            $(this).css('cursor', 'auto');
+        });
+    });
+
+</script>

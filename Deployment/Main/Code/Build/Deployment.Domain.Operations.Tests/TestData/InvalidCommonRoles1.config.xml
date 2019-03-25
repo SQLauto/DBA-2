@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="TestRig" Environment="TSRig" Config="TSRig" ProductGroup="FTP">
+  
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>MissingCommonRole.xml</CommonRoleFile>
+  
+  <machine Id="5" Name="TS-FAE3"   ExternalIP="2">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Serv" />
+  </machine>
+</configuration>

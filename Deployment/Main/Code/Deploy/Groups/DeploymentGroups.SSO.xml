@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DeploymentGroups>
+	<Group>SSO</Group>
+	<Group>Database</Group>
+	<Group>NotificationWorker</Group>
+	<Group>QueueManager</Group>
+	<Group>OysterNotificationWorker</Group>
+	<Group>TravelAlertsNotificationWorker</Group>
+	<Group>SingleSignOnServices</Group>
+	<Group>CustomerServices</Group>
+	<Group>ValidationServices</Group>
+</DeploymentGroups>

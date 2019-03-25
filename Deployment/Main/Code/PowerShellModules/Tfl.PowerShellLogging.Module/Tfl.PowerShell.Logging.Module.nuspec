@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>TFL.PowerShell.Logging</id>
+    <version>1.0.0.3</version>
+    <title>TFL.PowerShell.Logging</title>
+    <authors>TFL</authors>
+    <owners>TFL</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Nuget package of the TFL.PowerShell.Logging PowerShell module.</description>
+    <releaseNotes></releaseNotes>
+    <copyright>(c) 2018 TFL. All rights reserved.</copyright>
+    <tags>TFL Deployment PowerShell Logging Module FTP SSO</tags>
+  </metadata>
+  <files>
+    <file src="bin\$configuration$\*.dll" target="lib" />
+    <file src="bin\$configuration$\*.psm1" target="" />
+    <file src="bin\$configuration$\*.psd1" target="" />
+    <file src="bin\$configuration$\en-US\*.*" target="en-US" />
+  </files>
+</package>

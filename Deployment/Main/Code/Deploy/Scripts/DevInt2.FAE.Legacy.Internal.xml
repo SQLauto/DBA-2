@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="DevInt2.FAE.Legacy.Internal" Environment="DevInt2" Config="DevInt2" ProductGroup="FTP">
+
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+
+  <PostDeploymentTestIdentity>DeploymentAccount.Internal</PostDeploymentTestIdentity>
+
+  <machine Id="FTDC2MGT360" Name="FTDC2MGT360" ExternalIP="10.107.200.186" DeploymentMachine="true"  />
+
+  <machine Id="TDC2FAEC04V01" Name="TDC2FAEC04V01" ExternalIP="10.107.200.196" Role="SQL Volume">
+    <!-- FAE Database -->
+    <DatabaseRole Description="FAE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="VINS001" TargetDatabase="PerfTest_FAE" />
+    <DatabaseRole Description="FAE Database" Include="FAE.Database" TargetDatabase="PerfTest_FAE" />
+    <DatabaseRole Description="Config Database" Include="Config.Database" DatabaseInstance="Inst1" TargetDatabase="PerfTest_FAE"/>
+    <DatabaseRole Description="FAE Config Database" Include="FAE_Config.Database" DatabaseInstance="Inst1" TargetDatabase="PerfTest_FAE"/>
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="VINS001" TargetDatabase="PerfTest_FAE" />
+    <DatabaseRole Description="FAE Partitioning" Include="FAE.Partitioning" TargetDatabase="PerfTest_FAE"  />
+  </machine>
+
+  <machine Id="FTDC2CIS313" Name="FTDC2CIS313" ExternalIP="10.107.200.139" Role="CIS Server">
+    <ServerRole Description="FTP.EventLog.For.FAE.JourneyUsageService" Include="FTP.EventLog.For.FAE.JourneyUsageService" />
+    <ServerRole Description="Journey Usage" Include="FAE.JourneyUsage.Service" Config="DevInt2_Legacy" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" Config="DevInt2_Legacy" />
+  </machine>
+
+  <machine Id="FTDC2CIS314" Name="FTDC2CIS314" ExternalIP="10.107.200.140" Role="CIS Server">
+    <ServerRole Description="FTP.EventLog.For.FAE.JourneyUsageService" Include="FTP.EventLog.For.FAE.JourneyUsageService" />
+    <ServerRole Description="Journey Usage" Include="FAE.JourneyUsage.Service" Config="DevInt2_Legacy" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" Config="DevInt2_Legacy" />
+  </machine>
+
+  <machine Id="FTDC2CIS315" Name="FTDC2CIS315" ExternalIP="10.107.200.141" Role="CIS Server">
+    <ServerRole Description="FTP.EventLog.For.FAE.JourneyUsageService" Include="FTP.EventLog.For.FAE.JourneyUsageService" />
+    <ServerRole Description="Journey Usage" Include="FAE.JourneyUsage.Service" Config="DevInt2_Legacy" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" Config="DevInt2_Legacy" />
+  </machine>
+
+  <machine Id="FTDC2CIS316" Name="FTDC2CIS316" ExternalIP="10.107.200.142" Role="CIS Server">
+    <ServerRole Description="FTP.EventLog.For.FAE.JourneyUsageService" Include="FTP.EventLog.For.FAE.JourneyUsageService" />
+    <ServerRole Description="Journey Usage" Include="FAE.JourneyUsage.Service" Config="DevInt2_Legacy" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" Config="DevInt2_Legacy" />
+  </machine>
+
+  <machine Id="FTDC2CIS317" Name="FTDC2CIS317" ExternalIP="10.107.200.143" Role="CIS Server">
+    <ServerRole Description="FTP.EventLog.For.FAE.JourneyUsageService" Include="FTP.EventLog.For.FAE.JourneyUsageService" />
+    <ServerRole Description="Journey Usage" Include="FAE.JourneyUsage.Service" Config="DevInt2_Legacy" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" Config="DevInt2_Legacy" />
+  </machine>
+
+
+  <!--CPC Fares Aggregation Engine-->
+  <machine Id="FTDC2FAC318" Name="FTDC2FAC318" ExternalIP="10.107.200.144" Role="FAE Controller 1 - Non-Clustered">
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <PreDeployRole Include ="StopFaeController" />
+    <ServerRole Include ="FAE.Engine.Controller.CPC.Stateful" Config="DevInt2_Legacy"/>
+    <ServerRole Include="FAE.EngineControllerUtil.Install" Groups="FAE"  Config="DevInt2_Legacy"/>
+    <PostDeployRole Include ="StartFaeController" />
+    <!-- TODO Make name consistent-->
+  </machine>
+
+  <machine Id="FTDC2FAC319" Name="FTDC2FAC319" ExternalIP="10.107.200.145" Role="FAE Tap Importer - Non-Clustered">
+    <PreDeployRole Include ="Stop.Tap.Importer.CPC" />
+    <!-- TODO Make name consistent-->
+    <ServerRole Description="FAE Tap Importer" Include="FAE.TapImporter.Service.CPC" Config="DevInt2_Legacy"/>
+    <PostDeployRole Include ="StartFaeTapImporter.CPC" />
+  </machine>
+
+  <machine Id="FTDC2FAE320" Name="FTDC2FAE320" ExternalIP="10.107.200.146" Role="FAE Engine 1" >
+    <PreDeployRole Include="StopFaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="DevInt2_Legacy"/>
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE321" Name="FTDC2FAE321" ExternalIP="10.107.200.147" Role="FAE Engine 2">
+    <PreDeployRole Include="StopFaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="DevInt2_Legacy"/>
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE322" Name="FTDC2FAE322" ExternalIP="10.107.200.148" Role="FAE Engine 3">
+    <PreDeployRole Include="StopFaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="DevInt2_Legacy"/>
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE323" Name="FTDC2FAE323" ExternalIP="10.107.200.149" Role="FAE Engine 4">
+    <PreDeployRole Include="StopFaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="DevInt2_Legacy"/>
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE324" Name="FTDC2FAE324" ExternalIP="10.107.200.150" Role="FAE Engine 5">
+    <PreDeployRole Include="StopFaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="DevInt2_Legacy"/>
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE325" Name="FTDC2FAE325" ExternalIP="10.107.200.151" Role="FAE Engine 6">
+    <PreDeployRole Include="StopFaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="DevInt2_Legacy"/>
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE326" Name="FTDC2FAE326" ExternalIP="10.107.200.152" Role="FAE Engine 7">
+    <PreDeployRole Include="StopFaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="DevInt2_Legacy"/>
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE327" Name="FTDC2FAE327" ExternalIP="10.107.200.153" Role="FAE Engine 8">
+    <PreDeployRole Include="StopFaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="DevInt2_Legacy"/>
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE328" Name="FTDC2FAE328" ExternalIP="10.107.200.154" Role="FAE Engine 9">
+    <PreDeployRole Include="StopFaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="DevInt2_Legacy"/>
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE329" Name="FTDC2FAE329" ExternalIP="10.107.200.155" Role="FAE Engine 10">
+    <PreDeployRole Include="StopFaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="DevInt2_Legacy"/>
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE330" Name="FTDC2FAE330" ExternalIP="10.107.200.156" Role="FAE Engine 11">
+    <PreDeployRole Include="StopFaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="DevInt2_Legacy"/>
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE331" Name="FTDC2FAE331" ExternalIP="10.107.200.157" Role="FAE Engine 12">
+    <PreDeployRole Include="StopFaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="DevInt2_Legacy"/>
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE32" Name="FTDC2FAE332" ExternalIP="10.107.200.158" Role="FAE Engine 13">
+    <PreDeployRole Include="StopFaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="DevInt2_Legacy"/>
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE333" Name="FTDC2FAE333" ExternalIP="10.107.200.159" Role="FAE Engine 14">
+    <PreDeployRole Include="StopFaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="DevInt2_Legacy"/>
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE334" Name="FTDC2FAE334" ExternalIP="10.107.200.160" Role="FAE Engine 15">
+    <PreDeployRole Include="StopFaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="DevInt2_Legacy"/>
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE335" Name="FTDC2FAE335" ExternalIP="10.107.200.161" Role="FAE Engine 16">
+    <PreDeployRole Include="StopFaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="DevInt2_Legacy"/>
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE336" Name="FTDC2FAE336" ExternalIP="10.107.200.162" Role="FAE Engine 17">
+    <PreDeployRole Include="StopFaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="DevInt2_Legacy"/>
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE337" Name="FTDC2FAE337" ExternalIP="10.107.200.163" Role="FAE Engine 18">
+    <PreDeployRole Include="StopFaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateful" Config="DevInt2_Legacy"/>
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+</configuration>

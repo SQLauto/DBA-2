@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--
+    This targets file is meant to be imported by all SQLProj projects to get around an issue with database references and the CopyAlways property.
+    -->
+  <Target Name="AfterBuild">
+    <!-- Copy all post-deployment and publish profile files -->
+    <ItemGroup>
+      <PostDeploymentScripts Include="*\*\*.PostDeployment.sql" />
+      <PublishProfiles Include="*.Publish.xml" />
+    </ItemGroup>
+    <Copy SourceFiles="@(PostDeploymentScripts)" DestinationFiles="@(PostDeploymentScripts->'$(OutputPath)\%(RecursiveDir)$(ProjectName).%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(PublishProfiles)" DestinationFiles="@(PublishProfiles->'$(OutputPath)\%(Filename)%(Extension)')" />
+  </Target>
+</Project>

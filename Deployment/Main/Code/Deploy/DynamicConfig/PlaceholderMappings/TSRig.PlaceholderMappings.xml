@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<DynamicPlaceholderMappings xmlns="http://tfl.gov.uk/DeploymentConfig">
+  <Placeholder Name="CASCSiteIP" Lookup="TS-CAS1" />
+  <Placeholder Name="SsoWebSiteIP" Lookup="TS-DB2" />
+  <Placeholder Name="SSOSiteIP" Lookup="TS-DB2" />
+  <Placeholder Name="SDMSiteIP" Lookup="TS-CAS1" />
+  <!--<Placeholder name="SSOWebServiceReference" lookup="TS-DB2" />-->
+</DynamicPlaceholderMappings>

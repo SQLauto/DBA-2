@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://tfl.gov.uk/DeploymentConfig"
+            xmlns="http://tfl.gov.uk/DeploymentConfig"
+            elementFormDefault="qualified">
+  <xs:simpleType name="action">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Install" />
+      <xs:enumeration value="Uninstall" />
+      <xs:enumeration value="Reinstall" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="startupType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Automatic" />
+      <xs:enumeration value="Disabled" />
+      <xs:enumeration value="Manual" />
+      <xs:enumeration value="AutomaticDelayed" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ServerRoleTypeReference" mixed="true">
+    <xs:attribute name="Description" type="xs:string" use="optional" /><!-- Actually this is a duplicate - it should be the same as that defined in Common but need a way of reading type in including file -->
+    <xs:attribute name="Include" type="xs:string" use="required" />
+    <!-- Now these are the overridable attributes -->
+    <xs:attribute name="Config" type="xs:string" use="optional" />
+    <xs:attribute name="Groups" type="xs:string" use="optional" />
+    <xs:attribute name="SSISDBInstance" type="xs:string" use="optional" />
+    <xs:attribute name="IsDefaultDatabaseInstance" type="xs:boolean" use="optional" />
+    <xs:attribute name="StartUpType" type="startupType" use="optional" default="Manual" />
+    <!-- The way common role includes works means i can not make this required, that's OK, the code that reads in roles will validate it is always present-->
+    <xs:attribute name="SitePhysicalPath" type="xs:string" use="optional" />
+    <!--Used to override the action of an MSI installer or ScheduledTask.  Useful for running uninstalls/removals-->
+    <xs:attribute name="Action" type="action" use="optional" default="Install" />
+    <!--Used to override the action whether post deploy tests are run. Often used in conjunction with override of Action-->
+    <xs:attribute name="DisableTests" type="xs:boolean" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="DatabaseRoleTypeReference" mixed="true">
+    <xs:attribute name="Description" type="xs:string" use="optional" />
+    <xs:attribute name="Include" type="xs:string" use="required" />
+    <!-- Now these are the overridable attributes -->
+    <xs:attribute name="IsDefaultDatabaseInstance" type="xs:boolean" use="optional" />
+    <xs:attribute name="DatabaseInstance" type="xs:string" use="optional" />
+    <xs:attribute name="TargetDatabase" type="xs:string" use="optional" />
+    <xs:attribute name="Config" type="xs:string" use="optional" />      <!-- The way common role includes works means i can not make this required, that's OK, the code that reads in roles will validate it is always present-->
+    <xs:attribute name="Groups" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="PostDeployRoleTypeReference" mixed="true">
+    <xs:attribute name="Include" type="xs:string" use="required" />
+    <xs:attribute name="Description" type="xs:string" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="PreDeployRoleTypeReference" mixed="true">
+    <xs:attribute name="Include" type="xs:string" use="required" />
+    <xs:attribute name="Description" type="xs:string" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="PreRequisiteRoleTypeReference" mixed="true">
+    <xs:attribute name="Include" type="xs:string" use="required" />
+    <xs:attribute name="Description" type="xs:string" use="optional"/>
+  </xs:complexType>
+</xs:schema>
+

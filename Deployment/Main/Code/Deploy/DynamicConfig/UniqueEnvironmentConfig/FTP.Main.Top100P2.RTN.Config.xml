@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+    
+  <parameter name="SSO_WebsiteDefaultSsoRedirectProtectedUrl" value="https://cascm100p2necasc.ce-asev2.p.azurewebsites.net/dashboard" />
+  <parameter name="SSO_WebsiteDefaultSsoRedirectPublicUrl" value="https://cascm100p2necasc.ce-asev2.p.azurewebsites.net/HomePage" />
+  <parameter name="SSO_WebsiteSsoRedirectWhiteListUrls" value="localhost;cascm100p2necasc.ce-asev2.p.azurewebsites.net;#_SDMSiteIP_#;" />
+
+  <!-- Oyster Variables to be determined -->
+  <parameter name="SSO_WebsiteSsoRegisterRedirectUrlFormat" value="https://localhost/RegisterRedirect?{0}={1}"/>
+  <parameter name="SSO_WebsiteSsoOysterInnovatorUrlAction0001" value="https://localhost/topup" />
+  <parameter name="SSO_WebsiteSsoOysterInnovatorUrlAction0002" value="https://localhost/setautotopup" />
+  <parameter name="SSO_WebsiteSsoOysterInnovatorUrlAction0003" value="https://localhost/reportstolen" />
+  <parameter name="SSO_WebsiteSsoOysterInnovatorUrlAction0004" value="https://localhost/register" />
+  <parameter name="SSO_WebsiteSsoOysterInnovatorUrlAction0005" value="https://localhost/order" />
+  <parameter name="SSO_WebsiteApiNotSupportedUrl" value="https://localhost/notsupported" />
+
+  <parameter name="SSO_CustomerPortalAddress" value="https://cascm100p2necasc.ce-asev2.p.azurewebsites.net" />
+  <parameter name="SSO_SupportPortalAddress" value="https://cascm100p2necas.ce-asev2.p.azurewebsites.net" />
+  
+  <parameter name="OyBO_TFP_AzureMobileUploaderStorageConnectionString" value="" />
+  <parameter name="OyBO_TFP_AzureMobileUploaderContainerName" value="" />
+  <parameter name="OyBO_AzureUploader_AzureKeyVaultClientId" value="" />
+  <parameter name="OyBO_AzureUploader_CertificateThumbprint" value="" />
+  <parameter name="OyBO_AzureUploader_KeyVaultSecretUriForAzureBlobStorage" value="" />
+  
+</parameters>

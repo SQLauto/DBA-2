@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+  <parameter name="NPL_DatabaseConnectionString" value="metadata=res://*/NPL.csdl|res://*/NPL.ssdl|res://*/NPL.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=TS-DB1\Inst1;initial catalog=NPL;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" />
+</parameters>

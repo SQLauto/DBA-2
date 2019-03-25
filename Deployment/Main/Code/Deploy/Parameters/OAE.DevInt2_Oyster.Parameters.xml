@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+  <!-- Base Data -->
+  <parameter name="BaseData_DatabaseConnectionString" value="Data Source=tdc2faec04v01\VINS001;Initial Catalog=BaseData_Publish_FAE;Integrated Security=SSPI;Connect Timeout=200;"/>
+
+  <!-- FAE -->
+  <parameter name="FAE_TokenJourneySummaryUnprocessedFolder" value="\\FTDC2FAC318\tjs"/>
+  <parameter name="FAE_TokenJourneySummaryHeaderUnprocessedFolder" value="d:\tjsh\unprocessed"/>
+  <parameter name="FAE_TdrBaseDirectory" value="\\FTDC2FAC318\d$\TdrFileProcessor"/>
+  <parameter name="FAE_TdrUnprocessedSubdirectory" value="Unprocessed"/>
+  
+  <parameter name="FAE_TapImporterInboxFolder" value="d:\tfl\fae\tapqueue\inbox" />
+  <parameter name="FAE_TapImporterErrorFolder" value="d:\tfl\fae\tapqueue\error" />
+  <parameter name="FAE_TapImporterDoneFolder" value="d:\tfl\fae\tapqueue\done" />
+  <parameter name="FAE_TapImporterProcessingFolder" value="d:\tfl\fae\tapqueue\processing" />
+
+  <parameter name="FAE_DatabaseConnectionString" value=""/> 
+  <parameter name="TravelStore_DatabaseConnectionString" value="Data Source=tdc2faec04v01\vins001;MultiSubnetFailover=True;Initial Catalog=TravelStore_PAYG_2711;Persist Security Info=True;Integrated Security=SSPI;Connect Timeout=200;"/>
+  <parameter name="FAE_ConfigurationEntitiesDatabaseConnectionString" value="metadata=res://*/Repositories.Model.ConfigurationModel.csdl|res://*/Repositories.Model.ConfigurationModel.ssdl|res://*/Repositories.Model.ConfigurationModel.msl;Provider=System.Data.SqlClient;Provider Connection String=&quot;Data Source=tdc2faec04v01\vins001;MultiSubnetFailover=True;Initial Catalog=TravelStore_PAYG_2711;Persist Security Info=True;Integrated Security=SSPI;Connect Timeout=200;App=EntityFramework&quot;"/>
+  <parameter name="FAE_ServiceBusConnectionString" value="Endpoint=sb://ftdc2sba355.devint2int.fae.tfl.local/FTPServiceBus,sb://ftdc2sba356.devint2int.fae.tfl.local/FTPServiceBus,sb://ftdc2sba357.devint2int.fae.tfl.local/FTPServiceBus;StsEndpoint=https://ftdc2sba355.devint2int.fae.tfl.local:9355/FTPServiceBus,https://ftdc2sba356.devint2int.fae.tfl.local:9355/FTPServiceBus,https://ftdc2sba357.devint2int.fae.tfl.local:9355/FTPServiceBus;RuntimePort=9354;ManagementPort=9355;SharedAccessKeyName=Client-FAE;SharedAccessKey=80TVmrv5A+7DyUSF9tD+F00wxQl6GLfnVPCpLKcTs7Y="/>
+
+  <parameter name="FAE_IntradayCacheName" value="FAEIntradayHA"/>
+  <parameter name="FAE_HealthCheckTimeOutInSeconds" value="5"/>
+  <parameter name="FAE_IntradayCacheServiceAccountType" value="DomainAccount"/>
+  <parameter name="FAE_IntradayCachePort" value="22233"/>
+  <parameter name="FAE_IntradayCacheHost01" value="FTDC2APF308"/>
+  <parameter name="FAE_IntradayCacheHost02" value="FTDC2APF309"/>
+  <parameter name="FAE_IntradayCacheHost03" value="FTDC2APF310"/>
+  <parameter name="FAE_IntradayCacheHost04" value="FTDC2APF308"/>
+  <parameter name="FAE_MjtServiceUrl" value="http://mds-mjt.fae.tfl.local"/>
+  <parameter name="FAE_MjtApiVersion" value="1"/>
+  <parameter name="FAE_FaresServiceUrl" value="http://mds-fares.fae.tfl.local"/>
+  <parameter name="FAE_FaresApiVersion" value="1"/>
+  <parameter name="FAE_AuxiliaryFaresServiceUrl" value="http://mds-fares.fae.tfl.local" />
+  <parameter name="FAE_AuxiliaryFaresApiVersion" value="2" />
+  
+  <parameter name="FAE_SettingsServiceUrl" value="http://masterdata-api.fae.tfl.local"/>
+  <parameter name="FAE_SettingsApiVersion" value="1"/>
+  
+  <parameter name="FAE_DistributorApiUrl" value="http://FTDC2HMEMC01:8888"/>
+  
+  <parameter name="FAE_PipelineHost01" value="FTDC2FAE320"/>  <parameter name="FAE_PipelinePort01" value="8000"/>
+  <parameter name="FAE_PipelineHost02" value="FTDC2FAE321"/>  <parameter name="FAE_PipelinePort02" value="8000"/>
+  <parameter name="FAE_PipelineHost03" value="FTDC2FAE323"/>  <parameter name="FAE_PipelinePort03" value="8000"/>
+  <parameter name="FAE_PipelineHost04" value="FTDC2FAE324"/>  <parameter name="FAE_PipelinePort04" value="8000"/>
+  <parameter name="FAE_PipelineHost05" value="FTDC2FAE325"/>  <parameter name="FAE_PipelinePort05" value="8000"/>
+  <parameter name="FAE_PipelineHost06" value="FTDC2FAE326"/>  <parameter name="FAE_PipelinePort06" value="8000"/>
+  <parameter name="FAE_PipelineHost07" value="FTDC2FAE327"/>  <parameter name="FAE_PipelinePort07" value="8000"/>
+  <parameter name="FAE_PipelineHost08" value="FTDC2FAE328"/>  <parameter name="FAE_PipelinePort08" value="8000"/>
+  <parameter name="FAE_PipelineHost09" value="FTDC2FAE329"/>  <parameter name="FAE_PipelinePort09" value="8000"/>
+  <parameter name="FAE_PipelineHost10" value="FTDC2FAE330"/>  <parameter name="FAE_PipelinePort10" value="8000"/>
+  <parameter name="FAE_PipelineHost11" value="FTDC2FAE331"/>  <parameter name="FAE_PipelinePort11" value="8000"/>
+  <parameter name="FAE_PipelineHost12" value="FTDC2FAE332"/>  <parameter name="FAE_PipelinePort12" value="8000"/>
+  <parameter name="FAE_PipelineHost13" value="FTDC2FAE333"/>  <parameter name="FAE_PipelinePort13" value="8000"/>
+  <parameter name="FAE_PipelineHost14" value="FTDC2FAE334"/>  <parameter name="FAE_PipelinePort14" value="8000"/>
+  <parameter name="FAE_PipelineHost15" value="FTDC2FAE335"/>  <parameter name="FAE_PipelinePort15" value="8000"/>
+  <parameter name="FAE_PipelineHost16" value="FTDC2FAE336"/>  <parameter name="FAE_PipelinePort16" value="8000"/>
+  <parameter name="FAE_PipelineHost17" value="FTDC2FAE337"/>  <parameter name="FAE_PipelinePort17" value="8000"/>
+  <parameter name="FAE_PipelineHost18" value="FTDC2FAE338"/>  <parameter name="FAE_PipelinePort18" value="8000"/>
+  
+  <parameter name="PARE_DatabaseConnectionString" value="Data Source=tdc2faec04v01\VINS001;Initial Catalog=OaeLoadTest_FAE;Persist Security Info=True;User ID=pare;Password=pare;Max Pool Size=150;Pooling=True;Connect Timeout=30;"/>
+</parameters>

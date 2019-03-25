@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="TestRig.SDR" Environment="TestRig" Config="TestRig.SDR" ProductGroup="FTP">
+
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+
+  <machine Id="3" Name="TS-DB1" ExternalIP="" DeploymentMachine="true">
+  <ServerRole Include="SQL.Extension.Events.Folder" Description="SQL Extension Events Output Folder Creation" />
+  <DatabaseRole Include="SQL.Extension.Events" Description="SQL Extension Events Deployment Role" TargetDatabase="Master" DatabaseInstance="Inst1"/>
+  </machine>
+  
+  <machine Id="1" Name="TS-CAS1"  ExternalIP="">
+    <ServerRole Include="IISSetup.CAS" Description="IIS" Groups="Always" />
+    <ServerRole Description="SDR Website" Groups="Always" Include="SDR.Website" />
+  </machine>
+  
+</configuration>

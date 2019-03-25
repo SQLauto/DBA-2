@@ -1,0 +1,767 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/CommonRoles">
+  <CommonRoles>
+    <!-- FAE Roles-->
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall FAE Controller" Include="FAE.Engine.Controller.Uninstall" Groups="FAE">
+      <ServiceDeploy Name="WixEngineControllerHostInstaller" Action="Uninstall">
+        <MSI>
+          <id>C71E9FB6-9B1A-4699-AF0D-8AA79D36411E</id>
+          <name>WixEngineControllerHostInstaller.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\FAE\Controller\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>EngineControllerHost.exe</Name>
+            <Credentials>FAEServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="EngineControllerHost.exe.config" target="\tfl\FAE\Controller" />
+          <config name="appSettings.config" target="\tfl\FAE\Controller" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall FAE Engine" Include="FAE.Engine.Service.Uninstall" Groups="FAE">
+      <ServiceDeploy Name="WixPipelineHostInstaller" Action="Uninstall">
+        <MSI>
+          <id>5AC80313-5DF4-47AC-AB27-A11CD559E5E9</id>
+          <name>WixPipelineHostInstaller.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\FAE\PipelineHost\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>PipelineHost.exe</Name>
+            <Credentials>FAEServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="PipelineHost.exe.config" target="\tfl\FAE\PipelineHost" />
+          <config name="pipelineOperations.config" target="\tfl\FAE\PipelineHost" />
+          <config name="Loaders.config" target="\tfl\FAE\PipelineHost" />
+          <config name="log4net.config" target="\tfl\FAE\PipelineHost" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall FAE Tap Importer" Include ="FAE.TapImporter.Service.Uninstall" Groups="FAE">
+      <ServiceDeploy Name="WixFaeTapImporterServiceInstaller" Action="Uninstall">
+        <MSI>
+          <id>E44AC874-8450-4A9D-9966-CDAB63B6D80C</id>
+          <name>WixFaeTapImporterServiceInstaller.msi</name>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\FAE\TapImporter\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>EngineControllerHost.exe</Name>
+            <Credentials>FAEServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="TapImporterService.exe.config" target="\tfl\FAE\TapImporter"/>
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.MsiDeploy" Description="Uninstall FAE Engine Controller Util" Include="FAE.EngineControllerUtil.Uninstall" Groups="FAE">
+      <MsiDeploy Name="WixEngineControllerUtilInstaller" Action="Uninstall">
+        <MSI>
+          <id>A5B9BA33-7D30-4F80-90BC-BE4AA184FB22</id>
+          <name>WixEngineControllerUtilInstaller.msi</name>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\FAE\Controller" />
+          </parameters>
+        </MSI>
+        <Configs>
+          <config name="EngineControllerUtil.exe.config" target="\tfl\FAE\Controller" />
+        </Configs>
+      </MsiDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.MsiDeploy" Description="Uninstall FAE EOD Task Schedule Installer" Include="FAE.EOD.TaskSchedule.Uninstall" Groups="FAE">
+      <MsiDeploy Name="WixEndOfDayScheduledTaskInstaller" Action="Uninstall">
+        <MSI>
+          <id>A5D1319F-BE0C-4342-B24B-21DABC4D65EF</id>
+          <name>WixEndOfDayScheduledTaskInstaller.msi</name>
+          <parameters>
+            <usernameparameter name="SERVICEACCOUNT" credential="FAEServiceAccount" />
+            <passwordparameter name="SERVICEPASSWORD"  credential="FAEServiceAccount" />
+            <parameter name="INSTALLLOCATION" value="d:\tfl\FAE\Controller" />
+          </parameters>
+        </MSI>
+      </MsiDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.MsiDeploy" Description="Uninstall FAE Travel Day Revision Exporter" Include="FAE.TravelDayRevisonExporter.Uninstall" Groups="FAE">
+      <MsiDeploy Name="WixTravelDayRevisionExporterInstaller" Action="Uninstall">
+        <MSI>
+          <id>68905117-D9E4-4740-BFC7-75C59469E145</id>
+          <name>WixTravelDayRevisionExporterInstaller.msi</name>
+          <parameters>
+            <usernameparameter name="SERVICEACCOUNT" credential="FAEServiceAccount" />
+            <passwordparameter name="SERVICEPASSWORD"  credential="FAEServiceAccount" />
+            <parameter name="INSTALLLOCATION" value="d:\tfl\FAE\Controller" />
+          </parameters>
+        </MSI>
+        <Configs>
+          <config name="Tfl.FT.Fae.TravelDayRevisionExporter.exe.config" target="\tfl\FAE\Controller" />
+        </Configs>
+      </MsiDeploy>
+    </ServerRole>
+
+    <!-- PARE Roles -->
+    <ServerRole Name="TFL.MsiDeploy" Description="Uninstall PareStatusListMaintenanceApplication" Include="UninstallPareStatusListMaintenanceApplication" Groups="PARE">
+      <MsiDeploy Name="PareStatusListMaintenance.Application.Installer" Action="Uninstall">
+        <MSI>
+          <id>CA04D21D-53C8-4252-801A-405510CD1CE6</id>
+          <name>PareStatusListMaintenance.Application.Installer.msi</name>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\PARE\StatusListMaintenance\" />
+          </parameters>
+        </MSI>
+        <Configs>
+          <config name="StatusListMaintenance.exe.config" target="\tfl\PARE\StatusListMaintenance" />
+        </Configs>
+      </MsiDeploy>
+    </ServerRole>
+    
+    <ServerRole Name="TFL.MsiDeploy" Description="Uninstall PareDebtRecoveryScheduler" Include="UninstallPareDebtRecoveryScheduler" Groups="PARE">
+      <MsiDeploy Name="PareDebtRecoverySchedulerInstaller" Action="Uninstall">
+        <MSI>
+          <id>C149F428-942C-4346-B788-A94D04B25CA6</id>
+          <name>PareDebtRecoverySchedulerInstaller.msi</name>
+          <parameters>
+            <usernameparameter name="SERVICEACCOUNT" credential="PAREServiceAccount" />
+            <passwordparameter name="SERVICEPASSWORD"  credential="PAREServiceAccount" />
+            <parameter name="INSTALLLOCATION" value="d:\tfl\PARE\DebtRecoveryApplication\" />
+          </parameters>
+        </MSI>
+      </MsiDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.MsiDeploy" Description="Uninstall PareVerifyTapDataApplication" Include="UninstallPareVerifyTapDataApplication" Groups="PARE">
+      <MsiDeploy Name="PareVerifyTapData.Application.Installer" Action="Uninstall">
+        <MSI>
+          <id>762C5B92-EA02-4A4E-84B9-78FA4431C04B</id>
+          <name>PareVerifyTapData.Application.Installer.msi</name>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\PARE\VerifyTapData\" />
+          </parameters>
+        </MSI>
+        <Configs>
+          <config name="VerifyTapData.exe.config" target="\tfl\PARE\VerifyTapData" />
+        </Configs>
+      </MsiDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.MsiDeploy" Description="Uninstall PareVerifyTapDataScheduler" Include="UninstallPareVerifyTapDataScheduler" Groups="PARE">
+      <MsiDeploy Name="PareVerifyTapDataSchedulerInstaller" Action="Uninstall">
+        <MSI>
+          <id>40D4B993-B497-4FDE-A6CB-82D971CC769C</id>
+          <name>PareVerifyTapDataSchedulerInstaller.msi</name>
+          <parameters>
+            <usernameparameter name="SERVICEACCOUNT" credential="PAREServiceAccount" />
+            <passwordparameter name="SERVICEPASSWORD"  credential="PAREServiceAccount" />
+            <parameter name="INSTALLLOCATION" value="d:\tfl\PARE\VerifyTapData\" />
+          </parameters>
+        </MSI>
+      </MsiDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.MsiDeploy" Description="Uninstall PareDreSummaryLedgerScheduler" Include="UninstallPareDreSummaryLedgerScheduler" Groups="PARE">
+      <MsiDeploy Name="PareDreSummaryLedgerSchedulerInstaller" Action="Uninstall">
+        <MSI>
+          <id>9B9060A4-A1D5-4C65-A494-3D960B2CAF9B</id>
+          <name>PareDreSummaryLedgerSchedulerInstaller.msi</name>
+          <parameters>
+            <usernameparameter name="SERVICEACCOUNT" credential="PAREServiceAccount" />
+            <passwordparameter name="SERVICEPASSWORD"  credential="PAREServiceAccount" />
+            <parameter name="INSTALLLOCATION" value="d:\tfl\PARE\SettlementApplication\" />
+          </parameters>
+        </MSI>
+      </MsiDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.MsiDeploy" Description="Uninstall PareFullStatusListApplication" Include="UninstallPareFullStatusListApplication" Groups="PARE">
+      <MsiDeploy Name="PareFullStatusList.Application.Installer" Action="Uninstall">
+        <MSI>
+          <id>BF4EBEF3-57EB-4920-BD07-EB722BBA4121</id>
+          <name>PareFullStatusList.Application.Installer.msi</name>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\PARE\PareRequestFullStatusList\" />
+          </parameters>
+        </MSI>
+        <Configs>
+          <config name="Pare.RequestFullStatusList.exe.config" target="\tfl\PARE\PareRequestFullStatusList" />
+        </Configs>
+      </MsiDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.MsiDeploy" Description="Uninstall PARERequestFullStatusListScheduler" Include="UninstallPARERequestFullStatusListScheduler" Groups="PARE">
+      <MsiDeploy Name="PARERequestFullStatusListSchedulerInstaller" Action="Uninstall">
+        <MSI>
+          <id>7470EE40-C38B-4432-AF7B-567B731ECCEC</id>
+          <name>PareFullStatusListSchedulerInstaller.msi</name>
+          <parameters>
+            <usernameparameter name="SERVICEACCOUNT" credential="PAREServiceAccount" />
+            <passwordparameter name="SERVICEPASSWORD"  credential="PAREServiceAccount" />
+            <parameter name="INSTALLLOCATION" value="d:\tfl\PARE\PareRequestFullStatusList\" />
+          </parameters>
+        </MSI>
+      </MsiDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.MsiDeploy" Description="Uninstall PareAuthorisationGatewayUtil" Include="UninstallPareAuthorisationGatewayUtil" Groups="PARE">
+      <MsiDeploy Name="PareAuthorisationGateway.Util.Installer" Action="Uninstall">
+        <MSI>
+          <id>3EC0FD44-57B9-4C86-B5DF-2938BFBFA879</id>
+          <name>PareAuthorisationGateway.Util.Installer.msi</name>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\PARE\AuthorisationGatewayUtil\" />
+          </parameters>
+        </MSI>
+        <Configs>
+          <config name="AuthorisationGatewayUtil.exe.config" target="\tfl\PARE\AuthorisationGatewayUtil" />
+        </Configs>
+      </MsiDeploy>
+    </ServerRole>
+    
+    <ServerRole Name="TFL.MsiDeploy" Description="Uninstall ParePostDeploymentUtil" Include="UninstallParePostDeploymentUtil" Groups="PARE">
+      <MsiDeploy Name="ParePostDeployment.Util.Installer" Action="Uninstall">
+        <MSI>
+          <id>EAC35600-4F33-4C3D-806C-452E3A247E6D</id>
+          <name>ParePostDeployment.Util.Installer.msi</name>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\PARE\PostDeploymentUtil\" />
+          </parameters>
+        </MSI>
+        <Configs>
+          <config name="PostDeploymentUtil.exe.config" target="\tfl\PARE\PostDeploymentUtil" />
+        </Configs>
+      </MsiDeploy>
+    </ServerRole>
+
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall PareAuthorisationGatewayService" Include="UninstallPareAuthorisationGatewayService" Groups="PARE">
+      <ServiceDeploy Name="PareAuthorisationGatewayServiceInstaller" Action="Uninstall">
+        <MSI>
+          <id>B6A6C29A-C102-47C6-B00D-1247F0A01B60</id>
+          <name>PareAuthorisationGatewayServiceInstaller.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\AuthorisationGatewayService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>AuthorisationGatewayService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Authorisation.GatewayService.exe.config" target="\tfl\PARE\AuthorisationGatewayService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall PareRefundFileService" Include="UninstallPareRefundFileService" Groups="PARE">
+      <ServiceDeploy Name="PareRefundFileServiceInstaller" Action="Uninstall">
+        <MSI>
+          <id>21193E20-00F1-4795-BA1E-37B8DF94C756</id>
+          <name>PareRefundFileServiceInstaller.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\RefundFileService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>RefundFileService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="RefundFileService.exe.config" target="\tfl\PARE\RefundFileService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall PareRevenueFileService" Include="UninstallPareRevenueFileService" Groups="PARE">
+      <ServiceDeploy Name="PareRevenueFileService" Action="Uninstall">
+        <MSI>
+          <id>F5EE1A78-5A36-4A65-A139-A75251AE2E4D</id>
+          <name>PareRevenueFileService.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\RevenueStatusListFileService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>RevenueStatusListFileService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="RevenueStatusListFileService.exe.config" target="\tfl\PARE\RevenueStatusListFileService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall PareSettlementValidationResultService" Include="UninstallPareSettlementValidationResultService" Groups="PARE">
+      <ServiceDeploy Name="PareSettlementValidationResultServiceInstaller" Action="Uninstall">
+        <MSI>
+          <id>B044554C-D6BD-4D76-A634-B44F35597CE3</id>
+          <name>PareSettlementValidationResultServiceInstaller.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\Pare.SettlementValidationResultFileProcessingService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>Pare.SettlementValidationResultFileProcessingService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Pare.SettlementValidationResultFileProcessingService.exe.config" target="\tfl\PARE\Pare.SettlementValidationResultFileProcessingService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall PareStatusListProcessor" Include="UninstallPareStatusListProcessor" Groups="PARE">
+      <ServiceDeploy Name="PareStatusListProcessorInstaller"  Action="Uninstall">
+        <MSI>
+          <id>C58010D3-C6F3-40EE-9DB9-CAFA993E2B3F</id>
+          <name>PareStatusListProcessorInstaller.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\Pare.StatusListService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>Pare.StatusListService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Pare.StatusListService.exe.config" target="\tfl\PARE\Pare.StatusListService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall PareTapFileService" Include="UninstallPareTapFileService" Groups="PARE">
+      <ServiceDeploy Name="PareTapFileServiceInstaller" Action="Uninstall">
+        <MSI>
+          <id>78DA0AD1-E73E-4596-BDEC-8AE327C8F72F</id>
+          <name>PareTapFileProcessor.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\TapFileProcessorService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>TapFileProcessorService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="TapFileProcessorService.exe.config" target="\tfl\PARE\TapFileProcessorService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall PareTravelDayRevisionService" Include="UninstallPareTravelDayRevisionService" Groups="PARE">
+      <ServiceDeploy Name="PareTravelDayRevisionService" Action="Uninstall">
+        <MSI>
+          <id>04DEAA4C-47A5-41A4-B709-B78060CAADFE</id>
+          <name>PareTravelDayRevisionService.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\TravelDayRevisionService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>TravelDayRevisionService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="TravelDayRevisionService.exe.config" target="\tfl\PARE\TravelDayRevisionService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall SettlementFileResponseService" Include="UninstallSettlementFileResponseService" Groups="PARE">
+      <ServiceDeploy Name="SettlementFileResponseServiceInstaller" Action="Uninstall">
+        <MSI>
+          <id>690FC18C-B49C-48FC-BB77-0C0F3ACBFD7F</id>
+          <name>SettlementFileResponseServiceInstaller.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\SettlementFileResponseService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>SettlementFileResponseService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="SettlementFileResponseService.exe.config" target="\tfl\PARE\SettlementFileResponseService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall PareStatusListFileResponseService" Include="UninstallPareStatusListFileResponseService" Groups="PARE">
+      <ServiceDeploy Name="PareStatusListFileResponseServiceInstaller" Action="Uninstall">
+        <MSI>
+          <id>1B1FBA0A-6B50-42C3-9D7C-E1937A68E851</id>
+          <name>PareStatusListFileResponseServiceInstaller.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\ResponseFileProcessorService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>ResponseFileProcessorService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="ResponseFileProcessorService.exe.config" target="\tfl\PARE\ResponseFileProcessorService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall PareDirectPaymentConfirmationService" Include="UninstallPareDirectPaymentConfirmationService" Groups="PARE">
+      <ServiceDeploy Name="PareDirectPaymentConfirmationServiceInstaller" Action="Uninstall">
+        <MSI>
+          <id>3BDA80DB-01FC-4347-A132-D6811B6CC4CD</id>
+          <name>PareDirectPaymentConfirmationServiceInstaller.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\Pare.DirectPaymentService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>Pare.DirectPaymentService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Pare.DirectPaymentService.exe.config" target="\tfl\PARE\Pare.DirectPaymentService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall PareOysterTapImporterService" Include="UninstallPareOysterTapImporterService" Groups="PARE">
+      <ServiceDeploy Name="PareOysterTapImporterService" Action="Uninstall">
+        <MSI>
+          <id>CBB7C1A0-907F-47E9-9C62-126CBE3F18BB</id>
+          <name>PareOysterTapImporterService.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\OysterTapImporterService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>OysterTapImporterService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="OysterTapImporterService.exe.config" target="\tfl\PARE\OysterTapImporterService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+
+    <!-- SSO Roles -->
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall Customer Change NotificationWorker" Include="Customer.Change.NotificationWorker.Uninstall" Groups="SSO">
+      <ServiceDeploy Name="CustomerChangeNotificationWorker" Action="Uninstall">
+        <MSI>
+          <name>Customer.Change.NotificationWorker.msi</name>
+          <UpgradeCode>54982507-14AE-4F38-B887-605576B58C09</UpgradeCode>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="D:\TFL\SSO\Customer.Change.NotificationWorker\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>MCSS FTP Notification Worker</Name>
+            <Credentials>SSOServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Customer.Change.NotificationWorker.exe.config" target="\TFL\SSO\Customer.Change.NotificationWorker" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall Customer Change NotificationWorker Oyster" Include="Customer.Change.NotificationWorker.Oyster.Uninstall" Groups="SSO">
+      <ServiceDeploy Name="CustomerChangeNotificationWorkerOyster" Action="Uninstall">
+        <MSI>
+          <name>Customer.Change.NotificationWorker.Oyster.msi</name>
+          <UpgradeCode>FFCEF314-3E2D-427B-B654-7E41EF87DB02</UpgradeCode>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="D:\TFL\SSO\Customer.Change.NotificationWorkerOyster\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>MCSS Oyster Notification Worker</Name>
+            <Credentials>SSOServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Customer.Change.NotificationWorker.exe.config" target="\TFL\SSO\Customer.Change.NotificationWorkerOyster" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall Customer Change NotificationWorker Tavel Alerts" Include="Customer.Change.NotificationWorker.TravelAlerts.Uninstall" Groups="SSO">
+      <ServiceDeploy Name="CustomerChangeNotificationWorkerTravelAlerts" Action="Uninstall">
+        <MSI>
+          <name>Customer.Change.NotificationWorker.TravelAlerts.msi</name>
+          <UpgradeCode>6C2B39B5-016A-4F7B-A035-311E186EE75E</UpgradeCode>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="D:\TFL\SSO\Customer.Change.NotificationWorkerTravelAlerts\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>MCSS TravelAlerts Notification Worker</Name>
+            <Credentials>SSOServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Customer.Change.NotificationWorker.exe.config" target="\TFL\SSO\Customer.Change.NotificationWorkerTravelAlerts" />
+        </Configs>
+        <TestInfo DisableTests="true" />
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall Customer Change QueueManager" Include="Customer.Change.QueueManager.Uninstall" Groups="SSO">
+      <ServiceDeploy Name="CustomerChangeQueueManager" Action="Uninstall">
+        <MSI>
+          <name>Customer.Change.QueueManager.msi</name>
+          <UpgradeCode>9EF50B19-B32B-491A-8E3D-1FD2BC4E8D44</UpgradeCode>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="D:\TFL\SSO\Customer.Change.QueueManager\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>MCSS Queue Manager</Name>
+            <Credentials>SSOServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Customer.Change.QueueManager.exe.config" target="\TFL\SSO\Customer.Change.QueueManager" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.MsiDeploy" Description="Uninstall Marketing Preferences Exporter" Include="Customer.Change.MarketingPreferences.Exporter.Uninstall" Groups="SSO">
+      <MsiDeploy Name="ExporterInstaller" Action="Uninstall">
+        <MSI>
+          <name>Customer.Change.MarketingPreferencesExporter.msi</name>
+          <UpgradeCode>143963C2-78FE-471F-9F50-B96EE40446B3</UpgradeCode>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="D:\TFL\SSO\Customer.Change.MarketingPreferences.Exporter\" />
+          </parameters>
+        </MSI>
+        <Configs>
+          <config name="Customer.Change.MarketingPreferencesExporter.exe.config" target="\TFL\SSO\Customer.Change.MarketingPreferences.Exporter" />
+        </Configs>
+      </MsiDeploy>
+    </ServerRole>
+
+    <!--FTM Roles-->
+    <ServerRole Name="TFL.ServiceDeploy" Description="FTM (FTP-PCS)" Include="FTM.Service.Uninstall" Groups="FTM">
+      <ServiceDeploy Name="FileTransferManagerService" Action="Uninstall">
+        <MSI>
+          <name>FileTransferManager.Service.Installer.msi</name>
+          <UpgradeCode>EA7E3971-36F4-4262-9EC9-2A33754166C2</UpgradeCode>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\FTM\FileTransferManager.Service\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>FileTransferManager Service</Name>
+            <Credentials>FTMServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Tfl.FileTransferManagerService.exe.config" target="\tfl\FTM\FileTransferManager.Service"/>
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+
+    <!--Notifications -->
+    <ServerRole Name="TFL.ServiceDeploy"  Description="Send Email Uninstall" Include="SendEmail.Uninstall" Groups="Notifications">
+      <ServiceDeploy Name="SendEmailInstaller" Action="Uninstall">
+        <MSI>
+          <id>0fa3aa49-c8e2-4d6f-980c-0038b944cdef</id>
+          <name>SendEmail.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\Notifications\SendMailService" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>SendEmailService.exe</Name>
+            <Credentials>NotificationServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="SendEmailService.exe.config" target="\tfl\Notifications\SendMailService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy"  Description="Uninstall Notifications File Processor" Include="Notifications.FileProcessor.Uninstall" Groups="Notifications">
+      <ServiceDeploy Name="NotificationsFileProcessor" Action="Uninstall">
+        <MSI>
+          <id>7FD16FA1-C1FC-4FFD-B511-9640F1F86ED8</id>
+          <name>Tfl.Ft.Notifications.FileProcessor.Installer.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\Notifications\FileProcessorService" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>Tfl.Ft.Notifications.FileProcessor.WindowsService.exe</Name>
+            <Credentials>NotificationServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Tfl.Ft.Notifications.FileProcessor.WindowsService.exe.config" target="\tfl\Notifications\FileProcessorService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.MsiDeploy"  Description="Uninstall Payment Card Expiry Extract Task" Include="PaymentCardExpiryExtractTool.Install.Uninstall" Groups="Notifications">
+      <MsiDeploy Name="PaymentCardExpiryInstaller" Action="Uninstall">
+        <MSI>
+          <id>1976C520-859D-43ED-8D91-7DFEF17C948E</id>
+          <name>Tfl.Ft.PaymentCardExpiry.Installer.msi</name>
+          <UpgradeCode>E03BFF93-87A9-4048-8836-2CBA3CE73359</UpgradeCode>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\Notifications\PaymentCardExpiryExtract" />
+          </parameters>
+        </MSI>
+        <Configs>
+          <config name="Tfl.Ft.PaymentCardExpiry.Console.exe.config" target="\tfl\Notifications\PaymentCardExpiryExtract" />
+        </Configs>
+      </MsiDeploy>
+    </ServerRole>
+   
+    <!-- CSC SDM Service -->
+    <ServerRole Name="TFL.ServiceDeploy"  Description="CSC.SDM.ControllerService.Uninstall" Include="CSC.SDM.ControllerService.Uninstall" Groups="SDM">
+      <ServiceDeploy Name="CSCSDMControllerService" Action="Uninstall">
+        <MSI>
+          <id>B7A394D4-D47E-404C-9AD9-C8FFC2D7845D</id>
+          <name>CSC.SDM.ControllerService.Installer.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\SDM\CSCSDMControllerService" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>ControllerService</Name>
+            <Credentials>SDMServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="ControllerService.exe.config" target="\tfl\SDM\CSCSDMControllerService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+
+    <!-- MasterData -->
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall MasterData MJT service" Include="MasterData.MJTService.Uninstall" Groups="MasterData">
+      <ServiceDeploy Name="MasterData.MaximumJourneyTimeService.Installer" Action="Uninstall">
+        <MSI>
+          <id>69f3db10-0f4a-4105-a4f0-80d1d41f99af</id>
+          <name>MasterData.MaximumJourneyTimeService.Installer.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\MasterData\MaximumJourneyTimeService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>MasterData.MaximumJourneyTimeService.exe</Name>
+            <Credentials>MasterDataServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="MasterData.MaximumJourneyTimeService.exe.config" target="\tfl\MasterData\MaximumJourneyTimeService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall MasterData Fares service" Include="MasterData.FaresService.Uninstall" Groups="MasterData">
+      <ServiceDeploy Name="MasterData.FareService.Installer" Action="Uninstall">
+        <MSI>
+          <id>69327282-eae0-4078-a9aa-efe950f8bd7d</id>
+          <name>MasterData.FareService.Installer.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\MasterData\FareService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>MasterData.FareService.exe</Name>
+            <Credentials>MasterDataServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="MasterData.FareService.exe.config" target="\tfl\MasterData\FareService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+
+    <!--OyBO-->
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall Oyster Back Office TFP Service" Include="OyBO.TFP.Uninstall" Groups="OyBO">
+      <ServiceDeploy Name="OyBO.TFP.Installer" Action="Uninstall">
+        <MSI>
+          <id>6FDF33BF-C73D-4091-BBD5-1891A963BA6B</id>
+          <name>Tfl.Ft.OyBo.FileProcessor.Host.WixInstaller.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\OTFP\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>Tfl.Ft.OyBo.FileProcessor.Host.exe</Name>
+            <Credentials>OyBOServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Tfl.Ft.OyBo.FileProcessor.Host.exe.config" target="\tfl\OTFP" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+
+    <ServerRole Name="TFL.ServiceDeploy" Description="Uninstall Oyster Back Office TFP Azure Mobile Uploader Service" Include="OyBO.AzureMobileUploader.Uninstall" Groups="OyBO">
+      <ServiceDeploy Name="OyBO.AzureMobileUploader.Installer" Action="Uninstall">
+        <MSI>
+          <id>E91CA7BD-02EA-4801-8AC5-7C901FD4BDDA</id>
+          <name>Tfl.Ft.OyBo.AzureMobileUploader.Host.WixInstaller.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\AzureMobileUploader\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>Tfl.Ft.OyBo.AzureMobileUploader.Host.exe</Name>
+            <Credentials>OyBOExternalServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Tfl.Ft.OyBo.AzureMobileUploader.Host.exe.config" target="\tfl\AzureMobileUploader" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+
+	<ServerRole Name="TFL.ServiceDeploy" Description="Uninstall Oyster Back Office File Cleanup Service" Include="OyBO.FileCleanup.Uninstall" Groups="OyBO">
+      <ServiceDeploy Name="OyBO.FileCleanup.Installer" Action="Uninstall">
+        <MSI>
+          <id>C0E6E4BD-B82B-4E6C-8D75-46F186A2DAFA</id>
+          <name>Tfl.Ft.OyBo.FileSystemCleaner.Host.WixInstaller.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\FileCleanup\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>Tfl.Ft.OyBo.FileSystemCleaner.Host.exe</Name>
+            <Credentials>OyBOExternalServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Tfl.Ft.OyBo.FileSystemCleaner.Host.exe.config" target="\tfl\FileCleanup" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+
+  </CommonRoles>
+</configuration>

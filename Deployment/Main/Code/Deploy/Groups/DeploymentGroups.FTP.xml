@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DeploymentGroups>
+	<Group>CASC</Group>
+	<Group>FAE</Group>
+	<Group>FAEPipeline</Group>
+	<Group>FAEController</Group>
+	<Group>FAEPipelineLegacy</Group>
+	<Group>FAEControllerLegacy</Group>
+	<Group>FAETapImporter</Group>
+	<Group>FAEDisruptr</Group>
+	<Group>OAE</Group>
+	<Group>OAEPipeline</Group>
+	<Group>OAEController</Group>
+	<Group>OAETapImporter</Group>
+	<Group>PARE</Group>
+	<Group>Notifications</Group>
+  <Group>RAE</Group>
+	<Group>RAEOyster</Group>
+	<Group>RAECPC</Group>
+	<Group>SDM</Group>
+	<Group>CommonServices</Group>
+	<Group>RSP</Group>
+	<Group>FTM</Group>
+	<Group>MasterData</Group>
+	<Group>TJSDistributor</Group>
+  <Group>TJSDistributorOyster</Group>
+  <Group>TJSDistributorCPC</Group>
+	<Group>OyBO</Group>
+  <Group>OTFP</Group>
+  <Group>Refunds</Group>
+  <Group>OCAE</Group>
+	<Group>FG</Group>
+	<Group>Database</Group>
+	<Group>SSO</Group>
+	<Group>DBA</Group>
+  <Group>CPC</Group>
+	<Group>Oyster</Group>
+	<Group>NotificationWorker</Group>
+	<Group>QueueManager</Group>
+	<Group>OysterNotificationWorker</Group>
+	<Group>TravelAlertsNotificationWorker</Group>
+	<Group>SingleSignOnServices</Group>
+	<Group>CustomerServices</Group>
+	<Group>ValidationServices</Group>
+</DeploymentGroups>

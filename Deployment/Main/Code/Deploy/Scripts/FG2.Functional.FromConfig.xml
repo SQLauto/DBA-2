@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="TestRig" Environment="TestRig" Config="TestRig.FG" ProductGroup="FTP">  
+  <machine Id="3" Name="TS-CAS1"  ExternalIP="">
+	  <ServerRole Include="IISSetup.CAS" Description="IIS" Groups="FG" />    
+    <ServerRole Description="FG2 Website" Groups="FG">
+      <WebDeploy Name="FG2" RegistryKey="Software\TfL\FT\FG" AssemblyToVersionFrom="BusinessLayer.dll">
+        <AppPool>
+          <Name>CDefault Web Site</Name>
+          <ServiceAccount>ApplicationPoolIdentity</ServiceAccount>
+        </AppPool>
+        <Site>
+          <Name>Default Web Site</Name>
+          <Port>80</Port>
+          <PhysicalPath>c:\inetpub\wwwroot\</PhysicalPath>
+          <!--<ApplicationPool>ASP.NET v4.0</ApplicationPool>-->
+        </Site>
+        <Package>
+          <Name>WebApplication</Name>
+        </Package>
+        <TestInfo>
+          <EndPoint>RailScenario</EndPoint>
+        </TestInfo>
+      </WebDeploy>
+    </ServerRole>
+  </machine>
+  
+  <machine Id="4" Name="TS-DB1" ExternalIP="" DeploymentMachine="true"> 
+    <DatabaseRole Description="FG2 Database" Groups="FG">
+      <TargetDatabase>FaresGenerator</TargetDatabase>
+      <DatabaseInstance>Inst1</DatabaseInstance>
+      <PatchDeployment>Scripts\Add Data\FG2.addData.sql</PatchDeployment>
+      <TestInfo UserName="fae" Password="fae">
+        <Sql>
+          IF (SELECT  count(*) FROM $TargetDatabase.information_schema.tables WHERE table_schema='dbo' and table_name='Charge')=0
+          THROW 51000, 'Table [$TargetDatabase].[dbo].[Charge] does not exist', 1;
+        </Sql>
+      </TestInfo>
+    </DatabaseRole>
+  </machine>
+</configuration>

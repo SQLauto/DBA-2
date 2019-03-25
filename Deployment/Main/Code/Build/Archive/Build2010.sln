@@ -1,0 +1,115 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{89111766-4F7D-4DF0-9918-F6E808912264}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit Tests", "Unit Tests", "{9504FDCD-7050-4A1F-B8F1-FDF206235390}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomBuildActivities", "BuildTasks\CustomBuildActivities.csproj", "{A3E7ADFE-9898-48D8-AB3C-FE402DA572BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template", "Template\Template.csproj", "{FA21AE2C-C1F9-46E4-9BB7-20E9B5AA6A18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TfsBuild.Versioning.Activities", "TfsBuild.Versioning.Activities\TfsBuild.Versioning.Activities\TfsBuild.Versioning.Activities.csproj", "{F44C079C-A474-47B9-8874-4FB835A425DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deployment.Utils", "..\Deployment.Utils\Deployment.Utils.csproj", "{32447D46-4963-4315-BB61-5F7D6E783B94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomBuildActivities.Tests", "BuildTasks.Tests\CustomBuildActivities.Tests.csproj", "{C356DF32-6FF5-472A-B3C8-B8319B53ED59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TfsBuild.Versioning.Activities.Tests", "TfsBuild.Versioning.Activities\TfsBuild.Versioning.Activities.Tests\TfsBuild.Versioning.Activities.Tests.csproj", "{13254591-73C3-4121-92EB-7F64584C0788}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TfsBuild.Versioning.Activities.Tests.Stubs", "TfsBuild.Versioning.Activities\Stubs\TfsBuild.Versioning.Activities.Tests.Stubs.csproj", "{B65172D4-62BB-4601-853A-C830593183FF}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 8
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://tfs:8080/tfs/ftpdev
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = BuildTasks\\CustomBuildActivities.csproj
+		SccProjectName1 = BuildTasks
+		SccLocalPath1 = BuildTasks
+		SccProjectUniqueName2 = Template\\Template.csproj
+		SccProjectName2 = Template
+		SccLocalPath2 = Template
+		SccProjectUniqueName3 = TfsBuild.Versioning.Activities\\TfsBuild.Versioning.Activities\\TfsBuild.Versioning.Activities.csproj
+		SccProjectName3 = TfsBuild.Versioning.Activities/TfsBuild.Versioning.Activities
+		SccLocalPath3 = TfsBuild.Versioning.Activities\\TfsBuild.Versioning.Activities
+		SccProjectUniqueName4 = ..\\Deployment.Utils\\Deployment.Utils.csproj
+		SccProjectName4 = ../Deployment.Utils
+		SccLocalPath4 = ..\\Deployment.Utils
+		SccProjectUniqueName5 = BuildTasks.Tests\\CustomBuildActivities.Tests.csproj
+		SccProjectTopLevelParentUniqueName5 = Build2010.sln
+		SccProjectName5 = BuildTasks.Tests
+		SccLocalPath5 = BuildTasks.Tests
+		SccProjectUniqueName6 = TfsBuild.Versioning.Activities\\TfsBuild.Versioning.Activities.Tests\\TfsBuild.Versioning.Activities.Tests.csproj
+		SccProjectTopLevelParentUniqueName6 = Build2010.sln
+		SccProjectName6 = TfsBuild.Versioning.Activities/TfsBuild.Versioning.Activities.Tests
+		SccLocalPath6 = TfsBuild.Versioning.Activities\\TfsBuild.Versioning.Activities.Tests
+		SccProjectUniqueName7 = TfsBuild.Versioning.Activities\\Stubs\\TfsBuild.Versioning.Activities.Tests.Stubs.csproj
+		SccProjectTopLevelParentUniqueName7 = Build2010.sln
+		SccProjectName7 = TfsBuild.Versioning.Activities/Stubs
+		SccLocalPath7 = TfsBuild.Versioning.Activities\\Stubs
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A3E7ADFE-9898-48D8-AB3C-FE402DA572BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3E7ADFE-9898-48D8-AB3C-FE402DA572BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3E7ADFE-9898-48D8-AB3C-FE402DA572BA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A3E7ADFE-9898-48D8-AB3C-FE402DA572BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3E7ADFE-9898-48D8-AB3C-FE402DA572BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3E7ADFE-9898-48D8-AB3C-FE402DA572BA}.Release|x64.ActiveCfg = Release|Any CPU
+		{FA21AE2C-C1F9-46E4-9BB7-20E9B5AA6A18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA21AE2C-C1F9-46E4-9BB7-20E9B5AA6A18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA21AE2C-C1F9-46E4-9BB7-20E9B5AA6A18}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FA21AE2C-C1F9-46E4-9BB7-20E9B5AA6A18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA21AE2C-C1F9-46E4-9BB7-20E9B5AA6A18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA21AE2C-C1F9-46E4-9BB7-20E9B5AA6A18}.Release|x64.ActiveCfg = Release|Any CPU
+		{F44C079C-A474-47B9-8874-4FB835A425DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F44C079C-A474-47B9-8874-4FB835A425DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F44C079C-A474-47B9-8874-4FB835A425DA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F44C079C-A474-47B9-8874-4FB835A425DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F44C079C-A474-47B9-8874-4FB835A425DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F44C079C-A474-47B9-8874-4FB835A425DA}.Release|x64.ActiveCfg = Release|Any CPU
+		{32447D46-4963-4315-BB61-5F7D6E783B94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32447D46-4963-4315-BB61-5F7D6E783B94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32447D46-4963-4315-BB61-5F7D6E783B94}.Debug|x64.ActiveCfg = Debug|x64
+		{32447D46-4963-4315-BB61-5F7D6E783B94}.Debug|x64.Build.0 = Debug|x64
+		{32447D46-4963-4315-BB61-5F7D6E783B94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32447D46-4963-4315-BB61-5F7D6E783B94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32447D46-4963-4315-BB61-5F7D6E783B94}.Release|x64.ActiveCfg = Release|x64
+		{32447D46-4963-4315-BB61-5F7D6E783B94}.Release|x64.Build.0 = Release|x64
+		{C356DF32-6FF5-472A-B3C8-B8319B53ED59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C356DF32-6FF5-472A-B3C8-B8319B53ED59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C356DF32-6FF5-472A-B3C8-B8319B53ED59}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C356DF32-6FF5-472A-B3C8-B8319B53ED59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C356DF32-6FF5-472A-B3C8-B8319B53ED59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C356DF32-6FF5-472A-B3C8-B8319B53ED59}.Release|x64.ActiveCfg = Release|Any CPU
+		{13254591-73C3-4121-92EB-7F64584C0788}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13254591-73C3-4121-92EB-7F64584C0788}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13254591-73C3-4121-92EB-7F64584C0788}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{13254591-73C3-4121-92EB-7F64584C0788}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13254591-73C3-4121-92EB-7F64584C0788}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13254591-73C3-4121-92EB-7F64584C0788}.Release|x64.ActiveCfg = Release|Any CPU
+		{B65172D4-62BB-4601-853A-C830593183FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B65172D4-62BB-4601-853A-C830593183FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B65172D4-62BB-4601-853A-C830593183FF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B65172D4-62BB-4601-853A-C830593183FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B65172D4-62BB-4601-853A-C830593183FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B65172D4-62BB-4601-853A-C830593183FF}.Release|x64.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C356DF32-6FF5-472A-B3C8-B8319B53ED59} = {9504FDCD-7050-4A1F-B8F1-FDF206235390}
+		{13254591-73C3-4121-92EB-7F64584C0788} = {9504FDCD-7050-4A1F-B8F1-FDF206235390}
+		{B65172D4-62BB-4601-853A-C830593183FF} = {9504FDCD-7050-4A1F-B8F1-FDF206235390}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,744 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://tfl.gov.uk/CommonRoles"
+            xmlns="http://tfl.gov.uk/CommonRoles"
+            elementFormDefault="qualified">
+      <xs:simpleType name="dayOfWeek">
+       <xs:restriction base="xs:string">
+        <xs:enumeration value="Sunday" />
+        <xs:enumeration value="Monday" />
+        <xs:enumeration value="Tuesday" />
+        <xs:enumeration value="Wednesday" />
+        <xs:enumeration value="Thursday" />
+        <xs:enumeration value="Friday" />
+        <xs:enumeration value="Saturday" />
+      </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="monthOfYear">
+       <xs:restriction base="xs:string">
+        <xs:enumeration value="January" />
+        <xs:enumeration value="February" />
+        <xs:enumeration value="March" />
+        <xs:enumeration value="April" />
+        <xs:enumeration value="May" />
+        <xs:enumeration value="June" />
+        <xs:enumeration value="July" />
+        <xs:enumeration value="August" />
+        <xs:enumeration value="September" />
+        <xs:enumeration value="October" />
+        <xs:enumeration value="November" />
+        <xs:enumeration value="December" />
+      </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="action">
+       <xs:restriction base="xs:string">
+        <xs:enumeration value="Install" />
+        <xs:enumeration value="Uninstall" />
+        <xs:enumeration value="Reinstall" />
+      </xs:restriction>
+    </xs:simpleType>
+  <xs:simpleType name="startupType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Automatic" />
+      <xs:enumeration value="Disabled" />
+      <xs:enumeration value="Manual" />
+      <xs:enumeration value="AutomaticDelayed" />
+    </xs:restriction>
+  </xs:simpleType>
+    <xs:simpleType name="fileShareAction">
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="Create" />
+        <xs:enumeration value="Change" />
+        <xs:enumeration value="Remove" />
+      </xs:restriction>
+    </xs:simpleType>
+  <xs:simpleType name="WindowsServiceState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Running" />
+      <xs:enumeration value="Stopped" />
+      <xs:enumeration value="Paused" />
+      <xs:enumeration value="Disabled" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="WindowsServiceAction">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Fail" />
+      <xs:enumeration value="Fix" />
+      <xs:enumeration value="Ignore" />
+    </xs:restriction>
+  </xs:simpleType>
+    <xs:element name="StartDate" type="xs:string" />
+    <xs:element name="StartTime" type="xs:time" />
+    <xs:element name="RepeatEvery" type="xs:time" />
+    <xs:element name="RepeatDuration" type="xs:time" />
+    <xs:element name="TestInfo">
+      <xs:complexType>
+        <xs:attribute name="DisableTests" type="xs:boolean" use="optional" />
+        <xs:attribute name="VerificationWaitTimeMilliSeconds" type="xs:int" use="optional" />
+      </xs:complexType>
+    </xs:element>
+    <xs:complexType name="ServerRoleType" mixed="true">
+      <xs:sequence minOccurs="0">
+        <xs:element minOccurs="0" name="ServiceDeploy">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="1" maxOccurs ="1" name="MSI">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="0" name="id" type="xs:string" />
+                    <xs:element minOccurs="1" name="name" type="xs:string" />
+                    <xs:element minOccurs="0" name="UpgradeCode" type="xs:string" />
+                    <xs:element minOccurs="0" maxOccurs ="1" name="parameters">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element minOccurs="0" maxOccurs ="unbounded" name="usernameparameter">
+                            <xs:complexType>
+                              <xs:attribute name="name" type="xs:string" use="required" />
+                              <xs:attribute name="credential" type="xs:string" use="required" />
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs ="unbounded" name="passwordparameter">
+                            <xs:complexType>
+                              <xs:attribute name="name" type="xs:string" use="required" />
+                              <xs:attribute name="credential" type="xs:string" use="required" />
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs ="unbounded" name="parameter">
+                            <xs:complexType>
+                              <xs:attribute name="name" type="xs:string" use="required" />
+                              <xs:attribute name="value" type="xs:string" use="required" />
+                              <xs:attribute name="type" type="xs:string" use="optional" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs ="1" name="dlls">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element minOccurs="0" maxOccurs ="unbounded" name="dll">
+                            <xs:complexType>
+                              <xs:attribute name="name" type="xs:string" use="required" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs ="1" name="Services">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs ="unbounded" name="Service">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Name" type="xs:string" />
+                          <!--Current name is used when renaming a service. The old(current) name should be added here, and the new name added to name-->
+                          <!--Needs to be used in conjuction with an MSI Action of Reinstall-->
+                          <xs:element minOccurs="0" name="CurrentName" type="xs:string" />
+                          <xs:element minOccurs="0" name="Credentials" type="xs:string"  />
+                          <xs:element minOccurs="0" name="ClusterInfo">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="ResourceName" type="xs:string" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs="unbounded" name="DependentOnService">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <!--Service Name required single use-->
+                                <xs:element minOccurs="1" maxOccurs ="1" name="Name" type="xs:string" />
+                                <!--Target Machines One or More Instances-->
+                                <xs:element minOccurs="1" maxOccurs="unbounded" name="TargetMachine" type="xs:string" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="StartUpType" type="startupType" default="Manual" use="optional" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="1" maxOccurs ="1" name="Configs">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs ="unbounded" name="config">
+                      <xs:complexType>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                        <xs:attribute name="target" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element ref="TestInfo" minOccurs="0" maxOccurs ="1" />
+            </xs:sequence>
+            <xs:attribute name="Name" type="xs:string" use="required" />
+            <xs:attribute name="Action" type="action" default="Install" use="optional" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" name="MsiDeploy">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="1" name="MSI">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="0" name="id" type="xs:string" />
+                    <xs:element minOccurs="1" name="name" type="xs:string" />
+                    <xs:element minOccurs="0" name="UpgradeCode" type="xs:string" />
+                    <xs:element minOccurs="0" maxOccurs ="1" name="parameters">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element minOccurs="0" maxOccurs ="unbounded" name="usernameparameter">
+                            <xs:complexType>
+                              <xs:attribute name="name" type="xs:string" use="required" />
+                              <xs:attribute name="credential" type="xs:string" use="required" />
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs ="unbounded" name="passwordparameter">
+                            <xs:complexType>
+                              <xs:attribute name="name" type="xs:string" use="required" />
+                              <xs:attribute name="credential" type="xs:string" use="required" />
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element minOccurs="0" maxOccurs ="unbounded" name="parameter">
+                            <xs:complexType>
+                              <xs:attribute name="name" type="xs:string" use="required" />
+                              <xs:attribute name="value" type="xs:string" use="required" />
+                              <xs:attribute name="type" type="xs:string" use="optional" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs ="1" name="dlls">
+                        <xs:complexType>
+                          <xs:sequence>
+                            <xs:element minOccurs="0" maxOccurs ="unbounded" name="dll">
+                              <xs:complexType>
+                                <xs:attribute name="name" type="xs:string" use="required" />
+                              </xs:complexType>
+                            </xs:element>
+                          </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs ="1" name="Configs">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs ="unbounded" name="config">
+                      <xs:complexType>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                        <xs:attribute name="target" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element ref="TestInfo"  minOccurs="0" maxOccurs ="1" />
+            </xs:sequence>
+            <xs:attribute name="Name" type="xs:string" use="required" />
+            <xs:attribute name ="Action" type="action" use="optional" default="Install" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="1" name="EventLogDeploy">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="1" maxOccurs="1" name="Sources">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="1" maxOccurs="unbounded" name="Source">
+                      <xs:complexType>
+                        <xs:attribute name="Name" type="xs:string" use ="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="EventLogName" type="xs:string" use ="required" />
+            <xs:attribute name="MaxLogSizeKiloBytes" type="xs:int" default="1024" />
+            <xs:attribute name="DisablePostDeploymentTests" type="xs:boolean" use="optional" />
+            <xs:attribute name ="Action" type="xs:string" use="optional" default="Install" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="1" name="SsisSetup">
+          <xs:complexType>
+            <xs:attribute name="SSISDBInstance" type="xs:string" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" name="SsisDeploy">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="1" name="SSISEnvironment" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="SSISFolder" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="DatabaseInstance" type="xs:string" />
+            <xs:element minOccurs="1" maxOccurs="1" name="DeployMode" type="xs:string" />
+            <!-- SQL | DTS | File | WIZ-->
+              <xs:element minOccurs="0" maxOccurs="1" name="DestinationFolder" type="xs:string" />
+              <xs:element minOccurs="1" maxOccurs="1" name="Project">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="1" maxOccurs="1" name="Name" />
+                    <xs:element minOccurs="1" maxOccurs="1" name="SsisFile" />
+                    <xs:element minOccurs="1" maxOccurs="1" name="Type" />
+                    <xs:element minOccurs="0" maxOccurs="1" name="Packages">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element minOccurs="1" maxOccurs="unbounded" name="Package">
+                            <xs:complexType>
+                              <xs:attribute name="Name" type="xs:string" use="required" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="1" name="parameters">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element minOccurs="0" maxOccurs="unbounded" name="parameter">
+                            <xs:complexType>
+                              <xs:attribute name="name" type="xs:string" use="required" />
+                              <xs:attribute name="value" type="xs:string" use="required" />
+                              <xs:attribute name="type" type="xs:string" use="required" />
+                              <xs:attribute name="description" type="xs:string" use="optional" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="TestInfo">
+                <xs:complexType>
+                    <xs:attribute name="SqlUserName" type="xs:string" use="optional" />
+                    <xs:attribute name="SqlPassword" type="xs:string" use="optional" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="Name" type="xs:string" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" name="SMTPDeploy">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="1" maxOccurs="1" name="DropFolderLocation" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="ForwardingMailSMTP" type="xs:string" />
+             </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" name="WebDeploy">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs ="1" name="AppPool">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs ="1" name="Name" type="xs:string" />
+                    <xs:element minOccurs ="0" name="ServiceAccount" type="xs:string" />
+                    <xs:element minOccurs ="0" name="IdleTimeout" type="xs:int" />
+                    <xs:element minOccurs ="0" name="RecycleLogEvent" type="xs:string" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs ="1" name="Site">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs ="1" name="Name" type="xs:string" />
+                    <xs:element minOccurs ="1" name="Port" type="xs:unsignedShort" />
+                    <xs:element minOccurs ="1" name="PhysicalPath" type="xs:string" />
+                    <xs:element minOccurs ="0" name="DirectoryBrowsingEnabled" type="xs:boolean" />
+                    <!-- None, Basic, Digest, Windows, Form Default is None-->
+                    <xs:element minOccurs ="0" name="Authentication" type="xs:string" />
+                    <xs:element minOccurs="0" maxOccurs ="1" name="VirtualDirectory">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element minOccurs="1" maxOccurs ="1" name="Name" type="xs:string" />
+                          <xs:element minOccurs="1" maxOccurs ="1" name="PhysicalPath" type="xs:string" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs ="0" name="Application">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element minOccurs ="1" name="Name" type="xs:string" />
+                          <xs:element minOccurs ="1" name="PhysicalPath" type="xs:string" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="Package">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs ="1" name="Name" type="xs:string" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="Encryption">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="Encrypt">
+                      <xs:complexType>
+                        <xs:attribute name="Section" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="TestInfo">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="EndPoint">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute name="TestIdentity" type="xs:string" use="optional" />
+                            <xs:attribute name="ContentType" type="xs:string" use="optional" />
+                            <xs:attribute name="Authentication" type="xs:string" use="optional" />
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="Name" type="xs:string" use="required" />
+            <xs:attribute name="RegistryKey" type="xs:string" use="required" />
+            <xs:attribute name="AssemblyToVersionFrom" type="xs:string" use="optional" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="FileShare">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="1" maxOccurs="1" name="ShareName" type="xs:string"/>
+              <xs:element minOccurs="1" maxOccurs="1" name="FolderToShare" type="xs:string"/>
+              <xs:element minOccurs="1" maxOccurs="1" name="Users">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="1" maxOccurs="unbounded" name="User">
+                      <xs:complexType>
+                        <xs:attribute name="name" type="xs:string" use="required"/>
+                        <xs:attribute name="type" type="xs:string" use="optional"/>
+                        <xs:attribute name="permissions" type="xs:string" use="required"/>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name ="Action" type="fileShareAction" use="optional" default="Create" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="CreateFolder">
+          <xs:complexType>
+            <xs:attribute name="TargetPath" type="xs:string" use="required" />
+            <xs:attribute name="IsAbsolutePath" type="xs:boolean" use="optional" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="RemoveFolder">
+          <xs:complexType>
+            <xs:attribute name="TargetPath" type="xs:string" use="required" />
+            <xs:attribute name="IsAbsolutePath" type="xs:boolean" use="optional" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="CopyItem">
+          <xs:complexType>
+            <xs:attribute name="Source" type="xs:string" use="required" />
+            <xs:attribute name="Target" type="xs:string" use="required" />
+            <xs:attribute name="Recurse" type="xs:boolean" use="required" />
+            <xs:attribute name="Filter" type="xs:string" use="required" />
+            <xs:attribute name="Replace" type="xs:boolean" use="required" />
+            <xs:attribute name="IsAbsolutePath" type="xs:boolean" use="optional" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="1" name="CopyAssets">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="1" name="TestInfo">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="1" maxOccurs="1" name="Port" type="xs:string" />
+                    <xs:element minOccurs="1" maxOccurs="1" name="EndPoint" type="xs:string" />
+                  </xs:sequence>
+                  <xs:attribute name="VerificationWaitTimeMilliSeconds" type="xs:string" use="optional" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="Source" type="xs:string" use="required" />
+            <xs:attribute name="Subsystem" type="xs:string" use="required" />
+            <xs:attribute name="Daykeys" type="xs:string" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="ScheduledTaskDeploy" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="TaskName" type="xs:string" minOccurs="1" maxOccurs="1" />
+              <xs:element name="Folder" type="xs:string" minOccurs="0" maxOccurs="1" />
+              <xs:element name="ServiceAccount" type="xs:string" minOccurs="1" maxOccurs="1" />
+              <xs:element name="Description" type="xs:string" minOccurs="1" maxOccurs="1" />
+              <xs:element name="Triggers" minOccurs="1" maxOccurs ="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Trigger" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:choice>
+                            <xs:element name="AtStartUp" minOccurs="1" maxOccurs="1" />
+                            <xs:element name="OneTime" minOccurs="1" maxOccurs="1">
+                              <xs:complexType>
+                                <xs:sequence>
+                                  <xs:element ref="StartDate" minOccurs="1" maxOccurs="1"/>
+                                  <xs:element ref="StartTime" minOccurs="1" maxOccurs="1"/>
+                                  <xs:element ref="RepeatEvery" minOccurs="0" maxOccurs="1" />
+                                  <xs:element ref="RepeatDuration" minOccurs="0" maxOccurs="1" />
+                                </xs:sequence>
+                              </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Daily" minOccurs="1" maxOccurs="1">
+                              <xs:complexType>
+                                <xs:sequence>
+                                  <xs:element ref="StartDate" minOccurs="1" maxOccurs="1"/>
+                                  <xs:element ref="StartTime" minOccurs="1" maxOccurs="1"/>
+                                  <xs:element ref="RepeatEvery" minOccurs="0" maxOccurs="1" />
+                                  <xs:element ref="RepeatDuration" minOccurs="0" maxOccurs="1" />
+                                </xs:sequence>
+                                <xs:attribute name="Interval" type="xs:unsignedByte" use="optional" />
+                              </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Weekly" minOccurs="1" maxOccurs="1">
+                              <xs:complexType>
+                                <xs:sequence>
+                                  <xs:element ref="StartDate" minOccurs="1" maxOccurs="1"/>
+                                  <xs:element ref="StartTime" minOccurs="1" maxOccurs="1"/>
+                                  <xs:element name="Days" minOccurs="0" maxOccurs="1">
+                                    <xs:complexType>
+                                      <xs:sequence>
+                                        <xs:element name="DayOfWeek" type="dayOfWeek" minOccurs="1" maxOccurs="7"/>
+                                      </xs:sequence>
+                                    </xs:complexType>
+                                  </xs:element>
+                                  <xs:element ref="RepeatEvery" minOccurs="0" maxOccurs="1" />
+                                  <xs:element ref="RepeatDuration" minOccurs="0" maxOccurs="1" />
+                                </xs:sequence>
+                                <xs:attribute name="Interval" type="xs:unsignedByte" use="optional" />
+                              </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Monthly" minOccurs="1" maxOccurs="1">
+                              <xs:complexType>
+                                <xs:sequence>
+                                  <xs:element ref="StartDate" minOccurs="1" maxOccurs="1"/>
+                                  <xs:element ref="StartTime" minOccurs="1" maxOccurs="1"/>
+                                  <xs:element ref="RepeatEvery" minOccurs="0" maxOccurs="1" />
+                                  <xs:element ref="RepeatDuration" minOccurs="0" maxOccurs="1" />
+                                  <xs:element name="Month" type="monthOfYear" minOccurs="0" maxOccurs="12"/>
+                                  <xs:choice>
+                                    <xs:element name="Days" minOccurs="1" maxOccurs="1">
+                                      <xs:complexType>
+                                        <xs:sequence>
+                                          <xs:element name="Day">
+                                            <xs:simpleType>
+                                              <xs:restriction base="xs:unsignedByte">
+                                                <xs:minInclusive value="1" />
+                                                <xs:maxInclusive value="31" />
+                                              </xs:restriction>
+                                            </xs:simpleType>
+                                          </xs:element>
+                                        </xs:sequence>
+                                        <xs:attribute name="Last" type="xs:boolean" use="optional" />
+                                      </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="On">
+                                      <xs:complexType>
+                                        <xs:sequence>
+                                          <xs:element name="First" minOccurs="0" maxOccurs="1">
+                                            <xs:complexType>
+                                              <xs:sequence>
+                                                <xs:element name="DayOfWeek" type="dayOfWeek" minOccurs="1" maxOccurs="7"/>
+                                              </xs:sequence>
+                                            </xs:complexType>
+                                          </xs:element>
+                                          <xs:element name="Second" minOccurs="0" maxOccurs="1">
+                                            <xs:complexType>
+                                              <xs:sequence>
+                                                <xs:element name="DayOfWeek" type="dayOfWeek" minOccurs="1" maxOccurs="7"/>
+                                              </xs:sequence>
+                                            </xs:complexType>
+                                          </xs:element>
+                                          <xs:element name="Third" minOccurs="0" maxOccurs="1">
+                                            <xs:complexType>
+                                              <xs:sequence>
+                                                <xs:element name="DayOfWeek" type="dayOfWeek" minOccurs="1" maxOccurs="7"/>
+                                              </xs:sequence>
+                                            </xs:complexType>
+                                          </xs:element>
+                                         <xs:element name="Fourth" minOccurs="0" maxOccurs="1">
+                                            <xs:complexType>
+                                              <xs:sequence>
+                                                <xs:element name="DayOfWeek" type="dayOfWeek" minOccurs="1" maxOccurs="7"/>
+                                              </xs:sequence>
+                                            </xs:complexType>
+                                          </xs:element>
+                                          <xs:element name="Last" minOccurs="0" maxOccurs="1">
+                                            <xs:complexType>
+                                              <xs:sequence>
+                                                <xs:element name="DayOfWeek" type="dayOfWeek" minOccurs="1" maxOccurs="7"/>
+                                              </xs:sequence>
+                                            </xs:complexType>
+                                          </xs:element>
+                                        </xs:sequence>
+                                      </xs:complexType>
+                                    </xs:element>
+                                  </xs:choice>
+                                </xs:sequence>
+                              </xs:complexType>
+                            </xs:element>
+                          </xs:choice>
+                        </xs:sequence>
+                       <xs:attribute name="Disabled" type="xs:boolean" use="optional" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Actions" minOccurs="1" maxOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Action" minOccurs="1" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Command" type="xs:string" minOccurs="1" maxOccurs="1"  />
+                          <xs:element name="Arguments" type="xs:string" minOccurs="0" maxOccurs="1"  />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element ref="TestInfo"  minOccurs="0" maxOccurs ="1" />
+            </xs:sequence>
+            <xs:attribute name="Action" type="action" use="optional" default="Install" />
+            <xs:attribute name="Enabled" type="xs:boolean" use="optional" />
+          </xs:complexType>
+        </xs:element>
+	    </xs:sequence>
+      <xs:attribute name="Name" type="xs:string" use="required" />
+      <xs:attribute name="Include" type="xs:string" use="required" />
+      <xs:attribute name="Description" type="xs:string" use="optional" />
+      <xs:attribute name="Config" type="xs:string" use="optional" />
+      <xs:attribute name="Groups" type="xs:string" use="optional" />
+      <xs:attribute name="StartUpType" type="xs:string" use="optional" />
+      <xs:attribute name="SitePhysicalPath" type="xs:string" use="optional" />
+      <!-- The way common role includes works means i can not make this required, thats OK, the code that reads in roles will validate it is always present-->
+    </xs:complexType>
+    <xs:complexType name="DatabaseRoleType" mixed="true">
+      <xs:sequence minOccurs="0">
+        <xs:element minOccurs="1" name="TargetDatabase" type="xs:string"  />
+        <xs:element minOccurs="1" name="DatabaseInstance" type="xs:string" />
+        <xs:element minOccurs="0" name="BaselineDeployment" type="xs:string" />
+        <xs:element minOccurs="0" name="PreDeployment" type="xs:string" />
+        <xs:element minOccurs="0" name="PatchDeployment" type="xs:string" />
+        <xs:element minOccurs="0" name="PostDeployment" type="xs:string" />
+        <xs:element minOccurs="0" name="FolderPath" type="xs:string"  />
+        <xs:element minOccurs="0" name="PatchDeploymentFolder" type="xs:string"  />
+        <xs:element minOccurs="0" name="PatchFolderFormatStartsWith" type="xs:string"  />
+        <xs:element minOccurs="0" name="UpgradeScriptName" type="xs:string"  />
+        <xs:element minOccurs="0" name="PreValidationScriptName" type="xs:string"  />
+        <xs:element minOccurs="0" name="PostValidationScriptName" type="xs:string"  />
+        <xs:element minOccurs="0" name="DetermineIfDatabaseIsAtThisPatchLevelScriptName" type="xs:string"  />
+        <xs:element minOccurs="0" name="EnableAspnetSqlCacheDependency">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="OnTable" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" name="TestInfo">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs ="0" maxOccurs="1" name="Sql" />
+            </xs:sequence>
+            <xs:attribute name="Ignore" type="xs:boolean" use="optional" />
+            <xs:attribute name="UserName" type="xs:string" use="optional" />
+            <xs:attribute name="Password" type="xs:string" use="optional" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="Name" type="xs:string" use="required" />
+      <xs:attribute name="Description" type="xs:string" use="optional" />
+      <xs:attribute name="Include" type="xs:string" use="optional" />
+      <xs:attribute name="Groups" type="xs:string" use="optional" />
+      <xs:attribute name="DatabaseInstance"  type="xs:string" use="optional" />
+      <xs:attribute name="TargetDatabase"  type="xs:string" use="optional" />
+      <xs:attribute name="SSISDBInstance"  type="xs:string" use="optional" />
+      <xs:attribute name="config"  type="xs:string" use="optional" />
+      <!-- The way common role includes works means i can not make this required, thats OK, the code that reads in roles will validate it is always present-->
+    </xs:complexType>
+    <xs:complexType name="PostDeployRoleType" mixed="true">
+    <xs:sequence minOccurs="0">
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="WindowsServicePostDeploy">
+        <xs:complexType>
+          <xs:attribute name="ServiceName" type="xs:string" use="required" />
+          <xs:attribute name="State" type="WindowsServiceState" use="required" />
+          <!-- Stopped/Running-->
+          <xs:attribute name="Action" type="WindowsServiceAction" use="required" />
+          <!--Fix/Fail/Ignore-->
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AppFabricPostDeploy">
+        <xs:complexType>
+          <xs:attribute name="PortNumber" type="xs:int" use="required" />
+          <xs:attribute name="State" type="xs:string" use="required" />
+          <!---Up/Down-->
+          <xs:attribute name="Action" type="xs:string" use="required" />
+          <!--Fix/Fail/Ignore-->
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="WebServicePostDeploy">
+        <xs:complexType>
+          <xs:attribute name="PortNumber" type="xs:int" use="required" />
+          <xs:attribute name="WebServicePath" type="xs:string" use="required" />
+          <xs:attribute name="Timeout" type="xs:int" use="required" />
+          <!--Timeout in Seconds-->
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="Name" type="xs:string" use="optional" />
+    <xs:attribute name="Description" type="xs:string" use="optional"/>
+    <xs:attribute name="Include" type="xs:string" use="optional" />
+    <xs:attribute name="Groups" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="PreDeployRoleType" mixed="true">
+    <xs:sequence minOccurs="0">
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="WindowsServicePreDeploy">
+        <xs:complexType>
+          <xs:attribute name="ServiceName" type="xs:string" use="required" />
+          <xs:attribute name="State" type="WindowsServiceState" use="required" />
+          <!-- Stopped/Running-->
+          <xs:attribute name="Action" type="WindowsServiceAction" use="required" />
+          <!--Fix/Fail/Ignore-->
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="Name" type="xs:string" use="optional" />
+    <xs:attribute name="Description" type="xs:string" use="optional"/>
+    <xs:attribute name="Include" type="xs:string" use="optional" />
+    <xs:attribute name="Groups" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="PreRequisiteRoleType" mixed="true">
+    <xs:attribute name="Name" type="xs:string" use="optional" />
+    <xs:attribute name="Description" type="xs:string" use="optional"/>
+    <xs:attribute name="Include" type="xs:string" use="optional" />
+    <xs:attribute name="Groups" type="xs:string" use="optional" />
+  </xs:complexType>
+
+</xs:schema>
+

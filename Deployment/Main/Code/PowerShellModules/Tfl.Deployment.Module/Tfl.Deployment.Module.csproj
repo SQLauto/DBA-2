@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4670C410-04E3-40F2-8545-FF5A36187FB1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tfl.Deployment</RootNamespace>
+    <AssemblyName>Tfl.Deployment</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Collections.Immutable.1.4.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_MSIL\System.Management.Automation\v4.0_3.0.0.0__31bf3856ad364e35\System.Management.Automation.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\PowerShellCommonAssemblyInfo.cs">
+      <Link>Properties\PowerShellCommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Commands\AssertExpectedMsiKeyCommand.cs" />
+    <Compile Include="Commands\AssertExpectedProductCodeCommand.cs" />
+    <Compile Include="Commands\AssertExpectedUpgradeCodeCommand.cs" />
+    <Compile Include="Commands\AssertValidMsiPropertiesCommand.cs" />
+    <Compile Include="Commands\GetDeploymentManifestCommand.cs" />
+    <Compile Include="Commands\GetDeploymentGroupsCommand.cs" />
+    <Compile Include="Commands\GetInstalledProductCommand.cs" />
+    <Compile Include="Commands\GetInstalledProductsCommand.cs" />
+    <Compile Include="Commands\GetMsiDeploymentsCommand.cs" />
+    <Compile Include="Commands\GetMsiKeyCommand.cs" />
+    <Compile Include="Commands\GetScheduledTaskDeploymentsCommand.cs" />
+    <Compile Include="Commands\StartPackageDeploymentCommand.cs" />
+    <Compile Include="Commands\StartPostDeploymentValidationCommand.cs" />
+    <Compile Include="Commands\StartPreDeploymentValiadationCommand.cs" />
+    <Compile Include="Commands\TestInstallationRequestIsADowngradeCommand.cs" />
+    <Compile Include="Commands\TestIsMsiInstalledCommand.cs" />
+    <Compile Include="Commands\TestIsProductInstalledCommand.cs" />
+    <Compile Include="Commands\ConvertFromDeployRoleXmlCommand.cs" />
+    <Compile Include="Commands\ConvertToDeployRoleXmlCommand.cs" />
+    <Compile Include="Commands\GetDeploymentGroupFiltersCommand.cs" />
+    <Compile Include="Commands\GetDeploymentCommand.cs" />
+    <Compile Include="Commands\GetInstallPathForProductCodeCommand.cs" />
+    <Compile Include="Commands\GetServiceDeploymentsCommand.cs" />
+    <Compile Include="Commands\GetWebDeploymentsCommand.cs" />
+    <Compile Include="Commands\GetServiceAccountCommand.cs" />
+    <Compile Include="Commands\UpdateApplicationConfigFileCommand.cs" />
+    <Compile Include="Commands\UpdateDeploymentManifestCommand.cs" />
+    <Compile Include="Commands\UpdateWebParametersFileCommand.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="..\..\Deploy\Scripts\Modules\Tfl.Deployment\Tfl.Deployment.psd1">
+      <Link>Tfl.Deployment.psd1</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Deploy\Scripts\Modules\Tfl.Deployment\Tfl.Deployment.psm1">
+      <Link>Tfl.Deployment.psm1</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="UpdateManifest.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Tfl.Deployment.Module.nuspec" />
+    <None Include="Tfl.Deployment.Test.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Build\Deployment.Common\Deployment.Common.csproj">
+      <Project>{c69cab01-3acd-46d0-96cf-f05b4962a262}</Project>
+      <Name>Deployment.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Build\Deployment.Domain.Operations\Deployment.Domain.Operations.csproj">
+      <Project>{08d6bc41-2923-4791-8c56-9b7e2965cac2}</Project>
+      <Name>Deployment.Domain.Operations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Build\Deployment.Domain\Deployment.Domain.csproj">
+      <Project>{4f43c615-a37d-49c9-8c20-e5d889039391}</Project>
+      <Name>Deployment.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Build\Deployment.Installer\Deployment.Installation.csproj">
+      <Project>{4b09eda5-6545-4123-81db-9f47975761b3}</Project>
+      <Name>Deployment.Installation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tfl.PowerShell.Common\Tfl.PowerShell.Common.csproj">
+      <Project>{51ada052-8164-43b2-a1ec-beb3c11dc2ae}</Project>
+      <Name>Tfl.PowerShell.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="PostBuildMacros">
+    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
+      <Output TaskParameter="Assemblies" ItemName="Targets" />
+    </GetAssemblyIdentity>
+    <ItemGroup>
+      <VersionNumber Include="@(Targets->'%(Version)')" />
+    </ItemGroup>
+  </Target>
+  <PropertyGroup>
+    <PostBuildEventDependsOn>
+      $(PostBuildEventDependsOn);
+      PostBuildMacros;
+    </PostBuildEventDependsOn>
+    <PostBuildEvent>cmd /x /c mkdir "$(SolutionDir)Deploy\Scripts\Modules\Tfl.Deployment\lib"
+xcopy $(TargetDir)*.dll $(SolutionDir)Deploy\Scripts\Modules\Tfl.Deployment\lib /y
+if $(ConfigurationName) == Release cmd /x /c powershell -ExecutionPolicy Unrestricted .\UpdateManifest.ps1 -Path $(SolutionDir)Deploy\Scripts\Modules\Tfl.Deployment -Version @(VersionNumber)</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <!--<Target Name="AfterBuild">
+    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
+      <Output TaskParameter="Assemblies" ItemName="CurrentAssembly" />
+    </GetAssemblyIdentity>
+    <Exec Command="copy /Y $(TargetPath) $(ProjectDir)Versions\$(TargetName)_%(CurrentAssembly.Version).dll" />
+  </Target>-->
+</Project>

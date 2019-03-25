@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="DevInt.Internal" Environment="DevInt" Config="DevInt.FAE" ProductGroup="FTP">
+    <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+
+  
+<PostDeploymentTestIdentity>DeploymentAccount.Internal</PostDeploymentTestIdentity>
+
+<machine Id="1" Name="TDC2BLD010" ExternalIP="10.107.203.239" DeploymentMachine="true" />
+  <!-- Async DB Server -->
+  <!-- Must use ip address deploying file systems to sql nodes -->
+  <machine Id="2" Name="TDC2SQL005" ExternalIP="10.107.25.194" Role="Database Server 1">
+    
+    <ServerRole Description="RSP File System" Include="RSP.FileSystem" />
+
+    <!-- RSP SSIS -->
+    <ServerRole Description="Configures SSIS" SSISDBInstance="" IsDefaultDatabaseInstance="true"  Include="SSISSetup.RSP" />
+    <ServerRole Description="RSP SSIS Package" SSISDBInstance="" IsDefaultDatabaseInstance="true"  Include="RSP.RSPSSIS" />
+
+    <!-- Reporting DB need a seperate section here because in production they dont go on an instance-->
+    <!-- SPECIAL EXCLUSION: RLocke 2016.07.25 Can't override with blank but overrides for this are mandatory -->
+    <!--<DatabaseRole Description="RSP Deployment Schema" Include="Deployment.Schema" TargetDatabase="ReportingRW" DatabaseInstance="" />-->
+	<DatabaseRole Description='RSP Baseline' Include="RSP.Baseline.Database" DatabaseInstance="" IsDefaultDatabaseInstance="true" />
+    <DatabaseRole Description="RSP Fix Collation Patch" Include="RSP.FixCollation.Patch" TargetDatabase="ReportingRW" DatabaseInstance="" IsDefaultDatabaseInstance="true" />    
+    <DatabaseRole Description="RSP Deployment Schema" Include="Deployment.Schema" DatabaseInstance="" TargetDatabase="ReportingRW" IsDefaultDatabaseInstance="true"  />
+    <DatabaseRole Description="RSP Database" Include="RSP.DB" DatabaseInstance="" TargetDatabase="ReportingRW" IsDefaultDatabaseInstance="true"  />
+ </machine>
+  
+  
+</configuration>

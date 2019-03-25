@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="NotificationTestRig" Environment="TestRig" Config="TestRig.Notifications" ProductGroup="FTP">
+
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+
+  <machine Id="5" Name="TS-DB1" ExternalIP="" DeploymentMachine="true">
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices1" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices2" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices3" />
+    <PreDeployRole Description="CheckSqlAgentServiceInst1" Include="CheckSqlAgentServiceInst1" />
+
+    <!-- Setting up SMTP for Emails 
+    <ServerRole Description="SMTP Server role" Include="SMTP.Notifications" />-->
+
+    <!-- CS Database-->
+	<DatabaseRole Description='CASC Baseline' Include="CASC.Baseline.Database" />
+    <DatabaseRole Description="CSC Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="CS" />
+    <DatabaseRole Description="CSC Database" Include="CSC.Database" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="PaymentCardExpiryExtract CSC DB Credentials" Include="PaymentCardExpiryExtract.CSC.DB" DatabaseInstance="Inst3" />
+
+    <!-- Notification Database-->
+	<DatabaseRole Description='Notification Baseline' Include="Notification.Baseline.Database" />
+    <DatabaseRole Description="Notification Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="Notification" />
+    <DatabaseRole Description="Notification Database" Include="Notification.DB" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="SB Stub Notifications PARE " Include="SB.Notifications.Stub.ServiceBroker" DatabaseInstance="Inst3" />
+  </machine>
+  <machine Id="2" Name="TS-CIS1" ExternalIP="">
+    <ServerRole Description="IIS" Groups="Notifications" Include="IISSetup.CIS" />
+    <ServerRole Description="Notification Processor Service" Include="Notification.Processor.Service" />
+    <ServerRole Description="Notification Processor External Service" Include="Notification.Processor.ExternalService" />
+    <ServerRole Description="CACC Portal" Groups="Notifications" Include="CACC.Portal" />
+  </machine>
+  <machine Id="3" Name="TS-APP1" ExternalIP="">
+    <PreDeployRole Description="StopSendMailService" Include="StopSendMailService" />
+    <PreDeployRole Description="StopFileProcessorService" Include="StopFileProcessorService" />
+
+    <ServerRole Description="SendEmail Notifications File System" Include="SendEmail.FileSystem" />
+    <ServerRole Description="Send Email Installer" Include="SendEmail.Installer" StartUpType="AutomaticDelayed" />
+
+    <ServerRole Description="Notifications File Processor File System" Include="Notifications.FileProcessor.FileSystem" />
+    <ServerRole Description="Notifications File Processor" Include="Notifications.FileProcessor.Installer" StartUpType="AutomaticDelayed" />
+    <ServerRole Description="Notifications Azure Service" Include="Notifications.AzureService.Installer" StartUpType="AutomaticDelayed" />
+
+    <ServerRole Description="Payment Card Expiry Extract Console" Include="PaymentCardExpiryExtractTool.Install" />
+    <ServerRole Description="Payment Card Expiry Extract Scheduled Task" Include="PaymentCardExpiryExtractTool.ScheduledTask.Create" />
+  </machine>
+
+  <CustomTests>
+    <ServiceBrokerTest Name="Notification Sql Service Broker Stub Test" Groups="Notifications">
+      <Sql>
+        <ConnectionInfo UserName="tfsbuild" Password="LMTF$Bu1ld" />
+        <DatabaseServer>TS-DB1</DatabaseServer>
+        <DatabaseInstance>Inst3</DatabaseInstance>
+        <TargetDatabase>Notification</TargetDatabase>
+        <SqlScript>
+          <![CDATA[
+          -- Turn off internal activation
+          ALTER QUEUE [dbo].[http://tfl.gov.uk/Ft/Notification/Queue/Email] WITH STATUS=ON ,
+          RETENTION=OFF , ACTIVATION (  STATUS=OFF , PROCEDURE_NAME=[dbo].[Email_Activation] , MAX_QUEUE_READERS=10 , EXECUTE AS N'dbo'  ), POISON_MESSAGE_HANDLING (STATUS=ON)
+
+          -- Send a Message into the Queue
+          DECLARE @RC int
+          DECLARE @msgBody NVARCHAR(MAX)
+
+          SET @msgBody=
+          '<Notifications xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <Notification>
+              <NotificationCode>f8aee325-a6c9-4e94-9b46-bba98c93755a</NotificationCode>
+              <SendTo>
+                <CardHolder>
+                  <PanToken>99999999999999999999999</PanToken>
+                  <PaymentCardExpiryDate>0113</PaymentCardExpiryDate>
+                </CardHolder>
+              </SendTo>
+              <TemplateContentTags>
+                <PaymentAmount>9999</PaymentAmount>
+                <PaymentTransactionDateTime>2013-11-28T12:11:04.5030783+00:00</PaymentTransactionDateTime>
+                <PaymentCardPanToken>12345678912345678912345678</PaymentCardPanToken>
+                <PaymentCardExpiryDate>0113</PaymentCardExpiryDate>
+                <PaymentCardLast4Digits>1234</PaymentCardLast4Digits>
+                <PaymentCardType>Visa</PaymentCardType>
+                <DebtAmount>1</DebtAmount>
+                <DebtDate>2013-11-29T12:11:04.5030783+00:00</DebtDate>
+                <DebtIndicator>Y</DebtIndicator>
+                <AuthorisationAmount>2</AuthorisationAmount>
+              </TemplateContentTags>
+            </Notification>
+          </Notifications>'
+
+          EXECUTE @RC=[dbo].[SendMessageToNotificationQueue]
+          @msgBody
+
+          -- Check for the message
+          WAITFOR DELAY '00:00:15';
+          DECLARE @test int
+          DECLARE @testMessage nvarchar(max)
+
+          SET @testMessage='%<PanToken>99999999999999999999999</PanToken>%'
+
+          SET @test=(SELECT count(*)
+          FROM [Notification].[dbo].[http://tfl.gov.uk/Ft/Notification/Queue/Email]
+          WHERE CAST(message_body as nvarchar(max)) Like @testMessage)
+
+          -- Turn on activation VERY IMPORTANT, missing this will leave the database in a non functional state
+          ALTER QUEUE [dbo].[http://tfl.gov.uk/Ft/Notification/Queue/Email] WITH STATUS=ON ,
+          RETENTION=OFF , ACTIVATION (  STATUS=ON , PROCEDURE_NAME=[dbo].[Email_Activation] , MAX_QUEUE_READERS=10 , EXECUTE AS N'dbo'  ), POISON_MESSAGE_HANDLING (STATUS=ON)
+
+          IF @test=0
+          THROW 51000, 'Message not found in http://tfl.gov.uk/Ft/Notification/Queue/Email', 1;
+          ]]>
+        </SqlScript>
+      </Sql>
+    </ServiceBrokerTest>
+  </CustomTests>
+</configuration>

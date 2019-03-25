@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="Integration.TSRig.Uninstall" Environment="TSRig"  Config="TSRig" ProductGroup="FTP">
+  <CommonRoleFile>CommonUninstallRoles.xml</CommonRoleFile>
+
+  <machine Id="1" Name="TS-DB1" ExternalIP="" Role="FTP Database Server" DeploymentMachine="true" />
+    
+  <machine Id="4" Name="TS-CIS1"  ExternalIP="" Role="CIS Server 1">
+    <ServerRole Description="Uninstall Customer Change NotificationWorker" Include="Customer.Change.NotificationWorker.Uninstall" />
+    <ServerRole Description="Uninstall Customer Change NotificationWorker for Oyster" Include="Customer.Change.NotificationWorker.Oyster.Uninstall" />
+    <ServerRole Description="Uninstall Customer Change QueueManager" Include="Customer.Change.QueueManager.Uninstall" />
+  </machine>
+  
+  <!-- Due to the dependency between FAE Pipeline and MJT services, we need to deploy TS-SAS1 before the FAE Servers-->
+  <machine Id="13" Name="TS-SAS1"  ExternalIP="">
+    <!-- Notifications-->
+    <ServerRole Description="Send Email Uninstall" Include="SendEmail.Uninstall" />
+    <ServerRole  Description="Uninstall Notifications File Processor" Include="Notifications.FileProcessor.Uninstall" />
+    <ServerRole  Description="Uninstall Payment Card Expiry Extract Task" Include="PaymentCardExpiryExtractTool.Install.Uninstall" />
+    
+    <!--MasterData Services -->
+    <ServerRole Description="Uninstall MasterData MJT service" Include="MasterData.MJTService.Uninstall" />
+    <ServerRole Description="Uninstall MasterData Fares service" Include="MasterData.FaresService.Uninstall" />
+
+    <!-- SDM Controller service -->
+    <ServerRole  Description="CSC.SDM.ControllerService.Uninstall" Include="CSC.SDM.ControllerService.Uninstall" />
+
+  </machine>
+
+  <!--CPC Controller and Pipeline-->
+  <machine Id="5" Name="TS-FAE1"   ExternalIP="" Role="FAE Controller">
+    <ServerRole Description="Uninstall FAE Controller" Include="FAE.Engine.Controller.Uninstall" />
+    <ServerRole Description="Uninstall FAE Engine Controller Util" Include="FAE.EngineControllerUtil.Uninstall" />
+    <ServerRole Description="Uninstall FAE Travel Day Revision Exporter" Include="FAE.TravelDayRevisonExporter.Uninstall" />
+    <ServerRole Description="Uninstall FAE EOD Task Schedule Installer" Include="FAE.EOD.TaskSchedule.Uninstall" />
+
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service.Uninstall" />
+    
+  </machine>
+  
+  <!--CPC Pipeline-->
+  <machine Id="6" Name="TS-FAE2"   ExternalIP="" Role="FAE Engine 1">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service.Uninstall" />
+  </machine>
+  <!--Oyster Controller and Pipeline-->
+  <machine Id="7" Name="TS-FAE3"   ExternalIP="" Role="FAE Engine 2">
+    <ServerRole Description="Uninstall FAE Controller" Include="FAE.Engine.Controller.Uninstall" />
+    <ServerRole Description="Uninstall FAE Engine Controller Util" Include="FAE.EngineControllerUtil.Uninstall" />
+    <ServerRole Description="Uninstall FAE Travel Day Revision Exporter" Include="FAE.TravelDayRevisonExporter.Uninstall" />
+    <ServerRole Description="Uninstall FAE EOD Task Schedule Installer" Include="FAE.EOD.TaskSchedule.Uninstall" />
+
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service.Uninstall" />
+  </machine>
+  <!--Oyster Pipeline-->
+  <machine Id="8" Name="TS-FAE4"   ExternalIP="" Role="FAE Engine 3">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service.Uninstall" />
+  </machine>
+  
+  <machine Id="9" Name="TS-PARE1"   ExternalIP="" Role="PARE Services 1">
+    <!-- Pare Preprod Services-->
+    <ServerRole Description="Uninstall PareOysterTapImporterService" Include="UninstallPareOysterTapImporterService" />
+
+    <!-- Pare Services -->
+    <ServerRole Description="Uninstall PareAuthorisationGatewayService" Include="UninstallPareAuthorisationGatewayService" />
+    <ServerRole Description="Uninstall PareIdraService" Include="UninstallPareIdraService" />
+    <ServerRole Description="Uninstall PareRefundFileService" Include="UninstallPareRefundFileService" />
+    <ServerRole Description="Uninstall PareRevenueFileService" Include="UninstallPareRevenueFileService" />
+    <ServerRole Description="Uninstall PareSettlementValidationResultService" Include="UninstallPareSettlementValidationResultService" />
+    <ServerRole Description="Uninstall PareStatusListProcessor" Include="UninstallPareStatusListProcessor" />
+    <ServerRole Description="Uninstall PareTapFileService" Include="UninstallPareTapFileService" />
+    <ServerRole Description="Uninstall PareTravelDayRevisionService" Include="UninstallPareTravelDayRevisionService" />
+    <ServerRole Description="Uninstall SettlementFileResponseService" Include="UninstallSettlementFileResponseService" />
+    <ServerRole Description="Uninstall PareStatusListFileResponseService" Include="UninstallPareStatusListFileResponseService" />
+    <ServerRole Description="Uninstall PareDirectPaymentConfirmationService" Include="UninstallPareDirectPaymentConfirmationService" />
+    <ServerRole Description="Uninstall PareEndOfDayController" Include="UninstallPareEndOfDayController" />
+
+    <!-- Pare Command Line Exe's -->
+    <ServerRole Description="Uninstall PareFullStatusListApplication" Include="UninstallPareFullStatusListApplication" />
+    <ServerRole Description="Uninstall PareStatusListMaintenanceApplication" Include="UninstallPareStatusListMaintenanceApplication" />
+    <ServerRole Description="Uninstall PareVerifyTapDataApplication" Include="UninstallPareVerifyTapDataApplication" />
+
+    <ServerRole Description="Uninstall PareSettlementApplication" Include="UninstallPareSettlementApplication" />
+    <ServerRole Description="Uninstall TravelTokenGeneratorComponent" Include="UninstallTravelTokenGeneratorComponent" />
+    <ServerRole Description="Uninstall PareDebtRecoveryApplication" Include="UninstallPareDebtRecoveryApplication" />
+    <ServerRole Description="Uninstall PareAuthorisationGatewayUtil" Include="UninstallPareAuthorisationGatewayUtil" />
+
+    <!-- Pare Scheduled Tasks -->
+    <ServerRole Description="Uninstall PARERequestFullStatusListScheduler" Include="UninstallPARERequestFullStatusListScheduler" />
+    <ServerRole Description="Uninstall PareDreSummaryLedgerScheduler" Include="UninstallPareDreSummaryLedgerScheduler" />
+    <ServerRole Description="Uninstall PareVerifyTapDataScheduler" Include="UninstallPareVerifyTapDataScheduler" />
+    <ServerRole Description="Uninstall PareDebtRecoveryScheduler" Include="UninstallPareDebtRecoveryScheduler" />
+  </machine>
+    
+  <machine Id="11" Name="TS-FTM1"  ExternalIP="" Role="File Transfer Manager Server">
+    <ServerRole Description="Uninstall FTM Service" Include="FTM.Service.Uninstall" />
+  </machine>
+  
+</configuration>

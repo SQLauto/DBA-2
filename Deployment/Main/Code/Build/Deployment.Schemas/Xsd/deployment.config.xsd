@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://tfl.gov.uk/DeploymentConfig"
+            xmlns="http://tfl.gov.uk/DeploymentConfig"
+            elementFormDefault="qualified">
+  <xs:include schemaLocation="serverroleinclude.config.xsd"/>
+  <xs:element name="configuration">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="CommonRoleFile" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element name="PostDeploymentTestIdentity" minOccurs="0" maxOccurs="1" />
+        <xs:element name="machine" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="PreRequisiteRole" type="PreRequisiteRoleTypeReference" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="PreDeployRole" type="PreDeployRoleTypeReference" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="ServerRole" type="ServerRoleTypeReference" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="DatabaseRole" type="DatabaseRoleTypeReference" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="PostDeployRole" type="PostDeployRoleTypeReference" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="Id" type="xs:string" use="optional" />
+            <xs:attribute name="Name" type="xs:string" use="optional" />
+            <xs:attribute name="ExternalIP" type="xs:string" use="optional" />
+            <xs:attribute name="Role" type="xs:string" use="optional" />
+			      <xs:attribute name="DeploymentMachine" type="xs:boolean" use="optional" />
+            <xs:attribute name="Cluster" type="xs:string" use="optional" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="CustomTests" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ServiceBrokerTest" minOccurs="0" maxOccurs="unbounded" >
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="Sql">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element minOccurs="0" name="ConnectionInfo">
+                            <xs:complexType>
+                              <xs:attribute name="UserName" type="xs:string" use="required" />
+                              <xs:attribute name="Password" type="xs:string" use="required" />
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element minOccurs="0" name="DatabaseServer" type="xs:string" />
+                          <xs:element minOccurs="0" name="DatabaseInstance" type="xs:string" />
+                          <xs:element minOccurs="0" name="TargetDatabase" type="xs:string" />
+                          <xs:element name="SqlScript" type="xs:string" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="Name" type="xs:string" use="required" />
+                  <xs:attribute name="Groups" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="AppFabricTest" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="TestInfo" minOccurs="0" maxOccurs="1">
+                      <xs:complexType>
+                        <xs:attribute name="Account" type="xs:string" use="optional" />
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="1" maxOccurs="1" name="HostName" type="xs:string" />
+                    <xs:element minOccurs="1" maxOccurs="1" name="CacheName" type="xs:string" />
+                  </xs:sequence>
+                  <xs:attribute name="Name" type="xs:string" use="required" />
+                  <xs:attribute name="Groups" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs ="1" name="ServiceDependencies">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="1" maxOccurs ="unbounded" name="Service">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="1" maxOccurs="unbounded" name="DependentOnService">
+                      <xs:complexType>
+                        <xs:attribute name="ServiceName" type="xs:string" use="required" />
+                        <xs:attribute name="TargetMachine" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="ServiceName" type="xs:string" use="required" />
+                  <xs:attribute name="TargetMachine" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="Id" type="xs:string" use="optional" />
+      <xs:attribute name="Name" type="xs:string" use="optional" />
+      <xs:attribute name="Environment" type="xs:string" use="required" />
+	    <xs:attribute name="Config" type="xs:string" use="required" />
+      <xs:attribute name="ProductGroup" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

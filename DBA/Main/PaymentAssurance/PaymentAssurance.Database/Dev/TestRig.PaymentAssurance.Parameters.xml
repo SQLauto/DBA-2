@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+
+  <!--PARE-->
+  <parameter name="PARE_DatabaseConnectionString" value="Data Source=TS-DB1\Inst2;Initial Catalog=PARE;Persist Security Info=True;Integrated Security=SSPI"/>
+  <parameter name="PCS_DatabaseConnectionString" value="Data Source=TS-DB2\Inst2;Initial Catalog=pcs;Persist Security Info=True;Integrated Security=SSPI"/>
+  <parameter name="PARE_UseDatabasePartitioning" value="0" />
+  
+  <!-- SQL parameters named to ensure backward compatibility with the old system-->
+  <parameter name="PareEndpoint" value="TCP://TS-DB1:4022"/>
+  <parameter name="PcsEndpoint" value="TCP://TS-DB2:4022"/>
+  <parameter name="NotificationsEndpoint" value="TCP://TS-DB1:4023"/>
+  <parameter name="PaymentAssuranceServiceAccount" value="devint2int\zsvcPaymentAssurance"/>
+  </parameters>

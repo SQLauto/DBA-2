@@ -1,0 +1,7 @@
+http://technet.microsoft.com/en-us/library/ee332526.aspx
+
+the video series
+http://blogs.technet.com/b/musings_of_a_technical_tam/archive/2012/06/04/windows-powershell-self-training-guide.aspx
+[http://technet.microsoft.com/en-gb/scriptcenter/powershell.aspx]
+
+http://technet.microsoft.com/en-us/magazine/hh551144.aspx

@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<FilesToPackage xmlns="http://tfl.gov.uk/DeploymentConfig">
+  <!-- Commented out as .bak file is now going to be part of the App_Data folder. Maybe required in the future  
+  <FileToPackage DeploymentRoleName="MasterData.ProjectionStore.Restore" ParameterDirectoryPath="MasterData_ProjectionStore_Full_Backup_Path" ParameterFileName="MasterData_ProjectionStore_Full_Backup_FileName" />-->
+
+  <FileToPackage DeploymentRoleName="Baseline file system" ParameterDirectoryPath="Baseline_ExternalFileIncludePath" ParameterFileName="Baseline_ExternalFileIncludeFileName" />
+</FilesToPackage>

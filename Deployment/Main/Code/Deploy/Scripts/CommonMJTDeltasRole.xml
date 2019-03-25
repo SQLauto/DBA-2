@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/CommonRoles">
+  <CommonRoles>
+
+    <!-- File copy roles for scale environments -->
+    <!-- To be used in Preprod, Site A & Site B -->
+    <ServerRole Name="TFL.MasterDataDeltas" Description ="Copy 13 weeks MJT Files" Include="MasterData.MJTService.Assets.Last13Weeks" Groups="MasterData">
+      <CopyAssets Source="Assets" Daykeys="13568,13610,13655,13687,13736,13760,13824,13827,13881,13904,14000,14019,14040,14124,14145,14203,14246,14300" Subsystem="mjtdata\ftp" >
+        <TestInfo VerificationWaitTimeMilliSeconds ="60000">
+          <Port>8731</Port>
+          <EndPoint>status</EndPoint>
+        </TestInfo>
+      </CopyAssets>
+    </ServerRole>
+
+    <ServerRole Name="TFL.MasterDataDeltas" Description ="Copy 13 weeks Fares Files" Include="MasterData.FareService.Assets.Last13Weeks" Groups="MasterData">
+      <CopyAssets Source="Assets" Daykeys="13568,13610,13655,13687,13736,13760,13824,13827,13881,13904,14000,14019,14040,14124,14145,14203,14246,14300" Subsystem="FaresData\ftp" >
+        <TestInfo VerificationWaitTimeMilliSeconds ="120000">
+          <Port>8732</Port>
+          <EndPoint>status</EndPoint>
+        </TestInfo>
+      </CopyAssets>
+    </ServerRole>
+
+    <!--A full set of file copy roles for functional and integration environments only -->
+    <!--NOT to be used in Pre-Prod, Site A & Site B -->
+    <ServerRole Name="TFL.MasterDataDeltas" Description ="Copy MJT Files" Include="MasterData.MJTService.Assets.Full" Groups="MasterData">
+      <CopyAssets Source="Assets" Daykeys="12437,12556,12668,12785,12822,12934,13032,13150,13284,13296,13396,13516,13568,13610,13655,13687,13736,13760,13824,13827,13881,13904,14000,14019,14040,14124,14145,14203,14246,14300" Subsystem="mjtdata\ftp" >
+        <TestInfo VerificationWaitTimeMilliSeconds ="60000">
+          <Port>8731</Port>
+          <EndPoint>status</EndPoint>
+        </TestInfo>
+      </CopyAssets>
+    </ServerRole>
+
+    <ServerRole Name="TFL.MasterDataDeltas" Description ="Copy Fares Files" Include="MasterData.FareService.Assets.Full" Groups="MasterData">
+      <CopyAssets Source="Assets" Daykeys="12437,12556,12668,12785,12822,12934,13032,13150,13284,13296,13396,13516,13568,13610,13655,13687,13736,13760,13824,13827,13881,13904,14000,14019,14040,14124,14145,14203,14246,14300" Subsystem="FaresData\ftp" >
+        <TestInfo VerificationWaitTimeMilliSeconds ="120000">
+          <Port>8732</Port>
+          <EndPoint>status</EndPoint>
+        </TestInfo>
+      </CopyAssets>
+    </ServerRole>
+
+	 <!--Master Data File system roles for database backup files-->
+
+    <ServerRole Name="TFL.FileSystem" Description="MasterData ProjectionStore .bak file copy" Groups="MasterData" Include="MasterData.ProjectionStoreRestore.FileSystem">
+      <CreateFolder TargetPath="$(MasterDataProjectionStoreRestorePath)" IsAbsolutePath="true" />
+      <CopyItem Source="DatabaseScripts\MasterData_ProjectionStore.bak" Target="$(MasterDataProjectionStoreRestoreFile)" Filter="*" Recurse="false" Replace="true" IsAbsolutePath="true" />
+    </ServerRole>
+
+  </CommonRoles>
+</configuration>

@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="Production.Database.SiteA" Environment="SiteA" Config="SiteA" ProductGroup="FTP">
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonMJTDeltasRole.xml</CommonRoleFile>
+
+  <machine Id="FPDC2MGT001" Name="FPDC2MGT001" ExternalIP="10.133.80.101" Role="Internal Jump Server 2" DeploymentMachine="true">
+    <!-- MasterData ProjectionStore Restore SetUp-->
+    <ServerRole Include="MasterData.ProjectionStoreRestore.FileSystem" />
+  </machine>
+
+  <!--<machine Id="1" Name="10.133.76.21" ExternalIP="10.133.76.21" />-->
+
+  <machine Id="FPDC2SQLC01V01" Name="FPDC2SQLC01V01" ExternalIP="" Role="AlwaysOnFAE - VINS001">
+    <!-- Disruptr DB -->
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="VINS001" TargetDatabase="Disruptr" />
+    <DatabaseRole Include="Disruptr.Database" />
+
+    <!-- FAE Database -->
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="VINS001" TargetDatabase="FAE" />
+    <DatabaseRole Include="FAE.Database" />
+    <DatabaseRole Include="Config.Database" TargetDatabase="FAE"/>
+    <DatabaseRole Include="FAE_Config.Database" />
+    <DatabaseRole Include="Common.Partitioning" DatabaseInstance="VINS001" TargetDatabase="FAE" />
+    <DatabaseRole Include="FAE.Partitioning"  />
+
+    <!-- Travel Store db -->
+    <DatabaseRole Include="Deployment.Schema" TargetDatabase="TravelStore" DatabaseInstance="VINS001"  />
+    <DatabaseRole Include="TravelStore.Database" />
+    <DatabaseRole Include="Config.Database" TargetDatabase="TravelStore"/>
+    <DatabaseRole Include="TravelStore_Config.Database" TargetDatabase="TravelStore"/>
+    <DatabaseRole Include="Common.Partitioning" DatabaseInstance="VINS001" TargetDatabase="TravelStore"  />
+    <DatabaseRole Include="TravelStore.Partitioning"  />
+
+    <!-- Travel Store CPC db -->
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="VINS001" TargetDatabase="TravelStore_CPC" />
+    <DatabaseRole Include="TravelStore.Database" DatabaseInstance="VINS001" TargetDatabase="TravelStore_CPC" />
+    <DatabaseRole Include="Config.Database" TargetDatabase="TravelStore_CPC"/>
+    <DatabaseRole Include="TravelStore_Config.Database" TargetDatabase="TravelStore_CPC"/>
+    <DatabaseRole Include="Common.Partitioning" DatabaseInstance="VINS001" TargetDatabase="TravelStore_CPC" />
+    <DatabaseRole Include="TravelStore.Partitioning" TargetDatabase="TravelStore_CPC" />
+
+    <!-- RAE(Oyster) Database -->
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="VINS001" TargetDatabase="RAE" />
+    <DatabaseRole Include="RAE.Database" />
+    <DatabaseRole Include="Common.Partitioning" DatabaseInstance="VINS001" TargetDatabase="RAE"  />
+    <DatabaseRole Include="RAE.Partitioning" />
+    <!-- RAE(CPC) Database -->
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="VINS001" TargetDatabase="RAE_CPC" />
+    <DatabaseRole Include="RAE.Database" TargetDatabase="RAE_CPC" />
+    <DatabaseRole Include="Common.Partitioning" DatabaseInstance="VINS001" TargetDatabase="RAE_CPC" />
+    <DatabaseRole Include="RAE.Partitioning" TargetDatabase="RAE_CPC" />
+
+    <!-- TJS Store -->
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="VINS001" TargetDatabase="TJS" Config="SiteA_Oyster" />
+    <DatabaseRole Include="TJS.Database" TargetDatabase="TJS" Config="Staging_Oyster" />
+    <DatabaseRole Include="Common.Partitioning" DatabaseInstance="VINS001" TargetDatabase="TJS" Config="SiteA_Oyster" />
+    <DatabaseRole Include="TJS.Partitioning" TargetDatabase="TJS" Config="Staging_Oyster" />
+
+    <!-- TJS Store for CPC -->
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="VINS001" TargetDatabase="TJS_CPC" />
+    <DatabaseRole Include="TJS.Database" />
+    <DatabaseRole Include="Common.Partitioning" DatabaseInstance="VINS001" TargetDatabase="TJS_CPC" />
+    <DatabaseRole Include="TJS.Partitioning" />
+
+    <!-- System Database-->
+    <DatabaseRole Include="System.Deployment.Schema" DatabaseInstance="VINS001" />
+    <DatabaseRole Include="Dba.System" DatabaseInstance="VINS001" />
+
+    <!-- MasterData ProjectionStore DB-->
+    <DatabaseRole Include="MasterData.ProjectionStore.Restore" DatabaseInstance="VINS001" />
+
+    <!-- BaselineData DB-->
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="VINS001" TargetDatabase="BaselineData" />
+    <DatabaseRole Include="BaselineData.Database" DatabaseInstance="VINS001" />
+  </machine>
+
+
+  <!--<machine Id="3" Name="10.133.76.22" ExternalIP="10.133.76.22">
+	<ServerRole Description="Certificates for Pare/Notification SSB" Include="Notification.Certificates" />
+</machine>-->
+
+  <machine Id="FPDC2SQLC01V02" Name="FPDC2SQLC01V02" ExternalIP="" Role="AlwaysOnPare - VINS002">
+    <!-- PARE Database -->
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="VINS002" TargetDatabase="PARE" />
+    <DatabaseRole Include="PARE.Database" />
+    <DatabaseRole Include="Common.Partitioning" DatabaseInstance="VINS002" TargetDatabase="PARE" />
+    <DatabaseRole Include="Pare.Partitioning" />
+
+    <!-- additional PCS roles which deploy to the PARE DB that are included in PARE.DatabaseArtefacts -->
+    <DatabaseRole Include="PARE.PCS.Common.PARE" />
+    <DatabaseRole Include="Pcs.Pare" />
+    <DatabaseRole Include="Pare.Notifications.Dialog.Pare" />
+    <DatabaseRole Include="Pare.Notifications.Transport.Pare" />
+
+    <!--OyBO TapIdAllocator DB-->
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="VINS002" TargetDatabase="TapIdAllocator" />
+    <DatabaseRole Include="TapIdAllocator.Database" />
+
+    <!-- BaselineData DB-->
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="VINS002" TargetDatabase="BaselineData" />
+    <DatabaseRole Include="BaselineData.Database" DatabaseInstance="VINS002" />
+  </machine>
+
+  <!-- Notifications FileSystem: Must use ip address deploying file systems to sql nodes -->
+  <!--<machine Id="5" Name="10.133.76.23" ExternalIP="10.133.76.23">
+   <ServerRole Description="Certificates for Pare/Notification SSB" Include="Notification.Certificates" />
+
+</machine>-->
+
+  <machine Id="FPDC2SQLC01V03" Name="FPDC2SQLC01V03" ExternalIP="" Role="AlwaysOnCS - VINS006">
+    <!-- CS Database -->
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="VINS003" TargetDatabase="CS" />
+    <DatabaseRole Include="CSC.Database" />
+    <DatabaseRole Include="PaymentCardExpiryExtract.CSC.DB" />
+
+    <!-- Notifications Database -->
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="VINS003" TargetDatabase="Notification" />
+    <DatabaseRole Include="Notification.DB" />
+    <DatabaseRole Include="Pare.Notifications.Dialog.Notifications" />
+    <DatabaseRole Include="Pare.Notifications.Transport.Notifications" />
+
+    <!-- SDM DB -->
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="VINS003" TargetDatabase="SDM" />
+    <DatabaseRole Include="SDM.Database" />
+    <DatabaseRole Include="SDM.ServerObjects" />
+
+    <!-- OyBO OTFP DB -->
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="VINS003" TargetDatabase="OTFP" />
+    <DatabaseRole Include="OTFP.Database" />
+    <DatabaseRole Include="Common.Partitioning" DatabaseInstance="VINS003" TargetDatabase="OTFP" />
+    <DatabaseRole Include="OTFP.Partitioning" />
+
+    <!--OyBO OCAE DB-->
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="VINS003" TargetDatabase="OCAE" />
+    <DatabaseRole Include="OCAE.Database" />
+    <DatabaseRole Include="Common.Partitioning" DatabaseInstance="VINS003" TargetDatabase="OCAE" />
+    <DatabaseRole Include="OCAE.Partitioning" />
+
+    <!-- Refunds DB-->
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="VINS003" TargetDatabase="RefundManager" />
+    <DatabaseRole Include="Refunds.Database" />
+    <DatabaseRole Include="Common.Partitioning" DatabaseInstance="VINS003" TargetDatabase="RefundManager" />
+    <DatabaseRole Include="Refunds.Partitioning" />
+
+    <!-- BaselineData DB-->
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="VINS003" TargetDatabase="BaselineData" />
+    <DatabaseRole Include="BaselineData.Database" DatabaseInstance="VINS003" />
+  </machine>
+
+  <!-- Async DB Server -->
+  <!-- Must use ip address deploying file systems to sql nodes -->
+  <!--<machine Id="7" Name="10.133.76.13" ExternalIP="10.133.76.13">
+   <ServerRole Description="RSP File System" Include="RSP.FileSystem" />
+    <ServerRole Description="Configures SSIS" SSISDBInstance="" IsDefaultDatabaseInstance="true" Include="SSISSetup.RSP" />
+    <ServerRole Description="RSP SSIS Package" SSISDBInstance="" IsDefaultDatabaseInstance="true" Include="RSP.RSPSSIS" />
+  </machine>-->
+
+  <machine Id="FPDC2SQLC01N03" Name="FPDC2SQLC01N03" ExternalIP="">
+    <!-- Reporting DB need a separate section here because in production they don't go on an instance-->
+    <!-- SPECIAL EXCLUSION: RLocke 2016.07.25 Can't override with blank but overrides for this are mandatory -->
+    <!--<DatabaseRole Description="RSP Deployment Schema" Include="Deployment.Schema" TargetDatabase="ReportingRW" DatabaseInstance="" />-->
+    <DatabaseRole Include="RSP.DB" DatabaseInstance="" IsDefaultDatabaseInstance="true" />
+    <!-- BaselineData DB-->
+    <DatabaseRole DatabaseInstance="" Include="Deployment.Schema" IsDefaultDatabaseInstance="true" TargetDatabase="BaselineData" />
+    <DatabaseRole DatabaseInstance="" Include="BaselineData.Database" IsDefaultDatabaseInstance="true" />
+
+    <!-- PaymentAssurance DB-->
+    <DatabaseRole DatabaseInstance="" Include="Deployment.Schema" IsDefaultDatabaseInstance="true" TargetDatabase="PaymentAssurance" />
+    <DatabaseRole DatabaseInstance="" Include="PaymentAssurance.Database" IsDefaultDatabaseInstance="true" />
+  </machine>
+</configuration>

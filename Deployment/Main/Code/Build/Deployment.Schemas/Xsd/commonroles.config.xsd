@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://tfl.gov.uk/CommonRoles"
+            xmlns="http://tfl.gov.uk/CommonRoles"
+            elementFormDefault="qualified">
+  <xs:include schemaLocation="serverrole.config.xsd"/>
+  <xs:element name="configuration">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="CommonRoles">
+          <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+              <xs:element name="PreRequisiteRole" type="PreRequisiteRoleType" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="PreDeployRole" type="PreDeployRoleType" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="ServerRole" type="ServerRoleType" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="DatabaseRole" type="DatabaseRoleType" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="PostDeployRole" type="PostDeployRoleType" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+

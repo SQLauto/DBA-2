@@ -1,0 +1,8 @@
+<site name="CSC.Webservice.External.Authorisation" id="4">
+    <application path="/" applicationPool="Clr4IntegratedAppPool">
+        <virtualDirectory path="/" physicalPath="..\..\..\CACC\Main\CSC.Webservice.External.Authorisation" />
+    </application>
+    <bindings>
+        <binding protocol="http" bindingInformation="*:8718:" />
+    </bindings>
+</site>

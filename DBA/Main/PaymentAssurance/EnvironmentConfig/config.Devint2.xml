@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!-- ===============================================================================-->
+<!-- =========================Version 1.1==============================-->
+<!-- =========================Modified Date:14-11-2018==============================-->
+<!-- ===============================================================================-->
+<tfl>
+  <sql2excel>
+    <outputformat>excel</outputformat>    <!-- valid values: excel,csv -->
+    <sqlinput method="folder" folder="D:\TFL\PaymentAssurance\SqlFiles" runatdb="master" runatserver="TDC2SQL005"/>
+	<!--Example1: <sqlinput method="folder" folder="D:\temp\SQLS\MySQLs" database="master" instance="TDC2FAEC04V01\VINS001"/>-->
+	<!--Example2: <sqlinput method="table" database="master" instance="TDC2FAEC04V01\VINS001"/>-->
+    <outputfolder>D:\TFL\PaymentAssurance\Results</outputfolder>    <!-- Output Folder for excel -->
+	<processfolder>D:\TFL\PaymentAssurance\Processing</processfolder>
+    <excelpassword></excelpassword>     <!-- Excel password -->
+    <AutoFit>true</AutoFit>     <!-- True,yes,1: Autifit the columns, False,No,0: No autofit. This option is only for Excel  -->
+    <AutoFitMaxWidth>40</AutoFitMaxWidth>     <!-- Maximum length of a Excel cell. Default is blank, means no max length -->
+    <limitdata>0</limitdata>     <!-- limit the number of records returned from the sql server -->
+    <queryTimeoutSS>0</queryTimeoutSS>     <!-- query timout in seconds -->
+    <connectionTimeoutSS>0</connectionTimeoutSS>     <!-- server connection timout in seconds -->
+  </sql2excel>
+  <logging>
+	<logfolder>D:\TFL\PaymentAssurance\Logs</logfolder>
+	<reportfolder>D:\TFL\PaymentAssurance\Reports</reportfolder>
+	<keeplogdays>30</keeplogdays> 
+    <sendmail>
+      <islog>true</islog>       <!-- true,yes,1: loging to email, false,no,0: No logging to email -->
+      <emailOnAction>onSuccess</emailOnAction>       <!-- valid values: OnError, onSuccess. Please Note: OnSuccess will send mail in both error and success -->
+      <EmailSubject>DevInt2 Automated Query Results</EmailSubject>       
+	  <EmailFrom>cedbaops@tfl.gov.uk</EmailFrom>
+      <EmailTo>narendrayadav@tfl.gov.uk</EmailTo>       
+	  <smtpserver>Internalemail.seg.tfl.gov.uk</smtpserver>
+    </sendmail>
+	<logToTable islog="true" database="PaymentAssurance" instance="TDC2SQL005"/>
+	<logToEvent>true</logToEvent>     <!-- true,yes,1: Yes to event log, false,No,0: No event log entry -->
+    <logToHTML>true</logToHTML>    <!-- true,yes,1: Yes to HTML log, false,No,0: No HTML log -->
+    <debugmode>false</debugmode>    <!-- true,yes,1: debug mode, false,No,0: No Debug -->
+  </logging>
+</tfl>

@@ -1,0 +1,753 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/CommonRoles">
+  <CommonRoles>
+
+    <!-- Install a Windows Service and MSI-->
+    <ServerRole Name="TFL.ServiceDeploy" Include="Simple.Windows.ServiceX" Description="Simple Windows ServiceX" Groups="Win">
+      <ServiceDeploy Name="SimpleWindowsServiceX" Action="Install">
+        <MSI>
+          <name>WixSimpleWindowsServiceInstaller.msi</name>
+          <UpgradeCode>EED8A1A9-891E-4D78-9C56-532939489846</UpgradeCode>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="D:\TFL\Baseline\SimpleWindowsService" />
+            <parameter name="SERVICENAME1" value="SimpleWindowsService.exe" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service StartUpType="Manual">
+            <Name>SimpleWindowsService.exe</Name>
+            <Credentials>FAEServiceAccount</Credentials>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="SimpleWindowsService.exe.config" target="\TFL\Baseline\SimpleWindowsService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Include="Simple.Windows.Service" Description="Simple Windows Service" Groups="Win">
+      <ServiceDeploy Name="SimpleWindowsService">
+        <MSI>
+          <name>WixSimpleWindowsServiceInstaller.msi</name>
+          <UpgradeCode>EED8A1A9-891E-4D78-9C56-532939489846</UpgradeCode>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="D:\TFL\Baseline\SimpleWindowsService" />
+            <parameter name="SERVICENAME1" value="SimpleWindowsService.exe" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service StartUpType="Manual">
+            <Name>SimpleWindowsService.exe</Name>
+            <Credentials>FAEServiceAccount</Credentials>
+            <TestInfo VerificationWaitTimeMilliSeconds="7500" />
+            <!-- this is the wait time that is used-->
+          </Service>
+        </Services>
+        <Configs>
+          <config name="SimpleWindowsService.exe.config" target="\TFL\Baseline\SimpleWindowsService" />
+        </Configs>
+        <TestInfo VerificationWaitTimeMilliSeconds="6000" />
+      </ServiceDeploy>
+    </ServerRole>
+
+    <!--ServiceDeploy definition to install service the will be renamed by include below-->
+    <ServerRole Name="TFL.ServiceDeploy" Include="Simple.Windows.Service.ForRename.Old" Description="Simple Windows Service For Rename (Old) Install" Groups="Win">
+      <ServiceDeploy Name="SimpleWindowsService">
+        <MSI>
+          <name>SimpleWindowsService.ForRename.msi</name>
+          <UpgradeCode>558434EA-6FB5-436D-A429-C560FEC7A9D5</UpgradeCode>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="D:\TFL\Baseline\SimpleWindowsService.ForRename" />
+            <parameter name="SERVICENAME1" value="SimpleWindowsService 2 (Before Rename)" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service StartUpType="Manual">
+            <Name>SimpleWindowsService 2 (Before Rename)</Name>
+            <Credentials>FAEServiceAccount</Credentials>
+            <TestInfo VerificationWaitTimeMilliSeconds="7500" />
+            <!-- this is the wait time that is used-->
+          </Service>
+        </Services>
+        <Configs>
+          <config name="SimpleWindowsService.ForRename.exe.config" target="\TFL\Baseline\SimpleWindowsService.ForRename" />
+        </Configs>
+        <TestInfo DisableTests="true" />
+      </ServiceDeploy>
+    </ServerRole>
+
+    <!--ServiceDeploy definition to re-install and rename service above-->
+    <ServerRole Name="TFL.ServiceDeploy" Include="Simple.Windows.Service.ForRename.New" Description="Simple Windows Service For Rename (New) Install" Groups="Win">
+      <ServiceDeploy Name="SimpleWindowsService" Action="Reinstall">
+        <MSI>
+          <name>SimpleWindowsService.ForRename.msi</name>
+          <UpgradeCode>558434EA-6FB5-436D-A429-C560FEC7A9D5</UpgradeCode>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="D:\TFL\Baseline\SimpleWindowsService.ForRename" />
+            <parameter name="SERVICENAME1" value="SimpleWindowsService 2 (After Rename)" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service StartUpType="Manual">
+            <Name>SimpleWindowsService 2 (After Rename)</Name>
+            <CurrentName>SimpleWindowsService 2 (Before Rename)</CurrentName>
+            <Credentials>FAEServiceAccount</Credentials>
+            <TestInfo VerificationWaitTimeMilliSeconds="7500" />
+            <!-- this is the wait time that is used-->
+          </Service>
+        </Services>
+        <Configs>
+          <config name="SimpleWindowsService.ForRename.exe.config" target="\TFL\Baseline\SimpleWindowsService.ForRename" />
+        </Configs>
+        <TestInfo VerificationWaitTimeMilliSeconds="6000" />
+      </ServiceDeploy>
+    </ServerRole>
+
+    <ServerRole Name="TFL.MsiDeploy" Include="Simple.Console.AppX" Description="Simple Console AppX" Groups="Win">
+      <MsiDeploy Name="SimpleConsoleAppX Installer" Action="Install">
+        <MSI>
+          <name>WixSimpleConsoleAppInstaller.msi</name>
+          <UpgradeCode>F8B6DDF7-20B0-4EAA-A8CC-88265E3ECBCE</UpgradeCode>
+          <parameters>
+            <usernameparameter name="SERVICEACCOUNT" credential="DeploymentAccount" />
+            <passwordparameter name="SERVICEPASSWORD"  credential="DeploymentAccount" />
+            <parameter name="INSTALLLOCATION" value="D:\tfl\baseline\SimpleConsoleApp" />
+          </parameters>
+        </MSI>
+        <Configs>
+          <config name="SimpleConsoleApp.exe.config" target="\tfl\baseline\SimpleConsoleApp" />
+        </Configs>
+        <TestInfo DisableTests="true" />
+      </MsiDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.MsiDeploy" Include="Simple.Console.App" Description="SimpleConsoleApp" Groups="Win">
+      <MsiDeploy Name="SimpleConsoleApp Installer">
+        <MSI>
+          <name>WixSimpleConsoleAppInstaller.msi</name>
+          <UpgradeCode>F8B6DDF7-20B0-4EAA-A8CC-88265E3ECBCE</UpgradeCode>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="D:\tfl\baseline\SimpleConsoleApp" />
+          </parameters>
+        </MSI>
+        <Configs>
+          <config name="SimpleConsoleApp.exe.config" target="\tfl\baseline\SimpleConsoleApp" />
+        </Configs>
+      </MsiDeploy>
+    </ServerRole>
+
+    <ServerRole Name="TFL.MsiDeploy" Include="Simple.X509.Certificate.App" Description="Simple X509 Certificate App" Config="BaselineX" Groups="Win">
+      <MsiDeploy Name="SimpleConsoleAppX Installer" Action="Install">
+        <MSI>
+          <name>WixX509CertificateInstaller.msi</name>
+          <UpgradeCode>B31AF847-F42C-4CCB-8FA3-0B3E221AAABA</UpgradeCode>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="D:\tfl\baseline\SimpleX509CertificateApp" />
+          </parameters>
+        </MSI>
+        <TestInfo DisableTests="true" />
+      </MsiDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.MsiDeploy" Include="Simple.Console.App.MultiConfig" Description="SimpleConsoleAppMultiConfig" Groups="Win">
+      <MsiDeploy Name="SimpleConsoleAppMultiConfig Installer" Action="Install">
+        <MSI>
+          <name>WixSimpleConsoleAppMultiConfigInstaller.msi</name>
+          <UpgradeCode>C7870FD0-9E6A-4A48-8806-2A8311B62BA0</UpgradeCode>
+          <parameters>
+            <usernameparameter name="SERVICEACCOUNT" credential="DeploymentAccount" />
+            <passwordparameter name="SERVICEPASSWORD"  credential="DeploymentAccount" />
+            <parameter name="INSTALLLOCATION" value="D:\tfl\baseline\SimpleConsoleAppMultiConfig" />
+          </parameters>
+        </MSI>
+        <Configs>
+          <config name="SimpleConsoleAppMultiConfig.exe.config" target="\tfl\baseline\SimpleConsoleAppMultiConfig" />
+          <config name="connectionStrings.config" target="\tfl\baseline\SimpleConsoleAppMultiConfig" />
+        </Configs>
+      </MsiDeploy>
+    </ServerRole>
+
+    <!-- Uninstall Windows Service and MSI from Same Server - Now controlled by overriding Action at machine role level -->
+
+    <ServerRole Name="TFL.SMTPDeploy" Include="SMTP.Server.Role" Description="SMTP Server role" Groups="Always">
+      <!-- always run this, test the all feature -->
+      <SMTPDeploy name="SMTP Setup">
+        <DropFolderLocation>D:\TFL</DropFolderLocation>
+        <ForwardingMailSMTP>CISMSW004.ns.tfl.local</ForwardingMailSMTP>
+      </SMTPDeploy>
+    </ServerRole>
+
+    <!-- Deploy EventLog Server Roles -->
+    <ServerRole Name="TFL.EventLogDeploy" Include="Simple.Event.Logs" Description="SimpleEventLogs" Config="BaselineX" Groups="Win">
+      <EventLogDeploy EventLogName="LogC" Action="Install" >
+        <Sources>
+          <Source Name="A1" />
+          <Source Name="B1" />
+          <Source Name="C1" />
+        </Sources>
+      </EventLogDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.EventLogDeploy" Include="Simple.Event.Logs1" Description="SimpleEventLogs1" Config="BaselineX" Groups="Win">
+      <EventLogDeploy EventLogName="LogA" >
+        <Sources>
+          <Source Name="LogA1" />
+        </Sources>
+      </EventLogDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.EventLogDeploy" Include="Simple.Event.Logs2" Description="SimpleEventLogs2" Config="BaselineX" Groups="Win">
+      <EventLogDeploy EventLogName="LogB" MaxLogSizeKiloBytes="2048" >
+        <Sources>
+          <Source Name="LogB1" />
+        </Sources>
+      </EventLogDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.EventLogDeploy" Include="Simple.Event.Logs3" Description="SimpleEventLogs3" Config="BaselineX" Groups="Win">
+      <EventLogDeploy EventLogName="LogD" MaxLogSizeKiloBytes="4096" Action="Install" >
+        <Sources>
+          <Source Name="LogD1" />
+        </Sources>
+      </EventLogDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.EventLogDeploy" Include="Simple.Event.Logs4" Description="SimpleEventLogs4" Config="BaselineX" Groups="Win">
+      <EventLogDeploy EventLogName="LogDoesNotExistAndRoleShouldNotFail" Action="Uninstall">
+        <Sources>
+          <Source Name="LogNotHere" />
+        </Sources>
+      </EventLogDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.EventLogDeploy" Include="Simple.Event.Logs5" Description="SimpleEventLogs5" Config="BaselineX" Groups="Win">
+      <EventLogDeploy EventLogName="LogForUninstall" Action="install" DisablePostDeploymentTests="true">
+        <Sources>
+          <Source Name="Log5" />
+        </Sources>
+      </EventLogDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.EventLogDeploy" Include="Simple.Event.Logs6" Description="SimpleEventLogs6" Config="BaselineX" Groups="Win">
+      <EventLogDeploy EventLogName="LogForUninstall" Action="Uninstall">
+        <Sources>
+          <Source Name="Log5" />
+        </Sources>
+      </EventLogDeploy>
+    </ServerRole>
+
+
+    <ServerRole Name="TFL.IISSetup" Include="IISSetup" Description="WebDeploy Install and .Net Registration in IIS" Groups="Web" />
+    <ServerRole Name="TFL.StateServiceSetup" Include="State.Service.Setup" Description="State Service Setup" Groups="Web" />
+
+    <ServerRole Name="TFL.FileSystem" Include="Baseline.File.System" Description="Baseline file system" Groups="Always">
+      <CreateFolder TargetPath="\D$\tfl\BaselineTemp" />
+      <CopyItem Source="Resources\" Target="\D$\tfl\BaselineTemp" Recurse="true" Filter="*.xml" Replace="true" />
+      <CopyItem Source="ExternalResources\lmhosts.sam" Target="\D$\tfl\lmhosts.sam" Recurse="false" Filter="*" Replace="true" />
+    </ServerRole>
+
+    <ServerRole Name="TFL.FileSystem" Include="SQL.Extension.Events.Folder" Description="Baseline file system" Groups="Always">
+      <CreateFolder TargetPath="\D$\TFL\Logs\SqlExtendedEvents\" />
+    </ServerRole>
+
+    <!--Create fileshare-->
+    <!--Permissions can be Full, Change or Read-->
+    <ServerRole Name="TFL.FileShare" Include="TFL.FileShare.Creation" Description="Baseline windows FileShare" Groups="Always">
+      <FileShare>
+        <ShareName>SharedFolder</ShareName>
+        <FolderToShare>D$\tfl\BaselineTemp</FolderToShare>
+        <Users>
+          <User name="DeploymentAccount" type="ServiceAccount" permissions="Change"/>
+        </Users>
+      </FileShare>
+    </ServerRole>
+
+    <!--WebDeploy roles-->
+    <ServerRole Name="TFL.WebDeploy" Include="Simple.Web.Site" Description="Simple Web Site" Groups="Web">
+      <WebDeploy Name="Deployment Baseline Web"  RegistryKey="Software\TfL\BaseLine" AssemblyToVersionFrom="TfL.FT.Deployment.Baseline.SimpleWebSite.dll">
+        <AppPool>
+          <Name>Baseline App Pool</Name>
+          <ServiceAccount>FAEServiceAccount</ServiceAccount>
+          <IdleTimeout>0</IdleTimeout>
+          <RecycleLogEvent>Time,Requests,Schedule,Memory,IsapiUnhealthy,ConfigChange,PrivateMemory</RecycleLogEvent>
+        </AppPool>
+        <Site>
+          <Name>Simple Web Site</Name>
+          <Port>8700</Port>
+          <PhysicalPath>D:\TfL\Baseline\Simple Web Site</PhysicalPath>
+          <Authentication>Anonymous</Authentication>
+          <Authentication>Windows</Authentication>
+          <!--<ApplicationPool>Baseline App Pool</ApplicationPool>-->
+        </Site>
+        <Package>
+          <Name>SimpleWebSite</Name>
+        </Package>
+        <TestInfo>
+          <EndPoint></EndPoint>
+        </TestInfo>
+      </WebDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.WebDeploy" Include="Simple.Web.SiteX" Description="Simple Web SiteX" Groups="Web">
+      <WebDeploy Name="Deployment BaselineX Web"  RegistryKey="Software\TfL\BaseLineX" AssemblyToVersionFrom="TfL.FT.Deployment.Baseline.SimpleWebSite.dll">
+        <AppPool>
+          <Name>Baseline App Pool</Name>
+          <ServiceAccount>FAEServiceAccount</ServiceAccount>
+        </AppPool>
+        <Site>
+          <Name>Simple Web SiteX</Name>
+          <Port>8702</Port>
+          <PhysicalPath>D:\TfL\Baseline\Simple Web SiteX</PhysicalPath>
+          <!--<ApplicationPool>Baseline App Pool</ApplicationPool>-->
+        </Site>
+        <Package>
+          <Name>SimpleWebSite</Name>
+        </Package>
+        <TestInfo>
+          <EndPoint></EndPoint>
+        </TestInfo>
+      </WebDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.WebDeploy" Include="Simple.Web.SiteNX" Description="Simple Web SiteXNS" Groups="Web">
+      <WebDeploy Name="Deployment BaselineXNS Web"  RegistryKey="Software\TfL\BaseLineXNS" AssemblyToVersionFrom="TfL.FT.Deployment.Baseline.SimpleWebSite.dll">
+        <AppPool>
+          <Name>Baseline App Pool NS</Name>
+          <ServiceAccount>NetworkService</ServiceAccount>
+        </AppPool>
+        <Site>
+          <Name>Simple Web SiteXNS</Name>
+          <Port>8710</Port>
+          <PhysicalPath>D:\TfL\Baseline\Simple Web SiteXNS</PhysicalPath>
+          <!--<ApplicationPool>Baseline App Pool NS</ApplicationPool>-->
+        </Site>
+        <Package>
+          <Name>SimpleWebSite</Name>
+        </Package>
+        <TestInfo>
+          <EndPoint></EndPoint>
+        </TestInfo>
+      </WebDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.WebDeploy" Include="Simple.MVC.App" Description="Simple Mvc App" Groups="Web">
+      <WebDeploy Name="Deployment Baseline Mvc Web" RegistryKey="Software\TfL\BaseLine" AssemblyToVersionFrom="SimpleMvcApp.dll">
+        <AppPool>
+          <Name>Baseline App Pool AP</Name>
+          <ServiceAccount>ApplicationPoolIdentity</ServiceAccount>
+        </AppPool>
+        <Site>
+          <Name>Simple Mvc App</Name>
+          <Port>8698</Port>
+          <PhysicalPath>D:\TfL\Baseline\Simple Mvc App</PhysicalPath>
+          <!--<ApplicationPool>Baseline App Pool</ApplicationPool>-->
+        </Site>
+        <Package>
+          <Name>SimpleMvcApp</Name>
+        </Package>
+        <TestInfo>
+          <EndPoint></EndPoint>
+        </TestInfo>
+      </WebDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.WebDeploy" Include="Simple.Web.Service" Description="Simple Web Service" Groups="Web">
+      <WebDeploy Name="Deployment Baseline Web Service" RegistryKey="Software\TfL\BaseLine" AssemblyToVersionFrom="TfL.FT.Deployment.Baseline.SimpleWebService.dll">
+        <AppPool>
+          <Name>Baseline App Pool</Name>
+          <ServiceAccount>FAEServiceAccount</ServiceAccount>
+        </AppPool>
+        <Site>
+          <Name>Simple Web Service</Name>
+          <Port>8699</Port>
+          <PhysicalPath>D:\TfL\Baseline\SimpleWebService</PhysicalPath>
+          <!--<ApplicationPool>Baseline App Pool</ApplicationPool>-->
+          <!--
+        <Application>
+          <Name></Name>
+          <PhysicalPath></PhysicalPath>
+        </Application>
+        -->
+        </Site>
+        <Package>
+          <Name>SimpleWebService</Name>
+        </Package>
+        <TestInfo>
+          <EndPoint>SimpleWebService.svc</EndPoint>
+        </TestInfo>
+      </WebDeploy>
+    </ServerRole>
+
+    <!--Scheduled Task -Install-->
+    <ServerRole Name="TFL.ScheduledTaskDeploy" Include="ScheduleTask.TestDailyScheduleForceRecreate" Description="Test Daily Schedule with Force Recreate" Groups="Win">
+      <ScheduledTaskDeploy Action="Install" Enabled="false">
+        <TaskName>TestDailyScheduleForceRecreate</TaskName>
+        <Folder>FTP</Folder>
+        <ServiceAccount>FAEServiceAccount</ServiceAccount>
+        <Description>Test Scheduler 1</Description>
+        <Triggers>
+          <Trigger>
+            <Daily Interval="1">
+              <StartDate>31/12/2015</StartDate>
+              <StartTime>12:00:00</StartTime>
+            </Daily>
+          </Trigger>
+        </Triggers>
+        <Actions>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+            <Arguments />
+          </Action>
+        </Actions>
+      </ScheduledTaskDeploy>
+    </ServerRole>
+    <!--Scheduled Task - Install-->
+    <ServerRole Name="TFL.ScheduledTaskDeploy" Include="ScheduleTask.TestOnceOnlyScheduleCreate" Description="Test Daily Schedule" Groups="Win">
+      <ScheduledTaskDeploy Action="Install">
+        <TaskName>TestOnceOnlyScheduleCreate</TaskName>
+        <Folder>FTP</Folder>
+        <ServiceAccount>FAEServiceAccount</ServiceAccount>
+        <Description>Test Scheduler 2</Description>
+        <Triggers>
+          <Trigger>
+            <Daily Interval="2">
+              <StartDate>25/12/2015</StartDate>
+              <StartTime>10:30:00</StartTime>
+            </Daily>
+          </Trigger>
+        </Triggers>
+        <Actions>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+            <Arguments />
+          </Action>
+        </Actions>
+      </ScheduledTaskDeploy>
+    </ServerRole>
+    <!--Scheduled Task - If the Scheduled Task is not available creates a new one or change the parameters with following -->
+    <ServerRole Name="TFL.ScheduledTaskDeploy" Include="ScheduleTask.CreateAndChangeTest1" Description="Test Weekly Schedule - Defaults to everyday" Groups="Win">
+      <ScheduledTaskDeploy Action="Install">
+        <TaskName>CreateAndChangeTest</TaskName>
+        <Folder>FTP</Folder>
+        <ServiceAccount>FAEServiceAccount</ServiceAccount>
+        <Description>Test Scheduler 3</Description>
+        <Triggers>
+          <Trigger>
+            <Weekly Interval="1">
+              <StartDate>30/12/2015</StartDate>
+              <StartTime>11:00:00</StartTime>
+              <Days>
+                <DayOfWeek>Tuesday</DayOfWeek>
+              </Days>
+            </Weekly>
+          </Trigger>
+        </Triggers>
+        <Actions>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+            <Arguments>D:\AppFabricConfiguration\StartApfabricHostOnServerBoot.ps1</Arguments>
+          </Action>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+          </Action>
+        </Actions>
+      </ScheduledTaskDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ScheduledTaskDeploy" Include="ScheduleTask.CreateAndChangeTest2" Description="Test Weekly Schedule - Days" Groups="Win">
+      <ScheduledTaskDeploy Action="Install">
+        <TaskName>CreateAndChangeTest</TaskName>
+        <Folder>FTP</Folder>
+        <ServiceAccount>FAEServiceAccount</ServiceAccount>
+        <Description>Test Scheduler 4</Description>
+        <Triggers>
+          <Trigger>
+            <Weekly Interval="1">
+              <StartDate>30/12/2015</StartDate>
+              <StartTime>11:30:00</StartTime>
+              <Days>
+                <DayOfWeek>Monday</DayOfWeek>
+                <DayOfWeek>Tuesday</DayOfWeek>
+                <DayOfWeek>Thursday</DayOfWeek>
+                <DayOfWeek>Friday</DayOfWeek>
+              </Days>
+            </Weekly>
+          </Trigger>
+        </Triggers>
+        <Actions>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+            <Arguments>D:\AppFabricConfiguration\StartApfabricHostOnServerBoot.ps1</Arguments>
+          </Action>
+        </Actions>
+      </ScheduledTaskDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ScheduledTaskDeploy" Include="ScheduleTask.TestAtOnceSchedule1" Description="Test OneTime Schedule" Groups="Win">
+      <ScheduledTaskDeploy Action="Install" Disabled="true">
+        <TaskName>CreateAndDeleteTask</TaskName>
+        <Folder>FTP</Folder>
+        <ServiceAccount>FAEServiceAccount</ServiceAccount>
+        <Description>Test Scheduler 5</Description>
+        <Triggers>
+          <Trigger>
+            <OneTime>
+              <StartDate>30/12/2015</StartDate>
+              <StartTime>12:00:00</StartTime>
+            </OneTime>
+          </Trigger>
+        </Triggers>
+        <Actions>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+          </Action>
+        </Actions>
+        <TestInfo DisableTests="true"/>
+      </ScheduledTaskDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ScheduledTaskDeploy" Include="ScheduleTask.TestAtOnceSchedule2" Description="Test AtStartup Schedule" Groups="Win">
+      <ScheduledTaskDeploy Action="Uninstall">
+        <TaskName>CreateAndDeleteTask</TaskName>
+        <Folder>FTP</Folder>
+        <ServiceAccount>FAEServiceAccount</ServiceAccount>
+        <Description>Test Scheduler 6</Description>
+        <Triggers>
+          <Trigger Disabled="true">
+            <AtStartUp />
+          </Trigger>
+          <Trigger>
+            <OneTime>
+              <StartDate>30/12/2015</StartDate>
+              <StartTime>12:00:00</StartTime>
+            </OneTime>
+          </Trigger>
+        </Triggers>
+        <Actions>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+          </Action>
+        </Actions>
+      </ScheduledTaskDeploy>
+    </ServerRole>
+
+    <ServerRole Name="TFL.ScheduledTaskDeploy" Include="ScheduleTask.NoTriggers" Description="Test Schedule with No Triggers" Groups="Win">
+      <ScheduledTaskDeploy Action="Install" Enabled="false">
+        <TaskName>TestSchedulerNoTriggers</TaskName>
+        <Folder>FTP</Folder>
+        <ServiceAccount>FAEServiceAccount</ServiceAccount>
+        <Description>Test Scheduler No Triggers</Description>
+        <Triggers />
+        <Actions>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+            <Arguments />
+          </Action>
+        </Actions>
+      </ScheduledTaskDeploy>
+    </ServerRole>
+
+    <ServerRole Name="TFL.ScheduledTaskDeploy" Include="ScheduleTask.LogBackup" Description="Test Schedule Task For Log Files backup" Groups="Win">
+      <ScheduledTaskDeploy Action="Install" Enabled="false">
+        <TaskName>TestSchedulerLogBackup</TaskName>
+        <Folder>FTP</Folder>
+        <ServiceAccount>FAEServiceAccount</ServiceAccount>
+        <Description>Test Scheduler Log Archiver</Description>
+        <Triggers />
+        <Actions>
+          <Action>
+            <Command>PowerShell</Command>
+            <Arguments>-ExecutionPolicy ByPass Import-Module TFL.Utilities; Backup-Folder -Path '$(Baseline_LogPath1)' -TargetPath '$(Baseline_ArchivePath1)' -ArchiveOffset 2 -ArchiveDays 30 -Move</Arguments>
+          </Action>
+        </Actions>
+      </ScheduledTaskDeploy>
+    </ServerRole>
+
+    <!--PreDeploy Roles-->
+    <PreDeployRole Name="TFL.PreDeploy" Include="Simple.Windows.Service.Stop" Description="Simple.Windows.Service.Stop" Groups="Win">
+      <WindowsServicePreDeploy ServiceName="SimpleWindowsService.exe" State="Stopped" Action="Fix" />
+    </PreDeployRole>
+
+    <!--PostDeploy roles-->
+    <PostDeployRole Name="TFL.PostDeploy" Include="Poll.Simple.Web.Service" Description="Poll Simple Web Service" Groups="Web">
+      <WebServicePostDeploy PortNumber="8699" WebServicePath="SimpleWebService.svc" Timeout="30" />
+    </PostDeployRole>
+    <PostDeployRole Name="TFL.PostDeploy" Include="Start.AppFabric.Cluster" Description="Start AppFabric Cluster" Groups="Always">
+      <AppFabricPostDeploy PortNumber="22233" State="Up" Action="Fix" />
+    </PostDeployRole>
+
+    <PostDeployRole Name="TFL.PostDeploy" Description="Simple.Windows.Service.Start" Include="Simple.Windows.Service.Start" Groups="Win">
+      <WindowsServicePostDeploy ServiceName="SimpleWindowsService.exe" State="Running" Action="Fix" />
+    </PostDeployRole>
+    <PostDeployRole Name="TFL.PostDeploy" Description="Start Windows Service 2 (For Rename) - New" Include="Simple.Windows.Service.ForRename.Start" Groups="Win">
+      <WindowsServicePostDeploy ServiceName="SimpleWindowsService 2 (After Rename)" State="Running" Action="Fix" />
+    </PostDeployRole>
+
+    <!-- DATABASE ROLES -->
+    <PreDeployRole Name="TFL.PreDeploy" Include="CheckSqlServices1" Description="Check Sql Services 1" Groups="SSIS,Database">
+      <WindowsServicePreDeploy ServiceName="MSSQL$INST1" State="Running" Action="Fix" />
+    </PreDeployRole>
+    <PreDeployRole Name="TFL.PreDeploy" Include="CheckSqlServices2" Description="Check Sql Services 2" Groups="SSIS,Database">
+      <WindowsServicePreDeploy ServiceName="MSSQL$INST2" State="Running" Action="Fix" />
+    </PreDeployRole>
+    <PreDeployRole Name="TFL.PreDeploy" Include="CheckSqlServices3" Description="Check Sql Services 3" Groups="SSIS,Database">
+      <WindowsServicePreDeploy ServiceName="MSSQL$INST3" State="Running" Action="Fix" />
+    </PreDeployRole>
+    <PreDeployRole Name="TFL.PreDeploy" Include="CheckSqlIntegrationService" Description="CheckSqlIntegrationService" Groups="Always">
+      <WindowsServicePreDeploy ServiceName="MsDtsServer110" State="Running" Action="Fix" />
+    </PreDeployRole>
+    <PreDeployRole Name="TFL.PreDeploy" Include="CheckSqlAgentServiceInst1" Description="CheckSqlAgentServiceInst1" Groups="Always">
+      <WindowsServicePreDeploy ServiceName="SQLAgent$INST1" State="Running" Action="Fix" />
+    </PreDeployRole>
+    <PreDeployRole Name="TFL.PreDeploy" Include="CheckSqlAgentServiceInst2" Description="CheckSqlAgentServiceInst2" Groups="Always">
+      <WindowsServicePreDeploy ServiceName="SQLAgent$INST2" State="Running" Action="Fix" />
+    </PreDeployRole>
+    <PreDeployRole Name="TFL.PreDeploy" Include="CheckSqlAgentServiceInst3" Description="CheckSqlAgentServiceInst3" Groups="Always">
+      <WindowsServicePreDeploy ServiceName="SQLAgent$INST3" State="Running" Action="Fix" />
+    </PreDeployRole>
+
+    <ServerRole Name="TFL.SsisSetup" Include="SSISSetup.Notifications" Description="Configures SSIS for Notifications deployment" Groups="SSIS">
+      <SsisSetup SSISDBInstance="must_be_overridden"/>
+    </ServerRole>
+
+    <ServerRole Name="TFL.SsisDeploy" Include="Simple.SISS.Package" Description="Simple SSIS Package" Groups="SSIS">
+      <SsisDeploy Name="SimpleSSISPackage">
+        <SSISEnvironment>Configuration</SSISEnvironment>
+        <SSISFolder>SsisFolder</SSISFolder>
+        <DatabaseInstance>Inst1</DatabaseInstance>
+        <DeployMode>WIZ</DeployMode>
+        <Project>
+          <Name>SimpleSSISPackage</Name>
+          <SsisFile>SimpleSSISPackage.ispac</SsisFile>
+          <Type>ISPAC</Type>
+          <Packages>
+            <Package Name="SimplePackage.dtsx" />
+          </Packages>
+          <parameters>
+            <parameter name="Parameter1" value="value1" type="string" description="Location of unprocessed xml file." />
+            <parameter name="ConnectionString" value="$(Baseline_SimpleDBConnectionString)" type="string" description="simpledb connection string" />
+          </parameters>
+        </Project>
+        <TestInfo SqlUserName="tfsbuild" SqlPassword="LMTF$Bu1ld" />
+        <!-- used when validating a 'SQL' deployment-->
+      </SsisDeploy>
+    </ServerRole>
+    <DatabaseRole Name="FromConfig" Include="Simple.Database.Baseline.Inst1" Description="Simple Database Baseline Inst1" Groups="Database">
+      <TargetDatabase>SimpleDb</TargetDatabase>
+      <DatabaseInstance>Inst1</DatabaseInstance>
+      <BaselineDeployment>SimpleDB.DataMigrationScripts\Baseline\Baseline.sql</BaselineDeployment>
+      <PreDeployment></PreDeployment>
+      <PatchDeployment></PatchDeployment>
+      <PostDeployment></PostDeployment>
+      <TestInfo UserName="tfsbuild" Password="LMTF$Bu1ld">
+        <Sql>
+          if not exists (select 1 from sys.databases where name = 'SimpleDb')
+          begin
+          THROW 51000, 'Database SimpleDb does not exist', 1;
+          end
+        </Sql>
+      </TestInfo>
+    </DatabaseRole>
+
+    <DatabaseRole Name="FromConfig" Include="Simple.Database.Deployment.Schema" Description="Simple Database Deployment Schema" Groups="Database">
+      <TargetDatabase>SimpleDb</TargetDatabase>
+      <DatabaseInstance>Inst1</DatabaseInstance>
+      <PreDeployment></PreDeployment>
+      <PatchDeployment>DeploymentSchema.Scripts\Patching\DeploymentSchema.Patching.sql</PatchDeployment>
+      <PostDeployment></PostDeployment>
+      <TestInfo UserName="tfsbuild" Password="LMTF$Bu1ld">
+        <Sql>
+          IF (SELECT  count(*) FROM $TargetDatabase.sys.tables WHERE [name]= 'PatchingScriptsRun') = 0
+          THROW 51000, 'Table [$TargetDatabase].[deployment].[PatchingScriptsRun] does not exist', 1;
+        </Sql>
+      </TestInfo>
+    </DatabaseRole>
+    <DatabaseRole Name="FromConfig" Include="Simple.Database" Description="Simple Database" Groups="Database" >
+      <TargetDatabase>SimpleDb</TargetDatabase>
+      <DatabaseInstance>Inst1</DatabaseInstance>
+      <!--<<PreDeployment></PreDeployment>
+      PatchDeployment>SimpleDB.DataMigrationScripts\Patching\Patching.sql</PatchDeployment>
+      <PostDeployment>SimpleDB.DataMigrationScripts\Post-Deployment\Script.PostDeployment.sql</PostDeployment>-->
+      <PatchDeploymentFolder>SimpleDB.DataMigrationScripts\Common\Patching\</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <EnableAspnetSqlCacheDependency>
+        <OnTable>TableOne</OnTable>
+      </EnableAspnetSqlCacheDependency>
+      <TestInfo UserName="tfsbuild" Password="LMTF$Bu1ld">
+        <Sql>
+          IF (SELECT  count(*) FROM [$TargetDatabase].[dbo].[TableOne]) != 3
+          THROW 51000, 'TableOne must contain 3 records', 1;
+          IF (SELECT  Name FROM [$TargetDatabase].[dbo].[TableOne] Where Id = 3) != 'baselinerules'
+          THROW 51000, 'TableOne must contain baselinerules text for id  = 3', 1;
+          IF (SELECT  count(*) FROM $TargetDatabase.sys.tables WHERE [name]= 'TableTwo') = 0
+          THROW 51000, 'Table [$TargetDatabase].[dbo].[TableTwo] does not exist', 1;
+          IF (SELECT  count(*) FROM $TargetDatabase.sys.tables WHERE [name]= 'TableThree') = 0
+          THROW 51000, 'Table [$TargetDatabase].[dbo].[TableThree] does not exist', 1;
+          IF (SELECT  count(*) FROM $TargetDatabase.sys.tables WHERE [name]= 'TableX12') = 0
+          THROW 51000, 'Table [$TargetDatabase].[dbo].[TableX12] does not exist', 1;
+          IF (SELECT  count(*) FROM $TargetDatabase.sys.tables WHERE [name]= 'TableX13') = 0
+          THROW 51000, 'Table [$TargetDatabase].[dbo].[TableX13] does not exist', 1;
+        </Sql>
+      </TestInfo>
+    </DatabaseRole>
+
+    <DatabaseRole Name="FromConfig" Include="Simple.Database.Inst2.Install" Description="Simple Database Inst2 Install" Groups="Database" >
+      <TargetDatabase>SimpleDb</TargetDatabase>
+      <DatabaseInstance>Inst2</DatabaseInstance>
+      <PreDeployment></PreDeployment>
+      <PatchDeployment>DeploymentSchema.Scripts\Patching\DeploymentSchema.Patching.sql</PatchDeployment>
+      <PostDeployment></PostDeployment>
+      <EnableAspnetSqlCacheDependency>
+        <OnTable>TableOne</OnTable>
+        <OnTable>TableII</OnTable>
+      </EnableAspnetSqlCacheDependency>
+      <TestInfo UserName="tfsbuild" Password="LMTF$Bu1ld">
+        <Sql>
+          IF (SELECT Count(tableName) FROM [$TargetDatabase].[dbo].[AspNet_SqlCacheTablesForChangeNotification]) != 2
+          THROW 51000, 'THROW 51000, 'Table [$TargetDatabase].[dbo].[AspNet_SqlCacheTablesForChangeNotification] must contain 2 records', 1;
+          IF (SELECT  count(*) FROM $TargetDatabase.sys.tables WHERE [name]= 'PatchingScriptsRun') = 0
+          THROW 51000, 'Table [$TargetDatabase].[deployment].[PatchingScriptsRun] does not exist', 1;
+        </Sql>
+      </TestInfo>
+    </DatabaseRole>
+
+    <DatabaseRole Name="FromConfig" Include="Simple.Database.Inst2.Disable.SqlCache" Description="Simple Database Inst2 Disable SqlCache" Groups="Database" >
+      <TargetDatabase>SimpleDb</TargetDatabase>
+      <DatabaseInstance>Inst2</DatabaseInstance>
+      <!--<<PreDeployment></PreDeployment>
+      PatchDeployment>SimpleDB.DataMigrationScripts\Patching\Patching.sql</PatchDeployment>
+      <PostDeployment>SimpleDB.DataMigrationScripts\Post-Deployment\Script.PostDeployment.sql</PostDeployment>-->
+      <PatchDeploymentFolder>SimpleDB.DataMigrationScripts\Common\Patching\</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <DisableAspnetSqlCacheDependency>
+      </DisableAspnetSqlCacheDependency>
+      <TestInfo UserName="tfsbuild" Password="LMTF$Bu1ld">
+        <Sql>
+          IF (select count(*) from [$TargetDatabase].sys.tables where name = 'AspNet_SqlCacheTablesForChangeNotification') > 0
+          THROW 51000, 'AspNet_SqlCacheTablesForChangeNotification table should not exist', 1;
+          IF (select count(*) from [$TargetDatabase].sys.triggers where name like '%SqlCache%') > 0
+          THROW 51000, 'AspNet SqlCache dependencies triggers should not exist', 1;
+          IF (select count(*) from [$TargetDatabase].sys.procedures where name like '%sqlcache%') > 0
+          THROW 51000, 'AspNet SqlCache dependencies procedures should not exist', 1;
+        </Sql>
+      </TestInfo>
+    </DatabaseRole>
+
+    <DatabaseRole Name="FromConfig" Include="Simple.Database.Baseline.Inst2" Description="Simple Database Baseline Inst2" Groups="Database">
+      <TargetDatabase>SimpleDb</TargetDatabase>
+      <DatabaseInstance>Inst2</DatabaseInstance>
+      <BaselineDeployment>SimpleDB.DataMigrationScripts\Baseline\Baseline.sql</BaselineDeployment>
+      <PreDeployment></PreDeployment>
+      <PatchDeployment></PatchDeployment>
+      <PostDeployment></PostDeployment>
+    </DatabaseRole>
+
+    <DatabaseRole Name="FromConfig" Include="SQL.Extension.Events" Description="SQL Extension Events Deployment Role" Groups="Database">
+      <TargetDatabase>SimpleDb</TargetDatabase>
+      <DatabaseInstance>Inst1</DatabaseInstance>
+      <PreDeployment></PreDeployment>
+      <PatchDeployment>DeploymentSchema.Scripts\Patching\SQL.Extension.Events.sql</PatchDeployment>
+      <PostDeployment></PostDeployment>
+      <TestInfo UserName="tfsbuild" Password="LMTF$Bu1ld">
+        <Sql>
+          IF (SELECT  count(*) FROM $TargetDatabase.sys.tables WHERE [name]= 'PatchingScriptsRun') = 0
+          THROW 51000, 'Table [$TargetDatabase].[deployment].[PatchingScriptsRun] does not exist', 1;
+        </Sql>
+      </TestInfo>
+    </DatabaseRole>
+
+  </CommonRoles>
+
+</configuration>

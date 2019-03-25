@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<package>
+  <metadata>
+    <id>Deployment.Services</id>
+    <version>$version$</version>
+    <authors>FTP Build</authors>
+    <owners>FTP Build</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Deployment.Services contains common used to services within the Deployment Solution</description>
+    <copyright>Copyright 2017</copyright>
+    <dependencies>
+      <dependency id="Deployment.Common" version="1.0" />
+      <dependency id="Deployment.Domain" version="1.0" />
+      <dependency id="Deployment.Domain.Operations" version="1.0" />
+      <dependency id="System.Collections.Immutable" version="1.4.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\Deployment.Services.dll" target="lib\net452" />
+  </files>
+</package>

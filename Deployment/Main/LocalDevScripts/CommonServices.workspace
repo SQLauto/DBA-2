@@ -1,0 +1,7 @@
+$/CommonServices/Messaging/Core	 :	Messaging\Core
+$/CommonServices/Messaging/MessageBusAdaptor	 :	Messaging\MessageBusAdaptor
+$/CommonServices/Messaging/MessageBusTracking	 :	Messaging\MessageBusTracking
+$/CommonServices/Messaging/MessageCountMonitor	 :	Messaging\MessageCountMonitor
+$/CommonServices/Messaging/Tests	 :	Messaging\Tests
+$/CsSharedTest/FunctionalTests/Test	 :	FunctionalTests\Tests
+$/Deployment/Main/Code/Deploy/HelperScripts/SQLHelpers/DeploymentHelpers : Deployment\Main\Code\Deploy\HelperScripts\SQLHelpers\DeploymentHelpers

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="SSO only for Integration" Environment="TSRig" Config="TSRig" ProductGroup="SSO">
+
+  <CommonRoleFile>SSO.CommonInternalServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>SSO.CommonExternalServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>SSO.CommonDatabaseRoles.xml</CommonRoleFile>
+
+  <machine Id="2" Name="TS-CIS1" ExternalIP="">
+    <ServerRole Include="IISSetup.SSO" />
+	  <ServerRole Description="SSO.EventLog.For.Internal" Include="SSO.EventLogDeploy.Internal" />
+    <ServerRole Description="Customer Change NotificationWorker" Include="Customer.Change.NotificationWorker" />
+    <ServerRole Description="Customer Change NotificationWorker Oyster" Include="Customer.Change.NotificationWorker.Oyster" Config="SSO.TSRig.Notification.Oyster" />
+    <ServerRole Description="Customer Change QueueManager" Include="Customer.Change.QueueManager" />
+    <ServerRole Description="Marketing Preferences Exporter" Include="Customer.Change.MarketingPreferences.Exporter" />
+	  <!-- <ServerRole Description="Marketing Export Scheduled Task" Include="MarketingExporter.Task" /> -->
+  </machine>
+
+  <machine Id="1" Name="TS-DB2"  ExternalIP="" DeploymentMachine="true">
+    <ServerRole Include="IISSetup.SSO" />
+    <ServerRole Description="SSO File System" Include="SSO.FileSystem" />
+	  <ServerRole Description="SSO.EventLog.For.Internal" Include="SSO.EventLogDeploy.Internal" />
+	  <ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+    <ServerRole Description="Customer Services" Include="Customer.Services" />
+    <ServerRole Description="SingleSignOn Services" Include="SingleSignOn.Services" />
+    <ServerRole Description="SSO Validation Service" Include="Validation.Service" />
+    <ServerRole Description="SSO Website" Include="SSO.Website" />
+    <ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+
+    <DatabaseRole Description="SSO Database" Include="SSO.Database" />
+    <DatabaseRole Description="SSO Deployment Schema" Include="SSO.DBDeploymentSchema" />
+  </machine>
+</configuration>

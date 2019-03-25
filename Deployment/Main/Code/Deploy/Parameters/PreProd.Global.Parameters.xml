@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+  <!-- Base Data -->
+  <parameter name="BaseData_DatabaseConnectionString" value="Data Source=tdc2faec03V01\VINS001;Initial Catalog=BaseData_Publish_FAE;integrated security=SSPI;Connect Timeout=200;"/>
+
+  <!-- Notifications -->
+  <parameter name="Notifications_Services_EfDatabaseConnectionString" value="Server=TDC2FAEC03V03\VINS003;initial catalog=Notification;Integrated Security=SSPI" />
+  <parameter name="Notifications_InternalApiUrl" value="http://internalnotificationservice.preprod.fae.tfl.local/api/" />
+
+  <!--RSP-->
+  <parameter name ="RSP_ReportingRWDatabaseConnectionString" value="Data Source=tdc2faec03v01\vins001;Initial Catalog=ReportingRW;Integrated Security=SSPI;Provider=SQLNCLI11.1;Auto Translate=False;"/>
+  <parameter name ="RSP_FAEDatabaseConnectionString" value="Data Source=tdc2faec03v01\vins001;Initial Catalog=FAE;Integrated Security=SSPI;Provider=SQLNCLI11.1;Auto Translate=False;"/>
+
+  <!-- SQL parameters named to ensure backward compatibility with the old system-->
+  <parameter name="PareEndpoint" value="TCP://10.107.203.184:4022" />
+  <!-- this is the endpoint notifications sends its pare messages to-->
+  <parameter name="PcsEndpoint" value="LOCAL" />
+  <parameter name="NotificationsEndpoint" value="TCP://10.107.203.185:4023"/>
+  <!-- FAE/RSP variables -->
+  <parameter name="FAEDatabaseName" value="FAE"/>
+  <parameter name="RSPDatabaseName" value="ReportingRW"/>
+  <parameter name="PareSchemaName" value="dbo"/>
+  <!-- Notifications Extract scripts ReportingRW database name -->
+  <parameter name="ReportingRWDatabaseName" value="ReportingRW"/>
+  <parameter name="PareDatabaseServer" value="TDC2FAEC03V02\vins002"/>
+  <parameter name="FaeDatabaseServer" value="TDC2FAEC03V01\VINS001"/>
+
+  <!-- SQL parameters named to ensure backward compatibility with the old system-->
+  <parameter name="TJSDatabaseName" value="TJS_CPC"/>
+  <parameter name="TJSDatabaseServer" value="tdc2faec03v01\VINS001"/>
+  <parameter name="MDServiceAccount" value="fae\zsvcMasterData" />
+  <parameter name="RAEServiceAccount" value="fae\zsvcrae" />
+  <parameter name="FAEServiceAccount" value="fae\zsvcfae" />
+  <parameter name="OYBOServiceAccount" value="fae\zsvcOYBO" />
+  <parameter name="PAREServiceAccount" value="fae\zsvcPARE" />
+
+  <!-- SSO -->
+  <parameter name="SSO_Website_BaseUrl" value="https://account.preprod.fae.tfl.local" />
+  <parameter name="SSO_Website_LoginPostUrl" value="Login" />
+  <parameter name="SSO_Website_LoginErrorUrl" value="http://SDMPortal.preprod.fae.tfl.local" />
+
+  <parameter name="SSO_Service_BaseUrl" value="https://was.sso.preprod.fae.tfl.local" />
+  <parameter name="SSO_Service_Username" value="SSOPREPROD\zSvcFacade" />
+  <parameter name="SSO_Service_Password" value="H6b5289c" />
+
+  <parameter name="SSO_ShowTestAccounts" value="false" />
+  
+  <parameter name="MasterDataProjectionStoreRestorePath" value="\\TDC2FAEC03V01\I$\FAE_SQLBKP03\Backups\ProjectionStore\" />
+  <parameter name="MasterDataProjectionStoreRestoreFile" value="\\TDC2FAEC03V01\I$\FAE_SQLBKP03\Backups\ProjectionStore\MasterData_ProjectionStore.bak" />
+
+</parameters>

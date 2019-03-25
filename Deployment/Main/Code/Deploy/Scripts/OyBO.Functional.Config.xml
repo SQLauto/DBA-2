@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="OyBOTestRig" Environment="TestRig" Config="TestRig.OyBO" ProductGroup="FTP">
+
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+
+  <machine Id="2" Name="TS-FTM1" ExternalIP="">
+
+    <PreDeployRole Description="Stop OyBO Services" Include="StopOyBOServices" />
+    <PreDeployRole Description="Stop Ocae Service" Include="StopOcaeService" />
+    <PreDeployRole Description="Stop Refunds Service" Include="StopRefundsService" />
+    <PreDeployRole Description="Stop OyBO AzureMobileUploader Service" Include="StopOyBOAzureMobileUploaderService" />
+    <PreDeployRole Description="Stop OyBO FUL Stub Service" Include="StopFulStubService" />
+    <PreDeployRole Description="Stop OyBO Api Stub Service" Include="StopApiStubService" />
+    <!-- TJS Distributor -->
+    <PreDeployRole Include="TJSDistributor.JulianService.Stop" />
+	  <PreDeployRole Include="TJSDistributor.JulianService.CPC.Stop" />
+
+    <ServerRole Description="OyBO File System" Include="OyBO.FileSystem" />
+    <ServerRole Description="Create FileShare For OyBO Services with Deployment Permissions" Include="OyBO.FileShare.Functional"/>
+    <ServerRole Description="Ocae File System" Include="Ocae.FileSystem" />
+    <ServerRole Description="Ocae TestProbe File System" Include="Ocae.FileSystem.TestProbe" />   
+    
+    <ServerRole Description="Create FileShare For Ocae Service with Deployment Permissions" Include="Ocae.FileShare.Functional"/>
+    <ServerRole Description="Refunds File System" Include="Refunds.FileSystem" />
+    <ServerRole Description="Create FileShare For Refunds Service with Deployment Permissions" Include="Refunds.FileShare.Functional"/>
+    
+	  <!-- TJS Distributor -->
+    <ServerRole Include="TJSDistributor.Functional.CreateFolders" />
+    <ServerRole Include="TJSDistributor.Functional.CPC.CreateFolders" />
+	
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSDistributor" />
+    
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.OTFP" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.AzureMobileUploader" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.FileCleanup" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.OCAE" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.Refunds" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.FulServiceStub" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.ApiStub" />	
+
+    <ServerRole Description="Oyster Back Office TFP Service Uninstall" Include="OyBO.TFP.Uninstall" />
+    <ServerRole Description="Oyster Back Office TFP Service" Include="OyBO.TFP.Install" />
+	
+    <ServerRole Description="Oyster Back Office TFP Azure Mobile Uploader Service" Include="OyBO.AzureMobileUploader.Install" />
+    <ServerRole Description="Oyster Back Office TFP Azure Mobile Uploader Cert Install" Include="OyBO.AzureMobileUploaderCert.Install" />
+
+    <ServerRole Description="Oyster Back Office File Cleanup Console App Install" Include="OyBO.FileCleanup.Install"/>
+    <ServerRole Description="Oyster Back Office File Cleanup Scheduler" Include="OyBO.FileCleanup.ScheduledTask.Create" />
+
+    <ServerRole Description="Oyster Charge Adjustment Engine Service Install" Include="OyBO.Ocae.Install"/>
+
+    <ServerRole Description="OYBO FUL Stub Service Install" Include="OyBO.FulStub.Install"/>
+    <ServerRole Description="OyBO Api Stub Service Install" Include="OyBO.ApiStub.Install"/>
+
+	  <!--Uninstall role was added because of versioning issues with NuGet packages which resulted in dlls being deleted but not replaced. A uninstall / fresh install solves this.-->
+    <!--When each component is built in it's own directory on the build server, dll version clashes won't happen, so this role can be removed.-->
+    <ServerRole Description="OyBO Refunds Service Uninstall" Include="OyBO.Refunds.Install" Action="Uninstall" DisableTests="true"/>
+    <ServerRole Description="OyBO Refunds Service Install" Include="OyBO.Refunds.Install"/>
+	
+    <!-- TJS Distributor -->
+    <ServerRole Description="TJS Distributor Message Broker service" Include="TJSDistributor.JulianService.Install" StartUpType="AutomaticDelayed" />
+    <ServerRole Description="TJS Distributor Message Broker CPC service" Include="TJSDistributor.JulianService.CPC.Install" StartUpType="AutomaticDelayed" Config="TestRig_TJSDistributor_CPC" />
+
+    <!-- TJS Distributor -->
+    <PostDeployRole Include="TJSDistributor.JulianService.Start" />
+    <PostDeployRole Include="TJSDistributor.JulianService.CPC.Start" />	
+    
+    <PostDeployRole Description="Start OyBO Api Stub Service" Include="StartOyboApiStubService" />
+    <PostDeployRole Description="Start Oyster Back Office Services" Include="StartOyBOServices" />
+    <PostDeployRole Description="Start Oyster Back Office AzureMobileUploader Service" Include="StartOyBOAzureMobileUploaderService" />
+    <PostDeployRole Description="Start Oyster Charge Adjustment Engine Service" Include="StartOyboOCAEService" />
+    <PostDeployRole Description="Start OYBO FUL Stub Service" Include="StartOyboFulStubService" />
+    <PostDeployRole Description="Start OyBO Refunds Service" Include="StartOyboRefundsService" />
+  </machine>
+
+  <machine Id="3" Name="TS-DB1" ExternalIP="" Role="FTP Database Server" DeploymentMachine="true">
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices1" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices2" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices3" />
+    <PreDeployRole Description="CheckSqlAgentServiceInst3" Include="CheckSqlAgentServiceInst3" />
+
+    <ServerRole Description="OyBO File System" Include="OyBO.TestFileSystem" />
+    <!-- Used for testing the partitioning SQL Job. Defined in CommonLabServerRoles. Installed in the Functional rig ONLY. -->
+
+    <!-- OTFP DB-->
+    <DatabaseRole Description="OTFP Database" Include="OTFP.Baseline.Database"  DatabaseInstance="Inst3" TargetDatabase="OTFP" />
+    <DatabaseRole Description="OTFP Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="OTFP" />
+    <DatabaseRole Description="OTFP Database" Include="OTFP.Database" DatabaseInstance="Inst3" TargetDatabase="OTFP" />
+    <DatabaseRole Description="OTFP Database" Include="OTFP.PreProd.Database" DatabaseInstance="Inst3" TargetDatabase="OTFP" />
+    <DatabaseRole Description="OTFP Database" Include="OTFP.Functional.Database" DatabaseInstance="Inst3" TargetDatabase="OTFP" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst3" TargetDatabase="OTFP" />
+    <DatabaseRole Description="OTFP Partitioning" Include="OTFP.Partitioning" DatabaseInstance="Inst3" TargetDatabase="OTFP"  />
+
+    <!-- OCAE DB-->
+    <DatabaseRole Description="OCAE Database" Include="OCAE.Baseline.Database"  DatabaseInstance="Inst3" TargetDatabase="OCAE" />
+    <DatabaseRole Description="OCAE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="OCAE" />
+    <DatabaseRole Description="OCAE Database" Include="OCAE.Database" DatabaseInstance="Inst3" TargetDatabase="OCAE" />
+    <DatabaseRole Description="OCAE Functional Schema" Include="OCAE.Functional.Database" DatabaseInstance="Inst3" TargetDatabase="OCAE" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst3" TargetDatabase="OCAE" />
+    <DatabaseRole Description="OCAE Partitioning" Include="OCAE.Partitioning" DatabaseInstance="Inst3" TargetDatabase="OCAE"  />
+
+    <!-- Refunds DB-->
+    <DatabaseRole Description="Refunds Database" Include="Refunds.Baseline.Database"  DatabaseInstance="Inst3" TargetDatabase="RefundManager" />
+    <DatabaseRole Description="Refunds Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="RefundManager" />
+    <DatabaseRole Description="Refunds Database" Include="Refunds.Database" DatabaseInstance="Inst3" TargetDatabase="RefundManager" />
+    <DatabaseRole Description="Refunds Functional Schema" Include="Refunds.Functional.Database" DatabaseInstance="Inst3" TargetDatabase="RefundManager" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst3" TargetDatabase="RefundManager" />
+    <DatabaseRole Description="Refunds Partitioning" Include="Refunds.Partitioning" DatabaseInstance="Inst3" TargetDatabase="RefundManager"  />
+
+    <!-- TapIdAllocator DB-->
+    <DatabaseRole Description="TapIdAllocator Database" Include="TapIdAllocator.Baseline.Database"  DatabaseInstance="Inst3" TargetDatabase="TapIdAllocator" />
+    <DatabaseRole Description="TapIdAllocator Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="TapIdAllocator" />
+    <DatabaseRole Description="TapIdAllocator Database" Include="TapIdAllocator.Database" DatabaseInstance="Inst3" TargetDatabase="TapIdAllocator" />
+    <DatabaseRole Description="TapIdAllocator Functional Schema" Include="TapIdAllocator.Functional.Database" DatabaseInstance="Inst3" TargetDatabase="TapIdAllocator" />
+    
+    <!--CardDiscounts DB-->
+    <DatabaseRole Description="CardDiscounts Database" Include="CardDiscounts.Baseline.Database"  DatabaseInstance="Inst3" TargetDatabase="CardDiscounts" />
+    <DatabaseRole Description="CardDiscounts Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="CardDiscounts" />
+    <DatabaseRole Description="CardDiscounts Database" Include="CardDiscounts.Database" DatabaseInstance="Inst3" TargetDatabase="CardDiscounts" />
+    <DatabaseRole Description="CardDiscounts Functional Schema" Include="CardDiscounts.Functional.Database" DatabaseInstance="Inst3" TargetDatabase="CardDiscounts" />
+
+
+    <!-- TJS DB -->
+    <DatabaseRole Description='TJS Baseline' Include="TJS.Baseline.Database" DatabaseInstance="Inst3" TargetDatabase="TJS" />
+    <DatabaseRole Description="TJS Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="TJS" />
+    <DatabaseRole Description="TJS Main Schema" Include="TJS.Database" DatabaseInstance="Inst3" TargetDatabase="TJS" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst3" TargetDatabase="TJS" />
+    <DatabaseRole Description="TJS Partitioning" Include="TJS.Partitioning" DatabaseInstance="Inst3" TargetDatabase="TJS" />
+	
+    <!-- TJS DB for CPC -->
+    <DatabaseRole Description='TJS Baseline' Include="TJS.Baseline.Database" DatabaseInstance="Inst3" TargetDatabase="TJS_CPC" />
+    <DatabaseRole Description="TJS Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="TJS_CPC" />
+    <DatabaseRole Description="TJS Main Schema" Include="TJS.Database" DatabaseInstance="Inst3" TargetDatabase="TJS_CPC" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst3" TargetDatabase="TJS_CPC" />
+    <DatabaseRole Description="TJS Partitioning" Include="TJS.Partitioning" DatabaseInstance="Inst3" TargetDatabase="TJS_CPC" />
+  </machine>
+  
+  <machine Id="4" Name="TS-CIS1" ExternalIP="" Role="FTP IIS Server" >
+    <ServerRole Include="IISSetup.CIS" Description="IIS" Groups="OyBO" />
+
+	<!-- Configure the CardDiscountStore WebApi to be hosted and run under IIS -->
+	<ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.CardDiscountStore" />	
+	<ServerRole Description="OyBO CardDiscountStore" Include="OyBO.CardDiscountStore.Service" />
+
+  <!-- Configure the Refunds WebApi to be hosted and run under IIS -->
+  <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.RefundsApi" />
+  <ServerRole Description="OyBO Refund Api" Include="OyBO.Refunds.Api.Service" />
+  </machine>
+</configuration>

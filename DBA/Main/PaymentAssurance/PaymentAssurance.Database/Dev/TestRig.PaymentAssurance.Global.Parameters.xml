@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+
+  <parameter name="DBA_test" value="0" />
+  <parameter name="PaymentAssuranceServiceAccount" value="devint2int\zsvcPaymentAssurance">
+  
+  </parameters>

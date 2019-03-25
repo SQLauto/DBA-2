@@ -1,0 +1,247 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="DevInt2.FAE.Oyster.Internal" Environment="DevInt2" Config="DevInt2" ProductGroup="FTP">
+
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+
+  <PostDeploymentTestIdentity>DeploymentAccount.Internal</PostDeploymentTestIdentity>
+
+  <machine Id="FTDC2MGT360" Name="FTDC2MGT360" ExternalIP="10.107.200.186" DeploymentMachine="true"  />
+
+   <machine Id="TDC2FAEC04V01" Name="TDC2FAEC04V01" ExternalIP="10.107.200.196" Role="SQL Volume">
+    <!-- Travel Store DB -->
+	  <DatabaseRole Description='TravelStore Baseline' Include="TravelStore.Baseline.Database" DatabaseInstance="VINS001" TargetDatabase="OyBo_Mar2018_TravelStore" />
+	  <DatabaseRole Description="TravelStore Deployment Schema" Include="Deployment.Schema" DatabaseInstance="VINS001" TargetDatabase="OyBo_Mar2018_TravelStore" />
+	  <DatabaseRole Description="TravelStore Database" Include="TravelStore.Database" DatabaseInstance="VINS001" TargetDatabase="OyBo_Mar2018_TravelStore" />
+	  <DatabaseRole Description="Config Database" Include="Config.Database" DatabaseInstance="VINS001" TargetDatabase="OyBo_Mar2018_TravelStore"/>
+	  <DatabaseRole Description="TravelStore Config Database" Include="TravelStore_Config.Database" DatabaseInstance="VINS001" TargetDatabase="OyBo_Mar2018_TravelStore"/>
+	  <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="VINS001" TargetDatabase="OyBo_Mar2018_TravelStore" />
+	  <DatabaseRole Description="TravelStore Partitioning" Include="TravelStore.Partitioning" DatabaseInstance="VINS001" TargetDatabase="OyBo_Mar2018_TravelStore" />
+    <DatabaseRole Description="TravelStore DevInt2 schema increment" Include="TravelStore.DB.DevIntTwo" DatabaseInstance="VINS001" TargetDatabase="OyBo_Mar2018_TravelStore" />
+
+  </machine>
+
+  <machine Id="FTDC2CIS313" Name="FTDC2CIS313" ExternalIP="10.107.200.139" Role="CIS Server">
+    <ServerRole Description="FAE Oyster ManualCorrections ApiService" Include="OysterManualCorrectionsReceiver.Api" Config="DevInt2_Oyster" />
+    <ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+    <ServerRole Description="FAE VoidService" Include="FAE.Void.Service" Config="DevInt2_Oyster" />
+  </machine>
+  
+  <machine Id="FTDC2CIS314" Name="FTDC2CIS314" ExternalIP="10.107.200.140" Role="CIS Server">
+    <ServerRole Description="FAE Oyster ManualCorrections ApiService" Include="OysterManualCorrectionsReceiver.Api" Config="DevInt2_Oyster" />
+    <ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+    <ServerRole Description="FAE VoidService" Include="FAE.Void.Service" Config="DevInt2_Oyster" />
+  </machine>
+    
+  <machine Id="FTDC2CIS315" Name="FTDC2CIS315" ExternalIP="10.107.200.141" Role="CIS Server">
+    <ServerRole Description="FAE Oyster ManualCorrections ApiService" Include="OysterManualCorrectionsReceiver.Api" Config="DevInt2_Oyster" />
+    <ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+    <ServerRole Description="FAE VoidService" Include="FAE.Void.Service" Config="DevInt2_Oyster" />
+  </machine>
+    
+  <machine Id="FTDC2CIS316" Name="FTDC2CIS316" ExternalIP="10.107.200.142" Role="CIS Server">
+    <ServerRole Description="FAE Oyster ManualCorrections ApiService" Include="OysterManualCorrectionsReceiver.Api" Config="DevInt2_Oyster" />
+    <ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+    <ServerRole Description="FAE VoidService" Include="FAE.Void.Service" Config="DevInt2_Oyster" />
+  </machine>
+    
+  <machine Id="FTDC2CIS317" Name="FTDC2CIS317" ExternalIP="10.107.200.143" Role="CIS Server">
+    <ServerRole Description="FAE Oyster ManualCorrections ApiService" Include="OysterManualCorrectionsReceiver.Api" Config="DevInt2_Oyster" />
+    <ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+    <ServerRole Description="FAE VoidService" Include="FAE.Void.Service" Config="DevInt2_Oyster" />
+  </machine>
+
+  <!--Oyster Fares Aggregation Engine-->
+  <machine Id="FTDC2FAC318" Name="FTDC2FAC318" ExternalIP="10.107.200.144" Role="OAE Controller 1 - Non-Clustered">
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+	  <PreDeployRole Include ="StopOaeController" />
+    <ServerRole Include ="FAE.Engine.Controller.Oyster.Stateless" Config="DevInt2_Oyster"/>
+    <ServerRole Include="FAE.EngineControllerUtil.Install" Groups="OAE"  Config="DevInt2_Oyster"/>
+    <PostDeployRole Include ="StartOaeController" />
+  </machine>
+
+  <machine Id="FTDC2FAC319" Name="FTDC2FAC319" ExternalIP="10.107.200.145" Role="OAE Tap Importer - Non-Clustered">
+    <PreDeployRole Include ="StopTapImporter" />
+    <ServerRole Description="OAE Tap Importer Service folders" Include="OAE.TapImporter.Service.Folders" />
+	  <ServerRole Description="Create FileShare For FAE Tap Queue" Include="FAE.TapQueue.FileShare" />
+    <ServerRole Description="FAE Tap Importer" Include="FAE.TapImporter.Service.Oyster" Config="DevInt2_Oyster"/>
+    <PostDeployRole Include ="StartFaeTapImporter" />
+  </machine>
+
+  <machine Id="FTDC2FAE320" Name="FTDC2FAE320" ExternalIP="10.107.200.146" Role="OAE Engine 1" >
+    <PreDeployRole Include="StopOaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="DevInt2_Oyster"/>
+    <PostDeployRole Include="StartOaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE321" Name="FTDC2FAE321" ExternalIP="10.107.200.147" Role="OAE Engine 2">
+    <PreDeployRole Include="StopOaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="DevInt2_Oyster"/>
+    <PostDeployRole Include="StartOaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE322" Name="FTDC2FAE322" ExternalIP="10.107.200.148" Role="OAE Engine 3">
+    <PreDeployRole Include="StopOaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="DevInt2_Oyster"/>
+    <PostDeployRole Include="StartOaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE323" Name="FTDC2FAE323" ExternalIP="10.107.200.149" Role="OAE Engine 4">
+    <PreDeployRole Include="StopOaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="DevInt2_Oyster"/>
+    <PostDeployRole Include="StartOaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE324" Name="FTDC2FAE324" ExternalIP="10.107.200.150" Role="OAE Engine 5">
+    <PreDeployRole Include="StopOaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="DevInt2_Oyster"/>
+    <PostDeployRole Include="StartOaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE325" Name="FTDC2FAE325" ExternalIP="10.107.200.151" Role="OAE Engine 6">
+    <PreDeployRole Include="StopOaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="DevInt2_Oyster"/>
+    <PostDeployRole Include="StartOaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE326" Name="FTDC2FAE326" ExternalIP="10.107.200.152" Role="OAE Engine 7">
+    <PreDeployRole Include="StopOaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="DevInt2_Oyster"/>
+    <PostDeployRole Include="StartOaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE327" Name="FTDC2FAE327" ExternalIP="10.107.200.153" Role="OAE Engine 8">
+    <PreDeployRole Include="StopOaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="DevInt2_Oyster"/>
+    <PostDeployRole Include="StartOaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE328" Name="FTDC2FAE328" ExternalIP="10.107.200.154" Role="OAE Engine 9">
+    <PreDeployRole Include="StopOaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="DevInt2_Oyster"/>
+    <PostDeployRole Include="StartOaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE329" Name="FTDC2FAE329" ExternalIP="10.107.200.155" Role="OAE Engine 10">
+    <PreDeployRole Include="StopOaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="DevInt2_Oyster"/>
+    <PostDeployRole Include="StartOaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE330" Name="FTDC2FAE330" ExternalIP="10.107.200.156" Role="OAE Engine 11">
+    <PreDeployRole Include="StopOaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="DevInt2_Oyster"/>
+    <PostDeployRole Include="StartOaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE331" Name="FTDC2FAE331" ExternalIP="10.107.200.157" Role="OAE Engine 12">
+    <PreDeployRole Include="StopOaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="DevInt2_Oyster"/>
+    <PostDeployRole Include="StartOaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE32" Name="FTDC2FAE332" ExternalIP="10.107.200.158" Role="OAE Engine 13">
+    <PreDeployRole Include="StopOaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="DevInt2_Oyster"/>
+    <PostDeployRole Include="StartOaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE333" Name="FTDC2FAE333" ExternalIP="10.107.200.159" Role="OAE Engine 14">
+    <PreDeployRole Include="StopOaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="DevInt2_Oyster"/>
+    <PostDeployRole Include="StartOaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE334" Name="FTDC2FAE334" ExternalIP="10.107.200.160" Role="OAE Engine 15">
+    <PreDeployRole Include="StopOaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="DevInt2_Oyster"/>
+    <PostDeployRole Include="StartOaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE335" Name="FTDC2FAE335" ExternalIP="10.107.200.161" Role="OAE Engine 16">
+    <PreDeployRole Include="StopOaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="DevInt2_Oyster"/>
+    <PostDeployRole Include="StartOaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE336" Name="FTDC2FAE336" ExternalIP="10.107.200.162" Role="OAE Engine 17">
+    <PreDeployRole Include="StopOaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="DevInt2_Oyster"/>
+    <PostDeployRole Include="StartOaeEngine" />
+  </machine>
+  <machine Id="FTDC2FAE337" Name="FTDC2FAE337" ExternalIP="10.107.200.163" Role="OAE Engine 18">
+    <PreDeployRole Include="StopOaeEngine" />
+    <PreDeployRole Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" Config="DevInt2_Oyster"/>
+    <PostDeployRole Include="StartOaeEngine" />
+  </machine>
+  <!--<machine Id="FTDC2OAE38" Name="FTDC2OAE368" ExternalIP="10.107.200.250" Role="FAE Engine 19">
+    <PreDeployRole Description="StopOaeEngine" Include="StopOaeEngine" />
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" />
+  </machine>
+  <machine Id="FTDC2OAE369" Name="FTDC2OAE369" ExternalIP="10.107.200.251" Role="FAE Engine 20">
+    <PreDeployRole Description="StopOaeEngine" Include="StopOaeEngine" />
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" />
+  </machine>
+  <machine Id="FTDC2OAE370" Name="FTDC2OAE370" ExternalIP="10.107.200.252" Role="FAE Engine 21">
+    <PreDeployRole Description="StopOaeEngine" Include="StopOaeEngine" />
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" />
+  </machine>
+  <machine Id="FTDC2OAE371" Name="FTDC2OAE371" ExternalIP="10.107.200.253" Role="FAE Engine 22">
+    <PreDeployRole Description="StopOaeEngine" Include="StopOaeEngine" />
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv"/>
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.Oyster.Stateless" />
+  </machine>-->
+
+</configuration>

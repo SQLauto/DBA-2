@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<Deployments>
+  <Deployment Index='0' IsDatabaseDeployment='true'>
+    <Package Name='Deployment.Baseline.PAK_160805.1_Config_DB.zip' Config='Baseline.DB.config.xml' Environment='Baseline' Groups='' Servers='' Partition='' />
+    <DeploymentServer Name='TS-DB1' ExternalIP='' DeploymentTempPath='' />
+    <DeploymentAccount Name='FAELAB\TFSBuild' Password='vIgxmg6jvCDA1nUHWi8Xzw==' />
+  </Deployment>
+  <Deployment Index='1'>
+    <Package Name='Deployment.Baseline.PAK_160805.1_Config_WebApps.zip' Config='Baseline.Apps.Config.xml' Environment='Baseline' Groups='Web' Servers='' Partition='' />
+    <DeploymentServer Name='TS-DB1' ExternalIP='' DeploymentTempPath='' />
+    <DeploymentAccount Name='FAELAB\TFSBuild' Password='vIgxmg6jvCDA1nUHWi8Xzw==' />
+  </Deployment>
+  <Deployment Index='2'>
+    <Package Name='Deployment.Baseline.PAK_160805.1_Config_WinApps.zip' Config='Baseline.Apps.Config.xml' Environment='Baseline' Groups='Win' Servers='' Partition='' />
+    <DeploymentServer Name='TS-DB1' ExternalIP='' DeploymentTempPath='' />
+    <DeploymentAccount Name='FAELAB\TFSBuild' Password='vIgxmg6jvCDA1nUHWi8Xzw==' />
+  </Deployment>
+</Deployments>

@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/CommonRoles">
+  <CommonRoles>
+    <ServerRole Name="TFL.IISSetup" Include="IISSetup.SSOext" Description="IIS" Groups="SSO" />
+    <ServerRole Name="TFL.EventLogDeploy" Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" Groups="SSO">
+      <EventLogDeploy EventLogName="SSO">
+        <Sources>
+          <Source Name="Website" />
+          <Source Name="ServiceFacade" />
+        </Sources>
+      </EventLogDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.WebDeploy" Description="ServicesFacade Role Functional" Include="Service.Facade.Functional" Groups="SSO">
+      <WebDeploy Name="ServicesFacade" RegistryKey="Software\TfL\SSO\ServicesFacade" AssemblyToVersionFrom="Services.Facade.dll">
+        <AppPool>
+          <Name>SsoFacadePool</Name>
+          <ServiceAccount>ApplicationPoolIdentity</ServiceAccount>
+        </AppPool>
+        <Site>
+          <Name>ServicesFacade</Name>
+          <Port>8081</Port>
+          <PhysicalPath>D:\TFL\SSO\ServicesFacade</PhysicalPath>
+        </Site>
+        <Package>
+          <Name>Services.Facade</Name>
+        </Package>
+        <TestInfo>
+          <EndPoint>api/Role/ListAllRoles</EndPoint>
+          <!--Just browse the root-->
+        </TestInfo>
+      </WebDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.WebDeploy" Description="Services Facade Role" Include="Service.Facade.Role" Groups="SSO">
+      <WebDeploy Name="Services Facade" RegistryKey="Software\TfL\SSO\ServicesFacade" AssemblyToVersionFrom="Services.Facade.dll">
+        <AppPool>
+          <Name>SsoFacadePool</Name>
+          <ServiceAccount>ApplicationPoolIdentity</ServiceAccount>
+        </AppPool>
+       <Site>
+          <Name>ServicesFacade</Name>
+          <Port>8081</Port>
+          <PhysicalPath>D:\TFL\SSO\ServicesFacade</PhysicalPath>
+         <!-- Functional DOES NOT HAVE this basic auth -->
+          <Authentication>Basic</Authentication>
+        </Site>
+        <Package>
+          <Name>Services.Facade</Name>
+        </Package>
+        <TestInfo>
+         <!-- Functional DOES NOT HAVE this TestIdentity -->
+          <EndPoint TestIdentity="SSOEckohUser">api/Role/ListAllRoles</EndPoint>
+          <!--Just browse the root-->
+        </TestInfo>
+      </WebDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.WebDeploy" Description="SSO Website" Include="SSO.Website" Groups="SSO">
+      <WebDeploy Name="SSO Web" RegistryKey="Software\TfL\SSO\website" AssemblyToVersionFrom="SSO.Website.dll">
+        <AppPool>
+          <Name>SsoWebsitePool</Name>
+          <ServiceAccount>ApplicationPoolIdentity</ServiceAccount>
+        </AppPool>
+        <Site>
+          <Name>Default Web Site</Name>
+          <Port>80</Port>
+          <PhysicalPath>D:\TFL\SSO\Website</PhysicalPath>
+        </Site>
+        <Package>
+          <Name>SSO.Website</Name>
+        </Package>
+        <TestInfo>
+          <EndPoint></EndPoint>
+          <!--Just browse the root-->
+        </TestInfo>
+      </WebDeploy>
+    </ServerRole>
+  </CommonRoles>
+</configuration>

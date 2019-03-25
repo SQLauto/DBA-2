@@ -1,0 +1,131 @@
+﻿<Activity mc:Ignorable="sap" x:Class="TfsBuild.Versioning.Activities.UpdateAssemblyInfoFileVersion" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:local="clr-namespace:TfsBuild.Versioning.Activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mt="clr-namespace:Microsoft.TeamFoundation;assembly=Microsoft.TeamFoundation.Common" xmlns:mtbc="clr-namespace:Microsoft.TeamFoundation.Build.Client;assembly=Microsoft.TeamFoundation.Build.Client" xmlns:mtbc1="clr-namespace:Microsoft.TeamFoundation.Build.Client;assembly=Microsoft.TeamFoundation.Build.Client, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" xmlns:mtbw="clr-namespace:Microsoft.TeamFoundation.Build.Workflow;assembly=Microsoft.TeamFoundation.Build.Workflow" xmlns:mtbwa="clr-namespace:Microsoft.TeamFoundation.Build.Workflow.Activities;assembly=Microsoft.TeamFoundation.Build.Workflow" xmlns:mtbwt="clr-namespace:Microsoft.TeamFoundation.Build.Workflow.Tracking;assembly=Microsoft.TeamFoundation.Build.Workflow" xmlns:mtvc="clr-namespace:Microsoft.TeamFoundation.VersionControl.Client;assembly=Microsoft.TeamFoundation.VersionControl.Client" xmlns:mv="clr-namespace:Microsoft.VisualBasic;assembly=System" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:s="clr-namespace:System;assembly=mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns:s1="clr-namespace:System;assembly=mscorlib" xmlns:s2="clr-namespace:System;assembly=System" xmlns:s3="clr-namespace:System;assembly=System.Xml" xmlns:s4="clr-namespace:System;assembly=System.Core" xmlns:s5="clr-namespace:System;assembly=System.ServiceModel" xmlns:sa="clr-namespace:System.Activities;assembly=System.Activities, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" xmlns:sa1="clr-namespace:System.Activities;assembly=System.Activities" xmlns:sad="clr-namespace:System.Activities.Debugger;assembly=System.Activities" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sc="clr-namespace:System.ComponentModel;assembly=System" xmlns:sc1="clr-namespace:System.ComponentModel;assembly=WindowsBase" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:scg1="clr-namespace:System.Collections.Generic;assembly=System" xmlns:scg2="clr-namespace:System.Collections.Generic;assembly=System.ServiceModel" xmlns:scg3="clr-namespace:System.Collections.Generic;assembly=System.Core" xmlns:scg4="clr-namespace:System.Collections.Generic;assembly=mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:sd1="clr-namespace:System.Data;assembly=System.Data.DataSetExtensions" xmlns:sd2="clr-namespace:System.Drawing;assembly=System.Drawing" xmlns:si="clr-namespace:System.IO;assembly=mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns:si1="clr-namespace:System.IO;assembly=System.Core" xmlns:si2="clr-namespace:System.IO;assembly=System" xmlns:si3="clr-namespace:System.IO;assembly=System.ServiceModel" xmlns:si4="clr-namespace:System.IO;assembly=mscorlib" xmlns:si5="clr-namespace:System.IO;assembly=WindowsBase" xmlns:sl="clr-namespace:System.Linq;assembly=System.Core" xmlns:sl1="clr-namespace:System.Linq;assembly=System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns:sr="clr-namespace:System.Reflection;assembly=mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns:st="clr-namespace:System.Text;assembly=mscorlib" xmlns:str="clr-namespace:System.Text.RegularExpressions;assembly=System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns:sx="clr-namespace:System.Xml;assembly=System.Data" xmlns:sx1="clr-namespace:System.Xml;assembly=System.Xml" xmlns:sx2="clr-namespace:System.Xml;assembly=System.Runtime.Serialization" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="ForceCreateVersion" Type="InArgument(x:Boolean)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="AssemblyFileVersionReplacementPattern" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="BuildNumber" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="AssemblyVersionReplacementPattern" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="AssemblyInfoFileList" Type="InArgument(scg:IEnumerable(x:String))">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="BuildNumberPrefix" Type="InArgument(x:Int32)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="AssemblyCompanyReplacementPattern" Type="InArgument(x:String)" />
+    <x:Property Name="AssemblyTitleReplacementPattern" Type="InArgument(x:String)" />
+    <x:Property Name="AssemblyDescriptionReplacementPattern" Type="InArgument(x:String)" />
+    <x:Property Name="AssemblyConfigurationReplacementPattern" Type="InArgument(x:String)" />
+    <x:Property Name="AssemblyProductReplacementPattern" Type="InArgument(x:String)" />
+    <x:Property Name="AssemblyCopyrightReplacementPattern" Type="InArgument(x:String)" />
+    <x:Property Name="AssemblyTrademarkReplacementPattern" Type="InArgument(x:String)" />
+    <x:Property Name="AssemblyCultureReplacementPattern" Type="InArgument(x:String)" />
+    <x:Property Name="AssemblyInformationalVersionReplacementPattern" Type="InArgument(x:String)" />
+  </x:Members>
+  <sap:VirtualizedContainerService.HintSize>825,1478</sap:VirtualizedContainerService.HintSize>
+  <mva:VisualBasic.Settings>Assembly references and imported namespaces serialized as XML namespaces</mva:VisualBasic.Settings>
+  <sap:WorkflowViewStateService.ViewState>
+    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+      <x:Boolean x:Key="ShouldCollapseAll">False</x:Boolean>
+      <x:Boolean x:Key="ShouldExpandAll">True</x:Boolean>
+    </scg:Dictionary>
+  </sap:WorkflowViewStateService.ViewState>
+  <Sequence DisplayName="Process each solution separately" sad:XamlDebuggerXmlReader.FileName="D:\_TfsProjects\BuildActivities\SolutionBuildVersioning\Dev\Version 1.5.0.0\TfsBuild.Versioning.Activities\UpdateAssemblyInfoFileVersion.xaml" sap:VirtualizedContainerService.HintSize="785,1438" mtbwt:BuildTrackingParticipant.Importance="Low" mva:VisualBasic.Settings="Assembly references and imported namespaces serialized as XML namespaces">
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <If Condition="[AssemblyInfoFileList.Any()]" DisplayName="Handle Matching Files" sap:VirtualizedContainerService.HintSize="763,1314" mtbwt:BuildTrackingParticipant.Importance="Low">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <If.Then>
+        <Sequence DisplayName="Process Matching Files" sap:VirtualizedContainerService.HintSize="538,1208" mtbwt:BuildTrackingParticipant.Importance="Low">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ForEach x:TypeArguments="x:String" DisplayName="Enumerate Matching Files" sap:VirtualizedContainerService.HintSize="516,1084" mtbwt:BuildTrackingParticipant.Importance="Low" Values="[AssemblyInfoFileList]">
+            <ActivityAction x:TypeArguments="x:String">
+              <ActivityAction.Argument>
+                <DelegateInArgument x:TypeArguments="x:String" Name="path" />
+              </ActivityAction.Argument>
+              <Sequence sap:VirtualizedContainerService.HintSize="486,978" mtbwt:BuildTrackingParticipant.Importance="Low">
+                <Sequence.Variables>
+                  <Variable x:TypeArguments="mtbc:IBuildDetail" Name="BuildDetail" />
+                </Sequence.Variables>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <mtbwa:WriteBuildMessage DisplayName="Log Update" sap:VirtualizedContainerService.HintSize="464,22" mtbwt:BuildTrackingParticipant.Importance="Low" Importance="[BuildMessageImportance.High]" Message="[String.Format(&quot;Updating version information in {0}&quot;, path)]" mva:VisualBasic.Settings="Assembly references and imported namespaces serialized as XML namespaces" />
+                <If Condition="[AssemblyVersionReplacementPattern &lt;&gt; String.Empty And AssemblyVersionReplacementPattern &lt;&gt; VersioningHelper.PropertyNotFound]" DisplayName="If AssemblyVersion is defined" sap:VirtualizedContainerService.HintSize="464,314" mtbwt:BuildTrackingParticipant.Importance="Low">
+                  <If.Then>
+                    <Sequence DisplayName="Convert Pattern and Replace AssemblyVersion" sap:VirtualizedContainerService.HintSize="281,208" mtbwt:BuildTrackingParticipant.Importance="Low">
+                      <Sequence.Variables>
+                        <Variable x:TypeArguments="x:String" Name="AssemblyVersion" />
+                      </Sequence.Variables>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <local:ConvertVersionPattern BuildNumber="[BuildNumber]" BuildNumberPrefix="[BuildNumberPrefix]" ConvertedVersionNumber="[AssemblyVersion]" sap:VirtualizedContainerService.HintSize="200,22" mtbwt:BuildTrackingParticipant.Importance="Low" VersionPattern="[AssemblyVersionReplacementPattern]" />
+                      <local:ReplaceVersionInFile DisplayName="Replace AssemblyVersion" FilePath="[path]" ForceCreate="[ForceCreateVersion]" sap:VirtualizedContainerService.HintSize="200,22" mtbwt:BuildTrackingParticipant.Importance="Low" ReplacementVersion="[AssemblyVersion]" VersionType="[TfsBuild.Versioning.Activities.VersionTypeOptions.AssemblyVersion]" />
+                    </Sequence>
+                  </If.Then>
+                </If>
+                <If Condition="[AssemblyFileVersionReplacementPattern &lt;&gt; String.Empty And AssemblyFileVersionReplacementPattern &lt;&gt; VersioningHelper.PropertyNotFound]" DisplayName="If AssemblyFileVersion is defined" sap:VirtualizedContainerService.HintSize="464,314" mtbwt:BuildTrackingParticipant.Importance="Low">
+                  <If.Then>
+                    <Sequence DisplayName="Convert Pattern and Replace AssemblyFileVersion" sap:VirtualizedContainerService.HintSize="281,208" mtbwt:BuildTrackingParticipant.Importance="Low">
+                      <Sequence.Variables>
+                        <Variable x:TypeArguments="x:String" Name="AssemblyFileVersion" />
+                      </Sequence.Variables>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <local:ConvertVersionPattern BuildNumber="[BuildNumber]" BuildNumberPrefix="[BuildNumberPrefix]" ConvertedVersionNumber="[AssemblyFileVersion]" sap:VirtualizedContainerService.HintSize="200,22" mtbwt:BuildTrackingParticipant.Importance="Low" VersionPattern="[AssemblyFileVersionReplacementPattern]" />
+                      <local:ReplaceVersionInFile DisplayName="Replace AssemblyFileVersion" FilePath="[path]" ForceCreate="[ForceCreateVersion]" sap:VirtualizedContainerService.HintSize="200,22" mtbwt:BuildTrackingParticipant.Importance="Low" ReplacementVersion="[AssemblyFileVersion]" VersionType="[TfsBuild.Versioning.Activities.VersionTypeOptions.AssemblyFileVersion]" />
+                    </Sequence>
+                  </If.Then>
+                </If>
+                <mtbwa:GetBuildDetail sap:VirtualizedContainerService.HintSize="464,22" Result="[BuildDetail]" />
+                <local:ReplaceAssemblyInfoProperties AssemblyCompany="[AssemblyCompanyReplacementPattern]" AssemblyConfiguration="[AssemblyConfigurationReplacementPattern]" AssemblyCopyright="[AssemblyCopyrightReplacementPattern]" AssemblyCulture="[AssemblyCultureReplacementPattern]" AssemblyDescription="[AssemblyDescriptionReplacementPattern]" AssemblyInformationalVersion="[AssemblyInformationalVersionReplacementPattern]" AssemblyProduct="[AssemblyProductReplacementPattern]" AssemblyTitle="[AssemblyTitleReplacementPattern]" AssemblyTrademark="[AssemblyTrademarkReplacementPattern]" BuildDate="[DateTime.Now]" BuildDetail="[BuildDetail]" FilePath="[path]" ForceCreate="[ForceCreateVersion]" sap:VirtualizedContainerService.HintSize="464,22" />
+              </Sequence>
+            </ActivityAction>
+          </ForEach>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <mtbwa:WriteBuildWarning DisplayName="Warn No Matches Found" sap:VirtualizedContainerService.HintSize="200,1208" mtbwt:BuildTrackingParticipant.Importance="Low" Message="[String.Format(&quot;No assembly information files were provided&quot;)]" />
+      </If.Else>
+    </If>
+  </Sequence>
+</Activity>

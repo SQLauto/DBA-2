@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "BarChartError";
+}
+@model List<string>
+
+<h2>Bar Chart Error</h2>
+
+<p>An error occurred when trying to render a bar chart</p>
+<p>TODO</p>
+<ul>    
+    <li> verify that the environments and the database actually exist</li>
+    <li> Cope with getting no data back from service layer - what should we do?</li>
+</ul>
+<div>
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li>@Html.DisplayFor(i => item)</li>
+        }
+    </ul>
+</div>
+<p>Check the URL for spelling errors</p>

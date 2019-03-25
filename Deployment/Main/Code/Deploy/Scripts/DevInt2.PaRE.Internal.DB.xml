@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="DevInt2.PaRE.Internal.DB" Environment="DevInt2" Config="DevInt2" ProductGroup="FTP">
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <PostDeploymentTestIdentity>DeploymentAccount.Internal</PostDeploymentTestIdentity>
+
+  <machine Id="3" Name="FTDC2MGT360" ExternalIP="10.107.200.186" DeploymentMachine="true"  />
+  
+  <machine Id="25" Name="TDC2FAEC04V02" ExternalIP="10.107.200.197" Role="Database Server 3">
+    <!-- PARE Database -->
+    <DatabaseRole Description="PARE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="VINS002" TargetDatabase="PARE" />
+    <DatabaseRole Description="PARE Main Schema" Include="PARE.Database" />
+    <DatabaseRole Description="PARE Pre Production Schema" Include="PARE.PreProduction.Schema" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="VINS002" TargetDatabase="PARE" />
+    <DatabaseRole Description="Pare Partitioning" Include="Pare.Partitioning" />
+    <!-- additional PCS roles which deploy to the PARE DB that are included in PARE.DatabaseArtefacts -->
+    <DatabaseRole Description="PARE PCS Common Schema for PARE" Include="PARE.PCS.Common.PARE" />
+    <DatabaseRole Description="PCS Schema for PARE DB" Include="Pcs.Pare" />
+    <DatabaseRole Description="Pare.Notifications.Dialog.Pare" Include="Pare.Notifications.Dialog.Pare" />
+    <DatabaseRole Description="Pare.Notifications.Transport.Pare" Include="Pare.Notifications.Transport.Pare" />
+    <!-- PCS -->
+    <DatabaseRole Description="Deployment Schema in PCS" Include="Deployment.Schema" DatabaseInstance="VINS002" TargetDatabase="PCS" />
+    <DatabaseRole Description="PARE PCS Common for PCS DB" Include="PARE.PCS.Common.PCS" />
+    <DatabaseRole Description="PCS Mock" Include="Pcs.Mock" />
+    <!-- MasterData Mock schema -->
+    <DatabaseRole Description="PARE Master Data Mock Schema" Include="PARE.MasterDataMock.Schema" />
+  </machine>
+  <CustomTests>
+    <ServiceBrokerTest Name="Pare Pcs Server Sql Service Broker Test" Groups="PARE">
+      <Sql>
+        <DatabaseServer>TDC2FAEC04V02</DatabaseServer>
+        <DatabaseInstance>vins002</DatabaseInstance>
+        <TargetDatabase>Pare</TargetDatabase>
+        <SqlScript>
+          DECLARE @ConversationHandle uniqueidentifier;
+          DECLARE @StatusTime datetime=GETDATE();
+          DECLARE @Token nvarchar(26)='0123456789ABCDEF';
+          --Send the message
+          Exec [$TargetDatabase].[dbo].[SendStatusListUpdateRequest]
+          1,
+          'Correction',
+          @Token,
+          '0113',
+          '001',
+          1,
+          @StatusTime,
+          2,
+          @StatusTime,
+          @ConversationHandle=@ConversationHandle output;
+        </SqlScript>
+      </Sql>
+      <Sql>
+        <DatabaseServer>TDC2FAEC04V02</DatabaseServer>
+        <DatabaseInstance>vins002</DatabaseInstance>
+        <TargetDatabase>Pcs</TargetDatabase>
+        <SqlScript>
+          WAITFOR DELAY '00:00:10';
+
+          IF (select count(*) from $TargetDatabase.[PcsMock].[StatusListActionLog]  WHERE token='0123456789ABCDEF')=0
+			THROW 51000, 'Message not found in [PcsMock].[StatusListActionLog]', 1;
+          
+		  --clear down ready for next test
+          delete from $TargetDatabase.[PcsMock].[StatusListActionLog]  WHERE token='0123456789ABCDEF'
+        </SqlScript>
+      </Sql>
+    </ServiceBrokerTest>
+  </CustomTests>
+</configuration>

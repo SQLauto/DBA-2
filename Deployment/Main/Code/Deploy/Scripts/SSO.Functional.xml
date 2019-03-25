@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="SSO.TestRig" Environment="TestRig" Config="TestRig.SSO" ProductGroup="SSO">
+  <CommonRoleFile>SSO.CommonInternalServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>SSO.CommonExternalServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>SSO.CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>SSO.CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <machine Id="3" Name="TS-CAS1"	ExternalIP="">
+    <ServerRole Include="IISSetup" Description="IIS" Groups="SSO" />
+	<ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+    <ServerRole Description="SSO Website" Include="SSO.Website" />
+    <ServerRole Description="ServicesFacade Role" Include="Service.Facade.Functional" />
+  </machine>
+  <machine Id="2" Name="TS-CIS1"  ExternalIP="">
+    <ServerRole Include="IISSetup" Description="IIS" Groups="SSO" />
+	<ServerRole Description="SSO.EventLog.For.Internal" Include="SSO.EventLogDeploy.Internal" />
+    <ServerRole Description="SSO File System" Include="SSO.FileSystem" />
+    <ServerRole Description="For Marketing Preferences Files" Include="SSO.FileSystem.MarketPref" />
+    <ServerRole Description="Customer Services" Include="Customer.Services" />
+    <ServerRole Description="SingleSignOn Services" Include="SingleSignOn.Services" />
+    <ServerRole Description="SSO Validation Service" Include="Validation.Service" />
+    <ServerRole Description="FTP Notifications Stub" Include="FtpNotifications.Stub" />
+    <ServerRole Description="Customer Change NotificationWorker" Include="Customer.Change.NotificationWorker" />	
+    <ServerRole Description="Customer Change QueueManager" Include="Customer.Change.QueueManager" />
+    <ServerRole Description="Marketing Preferences Exporter" Include="Customer.Change.MarketingPreferences.Exporter" />
+	<!-- <ServerRole Description="Marketing Export Scheduled Task" Include="MarketingExporter.Task" /> -->
+  </machine>
+  <machine Id="1" Name="TS-DB1" ExternalIP="" DeploymentMachine="true">
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices1" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices2" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices3" />
+    <PreDeployRole Description="CheckSqlAgentServiceInst1" Include="CheckSqlAgentServiceInst1" />
+    <ServerRole Include="SQL.Extension.Events.Folder" Description="SQL Extension Events Output Folder Creation" />
+    <DatabaseRole Description="SSO Baseline" Include="SSO.Baseline.Database" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="SSO Deployment Schema" Include="SSO.DBDeploymentSchema" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="SSO Database" Include="SSO.Database" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="SSO Database Dev" Include="SSO.Database.Dev" DatabaseInstance="Inst1" />
+    <DatabaseRole Include="SQL.Extension.Events" Description="SQL Extension Events Deployment Role" TargetDatabase="Master" DatabaseInstance="Inst1"/>
+  </machine>
+  <machine Id="4" Name="TS-AF1" ExternalIP="">
+    <!-- Post Deploy Roles for SSO AppFabric Instance-->
+    <PostDeployRole Description="Start AppFabric Cluster" Include="AppFabric.Integration.Start" />
+  </machine>
+</configuration>

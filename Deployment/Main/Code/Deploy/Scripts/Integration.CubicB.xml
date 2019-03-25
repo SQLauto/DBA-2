@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="Integration.CubicB" Environment="CubicB" Config="CubicB" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonPareServiceDeploy.xml</CommonRoleFile>
+  <CommonRoleFile>CommonMJTDeltasRole.xml</CommonRoleFile>
+
+  <machine Id="FBDC5SQL001" Name="FBDC5SQL001" ExternalIP="10.133.188.75" Role="FTP Database Server" DeploymentMachine="true" />
+
+  <machine Id="FBDC5CAS001" Name="FBDC5CAS001" ExternalIP="10.133.188.77"  Role="CAS Server 1">
+    <ServerRole Description="FTP.EventLog.For.External.CASC" Include="FTP.EventLog.For.External.CASC" />
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSApi" />
+    <ServerRole Description="CACC File System" Include="CACC.FileSystem" />
+    <ServerRole Description="CSC External Token Status Service" Include="CACC.External.TokenStatus.Service" />
+    <ServerRole Description="CSC External Authorisation Service" Include="CACC.External.Authorisation.Service" />
+    <ServerRole Description="CSC External Customer Service" Include="CACC.External.Customer.Service" />
+    <ServerRole Description="Notification Processor External Service" Include="Notification.Processor.ExternalService" />
+    <ServerRole Description="SDM Portal"  Include="SDM.Portal" />
+    <ServerRole Include="FasterData.TJSApi.Service.Oyster" Config="CubicB_Oyster" />
+    <ServerRole Include="FasterData.TJSApi.Service.CPC" />
+  </machine>
+  <machine Id="FBDC5CIS001" Name="FBDC5CIS001"  ExternalIP="10.133.188.80" Role="CIS Server 1">
+    <ServerRole Description="FTP.EventLog.For.FAE.JourneyUsageService" Include="FTP.EventLog.For.FAE.JourneyUsageService" />
+    <ServerRole Description="Pare.TravelTokenService" Include="PARE.TravelToken.Service" />
+    <ServerRole Description="PARE Dashboard" Include="PARE.Dashboard.Web" />
+    <ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+    <ServerRole Description="Journey Usage" Include="FAE.JourneyUsage.Service"  Config="CubicB_Legacy" />
+    <ServerRole Description="Notification Processor Service" Include="Notification.Processor.Service" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+    <ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+    <ServerRole Description="FAE VoidService" Include="FAE.Void.Service"  Config="CubicB_Oyster" />
+    <ServerRole Description="FAE Oyster ManualCorrections ApiService" Include="OysterManualCorrectionsReceiver.Api" Config="CubicB_Oyster" />
+    <ServerRole Description="SDM Web Services"  Include="SDM.WebService" />
+    <ServerRole  Description="FTP.EventLog.For.MasterData.WebApi" Include="FTP.EventLog.For.MasterData.WebApi" />
+    <ServerRole Description="MasterData Api" Include="MasterData.Api" />
+
+  </machine>
+
+  <!--CPC Controller and Engine 1-->
+  <machine Id ="FBDC5FAE001" Name="FBDC5FAE001"   ExternalIP="10.133.188.85" Role="FAE Controller">
+    <ServerRole Description="FAE Controller" Include="FAE.Engine.Controller.CPC.Stateful" Config="CubicB_Legacy" />
+    <ServerRole Description="FAE Tap Importer Service folders" Include="FAE.TapImporter.Service.Folders" />
+    <ServerRole Description="Create FileShare For FAE Tap Queue" Include="FAE.TapQueue.FileShare" />
+    <ServerRole Include="FAE.TapImporter.Service.Oyster" Config="CubicB_Oyster" />
+    <ServerRole Description="FAE Engine Controller Util" Include="FAE.EngineControllerUtil.Install" Config="CubicB_Legacy" />
+    <ServerRole Description="FAE Travel Day Revision Exporter" Include="FAE.TravelDayRevisonExporter.Install" Config="CubicB_Legacy" />
+    <ServerRole Description="FAE EOD Task Schedule Installer" Include="FAE.EOD.ScheduledTask.Create" />
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service.CPC.Stateful" Config="CubicB_Legacy"/>
+    <ServerRole Description="FAE Disruptr" Include="FAE.Engine.Disruptr" />
+  </machine>
+  <!--CPC Engine 2-->
+  <machine Id="FBDC5FAE002" Name="FBDC5FAE002"   ExternalIP="10.133.188.86" Role="FAE Engine 1">
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service.CPC.Stateful" Config="CubicB_Legacy" />
+  </machine>
+  <!--Oyster Controller and Engine 1-->
+  <machine Id="FBDC5FAE003" Name="FBDC5FAE003"   ExternalIP="10.133.188.87" Role="FAE Engine 2">
+    <ServerRole Description="FAE Controller" Include="FAE.Engine.Controller.Oyster.Stateless" Config="CubicB_Oyster" Groups="OAEController" />
+    <ServerRole Description="FAE Engine Controller Util" Include="FAE.EngineControllerUtil.Install" Config="CubicB_Oyster" Groups="OAE" />
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service.Oyster.Stateless" Config="CubicB_Oyster" Groups="OAEPipeline" />
+
+    <!--Oyster RAE -->
+    <ServerRole Description="FTP.EventLog.For.RAE.RaeService" Include="FTP.EventLog.For.RAE.RaeService" Config="CubicB_Oyster" />
+    <ServerRole Description="RAE RSP Output Folder" Include="RAE.Service.RSP.Folders" Config="CubicB_Oyster" />
+    <ServerRole Description="RAE Service Installer" Include="RAE.Service.Install" Config="CubicB_Oyster" />
+    <!--CPC RAE -->
+    <ServerRole Description="RAE CPC RSP Output Folder" Include="RAE.CPC.Service.RSP.Folders" Config="CubicB_CPC" />
+    <ServerRole Description="RAE CPC Service Installer" Include="RAE.CPC.Service.Install" Config="CubicB_CPC" />
+  </machine>
+  <!--StatelessCPC Controller and Engine 1-->
+  <machine Id="FBDC5FAE004" Name="FBDC5FAE004"   ExternalIP="10.133.188.88" Role="FAE Engine 3">
+    <ServerRole Include="FAE.TapImporter.Service.CPC" Config="CubicB_CPC" />
+    <ServerRole Description="FAE Controller" Include="FAE.Engine.Controller.CPC.Stateless" Config="CubicB_CPC" Groups="FAEControllerStateless" />
+    <ServerRole Description="FAE Engine Controller Util" Include="FAE.EngineControllerUtil.Install" Config="CubicB_CPC" Groups="FAE" />
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service.CPC.Stateless" Config="CubicB_CPC" Groups="FAEPipelineStateless" />
+  </machine>
+  <machine Id="FBDC5PAR001" Name="FBDC5PAR001" ExternalIP="10.133.188.83" Role="PARE Services 1">
+
+    <ServerRole Description="PARE PreProduction File System" Include="PARE.PreProduction.FileSystem" />
+    <ServerRole Description="PARE File Staging Area Folders" Include="PARE.FileSystem" />
+
+    <!-- Pare Preprod Services-->
+    <ServerRole Description="PareOysterTapImporterService" Include="PareOysterTapImporterService" />
+    <ServerRole Description="PreProductionPareRiskEngineInstaller" Include="PreProductionPareRiskEngineInstaller" />
+
+    <!-- Pare Services -->
+    <ServerRole Description="PareAuthorisationGatewayServiceInstaller" Include="PareAuthorisationGatewayServiceInstaller" />
+    <ServerRole Description="PareRefundFileServiceInstaller" Include="PareRefundFileServiceInstaller" />
+    <ServerRole Description="PareRevenueFileService" Include="PareRevenueFileService" />
+    <ServerRole Description="PareSettlementValidationResultServiceInstaller" Include="PareSettlementValidationResultServiceInstaller" />
+    <ServerRole Description="PareStatusListProcessorInstaller" Include="PareStatusListProcessorInstaller" />
+    <ServerRole Description="PareTapFileServiceInstaller" Include="PareTapFileServiceInstaller" />
+    <ServerRole Description="PareTravelDayRevisionService" Include="PareTravelDayRevisionService" />
+    <ServerRole Description="SettlementFileResponseServiceInstaller" Include="SettlementFileResponseServiceInstaller" />
+    <ServerRole Description="PareDirectPaymentConfirmationServiceInstaller" Include="PareDirectPaymentConfirmationServiceInstaller" />
+    <ServerRole Description="PareRiskEngineInstaller" Include="PareRiskEngineInstaller"  />
+    <ServerRole Description="PareChargeCalculationInstaller" Include="PareChargeCalculationInstaller"  />
+
+    <!-- Pare Command Line Exe's -->
+    <ServerRole Description="PareFullStatusList.Application.Installer" Include="PareFullStatusList.Application.Installer" />
+    <ServerRole Description="PareStatusListMaintenance.Application.Installer" Include="PareStatusListMaintenance.Application.Installer" />
+    <ServerRole Description="PareVerifyTapData.Application.Installer" Include="PareVerifyTapData.Application.Installer" />
+  	<ServerRole Include="PareSettlement.Installer" />
+    <ServerRole Description="PareAuthorisationGateway.Util.Installer" Include="PareAuthorisationGateway.Util.Installer" />
+    <ServerRole Description="PareChargeCalculationPersist.Application.Installer" Include="PareChargeCalculationPersist.Application.Installer" />
+    <ServerRole Description="ParePostDeployment.Util.Installer" Include="ParePostDeployment.Util.Installer" />
+
+    <!-- Pare Scheduled Tasks -->
+	<ServerRole Include="PARERequestFullStatusList.ScheduledTask.Create" />
+	<ServerRole Include="PareVerifyTapData.ScheduledTask.Create" />
+    <ServerRole Include="PareStatusListMaintenanceApplication.ScheduledTask.Create" />
+    <ServerRole Include="PARESettlementFile.Amex.ScheduledTask.Create" />
+    <ServerRole Include="PARESettlementFile.Barclays.ScheduledTask.Create" />
+    <ServerRole Include="PareChargeCalculationPersist.ScheduledTask.Create" />
+
+  </machine>
+  <machine Id="FBDC5FTM001" Name="FBDC5FTM001" ExternalIP="10.133.188.92" Role="File Transfer Manager Server">
+    <ServerRole Include="FTP.EventLog.For.Internal.FTM" />
+    <ServerRole Include="FTM.Service" />
+  </machine>
+  <machine Id="FBDC5SBA001" Name="FBDC5SBA001"  ExternalIP="10.133.188.95" >
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSDistributor" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.OCAE" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.Refunds" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.OTFP" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.FileCleanup" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.AzureMobileUploader" />
+    <ServerRole Description="FTM EventLog Entry" Include="FTP.EventLog.For.Internal.FTM" />
+
+    <ServerRole Description="OyBO File System" Include="OyBO.FileSystem" />
+    <ServerRole Description="Create FileShare For OyBO Services" Include="OyBO.FileShare"/>
+    <ServerRole Description="Ocae File System" Include="Ocae.FileSystem" />
+    <ServerRole Description="Create FileShare For Ocae Service" Include="Ocae.FileShare"/>
+    <ServerRole Description="Refunds File System" Include="Refunds.FileSystem" />
+    <ServerRole Description="Create FileShare For Refunds Service" Include="Refunds.FileShare"/>
+    <ServerRole Include="TJSDistributor.Functional.CreateFolders" />
+    <ServerRole Include="TJSDistributor.Functional.CPC.CreateFolders" />
+
+    <ServerRole Description="FTM Service (FTP-OyBO)" Include="FTM.Service" Config="CubicB_OYBO" />
+
+    <ServerRole Description="Oyster Back Office TFP Service" Include="OyBO.TFP.Install" />
+    <ServerRole Description="Oyster Back Office File Cleanup Console App Install" Include="OyBO.FileCleanup.Install" />
+    <ServerRole Description="Oyster Charge Adjustment Engine Service Install" Include="OyBO.Ocae.Install"/>
+    <ServerRole Description="OyBO Refunds Service Install" Include="OyBO.Refunds.Install" Action="Reinstall"/>
+    <ServerRole Description="Oyster Back Office TFP Azure Mobile Uploader Service" Include="OyBO.AzureMobileUploader.Install" />
+
+    <ServerRole Description="TJS Distributor Message Broker service - Oyster" Include="TJSDistributor.JulianService.Install" Config="CubicB_Oyster" />
+    <ServerRole Description="TJS Distributor TJSHExtractor service - Oyster" Include="TJSDistributor.TJSHExtractor.Install" Config="CubicB_Oyster" />
+    <ServerRole Description="TJS Distributor Message Broker service - CPC" Include="TJSDistributor.JulianService.CPC.Install" />
+    <ServerRole Description="TJS Distributor TJSHExtractor service - CPC" Include="TJSDistributor.TJSHExtractor.CPC.Install" />
+
+    <ServerRole Description="TJS Distributor File Purger Install - Oyster" Include="TJSDistributor.FilePurger.Install" Config="CubicB_Oyster" />
+    <ServerRole Description="TJS Distributor File Purger Install - CPC" Include="TJSDistributor.FilePurger.CPC.Install" />
+    <ServerRole Description="TJS Distributor File Purger Scheduler - CPC" Include="TJSDistributor.FilePurger.CPC.ScheduledTask.Create" />
+    <ServerRole Description="TJS Distributor File Purge Scheduler - Oyster" Include="TJSDistributor.FilePurger.ScheduledTask.Create" Config="CubicB_Oyster" />
+    <ServerRole Description="OyBO File Purger Scheduler - Oyster" Include="OyBO.FileCleanup.ScheduledTask.Create" Config="CubicB_Oyster" />
+  </machine>
+  <machine Id="FBDC5SAS001" Name="FBDC5SAS001"  ExternalIP="10.133.188.97" >
+    <!-- Notifications-->
+    <ServerRole Description="SendEmail Notifications File System" Include="SendEmail.FileSystem" />
+    <ServerRole Description="Send Email Installer" Include="SendEmail.Installer" />
+    <ServerRole Description="Notifications File Processor File System" Include="Notifications.FileProcessor.FileSystem" />
+    <ServerRole Description="Notifications File Processor" Include="Notifications.FileProcessor.Installer" />
+    <ServerRole Include="PaymentCardExpiryExtractTool.Install" />
+    <ServerRole Include="PaymentCardExpiryExtractTool.ScheduledTask.Create" />
+
+    <!--MasterData MJT Service and Assets-->
+    <ServerRole Description="Add Remove FMJT files"  Include="MasterData.MJTService.Assets.Last13Weeks" />
+    <ServerRole Description="MasterData MJT service" Include="MasterData.MJTService.Install" />
+
+    <!--MasterData Fares Service and Assets-->
+    <ServerRole Description="Copy Fares Files" Include="MasterData.FareService.Assets.Last13Weeks" />
+    <ServerRole Description="MasterData Fares service" Include="MasterData.FaresService.Install" />
+
+    <!--SDM is no longer deployed to SDM server so moved it to SAS server-->
+    <ServerRole  Description="CSC.SDM.ControllerService" Include="CSC.SDM.ControllerService.Installer" />
+  </machine>
+</configuration>

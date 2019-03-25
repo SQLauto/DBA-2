@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="Integration.CubicC" Environment="CubicC" Config="CubicC" ProductGroup="FTP">
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonMJTDeltasRole.xml</CommonRoleFile>
+
+  <machine Id="FCDC5SQL001" Name="FCDC5SQL001" ExternalIP="10.133.188.140" Role="FTP Database Server" DeploymentMachine="true">
+	<!--<ServerRole Description="Certificates for Pare/Notification SSB" Include="Notification.Certificates" />-->
+
+	<!-- MasterData ProjectionStore Restore SetUp-->
+	<ServerRole Description="MasterData.ProjectionStore file system" Include="MasterData.ProjectionStoreRestore.FileSystem.CubicC" />
+
+	<!-- Notifications DB -->
+	<DatabaseRole Description="Notification Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="Notification" />
+	<DatabaseRole Description="Notification Database" Include="Notification.DB" DatabaseInstance="Inst3" />
+	<DatabaseRole Description="Pare.Notifications.Dialog.Notifications" Include="Pare.Notifications.Dialog.Notifications" DatabaseInstance="Inst3" />
+	<DatabaseRole Description="Pare.Notifications.Transport.Notifications" Include="Pare.Notifications.Transport.Notifications" DatabaseInstance="Inst3" />
+
+	<!-- Disruptr DB -->
+	<DatabaseRole Description="Disruptr Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="Disruptr" />
+	<DatabaseRole Description="Disruptr Database" Include="Disruptr.Database" DatabaseInstance="Inst1" TargetDatabase="Disruptr" />
+
+	<!-- FAE DB -->
+	<DatabaseRole Description="FAE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="FAE" />
+	<DatabaseRole Description="FAE Database" Include="FAE.Database" DatabaseInstance="Inst1" />
+	<DatabaseRole Description="Config Database" Include="Config.Database" DatabaseInstance="Inst1" TargetDatabase="FAE"/>
+	<DatabaseRole Description="FAE Config Database" Include="FAE_Config.Database" DatabaseInstance="Inst1" TargetDatabase="FAE"/>
+	<DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="FAE" />
+	<DatabaseRole Description="FAE Partitioning" Include="FAE.Partitioning" DatabaseInstance="Inst1" />
+
+	<!-- RSP Collation Fix -->
+	<!-- This needs to happen first -->
+	<DatabaseRole Description="RSP Fix Collation Patch" Include="RSP.FixCollation.Patch" DatabaseInstance="Inst1" />
+
+	<!-- Reporting DB -->
+	<DatabaseRole Description="RSP Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="ReportingRW" />
+	<DatabaseRole Description="RSP Database" Include="RSP.DB" DatabaseInstance="Inst1" />
+
+	<!-- Travel Store db -->
+	<DatabaseRole Description="TravelStore Deployment Schema" Include="Deployment.Schema" TargetDatabase="TravelStore" DatabaseInstance="Inst1"  />
+	<DatabaseRole Description="TravelStore Database" Include="TravelStore.Database" DatabaseInstance="Inst1"  />
+	<DatabaseRole Description="Config Database" Include="Config.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore"/>
+	<DatabaseRole Description="TravelStore Config Database" Include="TravelStore_Config.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore"/>
+	<DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="TravelStore"  />
+	<DatabaseRole Description="TravelStore Partitioning" Include="TravelStore.Partitioning" DatabaseInstance="Inst1"  />
+
+	<!-- Travel Store CPC db -->
+	<DatabaseRole Description="TravelStore Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC" />
+	<DatabaseRole Description="TravelStore Database" Include="TravelStore.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC" />
+	<DatabaseRole Description="Config Database" Include="Config.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC"/>
+	<DatabaseRole Description="TravelStore Config Database" Include="TravelStore_Config.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC"/>
+	<DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC" />
+	<DatabaseRole Description="TravelStore Partitioning" Include="TravelStore.Partitioning" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC" />
+
+	<!-- RAE(Oyster) Database -->
+	<DatabaseRole Description="RAE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="RAE" />
+	<DatabaseRole Description="RAE Database" Include="RAE.Database" DatabaseInstance="Inst1" TargetDatabase="RAE" />
+	<DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="RAE" />
+	<DatabaseRole Description="RAE Partitioning" Include="RAE.Partitioning" DatabaseInstance="Inst1" TargetDatabase="RAE" />
+	<!-- RAE(CPC) Database -->
+	<DatabaseRole Description="RAE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="RAE_CPC" />
+	<DatabaseRole Description="RAE Database" Include="RAE.Database" DatabaseInstance="Inst1" TargetDatabase="RAE_CPC" />
+	<DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="RAE_CPC" />
+	<DatabaseRole Description="RAE Partitioning" Include="RAE.Partitioning" DatabaseInstance="Inst1" TargetDatabase="RAE_CPC" />
+
+	<!-- PARE DB -->
+	<DatabaseRole Description="PARE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst2" TargetDatabase="PARE" />
+	<DatabaseRole Description="PARE Main Schema" Include="PARE.Database" DatabaseInstance="Inst2" />
+	<DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst2" TargetDatabase="PARE" />
+	<DatabaseRole Description="Pare Partitioning" Include="Pare.Partitioning" DatabaseInstance="Inst2" />
+	<!--<DatabaseRole Description="PARE Pre Production Schema" Include="PARE.PreProduction.Schema" />-->
+	<!-- additional PCS roles which deploy to the PARE DB that are included in PARE.DatabaseArtefacts -->
+	<DatabaseRole Description="PARE PCS Common.PARE Schema" Include="PARE.PCS.Common.PARE" DatabaseInstance="Inst2" />
+	<DatabaseRole Description="Pcs Pare Schema" Include="Pcs.Pare" DatabaseInstance="Inst2" />
+	<DatabaseRole Description="Pare.Notifications.Dialog.Pare" Include="Pare.Notifications.Dialog.Pare" DatabaseInstance="Inst2" />
+	<DatabaseRole Description="Pare.Notifications.Transport.Pare" Include="Pare.Notifications.Transport.Pare" DatabaseInstance="Inst2" />
+
+	<!-- CS DB -->
+	<DatabaseRole Description="CSC Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="CS" />
+	<DatabaseRole Description="CSC Database" Include="CSC.Database" DatabaseInstance="Inst3" />
+	<DatabaseRole Description="PaymentCardExpiryExtract CSC DB Credentials" Include="PaymentCardExpiryExtract.CSC.DB" DatabaseInstance="Inst3" />
+
+	<!-- SDM DB -->
+	<DatabaseRole Description="SDM Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="SDM" />
+	<DatabaseRole Description="SDM Database" Include="SDM.Database" DatabaseInstance="Inst3" />
+	<DatabaseRole Description="SDM ServerObjects" Include="SDM.ServerObjects" DatabaseInstance="Inst3" />
+
+	<!-- TJS Store -->
+	<DatabaseRole Description="TJS Deployment Schema" Include="Deployment.Schema" DatabaseInstance="INST1" TargetDatabase="TJS" />
+	<DatabaseRole Description="TJS Main Schema" Include="TJS.Database" DatabaseInstance="INST1" />
+	<DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="INST1" TargetDatabase="TJS" />
+	<DatabaseRole Description="TJS Partitioning" Include="TJS.Partitioning" DatabaseInstance="INST1" />
+
+	<!-- TJS Store for CPC -->
+	<DatabaseRole Description="TJS Deployment Schema" Include="Deployment.Schema" DatabaseInstance="INST1" TargetDatabase="TJS_CPC" Config="CubicC_CPC" />
+	<DatabaseRole Description="TJS Main Schema" Include="TJS.Database" DatabaseInstance="INST1" TargetDatabase="TJS_CPC" Config="CubicC_CPC" />
+	<DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="INST1" TargetDatabase="TJS_CPC" Config="CubicC_CPC" />
+	<DatabaseRole Description="TJS Partitioning" Include="TJS.Partitioning" DatabaseInstance="INST1" TargetDatabase="TJS_CPC" Config="CubicC_CPC" />
+
+	<!-- MasterData ProjectionStore DB-->
+	<DatabaseRole Description="System Deployment Schema" Include="System.Deployment.Schema" DatabaseInstance="INST1" />
+	<DatabaseRole Description="Dba.System" Include="Dba.System" DatabaseInstance="INST1" />
+	<DatabaseRole Description="MasterData.ProjectionStore.Restore" Include="MasterData.ProjectionStore.Restore" DatabaseInstance="INST1" />
+
+	<!-- OyBo DB-->
+	<DatabaseRole Description="OTFP Deployment Schema" Include="Deployment.Schema" DatabaseInstance="INST3" TargetDatabase="OTFP" />
+	<DatabaseRole Description="OTFP Database" Include="OTFP.Database" DatabaseInstance="INST3" TargetDatabase="OTFP" />
+	<DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="INST3" TargetDatabase="OTFP" />
+	<DatabaseRole Description="OTFP Partitioning" Include="OTFP.Partitioning" DatabaseInstance="INST3" TargetDatabase="OTFP"  />
+
+	<!-- OCAE DB-->
+	<DatabaseRole Description="OCAE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="INST3" TargetDatabase="OCAE" />
+	<DatabaseRole Description="OCAE Database" Include="OCAE.Database" DatabaseInstance="INST3" TargetDatabase="OCAE" />
+	<DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="INST3" TargetDatabase="OCAE" />
+	<DatabaseRole Description="OCAE Partitioning" Include="OCAE.Partitioning" DatabaseInstance="INST3" TargetDatabase="OCAE"  />
+
+	<!-- Refunds DB-->
+	<DatabaseRole Description="Refunds Deployment Schema" Include="Deployment.Schema" DatabaseInstance="INST3" TargetDatabase="RefundManager" />
+	<DatabaseRole Description="Refunds Database" Include="Refunds.Database" DatabaseInstance="INST3" TargetDatabase="RefundManager" />
+	<DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="INST3" TargetDatabase="RefundManager" />
+	<DatabaseRole Description="Refunds Partitioning" Include="Refunds.Partitioning" DatabaseInstance="INST3" TargetDatabase="RefundManager"  />
+
+	<!--OyBO TapIdAllocator DB-->
+	<DatabaseRole Description="TapIdAllocator Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst2" TargetDatabase="TapIdAllocator" />
+	<DatabaseRole Description="TapIdAllocator Database" Include="TapIdAllocator.Database" DatabaseInstance="Inst2" TargetDatabase="TapIdAllocator" />
+
+	<!-- BaselineData DB-->
+	<DatabaseRole Description="BaselineData Deployment Schema" Include="Deployment.Schema" DatabaseInstance="INST1" TargetDatabase="BaselineData" />
+    <DatabaseRole Description="BaselineData Database" Include="BaselineData.Database" DatabaseInstance="INST1" TargetDatabase="BaselineData" />
+
+	<!-- BaselineData DB-->
+	<DatabaseRole Description="BaselineData Deployment Schema" Include="Deployment.Schema" DatabaseInstance="INST2" TargetDatabase="BaselineData" />
+    <DatabaseRole Description="BaselineData Database" Include="BaselineData.Database" DatabaseInstance="INST2" TargetDatabase="BaselineData" />
+
+	<!-- BaselineData DB-->
+	<DatabaseRole Description="BaselineData Deployment Schema" Include="Deployment.Schema" DatabaseInstance="INST3" TargetDatabase="BaselineData" />
+    <DatabaseRole Description="BaselineData Database" Include="BaselineData.Database" DatabaseInstance="INST3" TargetDatabase="BaselineData" />
+  </machine>
+
+  <CustomTests>
+    <ServiceBrokerTest Name="Pare Notification Sql Service Broker Test" Groups="PARE,Notifications">
+      <Sql>
+        <DatabaseServer>FCDC5SQL001</DatabaseServer>
+        <DatabaseInstance>Inst3</DatabaseInstance>
+        <TargetDatabase>Notification</TargetDatabase>
+        <SqlScript>
+          -- Turn off internal activation
+          ALTER QUEUE [dbo].[http://tfl.gov.uk/Ft/Notification/Queue/Email] WITH STATUS = ON ,
+          RETENTION = OFF , ACTIVATION (  STATUS = OFF , PROCEDURE_NAME = [dbo].[Email_Activation] , MAX_QUEUE_READERS = 10 , EXECUTE AS N'dbo'  ), POISON_MESSAGE_HANDLING (STATUS = ON)
+
+        </SqlScript>
+      </Sql>
+      <Sql>
+        <DatabaseServer>FCDC5SQL001</DatabaseServer>
+        <DatabaseInstance>Inst2</DatabaseInstance>
+        <TargetDatabase>Pare</TargetDatabase>
+        <SqlScript>
+          -- Send a message
+          Declare @ConversationHandle1 UniqueIdentifier
+          exec SsbSendOnConversation
+          'http://tfl.gov.uk/Ft/Pare/CustomerNotification/Service/Pare',
+          'http://tfl.gov.uk/Ft/Notification/Service/Email',
+          'http://tfl.gov.uk/Ft/Notification/Contract/Email',
+          'http://tfl.gov.uk/Ft/Notification/Message/Email',
+          '&lt;Notifications xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+          &lt;Notification&gt;
+          &lt;NotificationCode&gt;f8aee325-a6c9-4e94-9b46-bba98c93755a&lt;/NotificationCode&gt;
+          &lt;SendTo&gt;
+          &lt;CardHolder&gt;
+          &lt;PanToken&gt;99999999999999999999999&lt;/PanToken&gt;
+          &lt;PaymentCardExpiryDate&gt;0113&lt;/PaymentCardExpiryDate&gt;
+          &lt;/CardHolder&gt;
+          &lt;/SendTo&gt;
+          &lt;TemplateContentTags&gt;
+          &lt;PaymentAmount&gt;9999&lt;/PaymentAmount&gt;
+          &lt;PaymentTransactionDateTime&gt;2013-11-28T12:11:04.5030783+00:00&lt;/PaymentTransactionDateTime&gt;
+          &lt;PaymentCardPanToken&gt;12345678912345678912345678&lt;/PaymentCardPanToken&gt;
+          &lt;PaymentCardExpiryDate&gt;0113&lt;/PaymentCardExpiryDate&gt;
+          &lt;PaymentCardLast4Digits&gt;1234&lt;/PaymentCardLast4Digits&gt;
+          &lt;PaymentCardType&gt;Visa&lt;/PaymentCardType&gt;
+          &lt;DebtAmount&gt;1&lt;/DebtAmount&gt;
+          &lt;DebtDate&gt;2013-11-29T12:11:04.5030783+00:00&lt;/DebtDate&gt;
+          &lt;DebtIndicator&gt;Y&lt;/DebtIndicator&gt;
+          &lt;AuthorisationAmount&gt;2&lt;/AuthorisationAmount&gt;
+          &lt;/TemplateContentTags&gt;
+          &lt;/Notification&gt;
+          &lt;/Notifications&gt;',
+          @ConversationHandle = @ConversationHandle1 OUT
+        </SqlScript>
+      </Sql>
+      <Sql>
+        <DatabaseServer>FCDC5SQL001</DatabaseServer>
+        <DatabaseInstance>Inst3</DatabaseInstance>
+        <TargetDatabase>Notification</TargetDatabase>
+        <SqlScript>
+          -- Check for the message
+          WAITFOR DELAY '00:00:15';
+          DECLARE @test int
+          SET @test = (SELECT count(*)
+          FROM [Notification].[dbo].[http://tfl.gov.uk/Ft/Notification/Queue/Email]
+          WHERE  CAST(message_body AS NVARCHAR(MAX)) Like '%&lt;PanToken&gt;99999999999999999999999%')
+
+          -- Remove it (doesnt work )
+          --DELETE FROM [Notification].[dbo].[http://tfl.gov.uk/Ft/Notification/Queue/Email]
+          --WHERE  CAST(message_body AS NVARCHAR(MAX)) Like '%&lt;PanToken&gt;99999999999999999999999%')
+
+          -- Turn on activation VERY IMPORTANT, missing this will leave the database in a non functional state
+          ALTER QUEUE [dbo].[http://tfl.gov.uk/Ft/Notification/Queue/Email] WITH STATUS = ON ,
+          RETENTION = OFF , ACTIVATION (  STATUS = ON , PROCEDURE_NAME = [dbo].[Email_Activation] , MAX_QUEUE_READERS = 10 , EXECUTE AS N'dbo'  ), POISON_MESSAGE_HANDLING (STATUS = ON)
+
+          IF @test=0
+          THROW 51000, 'Message not found in http://tfl.gov.uk/Ft/Notification/Queue/Email', 1;
+
+        </SqlScript>
+      </Sql>
+    </ServiceBrokerTest>
+  </CustomTests>
+</configuration>

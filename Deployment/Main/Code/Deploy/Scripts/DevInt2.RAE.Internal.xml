@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="DevInt2.Internal" Environment="DevInt2" Config="RAE.DevInt2" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+
+  <PostDeploymentTestIdentity>DeploymentAccount.Internal</PostDeploymentTestIdentity>
+
+  <machine Id="FTDC2MGT360" Name="FTDC2MGT360" ExternalIP="10.107.200.186" DeploymentMachine="true"  />
+
+  <machine Id="TDC2FAEC04V01" Name="TDC2FAEC04V01" ExternalIP="10.107.200.196">
+	<!-- RAE DB-->
+    <DatabaseRole Description='RAE Baseline' Include="RAE.Baseline.Database" DatabaseInstance="VINS001" TargetDatabase="RAE" />
+    <DatabaseRole Description="RAE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="VINS001" TargetDatabase="RAE" />
+    <DatabaseRole Description="RAE Database" Include="RAE.Database" DatabaseInstance="VINS001" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="VINS001" TargetDatabase="RAE"  />
+    <DatabaseRole Description="RAE Partitioning" Include="RAE.Partitioning" DatabaseInstance="VINS001"  />
+
+	<!-- TJS Redater proc override for RAE-->
+    <DatabaseRole Description="TJS Database Overide for RAE DevInt" Include="TJS.Database.RAE.DevInt" DatabaseInstance="VINS001" />
+  </machine>
+
+  <!--RAE-->
+  <machine Id="FTDC2LMEMC03N01" Name="FTDC2LMEMC03N01" ExternalIP="10.107.200.114" Role="RAE Controller">
+	<ServerRole Description="FTP.EventLog.For.RAE.RaeService" Include="FTP.EventLog.For.RAE.RaeService" />
+    <ServerRole Description="RAE Incoming TJSH Folders" Include="RAE.Service.Folders" />
+	<ServerRole Description="RAE RSP Output Folder" Include="RAE.Service.RSP.Folders" />
+    <ServerRole Description="StopRaeService" Include="StopRaeService" />
+    <ServerRole Description="RAE Service Installer" Include="RAE.Service.Install" />
+  </machine>
+
+  <machine Id="FTDC2LMEMC03N02" Name="FTDC2LMEMC03N02" ExternalIP="10.107.200.115" Role="RAE Controller">
+	<ServerRole Description="FTP.EventLog.For.RAE.RaeService" Include="FTP.EventLog.For.RAE.RaeService" />
+    <ServerRole Description="RAE Incoming TJSH Folders" Include="RAE.Service.Folders" />
+	<ServerRole Description="RAE RSP Output Folder" Include="RAE.Service.RSP.Folders" />
+    <ServerRole Description="StopRaeService" Include ="StopRaeService" />
+    <ServerRole Description="RAE Service Installer" Include="RAE.Service.Install" />
+  </machine>
+
+  <machine Id="FTDC2LMEMC03N03" Name="FTDC2LMEMC03N03" ExternalIP="10.107.200.116" Role="RAE Controller">
+	<ServerRole Description="FTP.EventLog.For.RAE.RaeService" Include="FTP.EventLog.For.RAE.RaeService" />
+    <ServerRole Description="RAE Incoming TJSH Folders" Include="RAE.Service.Folders" />
+	<ServerRole Description="RAE RSP Output Folder" Include="RAE.Service.RSP.Folders" />
+    <ServerRole Description="StopRaeService" Include ="StopRaeService" />
+    <ServerRole Description="RAE Service Installer" Include="RAE.Service.Install" />
+  </machine>
+
+</configuration>

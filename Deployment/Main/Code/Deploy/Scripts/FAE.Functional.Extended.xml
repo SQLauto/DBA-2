@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="TestRig" Environment="TestRig" Config="TestRig.FAE_Extended" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+
+  <!--FAE DB machine-->
+  <machine Id="1" Name="TS-DB1" ExternalIP="" DeploymentMachine="true">
+
+    <!-- Check SQL Services -->
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices1" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices2" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices3" />
+    <PreDeployRole Description="CheckSqlAgentServiceInst1" Include="CheckSqlAgentServiceInst1" />
+    <PreDeployRole Description="CheckSqlIntegrationService" Include="CheckSqlIntegrationService" />
+    <!-- /Check SQL Services -->
+
+    <ServerRole Description="FAE Functional Rig Admin Utils" Include="FAE.DeployFunctionalRigAdminUtils" />
+
+    <!-- SQL Extension Events Folder Structure -->
+    <ServerRole Include="SQL.Extension.Events.Folder" Description="SQL Extension Events Output Folder Creation" />
+
+    <!-- RSP SSIS -->
+    <ServerRole Description="Configures SSIS for RSP deployment" Include="SSISSetup.RSP" SSISDBInstance="Inst1" Groups="RSP,Database" />
+    <ServerRole Description="RSP File System" Include="RSP.FileSystem" />
+    <ServerRole Description="RSP SSIS Packages" Include="RSP.RSPSSIS.Inst1" />
+    <DatabaseRole Description='RSP Baseline' Include="RSP.Baseline.Database" DatabaseInstance="Inst1" TargetDatabase="ReportingRW" />
+
+    <!-- Disruptr DB -->
+    <DatabaseRole Description='Disruptr Baseline' Include="Disruptr.Baseline.Database" DatabaseInstance="Inst1" TargetDatabase="Disruptr" />
+    <DatabaseRole Description="Disruptr Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="Disruptr" />
+    <DatabaseRole Description="Disruptr Database" Include="Disruptr.Database" DatabaseInstance="Inst1" />
+
+    <!-- FAE DB -->
+    <DatabaseRole Description='FAE Baseline' Include="FAE.Baseline.Database" />
+    <DatabaseRole Description="FAE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="FAE" />
+    <DatabaseRole Description="FAE Database" Include="FAE.Database" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="Config Database" Include="Config.Database" DatabaseInstance="Inst1" TargetDatabase="FAE"/>
+    <DatabaseRole Description="FAE Config Database" Include="FAE_Config.Database" DatabaseInstance="Inst1" TargetDatabase="FAE"/>
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="FAE" />
+    <DatabaseRole Description="FAE Partitioning" Include="FAE.Partitioning" DatabaseInstance="Inst1" TargetDatabase="FAE"/>
+    <DatabaseRole Description="FAE LinkedServer PreProd" Include="FAE.LinkedServer.PreProd" DatabaseInstance="Inst1" TargetDatabase="FAE" />
+
+    <!-- Travel Store db -->
+    <DatabaseRole Description='TravelStore Baseline' Include="TravelStore.Baseline.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore" />
+    <DatabaseRole Description="TravelStore Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="TravelStore"/>
+    <DatabaseRole Description="TravelStore Database" Include="TravelStore.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore" />
+    <DatabaseRole Description="Config Database" Include="Config.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore"/>
+    <DatabaseRole Description="TravelStore Config Database" Include="TravelStore_Config.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="TravelStore"/>
+    <DatabaseRole Description="TravelStore Partitioning" Include="TravelStore.Partitioning" DatabaseInstance="Inst1" TargetDatabase="TravelStore" />
+
+    <!-- Travel Store CPC db -->
+    <DatabaseRole Description='TravelStore Baseline' Include="TravelStore.Baseline.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC" />
+    <DatabaseRole Description="TravelStore Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC" />
+    <DatabaseRole Description="TravelStore Database" Include="TravelStore.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC" />
+    <DatabaseRole Description="Config Database" Include="Config.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC"/>
+    <DatabaseRole Description="TravelStore Config Database" Include="TravelStore_Config.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC"/>
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC" />
+    <DatabaseRole Description="TravelStore Partitioning" Include="TravelStore.Partitioning" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC" />
+
+    <!-- RAE DB -->
+    <DatabaseRole Description='RAE Baseline' Include="RAE.Baseline.Database" DatabaseInstance="Inst1" TargetDatabase="RAE"/>
+    <DatabaseRole Description="RAE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="RAE"/>
+    <DatabaseRole Description="RAE Database" Include="RAE.Database" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="RAE" />
+    <DatabaseRole Description="RAE Partitioning" Include="RAE.Partitioning" DatabaseInstance="Inst1" />
+
+    <!-- The RAE database schema for functional environments only -->
+    <DatabaseRole Description="RAE Functional schema increment" Include="RAE.DB.Functional" Groups="RAE,Database" />
+
+    <!-- The Disruptr database schema for functional environments only -->
+    <DatabaseRole Description="Disruptr Functional schema increment" Include="Disruptr.DB.Functional" Groups="FAE,Database" />
+
+    <!-- The FAE database schema for functional environments only -->
+    <DatabaseRole Description="FAE Functional schema increment" Include="FAE.DB.Functional" Groups="FAE,Database" />
+
+    <!-- The TravelStore database schema for functional environments only -->
+    <DatabaseRole Description="TravelStore Functional schema increment" Include="TravelStore.DB.Functional" />
+    <DatabaseRole Description="CPC TravelStore Functional schema increment" Include="TravelStore.DB.Functional" TargetDatabase="TravelStore_CPC" />
+
+    <DatabaseRole Description="RSP Database" Groups="RSP,Database" Include="RSP.DB" DatabaseInstance="Inst1" />
+
+    <DatabaseRole Description="TJS Baseline" Include="TJS.Baseline.Database" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="TJS Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="TJS" />
+    <DatabaseRole Description="TJS Main Schema" Include="TJS.Database" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="TJS" />
+    <DatabaseRole Description="TJS Partitioning" Include="TJS.Partitioning" DatabaseInstance="Inst1" />
+ 
+
+    <!-- RSP is deployed into FAE in functional -->
+    <DatabaseRole Description="RSP Functional Database Increment" Include="RSP.DB.Functional" />
+
+    <!-- SQL Extension Events Database Deployment -->
+    <DatabaseRole Include="SQL.Extension.Events" Description="SQL Extension Events Deployment Role" TargetDatabase="Master" DatabaseInstance="Inst1"/>
+    <DatabaseRole Include="SQL.Extension.Events" Description="SQL Extension Events Deployment Role" TargetDatabase="Master" DatabaseInstance="Inst2"/>
+
+    <PostDeployRole Description="Start Integration AppFabric Cluster" Include="AppFabric.Integration.Start" />
+  </machine>
+
+  <machine Id="2" Name="TS-CIS1" ExternalIP="">
+    <ServerRole Include="IISSetup.CIS" Description="IIS" Groups="FAE"  />
+    <ServerRole Description="FTP.EventLog.For.FAE.JourneyUsageService" Include="FTP.EventLog.For.FAE.JourneyUsageService" />
+    <ServerRole Description="Journey Usage" Include="FAE.JourneyUsage.Service" Config="TestRig.FAE_Legacy" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" Config="TestRig.FAE_Legacy" />
+    <ServerRole Description="FAE Oyster ManualCorrections ApiService" Include="OysterManualCorrectionsReceiver.Api" Config="TestRig.FAE_Oyster_Extended" />
+    <ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+    <ServerRole Description="FAE VoidService" Include="FAE.Void.Service" Config="TestRig.FAE_Oyster_Extended" />
+  </machine>
+
+  <!-- TS-FAE1 IS THE MACHINE FOR LEGACY AND SHARED APPLICATIONS -->
+  <machine Id ="3" Name="TS-FAE1" ExternalIP="">
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv"/>
+    <PreDeployRole Description="StopFaeEngine" Include="StopFaeEngine" />
+    <PreDeployRole Description="StopFaeController" Include="StopFaeController" />
+    <PreDeployRole Description="StopFaeDisruptr" Include="StopFaeDisruptr" />
+    <PreDeployRole Include="TJSDistributor.JulianService.Stop" />
+    <PreDeployRole Description="StopRaeService" Include ="StopRaeService" />
+
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FTP.EventLog.For.FAE.Disruptr" />
+
+    <ServerRole Include="TJSDistributor.Functional.CreateFolders" />
+    <ServerRole Description="TJS Distributor Message Broker service" Include="TJSDistributor.JulianService.Install" StartUpType="AutomaticDelayed" />
+
+    <ServerRole Description="FAE MasterData Stub" Include="FAE.MasterData.Stub.Install" StartUpType="Automatic" />
+    
+    <ServerRole Description="FAE Tap Importer Folders" Include="FAE.TapImporter.Service.Folders" />
+    <ServerRole Description="Create FileShare For FAE Tap Queue" Include="FAE.TapQueue.FileShare" />
+
+    <ServerRole Description="FAE Tap Importer" Include="FAE.TapImporter.Service.Oyster" StartUpType="AutomaticDelayed" Config="TestRig.FAE" />
+    <ServerRole Description="FAE Engine Controller Util" Include="FAE.EngineControllerUtil.Install" Config="TestRig.FAE_CPC" />
+    <ServerRole Description="FAE Travel Day Revision Exporter" Include="FAE.TravelDayRevisonExporter.Install" Config="TestRig.FAE_Legacy"/>
+    <ServerRole Description="FAE EOD Task Schedule Installer" Include="FAE.EOD.ScheduledTask.Create" />
+
+    <ServerRole Description="FAE Disruptr" Include="FAE.Engine.Disruptr" Config="TestRig.FAE_Extended" />
+
+    <ServerRole Description="FAE Controller" Include="FAE.Engine.Controller.CPCOyster.Stateful" Config="TestRig.FAE_Legacy" />
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service.CPCOyster.Stateful" Config="TestRig.FAE_Legacy" />
+
+    <!-- RAE Service -->
+    <ServerRole Description="FTP.EventLog.For.RAE.RaeService" Include="FTP.EventLog.For.RAE.RaeService" />
+    <ServerRole Description="RAE Incoming TJSH Folders" Include="RAE.Service.Folders" />
+    <ServerRole Description="RAE Service Installer" Include="RAE.Service.Install" Config="TestRig.FAE_Oyster_Extended"/>
+
+  </machine>
+
+  <!-- TS-FAE2 IS A LEGACY ENGINE -->
+  <machine Id="4" Name="TS-FAE2" ExternalIP="">
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv"/>
+    <PreDeployRole Description="StopFaeEngine" Include="StopFaeEngine" />
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service.CPCOyster.Stateful" Config="TestRig.FAE_Legacy" />
+  </machine>
+
+  <!--FAE Stateless machine (Controller and Engine, running in Cpc AND Oyster mode)-->
+  <machine Id="5" Name="TS-FAE3" ExternalIP="">
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv"/>
+    <PreDeployRole Description="StopFaeEngine" Include="StopFaeEngine" />
+    <PreDeployRole Description="StopFaeController" Include="StopFaeController" />
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+
+    <!--<ServerRole Description="FAE Tap Importer" Include="FAE.TapImporter.Service.CPC" StartUpType="Automatic Delayed" Config="TestRig.FAE_Oyster"  />-->
+
+    <ServerRole Description="FAE Controller" Include="FAE.Engine.Controller.CPCOyster.Stateless" Config="TestRig.FAE_Oyster_Extended" />
+    <ServerRole Description="FAE Engine Controller Util" Include="FAE.EngineControllerUtil.Install" Config="TestRig.FAE_Oyster_Extended" />
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service.CPCOyster.Stateless" Config="TestRig.FAE_Oyster_Extended" />
+
+    <ServerRole Description="FAE Token Journey Summary folders" Include="FAE.TokenJourneySummary.Folders" />
+    <ServerRole Description="FAE Token Journey Summary Header folders" Include="FAE.TokenJourneySummaryHeader.Folders" />
+
+  </machine>
+
+  <!-- FAE Stateless (engine only, running in Cpc AND Oyster mode)) -->
+  <machine Id="6" Name="TS-FAE4" ExternalIP="">
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv"/>
+    <PreDeployRole Description="StopFaeEngine" Include="StopFaeEngine" />
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service.CPCOyster.Stateless" Config="TestRig.FAE_Oyster_Extended" />
+  </machine>
+
+<machine Id="7" Name="TS-OYBO1" ExternalIP="">
+    <PreDeployRole Include="TJSDistributor.JulianService.Stop" />
+    <PreDeployRole Include="TJSDistributor.TJSHExtractor.Stop" />
+
+    <ServerRole Include="TJSDistributor.Functional.CreateFolders" />
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSDistributor" />
+	
+  	<!--<ServerRole Description="TJSDistributor JulianService uninstall" Include="TJSDistributor.JulianService.Uninstall"/>-->
+    <!--<ServerRole Description="TJSDistributor TJSHExtractor uninstall" Include="TJSDistributor.TJSHExtractor.Uninstall"/>-->
+	
+    <ServerRole Description="TJS Distributor Message Broker service" Include="TJSDistributor.JulianService.Install" StartUpType="AutomaticDelayed" />
+    <ServerRole Description="TJS Distributor TJSHExtractor service" Include="TJSDistributor.TJSHExtractor.Install" StartUpType="AutomaticDelayed" />
+
+    <!--<ServerRole Description="TJS Distributor File Purger Uninstall" Include="TJSDistributor.FilePurger.Uninstall" />-->
+    <ServerRole Description="TJS Distributor File Purger Install" Include="TJSDistributor.FilePurger.Install" />
+    <ServerRole Description="TJS Distributor File Purge Scheduler" Include="TJSDistributor.FilePurger.ScheduledTask.Create" />
+
+    <PostDeployRole Include="TJSDistributor.JulianService.Start" />
+    <PostDeployRole Include="TJSDistributor.TJSHExtractor.Start" />
+
+</machine>	
+
+  <CustomTests>
+    <AppFabricTest Name="FAEIntraday App Fabric Test" Groups="FAE">
+      <TestInfo Account="DeploymentAccount" />
+      <HostName>TS-DB1</HostName>
+      <CacheName>FAEIntraday</CacheName>
+    </AppFabricTest>
+  </CustomTests>
+</configuration>

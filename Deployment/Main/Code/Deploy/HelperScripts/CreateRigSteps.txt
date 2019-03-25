@@ -1,0 +1,38 @@
+Unless otherwise specified assume that these instructions are to run from the domain controller.
+Note that these scripts assume that you are creating a new integration rig, currently server names are hard coded in many of the scripts.
+
+01) Install Powershell 5 on AD box (this is required as the subsequent scripts depnd on it).  
+    Note this will cause a reboot - it deploys in parallel but you need be patient.
+02) Copy the "Deploy" folder from source control to AD boxes, the folder you copy to will be referred to in these instructions as: $..\Deploy\
+03) Copy the folder "Enable Windows Remoting" from $../Code/CatalogTemplateSetUp/ to D:\GPO, you will end up with the path: D:\GPO\Enable Windows Remoting\
+04) To set up the GPO and enable Windows remoting run powershell script: $..\Deploy\HelperScripts\VAppDomainControllerChanges.ps1
+05) Ensure that the new GPO forced on to machines by running:  $..\Deploy\HelperScripts\VAppForceGPO.ps1
+06) Reboot all machines: $..\Deploy\HelperScripts\VAppRebootAllServers.ps1
+07) Create folder on D drive: "PowerShell5" and share it such that \\FAEADG001\PowerShell5\ resolves 
+08) Copy from the fae domain share the powershell 5 installer: Win7AndW2K8R2-KB3134760-x64.msu and place it in \\FAEADG001\PowerShell5\ (this is the share you created above)
+09) To install powershell 5 on all the machines run powershell script: $..\Deploy\HelperScripts\InstallPowershell5InRig.ps1 
+    Note that you may get the "error" message: "wusa.exe exited on TS-CIS1 with error code 1641" which means install successful and reboot initiated.
+10) To Set up IIS to be our configuration on the web servers run powershell script: $..\Deploy\HelperScripts\VAppSetUpIIS.ps1
+    Note that this initiates a number of reboots - find something else to do for an hour and do not proceed until you have waited an hour.
+11) To create the user accounts and the disabled cubic account (incase we need to give them access) run powershell script: $..\Deploy\HelperScripts\VAppAdUsersCreate.ps1
+    The script is rerunable, if you need more accounts just add another invocation of the function: CreateAdAccountByCopy
+12) To run SQL Server under our service accounts run powershell script: $..\Deploy\HelperScripts\VAppSetSqlServiceAccounts.ps1
+13) To add the SQL logins/users to SQL Server run powershell script: $..\Deploy\HelperScripts\VAppAddSqlLogins.ps1
+14) CURRENTLY THIS DOES NOT WORK WE NEED IM TO FIND THE MAGIC COMMAND WHICH DOES THIS, WE CAN STILL CHECK IF SCCM IS INSTALLED.
+	If IM have not removed the SCCM client then run powershell script: $..\Deploy\HelperScripts\VAppUninstallSCCMService.ps1 (takes about 45 minutes)
+	To check if SCCM exists see if there is a a Windows Service called "SMS Agent Host" on each of the boxes. 
+15) Log on to TS-DB1 using the TSBuild account and open SQL Server Management Studio and Visual Studio so the first time use is set.
+16) Remove the anoyiong and not working BGInfo from RIGs by running the powershell script: $..\Deploy\HelperScripts\VAppRemoveBgInfo.ps1
+17) Create the folders needed for SFTP server by running the powershell script: $..\Deploy\HelperScripts\VAppCreateSFTPFolders.ps1
+18) Clean up Event Logs on all machines by running the powershell: $..\Deploy\HelperScripts\VAppEventLogCleanUp.ps1 
+19) Clean up the installers that we have distributed by running the powershell: $..\Deploy\HelperScripts\VAppCleanUpFilesAndRegistry.ps1 
+	Note that this script is only a starting point.
+	THIS STEP HAS NOT BEEN TESTED YET!!
+
+Remaining Manual Steps:
+20) Install WinSCP onto TS-DB1 using TFS Build account using installer: \\share\Media\WinSCP
+21) Install WinSCP and FreeSSHD on TS-SFTP1 configuring as per doc: $..\Documents\SftpWindowsSetUp.docx.
+22) Install SBus - STEVE & Adam are going to enhance documentation for this
+
+
+

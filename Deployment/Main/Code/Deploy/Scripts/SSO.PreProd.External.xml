@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="SSO.PreProd.External" Environment="PreProd" Config="SSO.PreProd" ProductGroup="SSO">
+  <CommonRoleFile>SSO.CommonExternalServerRoles.xml</CommonRoleFile>
+  <machine Id="1" Name="FTDC2SSO001"	ExternalIP="10.107.197.152">
+    <ServerRole Include="IISSetup.SSOext" />
+    <ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+    <ServerRole Description="SSO Website" Include="SSO.Website" />
+    <ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+</machine>
+  <machine Id="2" Name="FTDC2SSO002"	ExternalIP="10.107.197.153">
+    <ServerRole Include="IISSetup.SSOext" />
+	  <ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+    <ServerRole Description="SSO Website" Include="SSO.Website" />
+    <ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+  </machine>
+   <machine Id="3" Name="FTDC2SSO003"	ExternalIP="10.107.197.154">
+    <ServerRole Include="IISSetup.SSOext" />
+	  <ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+    <ServerRole Description="SSO Website" Include="SSO.Website" />
+    <ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+  </machine>
+  <machine Id="4" Name="FTDC2SSO004"	ExternalIP="10.107.197.155">
+    <ServerRole Include="IISSetup.SSOext" />
+	  <ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+    <ServerRole Description="SSO Website" Include="SSO.Website" />
+    <ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+  </machine>
+  <machine Id="5" Name="FTDC2SSO005"	ExternalIP="10.107.197.156">
+    <ServerRole Include="IISSetup.SSOext" />
+	  <ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+    <ServerRole Description="SSO Website" Include="SSO.Website" />
+    <ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+  </machine>
+  <machine Id="6" Name="FTDC2SSO006"	ExternalIP="10.107.197.157">
+    <ServerRole Include="IISSetup.SSOext" />
+	  <ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+    <ServerRole Description="SSO Website" Include="SSO.Website" />
+    <ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+  </machine>
+  <machine Id="7" Name="FTDC2SSO007"	ExternalIP="10.107.197.158">
+    <ServerRole Include="IISSetup.SSOext" />
+    <ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+    <ServerRole Description="SSO Website" Include="SSO.Website" />
+    <ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+  </machine>
+  <machine Id="8" Name="FTDC2SSO008"	ExternalIP="10.107.197.159">
+    <ServerRole Include="IISSetup.SSOext" />
+    <ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+    <ServerRole Description="SSO Website" Include="SSO.Website" />
+    <ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+  </machine>
+  <machine Id="9" Name="FTDC2SSO009"	ExternalIP="10.107.197.176">
+    <ServerRole Include="IISSetup.SSOext" />
+    <ServerRole Description="SSO Website" Include="SSO.Website" />
+    <ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+  </machine>
+  <machine Id="10" Name="FTDC2SSO010"	ExternalIP="10.107.197.177">
+    <ServerRole Include="IISSetup.SSOext" />
+    <ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+    <ServerRole Description="SSO Website" Include="SSO.Website" />
+    <ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+  </machine>
+  <machine Id="11" Name="FTDC2SSO027" ExternalIP="10.107.203.186" DeploymentMachine="true" />
+</configuration>

@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="TSRig" Environment="TSRig" Config="TSRig" ProductGroup="Refunds">
+  <machine Id="1" Name="TS-DB1" DeploymentMachine="true" />
+  <machine Id="2" Name="TS-DB2"> 
+    <ServerRole Description="Refunds File System" Groups="Refunds">
+      <CreateFolder TargetPath="\d$\Refunds Deployment\PARESETTLEMENTFILE_ARCHIVE" />
+      <CreateFolder TargetPath="\d$\tfl\RefundsData" />
+      <CreateFolder TargetPath="\d$\tfl\RefundsData\ARF" />
+      <CreateFolder TargetPath="\d$\tfl\RefundsData\DATA\ReferenceData" />
+      <CreateFolder TargetPath="\d$\tfl\RefundsData\DATA\OccErrorFile" />
+      <CreateFolder TargetPath="\d$\tfl\RefundsData\DenyListing" />
+      <CreateFolder TargetPath="\d$\tfl\RefundsData\Disruptions" />
+      <CreateFolder TargetPath="\d$\tfl\RefundsData\PareSettlementFiles" />
+      <CreateFolder TargetPath="\d$\tfl\RefundsData\RefundAuthorisations" />
+      <CreateFolder TargetPath="\d$\tfl\RefundsData\Notifications" />
+    </ServerRole>
+    <ServerRole Description="Configures SSIS for Refunds deployment" SSISDBInstance="Inst1" Groups="Refunds,Database" />    
+    <ServerRole Description="RefundsAutomatedNotification SSIS Package" Groups="Refunds,Database">
+      <SsisDeploy Name="RefundsAutomatedNotification">
+        <SSISEnvironment>RefundsEnv</SSISEnvironment>
+        <SSISFolder>Refunds</SSISFolder>
+        <DatabaseInstance>Inst1</DatabaseInstance>
+        <DeployMode>WIZ</DeployMode>
+        <Project>
+          <Name>RefundsAutomatedNotification</Name>
+          <SsisFile>RefundsAutomatedNotification.ispac</SsisFile>
+          <Type>ISPAC</Type>
+          <Packages>
+            <Package Name="AutomatedNotification.dtsx" />
+          </Packages>
+          <parameters>
+            <parameter name="ProjPar_Refunds_InitialCatalog" value="Refunds" type="String" description="" />
+            <parameter name="ProjPar_Refunds_Password" value="" type="String" description="" />
+            <parameter name="ProjPar_Refunds_ServerName" value="TDC2SQL011\INS001" type="String" description="" />
+            <parameter name="ProjPar_Refunds_UserName" value="REFUNDS_DATALOAD" type="String" description="" />
+            <parameter name="ProjPar_XML_Destination" value="D:\REFUNDSDATA\INS001\DATA\Notifications" type="String" description="" />
+          </parameters>
+        </Project>
+        <TestInfo SqlUserName="tfsbuild" SqlPassword="LMTF$Bu1ld" />
+      </SsisDeploy>  
+    </ServerRole>
+    <ServerRole Description="AnalyticsDenyListing SSIS Package" Groups="Refunds,Database">
+      <SsisDeploy Name="AnalyticsDenyListing">
+        <SSISEnvironment>RefundsEnv</SSISEnvironment>
+        <SSISFolder>Refunds</SSISFolder>
+        <DatabaseInstance>Inst1</DatabaseInstance>
+        <DeployMode>WIZ</DeployMode>
+        <Project>
+          <Name>AnalyticsDenyListing</Name>
+          <SsisFile>AnalyticsDenyListing.ispac</SsisFile>
+          <Type>ISPAC</Type>
+          <Packages>
+            <Package Name="AnalyticsDenyListing.dtsx" />
+          </Packages>
+          <parameters>
+            <parameter name="ProjPar_Refunds_UserName" value="REFUNDS_DATALOAD" type="string" description="" />
+            <parameter name="ProjPar_Refunds_ServerName" value="TDC2SQL011\INS001" type="string" description="" />
+            <parameter name="ProjPar_Refunds_Password" value="" type="string" description="" />
+            <parameter name="ProjPar_Refunds_InitialCatalog" value="REFUNDS" type="string" description="" />
+          </parameters>
+        </Project>
+        <TestInfo SqlUserName="tfsbuild" SqlPassword="LMTF$Bu1ld" />
+      </SsisDeploy>  
+    </ServerRole>
+    <ServerRole Description="PareDenyFileGeneration SSIS Package" Groups="Refunds,Database">
+      <SsisDeploy Name="PareDenyFileGeneration">
+        <SSISEnvironment>RefundsEnv</SSISEnvironment>
+        <SSISFolder>Refunds</SSISFolder>
+        <DatabaseInstance>Inst1</DatabaseInstance>
+        <DeployMode>WIZ</DeployMode>
+        <Project>
+          <Name>PareDenyFileGeneration</Name>
+          <SsisFile>PareDenyFileGeneration.ispac</SsisFile>
+          <Type>ISPAC</Type>
+          <Packages>
+            <Package Name="CreatePareDenyList.dtsx" />
+          </Packages>
+          <parameters>
+            <parameter name="ProjPar_Refunds_UserName" value="REFUNDS_DATALOAD" type="String" description="" />
+            <parameter name="ProjPar_Refunds_ServerName" value="TDC2SQL011\INS001" type="String" description="" />
+            <parameter name="ProjPar_Refunds_Password" value="" type="String" description="" />
+            <parameter name="ProjPar_Refunds_InitialCatalog" value="REFUNDS" type="String" description="" />
+            <parameter name="ProjPar_PareDenyListFile" value="D:\REFUNDSDATA\INS001\DATA\PareDenyListFile" type="String" description="" />
+            <parameter name="ProjPar_DenyList_XML_Destination" value="D:\REFUNDSDATA\INS001\DATA\Notifications" type="String" description="" />
+            <parameter name="Par_NumOfSetRows" value="0" type="Int32" description="" />
+          </parameters>
+        </Project>
+        <TestInfo SqlUserName="tfsbuild" SqlPassword="LMTF$Bu1ld" />
+      </SsisDeploy>  
+    </ServerRole>
+    <ServerRole Description="RefundsLBPAYGAuto SSIS Package" Groups="Refunds,Database">
+      <SsisDeploy Name="RefundsLBPAYGAuto">
+        <SSISEnvironment>RefundsEnv</SSISEnvironment>
+        <SSISFolder>Refunds</SSISFolder>
+        <DatabaseInstance>Inst1</DatabaseInstance>
+        <DeployMode>WIZ</DeployMode>
+        <Project>
+          <Name>RefundsLBPAYGAuto</Name>
+          <SsisFile>RefundsLBPAYGAuto.ispac</SsisFile>
+          <Type>ISPAC</Type>
+          <Packages>
+            <Package Name="RefundsLBPAYGAuto.dtsx" />
+          </Packages>
+          <parameters>
+            <parameter name="ProjPar_CS_Username" value="ocrs_dev" type="String" description="" />
+            <parameter name="ProjPar_CS_Servername" value="TFLCS" type="String" description="" />
+            <parameter name="ProjPar_CS_Password" value="" type="String" description="" />
+            <parameter name="ProjPar_CS_InitialCatalog" value="CS" type="String" description="" />
+            <parameter name="ProjPar_TFLCS_Username" value="ocrs_dev" type="String" description="" />
+            <parameter name="ProjPar_TFLCS_Servername" value="TFLCS" type="String" description="" />
+            <parameter name="ProjPar_TFLCS_Password" value="" type="String" description="" />
+            <parameter name="ProjPar_Refunds_InitialCatalog" value="REFUNDS" type="String" description="" />
+            <parameter name="ProjPar_Refunds_Password" value="" type="String" description="" />
+            <parameter name="ProjPar_Refunds_ServerName" value="TDC2SQL011\INS001" type="String" description="" />
+            <parameter name="ProjPar_Refunds_UserName" value="REFUNDS_DATALOAD" type="String" description="" />
+            <parameter name="ProjPar_ExecuteOracleElements" value="0" type="Boolean" description="" />
+            <parameter name="ProjPar_TFLCS_Env" value="ocrs_dev" type="String" description="" />
+            <parameter name="Parameter" value="0" type="Int32" description="" />
+          </parameters>
+        </Project>
+        <TestInfo SqlUserName="tfsbuild" SqlPassword="LMTF$Bu1ld" />
+      </SsisDeploy>  
+    </ServerRole>
+    <ServerRole Description="Disruptions SSIS Package" Groups="Refunds,Database">
+      <SsisDeploy Name="Disruptions">
+        <SSISEnvironment>RefundsEnv</SSISEnvironment>
+        <SSISFolder>Refunds</SSISFolder>
+        <DatabaseInstance>Inst1</DatabaseInstance>
+        <DeployMode>WIZ</DeployMode><Project>
+          <Name>Disruptions</Name>
+          <SsisFile>Disruptions.ispac</SsisFile>
+          <Type>ISPAC</Type>
+          <Packages>
+            <Package Name="DisruptionPackage.dtsx" />
+          </Packages>
+          <parameters>
+            <parameter name="ProjPar_CS_InitialCatalog" value="CS" type="String" description="" />
+            <parameter name="ProjPar_CS_Password" value="" type="String" description="" />
+            <parameter name="ProjPar_CS_Servername" value="TDC2SQL011\INS001" type="String" description="" />
+            <parameter name="ProjPar_CS_Username" value="READONLY" type="String" description="" />
+            <parameter name="ProjPar_DisruptionArchive" value="D:\REFUNDSDATA\INS001\DATA\Disruption\Archive" type="String" description="" />
+            <parameter name="ProjPar_ExecuteOracleElements" value="0" type="Boolean" description="" />
+            <parameter name="ProjPar_OccErrorFileConnectionString" value="D:\REFUNDSDATA\INS001\DATA\ERRORS\Errors.xls" type="String" description="" />
+            <parameter name="ProjPar_OccErrorFileTemplateConnectionString" value="D:\REFUNDSDATA\INS001\DATA\ERRORS\ErrorsTemplate.xls" type="String" description="" />
+            <parameter name="ProjPar_Refunds_InitialCatalog" value="REFUNDS" type="String" description="" />
+            <parameter name="ProjPar_Refunds_Password" value="" type="String" description="" />
+            <parameter name="ProjPar_Refunds_ServerName" value="TDC2SQL011\INS001" type="String" description="" />
+            <parameter name="ProjPar_Refunds_UserName" value="REFUNDS_DATALOAD" type="String" description="" />
+            <parameter name="ProjPar_RefundsEnvironment" value="'INS001'" type="String" description="" />
+            <parameter name="ProjPar_TFLCS_Password" value="" type="String" description="" />
+            <parameter name="ProjPar_TFLCS_Servername" value="TFLCS" type="String" description="" />
+            <parameter name="ProjPar_TFLCS_Username" value="ocrs_live" type="String" description="" />
+            <parameter name="ProjPar_TmpFileConnectionString" value="D:\REFUNDSDATA\INS001\DATA\Disruption\DISRUPTIONS_EXTRACT.xls" type="String" description="" />
+            <parameter name="ProjPar_TmpRefunddisruptionFileDate" value="2013/12/12 10:28" type="DateTime" description="" />
+          </parameters>
+        </Project>        
+        <TestInfo SqlUserName="tfsbuild" SqlPassword="LMTF$Bu1ld" />
+      </SsisDeploy>
+    </ServerRole>
+    <ServerRole Description="Refund SSIS Package" Groups="Refunds,Database">
+      <SsisDeploy Name="Refund">
+        <SSISEnvironment>RefundsEnv</SSISEnvironment>
+        <SSISFolder>Refunds</SSISFolder>
+        <DatabaseInstance>Inst1</DatabaseInstance>
+        <DeployMode>WIZ</DeployMode>
+        <Project>
+          <Name>Refund</Name>
+          <SsisFile>Refund.ispac</SsisFile>
+          <Type>ISPAC</Type>
+          <Packages>
+            <Package Name="FTPRefundSDR (1).dtsx" />
+            <Package Name="Refund.dtsx" />
+          </Packages>
+          <parameters>
+            <parameter name="ProjPar_BatchOCCAuthFilePath" value="D:\REFUNDSDATA\INS002\DATA\OCCBatchFile\BatchAuthFile.xls" type="String" description="" />
+            <parameter name="ProjPar_BatchSourceAuthFilePath" value="D:\REFUNDSDATA\INS002\DATA\OUTBOUND_AUTHORISATION\BatchAuthFile.xls" type="String" description="" />
+            <parameter name="ProjPar_BatchSourceAuthTemplate" value="D:\REFUNDSDATA\INS002\DATA\OUTBOUND_AUTHORISATION\TEMPLATE\TemplateBatchAuthFile.xls" type="String" description="" />
+            <parameter name="ProjPar_Env" value="'INS001'" type="String" description="" />
+            <parameter name="ProjPar_ExecuteOracleElements" value="0" type="Boolean" description="" />
+            <parameter name="ProjPar_FAE_InitialCatalog" value="FAE" type="String" description="" />
+            <parameter name="ProjPar_FAE_Password" value="" type="String" description="" />
+            <parameter name="ProjPar_FAE_ServerName" value="TDC2SQL011\INS001" type="String" description="" />
+            <parameter name="ProjPar_FAE_UserName" value="READONLY" type="String" description="" />
+            <parameter name="ProjPar_PARE_InitialCatalog" value="PARE" type="String" description="" />
+            <parameter name="ProjPar_PARE_Password" value="" type="String" description="" />
+            <parameter name="ProjPar_PARE_ServerName" value="TDC2SQL011\INS002" type="String" description="" />
+            <parameter name="ProjPar_PARE_UserName" value="REFUNDS_DATALOAD" type="String" description="" />
+            <parameter name="ProjPar_Refunds_InitialCatalog" value="REFUNDS" type="String" description="" />
+            <parameter name="ProjPar_Refunds_Password" value="" type="String" description="" />
+            <parameter name="ProjPar_Refunds_ServerName" value="10.133.76.13" type="String" description="" />
+            <parameter name="ProjPar_Refunds_UserName" value="REFUNDS_DATALOAD" type="String" description="" />
+            <parameter name="ProjPar_TFLCS_Password" value="" type="String" description="" />
+            <parameter name="ProjPar_TFLCS_Servername" value="TFLCS" type="String" description="" />
+            <parameter name="ProjPar_TFLCS_Username" value="ocrs_live" type="String" description="" />
+            <parameter name="ParBatchId" value="71" type="Int32" description="" />
+            <parameter name="ParRefundTypeId" value="3" type="Int32" description="" />
+            <parameter name="SYNCHRONIZED" value="0" type="Int32" description="" />
+          </parameters>
+        </Project>
+        <TestInfo SqlUserName="tfsbuild" SqlPassword="LMTF$Bu1ld" />
+      </SsisDeploy>
+    </ServerRole>
+    <ServerRole Description="PareSettlementFileGeneration SSIS Package" Groups="Refunds,Database">
+      <SsisDeploy Name="PareSettlementFileGeneration">
+        <SSISEnvironment>RefundsEnv</SSISEnvironment>
+        <SSISFolder>Refunds</SSISFolder>
+        <DatabaseInstance>Inst1</DatabaseInstance>
+        <DeployMode>WIZ</DeployMode>
+        <Project>
+          <Name>PareSettlementFileGeneration</Name>
+          <SsisFile>PareSettlementFileGeneration.ispac</SsisFile>
+          <Type>ISPAC</Type>
+          <Packages>
+            <Package Name="Package.dtsx" />
+          </Packages>
+          <parameters>
+            <parameter name="ProjPar_PareSettlementFile" value="D:\REFUNDSDATA\INS001\DATA\PareSettlementFile" type="String" description="" />
+            <parameter name="ProjPar_PareSettlementFileArchive" value="D:\REFUNDSDATA\INS001\DATA\PareSettlementFile\Archive" type="String" description="" />
+            <parameter name="ProjPar_PareSettlementFileDestination" value="D:\REFUNDSDATA\INS001\DATA\PareSettlementFile\PARE" type="String" description="" />
+            <parameter name="ProjPar_Refunds_InitialCatalog" value="REFUNDS" type="String" description="" />
+            <parameter name="ProjPar_Refunds_Password" value="" type="String" description="" />
+            <parameter name="ProjPar_Refunds_ServerName" value="TDC2SQL011\INS001" type="String" description="" />
+            <parameter name="ProjPar_Refunds_UserName" value="REFUNDS_DATALOAD" type="String" description="" />
+            <parameter name="Par_NumOfSetRows" value="0" type="Int32" description="" />
+          </parameters>
+        </Project>
+        <TestInfo SqlUserName="tfsbuild" SqlPassword="LMTF$Bu1ld" />
+      </SsisDeploy>
+    </ServerRole>
+    <ServerRole Description="ProcessRefundFile SSIS Package" Groups="Refunds,Database">
+      <SsisDeploy Name="ProcessRefundFile">
+        <SSISEnvironment>RefundsEnv</SSISEnvironment>
+        <SSISFolder>Refunds</SSISFolder>
+        <DatabaseInstance>Inst1</DatabaseInstance>
+        <DeployMode>WIZ</DeployMode>
+        <Project>
+          <Name>ProcessRefundFile</Name>
+          <SsisFile>ProcessRefundFile.ispac</SsisFile>
+          <Type>ISPAC</Type>
+          <Packages>
+            <Package Name="ProcessRefundFile.dtsx" />
+          </Packages>
+          <parameters>
+            <parameter name="ProjPar_OccApprovedFile" value="D:\REFUNDSDATA\INS001\DATA\APPROVED\BatchAuthFile.xls" type="String" description="" />
+            <parameter name="ProjPar_Refunds_InitialCatalog" value="REFUNDS" type="String" description="" />
+            <parameter name="ProjPar_Refunds_Password" value="" type="String" description="" />
+            <parameter name="ProjPar_Refunds_ServerName" value="TDC2SQL011\INS001" type="String" description="" />
+            <parameter name="ProjPar_Refunds_UserName" value="REFUNDS_DATALOAD" type="String" description="" />
+            <parameter name="ProjPar_OccApprovedFileArchiveDestination" value="D:\REFUNDSDATA\INS001\DATA\APPROVED\ARCHIVE" type="String" description="" />
+            <parameter name="ProjPar_OccApprovedFile" value="D:\REFUNDSDATA\INS001\DATA\APPROVED\BatchAuthFile.xls" type="String" description="" />
+            <parameter name="ProjPar_Refunds_InitialCatalog" value="REFUNDS" type="String" description="" />
+            <parameter name="ProjPar_Refunds_Password" value="" type="String" description="" />
+            <parameter name="ProjPar_Refunds_ServerName" value="TDC2SQL011\INS001" type="String" description="" />
+            <parameter name="ProjPar_Refunds_UserName" value="REFUNDS_DATALOAD" type="String" description="" />
+            <parameter name="ProjPar_OccApprovedFileArchiveDestination" value="D:\REFUNDSDATA\INS001\DATA\APPROVED\ARCHIVE" type="String" description="" />
+          </parameters>
+        </Project>
+        <TestInfo SqlUserName="tfsbuild" SqlPassword="LMTF$Bu1ld" />
+      </SsisDeploy>
+    </ServerRole>
+    <ServerRole Description="RefundsARFFile SSIS Package" Groups="Refunds,Database">
+      <SsisDeploy Name="RefundsARFFile">
+        <SSISEnvironment>RefundsEnv</SSISEnvironment>
+        <SSISFolder>Refunds</SSISFolder>
+        <DatabaseInstance>Inst1</DatabaseInstance>
+        <DeployMode>WIZ</DeployMode>
+        <Project>
+          <Name>RefundsARFFile</Name>
+          <SsisFile>RefundsARFFile.ispac</SsisFile>
+          <Type>ISPAC</Type>
+          <Packages>
+            <Package Name="RefundsARFFiles.dtsx" />
+          </Packages>
+          <parameters>
+            <parameter name="ProjPar_Refunds_ARFDir" value="D:\REFUNDSDATA\INS001\DATA\ARFFiles\" type="String" description="" />
+            <parameter name="ProjPar_Refunds_ARFDir" value="D:\REFUNDSDATA\INS004\DATA\ARFFiles" type="String" description="" />
+            <parameter name="ProjPar_Refunds_InitialCatalog" value="REFUNDS" type="String" description="" />
+            <parameter name="ProjPar_Refunds_Password" value="" type="String" description="" />
+            <parameter name="ProjPar_Refunds_ServerName" value="TDC2SQL011\INS001" type="String" description="" />
+            <parameter name="ProjPar_Refunds_ServerName" value="TDC2SQL011\INS004" type="String" description="" />
+            <parameter name="ProjPar_Refunds_UserName" value="REFUNDS_DATALOAD" type="String" description="" />
+            <parameter name="Parameter" value="0" type="Int32" description="" />
+          </parameters>
+        </Project>
+        <TestInfo SqlUserName="tfsbuild" SqlPassword="LMTF$Bu1ld" />
+      </SsisDeploy>
+    </ServerRole>
+    <DatabaseRole Description="REFUNDS Server Objects" Groups="Refunds">
+      <TargetDatabase>Refunds</TargetDatabase>
+      <DatabaseInstance>Inst1</DatabaseInstance>
+      <BaselineDeployment>Refunds\DB\DEPLOYMENT\SCRIPTS\DB_MASTER.baseline.sql</BaselineDeployment>
+      <PreDeployment></PreDeployment>
+      <PatchDeployment>Refunds\DB\DEPLOYMENT\SCRIPTS\DB_MASTER.publish.sql</PatchDeployment>
+      <PostDeployment></PostDeployment>
+      <PatchDeploymentFolder></PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith></PatchFolderFormatStartsWith>
+      <UpgradeScriptName></UpgradeScriptName>
+      <PreValidationScriptName></PreValidationScriptName>
+      <PostValidationScriptName></PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName></DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <TestInfo Ignore="true" />
+    </DatabaseRole>
+  </machine>  
+</configuration>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="TestRig" Environment="TestRig" Config="TestRig.CASC" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <machine Id="4" Name="TS-CAS1"  ExternalIP="">
+    <ServerRole Include="IISSetup.CAS" Description="IIS" Groups="CASC" />
+    <ServerRole Include="CACC.FileSystem" />
+    <ServerRole Description="FTP.EventLog.For.External.CASC" Include="FTP.EventLog.For.External.CASC" />
+    
+    <ServerRole Description="CSC External Token Status Service" Include="CACC.External.TokenStatus.Service" />
+    <ServerRole Description="CSC External Authorisation Service" Include="CACC.External.Authorisation.Service" />
+    <ServerRole Description="CSC External Customer Service" Include="CACC.External.Customer.Service" />
+    <ServerRole Description="CSC Mock Services" Include="CACC.Mock.Services" />
+  </machine>  
+  <machine Id="5" Name="TS-DB1" ExternalIP="" DeploymentMachine="true">
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices3" />
+    <DatabaseRole Description='CASC Baseline' Include="CASC.Baseline.Database" />
+    <DatabaseRole Description="CACC Deployment Schema" Include="Deployment.Schema" TargetDatabase="CS" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="CSC Database" Include="CSC.Database" DatabaseInstance="Inst3" />
+  </machine>
+</configuration>

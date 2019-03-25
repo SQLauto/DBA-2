@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+	<parameter name="OyBO_TFP_AzureMobileUploaderStorageConnectionString" value="" />
+	<parameter name="OyBO_TFP_AzureMobileUploaderContainerName" value="inbox" />
+	<parameter name="OyBO_AzureUploader_AzureKeyVaultClientId" value="https://mobileapistableipp001.vault.azure.net/secrets/StorageConnectionString" />
+	<parameter name="OyBO_AzureUploader_CertificateThumbprint" value="b7de1e56-6017-45cc-a31e-4bdc4a00830a" />
+	<parameter name="OyBO_AzureUploader_KeyVaultSecretUriForAzureBlobStorage" value="5F9E1EB7956FFA79AA3AC471E1BA35CDC6C5D96C" />
+</parameters>

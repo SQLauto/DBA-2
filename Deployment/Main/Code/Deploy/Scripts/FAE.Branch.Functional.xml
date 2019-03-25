@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="TestRig" Environment="TestRig" Config="TestRig.FAE" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <machine Id="2" Name="TS-CIS1" ExternalIP="">
+    <ServerRole Include="IISSetup.CIS" Description="IIS" Groups="FAE"  />
+    <ServerRole Description="FTP.EventLog.For.FAE.JourneyUsageService" Include="FTP.EventLog.For.FAE.JourneyUsageService" />
+    <ServerRole Description="Journey Usage" Include="FAE.JourneyUsage.Service" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+	<ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+	<ServerRole Description="FAE VoidService" Include="FAE.Void.Service" />
+  </machine>
+  <machine Id ="3" Name="TS-FAE1" ExternalIP="">
+	<PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv"/>
+    <PreDeployRole Description="StopFaeController" Include="StopFaeController" />
+    <ServerRole Description="FAE Token Journey Summary folders" Include="FAE.TokenJourneySummary.Folders" />    
+    <ServerRole Description="FAE Tap Importer Folders" Include="FAE.TapImporter.Service.Folders" />
+	<ServerRole Description="Create FileShare For FAE Tap Queue" Include="FAE.TapQueue.FileShare" />
+    
+    <ServerRole Description="FAE Controller" Include ="FAE.Engine.Controller.CPC.Stateless" />
+    <ServerRole Description="FAE Tap Importer" Include ="FAE.TapImporter.Service" />
+    <ServerRole Description="FAE Engine Controller Util" Include="FAE.EngineControllerUtil.Install" />
+    <ServerRole Description="FAE Travel Day Revision Exporter" Include="FAE.TravelDayRevisonExporter.Install" />
+    <ServerRole Description="FAE EOD Task Schedule Installer" Include="FAE.EOD.TaskSchedule.Install" />
+   </machine>
+  <machine Id="4" Name="TS-FAE2" ExternalIP="">
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv"/>
+    <PreDeployRole Description="StopFaeController" Include="StopFaeController" />
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service.CPC.Stateless" />
+	<ServerRole Description="FAE Token Journey Summary Header folders" Include="FAE.TokenJourneySummaryHeader.Folders" />
+  </machine>
+  <machine Id="5" Name="TS-FAE3" ExternalIP="">
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv"/>
+    <PreDeployRole Description="StopFaeController" Include="StopFaeController" />
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service.CPC.Stateless" />
+	<ServerRole Description="FAE Token Journey Summary Header folders" Include="FAE.TokenJourneySummaryHeader.Folders" />
+  </machine>
+  <machine Id="6" Name="TS-FAE4" ExternalIP="">
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv"/>
+    <PreDeployRole Description="StopFaeController" Include="StopFaeController" />
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service.CPC.Stateless" />
+	<ServerRole Description="FAE Token Journey Summary Header folders" Include="FAE.TokenJourneySummaryHeader.Folders" />
+  </machine>  
+  
+  <machine Id="10" Name="TS-DB1" ExternalIP="" DeploymentMachine="true">
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices1" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices2" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices3" />
+    <PreDeployRole Description="CheckSqlAgentServiceInst1" Include="CheckSqlAgentServiceInst1" />
+	  <PreDeployRole Description="CheckSqlIntegrationService" Include="CheckSqlIntegrationService" />
+	  
+    <ServerRole Description="FAE Functional Rig Admin Utils" Include="FAE.DeployFunctionalRigAdminUtils" />
+		
+    <!-- RSP SSIS -->
+    <ServerRole Description="RSP File System" Include="RSP.FileSystem" />
+    <ServerRole Description="Configures SSIS for RSP deployment" Include="SSISSetup.RSP" SSISDBInstance="Inst1" Groups="RSP,Database" />
+    <ServerRole Description="RSP SSIS Packages" Include="RSP.RSPSSIS.Inst1" />
+    
+	  <DatabaseRole Description='RSP Baseline' Include="RSP.Baseline.Database" DatabaseInstance="Inst1" TargetDatabase="ReportingRW" />
+	
+    <!-- PARE DB -->
+	  <DatabaseRole Description='PARE Baseline' Include="PARE.Baseline.Database" DatabaseInstance="Inst2" TargetDatabase="PARE" />
+    <DatabaseRole Description="PARE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst2" TargetDatabase="PARE" />
+    <DatabaseRole Description="PARE Main Schema" Include="PARE.Database" DatabaseInstance="Inst2" />
+	  <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst2" TargetDatabase="PARE" />
+	  <DatabaseRole Description="Pare Partitioning" Include="Pare.Partitioning" DatabaseInstance="Inst2" />
+	
+    <!-- FAE DB -->	
+	  <DatabaseRole Description='FAE Baseline' Include="FAE.Baseline.Database" DatabaseInstance="Inst1" TargetDatabase="FAE" />
+    <DatabaseRole Description="FAE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="FAE" />
+	  <DatabaseRole Description="FAE Database" Include="FAE.Database" DatabaseInstance="Inst1" />
+	  <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="FAE" />
+	  <DatabaseRole Description="FAE Partitioning" Include="FAE.Partitioning" DatabaseInstance="Inst1" />
+	  <DatabaseRole Description="FAE LinkedServer PreProd" Include="FAE.LinkedServer.PreProd" DatabaseInstance="Inst1" />
+	<!-- Travel Store db -->
+	
+	  <DatabaseRole Description='TravelStore Baseline' Include="TravelStore.Baseline.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore" />
+	  <DatabaseRole Description="TravelStore Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="TravelStore" />
+    <DatabaseRole Description="TravelStore Database" Include="TravelStore.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore" />
+	  <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="TravelStore" />
+	  <DatabaseRole Description="TravelStore Partitioning" Include="TravelStore.Partitioning" DatabaseInstance="Inst1" TargetDatabase="TravelStore" />
+	
+	<!-- The FAE database schema for functional environments only -->
+	  <DatabaseRole Description="FAE Functional schema increment" Include="FAE.DB.Functional" Groups="FAE,Database" />
+	  <DatabaseRole Description="FAE Branch Functional schema increment" Include="FAE.DB.Branch.Functional" Groups="FAE,Database" />
+		
+	<!-- The FAE database schema for functional environments only -->
+	  <DatabaseRole Description="TravelStore Functional schema increment" Include="TravelStore.DB.Functional" />	
+	  <DatabaseRole Description="TravelStore Branch Functional schema increment" Include="TravelStore.DB.Branch.Functional" />
+		
+    <DatabaseRole Description="RSP Database" Groups="RSP,Database" Include="RSP.DB" DatabaseInstance="Inst1" />
+	
+	<!-- RSP is deployed into FAE in functional -->
+    <DatabaseRole Description="RSP Functional Database Increment" Include="RSP.DB.Functional" />
+
+    <PostDeployRole Description="Start Integration AppFabric Cluster" Include="AppFabric.Integration.Start" />
+	
+  </machine> 
+  <CustomTests>
+    <AppFabricTest Name="FAEIntraday App Fabric Test" Groups="FAE">
+      <TestInfo Account="DeploymentAccount" />
+      <HostName>TS-DB1</HostName>
+      <CacheName>FAEIntraday</CacheName>
+    </AppFabricTest>
+  </CustomTests>
+</configuration>

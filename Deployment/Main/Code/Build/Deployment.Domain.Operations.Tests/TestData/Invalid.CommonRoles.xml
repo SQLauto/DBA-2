@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/CommonRoles">
+  <CommonRoles>
+    <!-- Test 2 Invalid Groups Declared  -->
+    <ServerRole Name="TFL.ServiceDeploy" Description="Invalid Unit Test - Case 2" Include="FAE.Controller.Invalid2">
+      <ServiceDeploy Name="FAEEngineController">
+        <MSI>
+          <id>EED8A1A9-891E-4D78-9C56-532939489846</id>
+          <name>Controller.msi</name>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\FAE\Controller\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>EngineControllerHost.exe</Name>
+            <Credentials>FAEServiceAccount</Credentials>
+            <StartUpType>Manual</StartUpType>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="EngineControllerHost.exe.config" target="\tfl\FAE\Controller"/>
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+
+    <!-- Test 3 Invalid Groups Declared  -->
+    <ServerRole Name="TFL.ServiceDeploy" Description="Invalid Unit Test - Case 3" Include="FAE.Controller.Invalid3" Groups="FAEOTHER">
+      <ServiceDeploy Name="FAEEngineController">
+        <MSI>
+          <id>EED8A1A9-891E-4D78-9C56-532939489846</id>
+          <name>Controller.msi</name>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\FAE\Controller\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>EngineControllerHost.exe</Name>
+            <Credentials>FAEServiceAccount</Credentials>
+            <StartUpType>Manual</StartUpType>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="EngineControllerHost.exe.config" target="\tfl\FAE\Controller"/>
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+
+    <!-- Test 5 - Service-MSI Must have wither Id or UpgradeCode  -->
+    <ServerRole Name="TFL.ServiceDeploy" Description="Invalid Config - Test Case 5" Include="FAE.Engine.Service.InvalidCase5" Groups="FAE,FAEPipeline">
+      <ServiceDeploy Name="WixPipelineHostInstaller">
+        <MSI>
+          <name>WixPipelineHostInstaller.msi</name>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\FAE\PipelineHost\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>PipelineHost.exe</Name>
+            <Credentials>FAEServiceAccount</Credentials>
+            <StartUpType>Manual</StartUpType>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="PipelineHost.exe.config" target="\tfl\FAE\PipelineHost" />
+          <config name="pipelineOperations.config" target="\tfl\FAE\PipelineHost" />
+          <config name="Loaders.config" target="\tfl\FAE\PipelineHost" />
+          <config name="log4net.config" target="\tfl\FAE\PipelineHost" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+
+    <!-- Test 6 - MSI-MSI Must have wither Id or UpgradeCode  -->
+    <ServerRole Name="TFL.MsiDeploy" Include="WixEngineControllerUtilInstaller.Invalid6" Description="Invalid Config - Test Case 6" Groups="FAE">
+      <MsiDeploy Name="SimpleConsoleAppX Installer" Action="Install">
+        <MSI>
+          <name>WixSimpleConsoleAppInstaller.msi</name>
+          <parameters>
+            <usernameparameter name="SERVICEACCOUNT" credential="DeploymentAccount" />
+            <passwordparameter name="SERVICEPASSWORD"  credential="DeploymentAccount" />
+            <parameter name="INSTALLLOCATION" value="d:\tfl\baseline\SimpleConsoleApp" />
+          </parameters>
+        </MSI>
+        <Configs>
+          <config name="SimpleConsoleApp.exe.config" target="\tfl\baseline\SimpleConsoleApp" />
+        </Configs>
+        <TestInfo DisableTestss="true" />
+      </MsiDeploy>
+    </ServerRole>
+
+    <!-- Test 8 - No Children allowed ++ No Config Specified in Test 7  -->
+    <ServerRole Name="TFL.ServiceDeploy" Description="Invalid Config - Test Case 7" Include="FAE.Engine.Service">
+      <ServiceDeploy Name="FAEPipelineHost">
+        <MSI>
+          <id>C915AC1B-9A4F-4CCC-9297-FD992362F99D</id>
+          <name>PipelineHost.msi</name>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\FAE\PipelineHost\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>PipelineHost.exe</Name>
+            <Credentials>FAEServiceAccount</Credentials>
+            <StartUpType>Automatic Delayed Start</StartUpType>
+          </Service>
+        </Services>
+      </ServiceDeploy>
+    </ServerRole>
+  </CommonRoles>
+
+</configuration>

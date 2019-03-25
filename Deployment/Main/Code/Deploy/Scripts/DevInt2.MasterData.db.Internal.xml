@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="DevInt2.MasterData.Internal" Environment="DevInt2" Config="DevInt2" ProductGroup="FTP">
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonMJTDeltasRole.xml</CommonRoleFile>
+
+  <PostDeploymentTestIdentity>DeploymentAccount.Internal</PostDeploymentTestIdentity>
+  <machine Id="1" Name="FTDC2MGT360" ExternalIP="10.107.200.186" DeploymentMachine="true">
+	<ServerRole Description="MasterData.ProjectionStore.DevInt2" Include="MasterData.ProjectionStoreRestore.FileSystem.DevInt2" />
+  </machine>
+  <!-- Master Deployment Roles -->
+
+  <machine Id="2" Name="10.107.200.196" ExternalIP="10.107.200.196" Role="Database Server 1">
+    <DatabaseRole Description="System Deployment Schema" Include="System.Deployment.Schema" />
+    <DatabaseRole Description="Dba.System" Include="Dba.System" />
+    <DatabaseRole Description="MasterData.ProjectionStore.Restore" Include="MasterData.ProjectionStore.Restore" />
+  </machine>
+</configuration>

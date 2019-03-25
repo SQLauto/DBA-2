@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="Integration.TSRig.VanillaDbOnly" Environment="TSRig"  Config="TSRig" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonPareServiceDeploy.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>SSO.CommonInternalServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>SSO.CommonExternalServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>SSO.CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonMJTDeltasRole.xml</CommonRoleFile>
+
+  <machine Id="1" Name="TS-DB1" ExternalIP="" Role="FTP Database Server" DeploymentMachine="true">
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices1" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices2" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices3" />
+    <PreDeployRole Description="CheckSqlAgentServiceInst1" Include="CheckSqlAgentServiceInst1" />
+
+    <!-- Setting up SMTP for Emails -->
+    <ServerRole Description="SMTP Server role" Include="SMTP.Notifications" />
+
+    <!-- RSP SSIS -->
+    <ServerRole Description="Configures SSIS for RSP deployment" Include="SSISSetup.RSP" SSISDBInstance="Inst1" Groups="RSP,Database" />
+    <ServerRole Description="RSP File System" Include="RSP.FileSystem" />
+    <ServerRole Description="RSP SSIS Packages"  Include="RSP.RSPSSIS.Inst1" />
+
+    <!-- Copy MasterData backup Files -->
+    <ServerRole Description="MasterData.ProjectionStore file system" Include="MasterData.ProjectionStoreRestore.FileSystem.INT" />
+
+    <!-- Notifications DB -->
+	  <DatabaseRole Description="Notification Baseline Database" Include="Notification.Baseline.Database" />
+    <DatabaseRole Description="Notification Deployment Schema" Include="Deployment.Schema" TargetDatabase="Notification"  DatabaseInstance="Inst3" />
+    <DatabaseRole Description="Notification Database" Include="Notification.DB" DatabaseInstance="Inst3" />
+
+    <!-- NOTIFICATIONS BROKER: PARE <-> Notification -->
+    <DatabaseRole Description="Pare.Notifications.Transport.Notifications" Include="Pare.Notifications.Transport.Notifications" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="Pare.Notifications.Dialog.Notifications" Include="Pare.Notifications.Dialog.Notifications" DatabaseInstance="Inst3" />
+
+    <!-- FAE DB -->
+	  <DatabaseRole Description="FAE Baseline" Include="FAE.Baseline.Database" />
+    <DatabaseRole Description="FAE Deployment Schema" Include="Deployment.Schema" TargetDatabase="FAE" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="FAE Database" Include="FAE.Database" DatabaseInstance="Inst1" />
+	  <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="FAE" />
+	  <DatabaseRole Description="FAE Partitioning" Include="FAE.Partitioning" DatabaseInstance="Inst1" />
+
+    <!-- RSP Collation Fix -->
+    <!-- This needs to happen first -->
+	  <DatabaseRole Description="RSP Baseline" Include="RSP.Baseline.Database" />
+    <DatabaseRole Description="RSP Fix Collation Patch" Include="RSP.FixCollation.Patch" DatabaseInstance="Inst1" />
+
+    <!-- Reporting DB -->
+    <DatabaseRole Description="RSP Deployment Schema" Include="Deployment.Schema" TargetDatabase="ReportingRW" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="RSP Database" Include="RSP.DB" DatabaseInstance="Inst1" />
+
+	  <!-- Travel Store db -->
+	  <DatabaseRole Description='TravelStore Baseline' Include="TravelStore.Baseline.Database" DatabaseInstance="Inst1" />
+	  <DatabaseRole Description="TravelStore Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="TravelStore" />
+    <DatabaseRole Description="TravelStore Database" Include="TravelStore.Database" DatabaseInstance="Inst1"  />
+	  <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="TravelStore"  />
+	  <DatabaseRole Description="TravelStore Partitioning" Include="TravelStore.Partitioning" DatabaseInstance="Inst1"  />
+
+    <!-- PARE DB -->
+	  <DatabaseRole Description="PARE Baseline" Include="PARE.Baseline.Database" />
+    <DatabaseRole Description="PARE Deployment Schema" Include="Deployment.Schema" TargetDatabase="PARE" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="PARE Main Schema" Include="PARE.Database" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="PARE Pre Production Schema" Include="PARE.PreProduction.Schema" DatabaseInstance="Inst2" />
+	  <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst2" TargetDatabase="PARE" />
+	  <DatabaseRole Description="Pare Partitioning" Include="Pare.Partitioning" DatabaseInstance="Inst2" />
+
+    <!-- AUTHORISATION BROKER: PARE <-> PCS  -->
+    <DatabaseRole Description="Pare.Authorisation.Transport.Pare" Include="Pare.Authorisation.Transport.Pare" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="PARE PCS Common.PARE Schema" Include="PARE.PCS.Common.PARE" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Pcs Pare Schema" Include="Pcs.Pare" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Pare.Authorisations.Dialog.Pare" Include="Pare.Authorisations.Dialog.Pare" DatabaseInstance="Inst2" />
+
+    <!-- NOTIFICATIONS BROKER: PARE <-> Notification -->
+    <DatabaseRole Description="Pare.Notifications.Transport.Pare" Include="Pare.Notifications.Transport.Pare" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Pare.Notifications.Dialog.Pare" Include="Pare.Notifications.Dialog.Pare" DatabaseInstance="Inst2" />
+
+    <!-- CS DB -->
+	<DatabaseRole Description="CSC Baseline" Include="CASC.Baseline.Database"  />
+    <DatabaseRole Description="CSC Deployment Schema" Include="Deployment.Schema" TargetDatabase="CS" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="CSC Database" Include="CSC.Database" DatabaseInstance="Inst3"  />
+    <DatabaseRole Description="PaymentCardExpiryExtract CSC DB Credentials" Include="PaymentCardExpiryExtract.CSC.DB" DatabaseInstance="Inst3"  />
+
+    <!-- SDM DB -->
+    <DatabaseRole Description="SDM Baseline" Include="SDM.Baseline" DatabaseInstance="Inst3"  />
+    <DatabaseRole Description="SDM Deployment Schema" Include="Deployment.Schema" TargetDatabase="SDM" DatabaseInstance="Inst3"   />
+    <DatabaseRole Description="SDM Database" Include="SDM.Database" DatabaseInstance="Inst3"   />
+    <DatabaseRole Description="SDM ServerObjects" Include="SDM.ServerObjects" DatabaseInstance="Inst3"  />
+
+    <!-- MasterData Projection Store - Restore -->
+    <DatabaseRole Description="System Deployment Schema"  Include="System.Deployment.Schema" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="Dba.System" Include="Dba.System" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="MasterData.ProjectionStore.Restore" Include="MasterData.ProjectionStore.Restore" DatabaseInstance="Inst3" />
+    <!-- Post Deploy Roles-->
+  	<!--
+      <PostDeployRole Description="Start AppFabric Cluster" Include="AppFabric.Integration.Start" />
+	  -->
+  </machine>
+
+  <!-- Need to deploy PARE db before the PCS db, due to linked server synonyms-->
+  <machine Id="2" Name="TS-DB2" ExternalIP="" Role="PCS Database Server">
+    <!-- PCS DB -->
+  	<DatabaseRole Description="PCS Baseline" Include="PCS.Baseline.Database" />
+    <DatabaseRole Description="Deployment Schema for PCS" Include="Deployment.Schema" DatabaseInstance="Inst2" TargetDatabase="PCS" />
+    <DatabaseRole Description="Pcs.Authorisation.Transport.Pcs" Include="Pcs.Authorisation.Transport.Pcs" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="PARE PCS Common for PCS DB" Include="PARE.PCS.Common.PCS" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="PCS Mock" Include="Pcs.Mock" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Pcs.Authorisation.Dialog.Pcs" Include="Pcs.Authorisation.Dialog.Pcs" DatabaseInstance="Inst2" />
+
+    <DatabaseRole Description="SSO Deployment Schema" Include="SSO.DBDeploymentSchema" />
+    <DatabaseRole Description="SSO Database"  Include="SSO.Database" />
+    <!-- Post Deploy Roles for SSO AppFabric Instance-->
+	  <!--
+      <PostDeployRole Description="Start AppFabric Cluster" Include="AppFabric.Integration.Start" />
+	  -->
+  </machine>
+
+  <CustomTests>
+    <ServiceBrokerTest Name="Pare Pcs Server Sql Service Broker Test" Groups="PARE">
+      <Sql>
+        <ConnectionInfo UserName="tfsbuild" Password="LMTF$Bu1ld" />
+        <DatabaseServer>TS-DB1</DatabaseServer>
+        <DatabaseInstance>Inst2</DatabaseInstance>
+        <TargetDatabase>Pare</TargetDatabase>
+        <SqlScript>
+          DECLARE @ConversationHandle uniqueidentifier;
+          DECLARE @StatusTime datetime=GETDATE();
+          DECLARE @Token nvarchar(26)='0123456789ABCDEF';
+          --Send the message
+          Exec [$TargetDatabase].[dbo].[SendStatusListUpdateRequest]
+          1,
+          'Correction',
+          @Token,
+          '0113',
+          '001',
+          1,
+          @StatusTime,
+          2,
+          @StatusTime,
+          @ConversationHandle=@ConversationHandle output;
+        </SqlScript>
+      </Sql>
+      <Sql>
+        <ConnectionInfo UserName="tfsbuild" Password="LMTF$Bu1ld" />
+        <DatabaseServer>TS-DB2</DatabaseServer>
+        <DatabaseInstance>Inst2</DatabaseInstance>
+        <TargetDatabase>Pcs</TargetDatabase>
+        <SqlScript>
+          WAITFOR DELAY '00:00:15';
+
+          IF (select count(*) from $TargetDatabase.DBO.PCSMockLog WHERE Message like '%0123456789ABCDEF%')=0
+          THROW 51000, 'Message not found in PCSMockLog', 1;
+          --clear down ready for next test
+          delete from $TargetDatabase.DBO.PCSMockLog WHERE Message like '%0123456789ABCDEF%'
+        </SqlScript>
+      </Sql>
+    </ServiceBrokerTest>
+    <ServiceBrokerTest Name="Pare Notification Sql Service Broker Test" Groups="PARE,Notifications">
+      <Sql>
+        <ConnectionInfo UserName="tfsbuild" Password="LMTF$Bu1ld" />
+        <DatabaseServer>TS-DB1</DatabaseServer>
+        <DatabaseInstance>Inst3</DatabaseInstance>
+        <TargetDatabase>Notification</TargetDatabase>
+        <SqlScript>
+          -- Turn off internal activation
+          ALTER QUEUE [dbo].[http://tfl.gov.uk/Ft/Notification/Queue/Email] WITH STATUS=ON ,
+          RETENTION=OFF , ACTIVATION (  STATUS=OFF , PROCEDURE_NAME=[dbo].[Email_Activation] , MAX_QUEUE_READERS=10 , EXECUTE AS N'dbo'  ), POISON_MESSAGE_HANDLING (STATUS=ON)
+
+        </SqlScript>
+      </Sql>
+      <Sql>
+        <ConnectionInfo UserName="tfsbuild" Password="LMTF$Bu1ld" />
+        <DatabaseServer>TS-DB1</DatabaseServer>
+        <DatabaseInstance>Inst2</DatabaseInstance>
+        <TargetDatabase>Pare</TargetDatabase>
+        <SqlScript>
+          -- Send a message
+          Declare @ConversationHandle1 UniqueIdentifier
+          exec SsbSendOnConversation
+          'http://tfl.gov.uk/Ft/Pare/CustomerNotification/Service/Pare',
+          'http://tfl.gov.uk/Ft/Notification/Service/Email',
+          'http://tfl.gov.uk/Ft/Notification/Contract/Email',
+          'http://tfl.gov.uk/Ft/Notification/Message/Email',
+          '&lt;Notifications xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+          &lt;Notification&gt;
+          &lt;NotificationCode&gt;f8aee325-a6c9-4e94-9b46-bba98c93755a&lt;/NotificationCode&gt;
+          &lt;SendTo&gt;
+          &lt;CardHolder&gt;
+          &lt;PanToken&gt;99999999999999999999999&lt;/PanToken&gt;
+          &lt;PaymentCardExpiryDate&gt;0113&lt;/PaymentCardExpiryDate&gt;
+          &lt;/CardHolder&gt;
+          &lt;/SendTo&gt;
+          &lt;TemplateContentTags&gt;
+          &lt;PaymentAmount&gt;9999&lt;/PaymentAmount&gt;
+          &lt;PaymentTransactionDateTime&gt;2013-11-28T12:11:04.5030783+00:00&lt;/PaymentTransactionDateTime&gt;
+          &lt;PaymentCardPanToken&gt;12345678912345678912345678&lt;/PaymentCardPanToken&gt;
+          &lt;PaymentCardExpiryDate&gt;0113&lt;/PaymentCardExpiryDate&gt;
+          &lt;PaymentCardLast4Digits&gt;1234&lt;/PaymentCardLast4Digits&gt;
+          &lt;PaymentCardType&gt;Visa&lt;/PaymentCardType&gt;
+          &lt;DebtAmount&gt;1&lt;/DebtAmount&gt;
+          &lt;DebtDate&gt;2013-11-29T12:11:04.5030783+00:00&lt;/DebtDate&gt;
+          &lt;DebtIndicator&gt;Y&lt;/DebtIndicator&gt;
+          &lt;AuthorisationAmount&gt;2&lt;/AuthorisationAmount&gt;
+          &lt;/TemplateContentTags&gt;
+          &lt;/Notification&gt;
+          &lt;/Notifications&gt;',
+          @ConversationHandle=@ConversationHandle1 OUT
+        </SqlScript>
+      </Sql>
+      <Sql>
+        <ConnectionInfo UserName="tfsbuild" Password="LMTF$Bu1ld" />
+        <DatabaseServer>TS-DB1</DatabaseServer>
+        <DatabaseInstance>Inst3</DatabaseInstance>
+        <TargetDatabase>Notification</TargetDatabase>
+        <SqlScript>
+          -- Check for the message
+          WAITFOR DELAY '00:00:15';
+          DECLARE @test int
+          SET @test=(SELECT count(*)
+          FROM [Notification].[dbo].[http://tfl.gov.uk/Ft/Notification/Queue/Email]
+          WHERE  CAST(message_body AS NVARCHAR(MAX)) Like '%&lt;PanToken&gt;99999999999999999999999%')
+
+          -- Remove it (doesnt work )
+          --DELETE FROM [Notification].[dbo].[http://tfl.gov.uk/Ft/Notification/Queue/Email]
+          --WHERE  CAST(message_body AS NVARCHAR(MAX)) Like '%&lt;PanToken&gt;99999999999999999999999%')
+
+          -- Turn on activation VERY IMPORTANT, missing this will leave the database in a non functional state
+          ALTER QUEUE [dbo].[http://tfl.gov.uk/Ft/Notification/Queue/Email] WITH STATUS=ON ,
+          RETENTION=OFF , ACTIVATION (  STATUS=ON , PROCEDURE_NAME=[dbo].[Email_Activation] , MAX_QUEUE_READERS=10 , EXECUTE AS N'dbo'  ), POISON_MESSAGE_HANDLING (STATUS=ON)
+
+          IF @test=0
+          THROW 51000, 'Message not found in http://tfl.gov.uk/Ft/Notification/Queue/Email', 1;
+
+        </SqlScript>
+      </Sql>
+    </ServiceBrokerTest>
+    <AppFabricTest Name="FAEIntraday App Fabric Test" Groups="FAE">
+      <TestInfo Account="DeploymentAccount" />
+      <HostName>TS-DB1</HostName>
+      <CacheName>FAEIntraday</CacheName>
+    </AppFabricTest>
+    <AppFabricTest Name="SSO App Fabric Test" Groups="FAE">
+      <TestInfo Account="DeploymentAccount" />
+      <HostName>TS-DB2</HostName>
+      <CacheName>SSO</CacheName>
+    </AppFabricTest>
+  </CustomTests>
+
+</configuration>

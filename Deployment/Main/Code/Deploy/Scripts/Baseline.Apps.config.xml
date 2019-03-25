@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="Deployment Baseline - Apps" Environment="Baseline" Config="Baseline" ProductGroup="DeploymentBaseline">
+
+  <CommonRoleFile>Baseline.CommonRoles.xml</CommonRoleFile>
+
+  <machine Id="2" Name="TS-DB1" ExternalIP="" DeploymentMachine="true">
+    <!-- Deploy EventLog Server Roles -->
+    <ServerRole Include="Simple.Event.Logs" Description="SimpleEventLogs" Config="BaselineX"/>
+    <ServerRole Include="Simple.Event.Logs1" Description="SimpleEventLogs1" Config="BaselineX"/>
+    <ServerRole Include="Simple.Event.Logs2" Description="SimpleEventLogs2" Config="BaselineX"/>
+    <ServerRole Include="Simple.Event.Logs3" Description="SimpleEventLogs3" Config="BaselineX"/>
+    <ServerRole Include="Simple.Event.Logs4" Description="SimpleEventLogs4" Config="BaselineX"/>
+    <ServerRole Include="Simple.Event.Logs5" Description="SimpleEventLogs5" Config="BaselineX"/>
+    <ServerRole Include="Simple.Event.Logs6" Description="SimpleEventLogs6" Config="BaselineX"/>
+    <!-- Install a Windows Service and MSI-->
+    <!-- Post Deployment Validation Disabled to test Uninstall-->
+    <ServerRole Include="State.Service.Setup" Description="State Service Setup" />
+
+    <!-- Post Deployment Validation Disabled to test Uninstall-->
+    <ServerRole Include="Simple.Windows.ServiceX" Description="Simple Windows ServiceX Install" Config="BaselineX" DisableTests="true" />
+    <ServerRole Include="Simple.Console.AppX" Description="Simple Console AppX Install" Config="BaselineX" DisableTests="true"/>
+    <ServerRole Include="Simple.Console.App.MultiConfig" Description="Simple Console App MultiConfig Install" />
+
+    <ServerRole Include="Simple.Windows.ServiceX" Description="Simple Windows ServiceX Reinstall" Config="BaselineX" Action="Reinstall" DisableTests="true" />
+    <ServerRole Include="Simple.Console.AppX" Description="Simple Console AppX Uninstall" Config="BaselineX" Action="Uninstall"/>
+
+    <!-- Setting up SMTP for Emails -->
+    <ServerRole Include="SMTP.Server.Role" Description="SMTP Server AppX Install"/>
+
+    <ServerRole Include="Simple.Windows.ServiceX" Description="Simple Windows ServiceX Uninstall" Config="BaselineX" Action="Uninstall" DisableTests="true" />
+
+    <PostDeployRole Include="Start.AppFabric.Cluster" Description="Start AppFabric Cluster" />
+  </machine>
+
+  <machine Id="3" Name="TS-CAS1" ExternalIP="">
+    <ServerRole Include="IISSetup" Description="WebDeploy Install and .Net Registration in IIS" />
+    <ServerRole Include="Baseline.File.System" Description="Baseline file system" />
+    <!-- Create Fileshare on server -->
+    <ServerRole Include="TFL.FileShare.Creation" Description="Create fileshare" />
+    <ServerRole Include="Simple.Web.Site" Description="Simple Web Site" />
+    <ServerRole Include="Simple.Web.SiteX" Description="Simple Web SiteX" Config="BaselineX"/>
+    <ServerRole Include="Simple.Web.SiteNX" Description="Simple Web SiteXNS" Config="BaselineXNS"/>
+    <ServerRole Include="Simple.MVC.App" Description="Simple Mvc App" />
+    <ServerRole Include="Simple.Windows.ServiceX" Description="Simple Windows ServiceX" Config="BaselineX"/>
+    <ServerRole Include="Simple.Console.AppX" Description="SimpleConsoleAppX" Config="BaselineX" />
+	  <ServerRole Include="Simple.X509.Certificate.App" Description="Simple X509 Certificate App" />
+  </machine>
+  <machine Id="4" Name="TS-CIS1"  ExternalIP="">
+    <PreDeployRole Include="Simple.Windows.Service.Stop" />
+    <ServerRole Include="IISSetup" Description="WebDeploy Install and .Net Registration in IIS"/>
+    <ServerRole Include="Simple.Web.Service" Description="Simple Web Service Install" />
+
+    <ServerRole Include="Simple.Windows.Service.ForRename.Old" />
+    <ServerRole Include="Simple.Windows.Service" Description="Simple Windows Service Install"/>
+    <ServerRole Include="Simple.Console.App" Description="Simple Console App Install" />
+    <!--Test service rename-->
+    <ServerRole Include="Simple.Windows.Service.ForRename.New" />
+	  <ServerRole Include="Simple.X509.Certificate.App" Description="Simple X509 Certificate App" />
+    <ServerRole Include="ScheduleTask.TestDailyScheduleForceRecreate" Description="Test Daily Schedule with Force Recreate"/>
+    <ServerRole Include="ScheduleTask.TestOnceOnlyScheduleCreate" Description="Test Daily Create Schedule" />
+    <ServerRole Include="ScheduleTask.CreateAndChangeTest1" Description="Test Weekly Schedule"/>
+    <ServerRole Include="ScheduleTask.CreateAndChangeTest2" Description="Test Weekly Schedule Change"/>
+    <ServerRole Include="ScheduleTask.TestAtOnceSchedule1" Description="Test AtOnce Schedule" />
+    <ServerRole Include="ScheduleTask.TestAtOnceSchedule2" Description="Test AtOnce Schedule Change"/>
+    <ServerRole Include="ScheduleTask.NoTriggers" />
+    <ServerRole Include="ScheduleTask.LogBackup" />
+    <!--Test Removal-->
+    <ServerRole Include="ScheduleTask.NoTriggers" Action="Uninstall" DisableTests="true"/>
+    <PostDeployRole Include="Poll.Simple.Web.Service" Description="Poll Simple Web Service" />
+    <PostDeployRole Include="Simple.Windows.Service.Start" />
+    <PostDeployRole Include="Simple.Windows.Service.ForRename.Start" />
+  </machine>
+
+  <CustomTests>
+    <AppFabricTest Name="Baseline App Fabric Test" Groups="Always">
+      <TestInfo Account="DeploymentAccount" />
+      <HostName>TS-DB1</HostName>
+      <CacheName>FAEIntraday</CacheName>
+    </AppFabricTest>
+    </CustomTests>
+
+  <ServiceDependencies>
+    <Service ServiceName="SimpleWindowsService.exe" TargetMachine="TS-CAS1">
+      <DependentOnService ServiceName="SimpleWindowsService.exe" TargetMachine="TS-CIS1" />
+    </Service>
+  </ServiceDependencies>
+
+</configuration>

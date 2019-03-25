@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="TestRig" Environment="TestRig" Config="TestRig.SDM" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+
+  <machine Id="3" Name="TS-DB1" ExternalIP="" DeploymentMachine="true">
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices1" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices2" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices3" />
+    <DatabaseRole Description="SDM Baseline" Include="SDM.Baseline" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="SDM Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="SDM" />
+    <DatabaseRole Description="SDM Database" Include="SDM.Database" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="SDM ServerObjects" Include="SDM.ServerObjects" DatabaseInstance="Inst3" />
+  </machine>
+  <machine Id="1" Name="TS-CAS1"  ExternalIP="">
+	  <ServerRole Include="IISSetup.CAS" Description="IIS" Groups="SDM"  />
+    <ServerRole Description="SDM Portal"  Include="SDM.Portal.Rig" />
+  </machine>
+  <machine Id="2" Name="TS-CIS1"  ExternalIP="">
+    <PreDeployRole Description="StopSDMControllerService" Include="StopSDMControllerService" />
+    <ServerRole Include="IISSetup.CAS" Description="IIS" Groups="SDM"  />
+    <ServerRole Description="SDM Web Services" Include="SDM.WebService" />
+    <ServerRole Description="SDM Mock SSO" Include="SDM.Mock.SSO" />
+	<ServerRole Description="SDM Mock FaeApi" Include="SDM.Mock.FaeApi" />
+    <ServerRole  Description="CSC.SDM.ControllerService" Include="CSC.SDM.ControllerService.Installer" StartUpType="AutomaticDelayed" />
+  </machine>
+</configuration>

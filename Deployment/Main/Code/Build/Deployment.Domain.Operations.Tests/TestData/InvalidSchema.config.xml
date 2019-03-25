@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="Deployment Baseline" Environment="Baseline" Config="Baseline" ProductGroup="DeploymentBaseline">  
+  <machine Id="1" MachineName="TS-CAS1" ExternalIP="1">
+    <ServerRole Name="TFL.IISsetup" Description="IIS" />
+    <ServerRole Name="Tfl.FileSystem">
+      <CreateFolder TargetPath="\D$\tfl\BaselineTemp" />
+    </ServerRole>
+    <ServerRole Name="TFL.WebDeploy" Description="Simple Web Site">
+      <WebDeploy Name="Deployment Baseline Web">
+        <ApppPool>
+          <Name>Baseline App Pool</Name>
+          <ServiceAccount>FAEServiceAccount</ServiceAccount>
+        </ApppPool>
+        <Site>
+          <Name>Simple Web Site</Name>          
+          <Port>8700</Port>
+          <PhysicalPath>D:\TfL\Baseline\Simple Web Site</PhysicalPath>
+          <!--<ApplicationPool>Baseline App Pool</ApplicationPool>-->
+          <!--
+          <Application>
+            <Name></Name>
+            <PhysicalPath></PhysicalPath>
+          </Application>
+          -->
+        </Site>
+        <Package>
+          <Name>SimpleWebSite</Name>
+        </Package>
+        <!--<TestInfo></TestInfo>-->
+      </WebDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.WebDeploy" Description="Simple Mvc App">
+      <WebDeploy Name="Deployment Baseline Mvc Web">
+        <AppPool>
+          <Name>Baseline App Pool</Name>
+          <ServiceAccount>FAEServiceAccount</ServiceAccount>
+        </AppPool>
+        <Site>
+          <Name>Simple Mvc App</Name>
+          <Port>8698</Port>
+          <PhysicalPath>D:\TfL\Baseline\Simple Mvc App</PhysicalPath>
+          <!--<ApplicationPool>Baseline App Pool</ApplicationPool>-->
+        </Site>
+        <Package>
+          <Name>SimpleMvcApp</Name>
+        </Package>
+      </WebDeploy>
+    </ServerRole>
+  </machine>
+  
+  <machine Id="4" Name="TS-CIS1"  ExternalIP="2">
+	  <ServerRole Name="TFL.IISsetup" Description="IIS" />
+    <ServerRole Name="TFL.ServiceDeploy" Description="Simple Windows Service">
+      <ServiceDeploy Name="SimpleWindowsService">
+        <MSI>
+          <id>EED8A1A9-891E-4D78-9C56-532939489846</id>
+          <name>SimpleWindowsService.msi</name>
+          <installlocation>d:\tfl\Baseline\SimpleWindowsService</installlocation>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>SimpleWindowsService.exe</Name>
+            <Credentials>FAEServiceAccount</Credentials>
+            <StartUpType>Manual</StartUpType>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="SimpleWindowsService.exe.config" target="\tfl\Baseline\SimpleWindowsService"/>
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.WebDeploy" Description="Simple Web Service">
+      <WebDeploy Name="Deployment Baseline Web Service">
+        <AppPool>
+          <Name>Baseline App Pool</Name>
+          <ServiceAccount>FAEServiceAccount</ServiceAccount>
+        </AppPool>
+        <Site>
+          <Name>Simple Web Service</Name>
+          <Port>8699</Port>
+          <PhysicalPath>D:\TfL\Baseline\SimpleWebService</PhysicalPath>
+          <!--<ApplicationPool>Baseline App Pool</ApplicationPool>-->
+          <!--
+          <Application>
+            <Name></Name>
+            <PhysicalPath></PhysicalPath>
+          </Application>
+          -->
+        </Site>
+        <Package>
+          <Name>SimpleWebService</Name>
+        </Package>
+        <TestInfo>
+          <EndPoint>SimpleWebService.svc</EndPoint>
+        </TestInfo>
+      </WebDeploy>
+    </ServerRole>
+  </machine>
+  
+  <machine Id="3" Name="TS-DB1" ExternalIP="3" DeploymentMachine="true">
+     
+    <DatabaseRole Name="FromConfig" Description="Simple Database">
+      <ProjectStub>SimpleDb</ProjectStub>
+      <TargetDatabase>SimpleDb</TargetDatabase>
+      <DatabaseInstance>Inst1</DatabaseInstance>
+      <PublishProfile>SimpleDb.$Environment.publish.xml</PublishProfile>
+      <PostDeployment></PostDeployment>
+      <AlwaysCreateNewDatabase>true</AlwaysCreateNewDatabase>
+      <EnableAspnetSqlCacheDependency>
+        <OnTable>TableOne</OnTable>
+      </EnableAspnetSqlCacheDependency>
+      <TestInfo UserName="tfsbuild" Password="LMTF$Bu1ld" />
+    </DatabaseRole>
+
+    <DatabaseRole Name="ASPMembership" Description="SimpleDB ASP.NET Membership">
+      <TargetDatabase>SimpleDB</TargetDatabase>
+      <DatabaseInstance>Inst1</DatabaseInstance>
+      <AlwaysCreateNewDatabase>false</AlwaysCreateNewDatabase>
+      <TestInfo UserName="tfsbuild" Password="LMTF$Bu1ld">
+        <Table>aspnet_Users</Table>
+      </TestInfo>
+    </DatabaseRole>
+
+  </machine>
+</configuration>

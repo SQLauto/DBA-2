@@ -1,0 +1,2655 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/CommonRoles">
+	<CommonRoles>
+		<!-- IIS Setup roles -->
+		<ServerRole Name="TFL.IISSetup" Include="IISSetup" Description="IIS" Groups="Always" />
+		<ServerRole Name="TFL.IISSetup" Include="IISSetup.CAS" Description="IIS" Groups="CASC,Notifications,SDM" />
+		<ServerRole Name="TFL.IISSetup" Include="IISSetup.CIS" Description="IIS" Groups="FAE,PARE,CASC,Notifications,SDM,MasterData,OyBO" />
+
+		<!--RSP Exporter -->
+		<ServerRole Name="TFL.FileSystem" Description="RSP File System" Include="RSP.FileSystem" Groups="RSP">
+			<CreateFolder TargetPath="\D$\TFL\RSP\Temp" />
+			<CreateFolder TargetPath="\D$\TFL\RSP\Final" />
+		</ServerRole>
+		<!--RSP roles -->
+		<!--Notification services new roles to repalace SSIS packages-->
+		<ServerRole Name="TFL.SsisSetup" Include="SSISSetup.RSP" Description="Configures SSIS for RSP deployment" Groups="RSP,Database">
+			<SsisSetup SSISDBInstance="VINS001"/>
+		</ServerRole>
+
+		<ServerRole Name="TFL.SsisDeploy" Description="RSP SSIS Package" Include="RSP.RSPSSIS" Groups="RSP,Database">
+			<SsisDeploy Name="RSPSSIS">
+				<SSISEnvironment>RspAllocation</SSISEnvironment>
+				<SSISFolder>RSP</SSISFolder>
+				<DatabaseInstance>VINS001</DatabaseInstance>
+				<DeployMode>WIZ</DeployMode>
+				<Project>
+				  RSP
+          <Name>RSPSSIS</Name>
+					<SsisFile>RSPSSIS.ispac</SsisFile>
+					<Type>ISPAC</Type>
+					<Packages>
+						<Package Name="RSP.dtsx" />
+					</Packages>
+					<parameters>
+						<parameter name="DestinationFolderPath" value="D:\TFL\RSP\Final\" type="string" description="Final folder location." />
+						<parameter name="ReportingRWConnectionString" value="$(RSP_ReportingRWDatabaseConnectionString)" type="string" description="Reporting database" />
+						<parameter name="FAEConnectionString" value="$(RSP_FAEDatabaseConnectionString)" type="string" description="FAE database" />
+						<parameter name="TempFolderPath" value="D:\TFL\RSP\Temp\" type="string" description="Email FilePath Location - for FileSystemEmailGateway only" />
+					</parameters>
+				</Project>
+				<TestInfo SqlUserName="tfsbuild" SqlPassword="LMTF$Bu1ld" />
+			</SsisDeploy>
+		</ServerRole>
+
+		<!--CASC Roles-->
+		<ServerRole Name="TFL.EventLogDeploy" Description="FTP.EventLog.For.External.CASC" Include="FTP.EventLog.For.External.CASC" Groups="CASC">
+			<EventLogDeploy EventLogName="FTP">
+				<Sources>
+					<Source Name="ExternalAuthorisationWebService" />
+					<Source Name="ExternalCustomerWebService" />
+					<Source Name="ExternalTokenStatusWebService" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.WebDeploy" Description="CSC External Token Status Service" Include="CACC.External.TokenStatus.Service" Groups="CASC">
+			<WebDeploy Name="CSCTokenStatusService" RegistryKey="Software\TfL\CASC\IVR"  AssemblyToVersionFrom="TfL.CSC.Webservice.External.TokenStatus.dll">
+				<AppPool>
+					<Name>CSCTokenStatusService</Name>
+					<ServiceAccount>NetworkService</ServiceAccount>
+				</AppPool>
+				<Site>
+					<Name>CSCTokenStatusService</Name>
+					<Port>8716</Port>
+					<PhysicalPath>D:\TFL\CACC\CSCTokenStatusService</PhysicalPath>
+					<Authentication>Basic</Authentication>
+				</Site>
+				<Package>
+					<Name>CSC.Webservice.External.TokenStatus</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint TestIdentity="EckohUser">CSCTokenStatusService.svc</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.WebDeploy" Description="CSC External Authorisation Service" Include="CACC.External.Authorisation.Service" Groups="CASC">
+			<WebDeploy Name="CSCAuthorisationService" RegistryKey="Software\TfL\CASC\IVR"  AssemblyToVersionFrom="TfL.CSC.Webservice.External.Authorisation.dll">
+				<AppPool>
+					<Name>CSCAuthorisationService</Name>
+					<ServiceAccount>NetworkService</ServiceAccount>
+				</AppPool>
+				<Site>
+					<Name>CSCAuthorisationService</Name>
+					<Port>8718</Port>
+					<PhysicalPath>D:\TFL\CACC\CSCAuthorisationService</PhysicalPath>
+					<Authentication>Basic</Authentication>
+				</Site>
+				<Package>
+					<Name>CSC.Webservice.External.Authorisation</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint TestIdentity="EckohUser">CSCAuthorisationService.svc</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.WebDeploy" Description="CSC External Customer Service" Include="CACC.External.Customer.Service" Groups="CASC">
+			<WebDeploy Name="CSCCustomerServiceExternal" RegistryKey="Software\TfL\CASC\IVR"  AssemblyToVersionFrom="TfL.CSC.Webservice.External.Customer.dll">
+				<AppPool>
+					<Name>CSCCustomerServiceExternal</Name>
+					<ServiceAccount>NetworkService</ServiceAccount>
+				</AppPool>
+				<Site>
+					<Name>CSCCustomerService</Name>
+					<Port>8720</Port>
+					<PhysicalPath>D:\TFL\CACC\CSCCustomerService</PhysicalPath>
+					<Authentication>Basic</Authentication>
+				</Site>
+				<Package>
+					<Name>CSC.Webservice.External.Customer</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint TestIdentity="EckohUser">CustomerService.svc</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.WebDeploy" Description="CSC Mock Services" Include="CACC.Mock.Services" Groups="CASC">
+			<WebDeploy Name="CSC.Mock.Services" RegistryKey="Software\TfL\CASC" AssemblyToVersionFrom="TfL.CSC.MockServices.dll">
+				<AppPool>
+					<Name>CSCMockServices</Name>
+					<ServiceAccount>ApplicationPoolIdentity</ServiceAccount>
+				</AppPool>
+				<Site>
+					<Name>CSCMockServices</Name>
+					<Port>8799</Port>
+					<PhysicalPath>D:\TFL\CACC\MockServices</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>CSC.MockServices</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint/>
+					<EndPoint>Payment/RegisterNewCard?data=kdDTGz1t2vRt6sQ9RV+DihWrm7Iyid6BFNE05QIdlmcpIYLJgZ6V4aXszWVTCudb9dH/zWQbvfYHkHTHx/SuxagIgyjX7j+Kr5LWpQCHQVxKK4BhqnaOEGydiLvhyZ4ytrK5klz5oOIJnWj4nN1asxnvSSYRMTnaQoFbT16GHP7oCzNIVzl9yLLVdtggwdSyvfFR5qeYGDnqnlOnMEaIB6JyRS81NjQzYSQ3NDZ0ZjU3MzZB</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+
+		<!--SDM -->
+		<ServerRole Name="TFL.WebDeploy" Description="SDM Portal"  Include="SDM.Portal" Groups="SDM">
+			<WebDeploy Name="SDM.Portal" RegistryKey="Software\TfL\SDM\SDMPortal"  AssemblyToVersionFrom="CSC.SDM.Domain.dll">
+				<AppPool>
+					<Name>SDMPortal</Name>
+					<ServiceAccount>SDMServiceAccount</ServiceAccount>
+					<IdleTimeout>0</IdleTimeout>
+					<RecycleLogEvent>Time,Requests,Schedule,Memory,IsapiUnhealthy,ConfigChange,PrivateMemory</RecycleLogEvent>
+				</AppPool>
+				<Site>
+					<Name>SDM.Portal</Name>
+					<Port>80</Port>
+					<PhysicalPath>D:\TFL\SDM\SDMPortal</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>CSC.SDM.Web</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint/>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.WebDeploy" Description="SDM Web Services"  Include="SDM.WebService" Groups="SDM">
+			<WebDeploy Name="SDM.WebService" RegistryKey="Software\TfL\SDM\SDMWebService"  AssemblyToVersionFrom="CSC.SDM.Services.dll">
+				<AppPool>
+					<Name>SDM</Name>
+					<ServiceAccount>SDMServiceAccount</ServiceAccount>
+					<IdleTimeout>0</IdleTimeout>
+					<RecycleLogEvent>Time,Requests,Schedule,Memory,IsapiUnhealthy,ConfigChange,PrivateMemory</RecycleLogEvent>
+				</AppPool>
+				<Site>
+					<Name>SDM.WebService</Name>
+					<Port>8730</Port>
+					<PhysicalPath>D:\TFL\SDM\SDMWebService</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>CSC.SDM.Services</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint>api/DisruptionEventTemplates</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.WebDeploy" Description="SDM Mock SSO"  Include="SDM.Mock.SSO" Groups="SDM">
+			<WebDeploy Name="SDM.Mock.SSO" RegistryKey="Software\TfL\SDM\MockSSO"  AssemblyToVersionFrom="CSC.SDM.MockSSO.dll">
+				<AppPool>
+					<Name>SDM</Name>
+					<ServiceAccount>SDMServiceAccount</ServiceAccount>
+				</AppPool>
+				<Site>
+					<Name>SDM.Mock.SSO</Name>
+					<Port>8728</Port>
+					<PhysicalPath>D:\TFL\SDM\MockSSO</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>CSC.SDM.MockSSO</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint/>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.WebDeploy" Description="SDR Website" Include="SDR.Website" Groups="SDM">
+			<WebDeploy Name="SDR Web" RegistryKey="Software\TfL\SDR\website" AssemblyToVersionFrom="ServiceDelayRefund.Services.dll">
+				<AppPool>
+					<Name>Default Web Site</Name>
+					<ServiceAccount>ApplicationPoolIdentity</ServiceAccount>
+				</AppPool>
+				<Site>
+					<Name>Default Web Site</Name>
+					<Port>80</Port>
+					<PhysicalPath>D:\TFL\SDR\Website</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>ServiceDelayRefund.Services</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint/>
+					<!--Just browse the root-->
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.ServiceDeploy"  Description="CSC.SDM.ControllerService" Include="CSC.SDM.ControllerService.Installer" Groups="SDM">
+			<ServiceDeploy Name="CSCSDMControllerService">
+				<MSI>
+					<name>CSC.SDM.ControllerService.Installer.msi</name>
+					<UpgradeCode>18789E78-F7FD-4FD1-A3A5-8E846F46BFBE</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\SDM\CSCSDMControllerService" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>ControllerService</Name>
+						<Credentials>SDMServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="ControllerService.exe.config" target="\TFL\SDM\CSCSDMControllerService" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<!-- Notifications Role -->
+		<ServerRole Name="TFL.FileSystem" Description="SendEmail File System" Include="SendEmail.FileSystem" Groups="Notifications">
+			<CreateFolder TargetPath="\D$\TFL\Notifications\Templates\TfL" />
+			<CreateFolder TargetPath="\D$\TFL\Notifications\Templates\TfL\Includes" />
+			<CopyItem Source="EmailTemplates\TfL" Filter="*.*" Target="\D$\TFL\Notifications\Templates\TfL\" Recurse="true" Replace="true" />
+			<CopyItem Source="EmailTemplates\TfL\Includes" Filter="*.*" Target="\D$\TFL\Notifications\Templates\TfL\Includes" Recurse="true" Replace="true" />
+			<!--these are deployed with the service <CopyItem Source="MessageSchemas" Filter="*.*" Target="\D$\TFL\Notifications\MessageSchemas" Recurse="false" Replace="true" />-->
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileSystem" Description="Notifications File Processor File System" Include="Notifications.FileProcessor.FileSystem" Groups="Notifications">
+			<CreateFolder TargetPath="\D$\TFL\Notifications\EmailNotification\NotificationFileProcessor" />
+			<CreateFolder TargetPath="\D$\TFL\Notifications\EmailNotification\NotificationFileProcessor\Unprocessed" />
+			<CreateFolder TargetPath="\D$\TFL\Notifications\EmailNotification\NotificationFileProcessor\Invalid" />
+			<CreateFolder TargetPath="\D$\TFL\Notifications\EmailNotification\NotificationFileProcessor\Failed" />
+			<CreateFolder TargetPath="\D$\TFL\Notifications\EmailNotification\NotificationFileProcessor\Processed" />
+			<CreateFolder TargetPath="\D$\TFL\Notifications\EmailNotification\NotificationFileProcessor\Loading" />
+		</ServerRole>
+
+		<ServerRole Name="TFL.SMTPDeploy" Description="SMTP Server role" Include="SMTP.Notifications" Groups="CASC,Notifications">
+			<SMTPDeploy name="SMTP Setup">
+				<DropFolderLocation>D:\TFL\Notifications\EmailDrop</DropFolderLocation>
+			</SMTPDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.WebDeploy" Description="Notification Processor Service" Include="Notification.Processor.Service" Groups="Notifications">
+			<WebDeploy Name="CSCWebService" RegistryKey="Software\TfL\CASC\NotificationServices" AssemblyToVersionFrom="NotificationProcessor.Services.dll">
+				<AppPool>
+					<Name>NotificationWebServices</Name>
+					<ServiceAccount>NotificationServiceAccount</ServiceAccount>
+				</AppPool>
+				<Site>
+					<Name>NotificationProcessor.Services</Name>
+					<Port>8724</Port>
+					<PhysicalPath>D:\TFL\CACC\NotificationProcessor.Services</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>NotificationProcessor.Services</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint>api/DataUpdate</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.WebDeploy" Description="Notification Processor External Service" Include="Notification.Processor.ExternalService" Groups="Notifications">
+			<WebDeploy Name="CSCWebService" RegistryKey="Software\TfL\CASC\NotificationExternalServices" AssemblyToVersionFrom="NotificationProcessor.ExternalServices.dll">
+				<AppPool>
+					<Name>CSCWebService</Name>
+					<ServiceAccount>NetworkService</ServiceAccount>
+				</AppPool>
+				<Site>
+					<Name>NotificationProcessor.ExternalServices</Name>
+					<Port>8726</Port>
+					<PhysicalPath>D:\TFL\CACC\NotificationProcessor.ExternalServices</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>NotificationProcessor.ExternalServices</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint>api/DataUpdate</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.MsiDeploy"  Description="Payment Card Expiry Extract Task Console" Include="PaymentCardExpiryExtractTool.Install" Groups="Notifications">
+			<MsiDeploy Name="PaymentCardExpiryInstaller">
+				<MSI>
+					<name>Tfl.Ft.PaymentCardExpiry.Installer.msi</name>
+					<UpgradeCode>E03BFF93-87A9-4048-8836-2CBA3CE73359</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\Notifications\PaymentCardExpiryExtract" />
+					</parameters>
+				</MSI>
+				<Configs>
+					<config name="Tfl.Ft.PaymentCardExpiry.Console.exe.config" target="\TFL\Notifications\PaymentCardExpiryExtract" />
+				</Configs>
+			</MsiDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ScheduledTaskDeploy" Description="Payment Card Expiry Extract Scheduled Task" Include="PaymentCardExpiryExtractTool.ScheduledTask.Create" Groups="Notifications">
+			<ScheduledTaskDeploy Action="Install">
+				<TaskName>Payment Card Expiry Extract Xml File</TaskName>
+				<Folder>FTP</Folder>
+				<ServiceAccount>PayCardExpiryExtractServiceAccount</ServiceAccount>
+				<Description/>
+				<Triggers>
+					<Trigger>
+						<Daily Interval="1">
+							<StartDate>01/02/2017</StartDate>
+							<StartTime>00:10:00</StartTime>
+						</Daily>
+					</Trigger>
+				</Triggers>
+				<Actions>
+					<Action>
+						<Command>D:\TFL\Notifications\PaymentCardExpiryExtract\Tfl.Ft.PaymentCardExpiry.Console.exe</Command>
+					</Action>
+				</Actions>
+			</ScheduledTaskDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.ServiceDeploy"  Description="Notifications File Processor" Include="Notifications.FileProcessor.Installer" Groups="Notifications">
+			<ServiceDeploy Name="NotificationsFileProcessor">
+				<MSI>
+					<name>Tfl.Ft.Notifications.FileProcessor.Installer.msi</name>
+					<UpgradeCode>F2551C3F-8214-4293-BCD5-61F9D500E152</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\Notifications\FileProcessorService" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>Tfl.Ft.Notifications.FileProcessor.WindowsService.exe</Name>
+						<Credentials>NotificationServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="Tfl.Ft.Notifications.FileProcessor.WindowsService.exe.config" target="\TFL\Notifications\FileProcessorService" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy"  Description="Notifications Azure Service" Include="Notifications.AzureService.Installer" Groups="Notifications">
+			<ServiceDeploy Name="NotificationsAzureService">
+				<MSI>
+					<name>Tfl.Ft.Notifications.AzureService.Installer.msi</name>
+					<UpgradeCode>147EF9A1-9368-48BD-BE99-5B92E2A3DEE3</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\Notifications\AzureService" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>Tfl.Ft.Notifications.AzureService.WindowsService.exe</Name>
+						<Credentials>NotificationServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="Tfl.Ft.Notifications.AzureService.WindowsService.exe.config" target="\TFL\Notifications\AzureService" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.ServiceDeploy"  Description="Send Email Installer" Include="SendEmail.Installer" Groups="Notifications">
+			<ServiceDeploy Name="SendEmailInstaller">
+				<MSI>
+					<name>SendEmail.msi</name>
+					<UpgradeCode>E87F999F-EEC1-45CB-852E-58B5E1F29338</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\Notifications\SendMailService" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>SendEmailService.exe</Name>
+						<Credentials>NotificationServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="SendEmailService.exe.config" target="\TFL\Notifications\SendMailService" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<!--FTM Roles-->
+		<ServerRole Name="TFL.EventLogDeploy" Description="FTP.EventLog.For.Internal.FTM" Include="FTP.EventLog.For.Internal.FTM" Groups="FTM">
+			<EventLogDeploy EventLogName="FTM">
+				<Sources>
+					<Source Name="FileTransferManager" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+
+		 <!--FTM Payment Assurance folders-->
+		 <ServerRole Name="TFL.FileSystem" Description="FTM Payment Assurance File System" Include="FTM.PaymentAssurance.FileSystem" Groups="FTM">
+			<CreateFolder TargetPath="\D$\TFL\PaymentAssurance\SqlFiles" />
+      <CreateFolder TargetPath="\D$\TFL\PaymentAssurance\Processing" />
+      <CreateFolder TargetPath="\D$\TFL\PaymentAssurance\Results" />
+		 </ServerRole>
+
+		<ServerRole Name="TFL.FileSystem" Description="FTM PCS File System" Include="PCS.Filesystem" Groups="FTM">
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\PCS" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\PCS\outbound" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\PCS\outbound\csl" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\PCS\outbound\settle" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\PCS\inbound" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\PCS\inbound\tap" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\PCS\inbound\csl" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\PCS\inbound\settle" />
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="FTM IM File System" Include="IM.Filesystem" Groups="FTM">
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\IM" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\IM\inbound" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\IM\inbound\settle" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\IM\inbound\rsp" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\IM\inbound\oysterrsp" />
+		  <CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\IM\inbound\cpcrsp" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\IM\inbound\refunds" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\IM\outbound" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\IM\outbound\disruptions" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\IM\outbound\refunds" />
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="FTM Analytics File System" Include="Analytics.Filesystem" Groups="FTM">
+			<CreateFolder TargetPath="\D$\TFL\RefundsData\Disruptions" />
+			<CreateFolder TargetPath="\D$\TFL\RefundsData\RefundAuthorisations" />
+			<CreateFolder TargetPath="\D$\TFL\RefundsData\ApprovedRefundAuthorisations" />
+			<CreateFolder TargetPath="\D$\TFL\RefundsData\PareSettlementFiles" />
+			<CreateFolder TargetPath="\D$\TFL\RefundsData\Notifications" />
+			<CreateFolder TargetPath="\D$\TFL\RefundsData\DenyListing" />
+      <CreateFolder TargetPath="\D$\TFL\RefundsData\RefundManager" />
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="SFTP Public Keys" Include="SFTPPublicKeys" Groups="FTM">
+			<CreateFolder TargetPath="\SFTPClient1\.ssh" />
+			<CreateFolder TargetPath="\SFTPClient2\.ssh" />
+			<CopyItem Source="SFTPAuthKeyPairs\Public" Target="\SFTPClient1\.ssh" Recurse="false" Filter="*.*" Replace="true" />
+			<CopyItem Source="SFTPAuthKeyPairs\Public" Target="\SFTPClient2\.ssh" Recurse="false" Filter="*.*" Replace="true" />
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="SFTP Private Keys" Include="SFTPPrivateKeys" Groups="FTM">
+			<CreateFolder TargetPath="\D$\SFTPAuthKeys" />
+			<CopyItem Source="SFTPAuthKeyPairs\Private" Target="\D$\SFTPAuthKeys" Recurse="false" Filter="*.*" Replace="true" />
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="FTM OyBO File System" Include="OYBO.FTM.Filesystem" Groups="FTM">
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\PCS" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\PCS\OyBOinbound" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\PCS\OyBOoutbound" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\IM\inbound\OYT" />
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="FTM OyBO File System OOL" Include="OYBO.FTM.OOL.Filesystem" Groups="FTM">
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\prestige\id7" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\prestige\id8" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\prestige\id10" />
+			<CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\prestige\id12" />
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy" Description="FTM Service (FTP-PCS)" Include="FTM.Service" Groups="FTM">
+			<ServiceDeploy Name="FileTransferManagerService">
+				<MSI>
+					<name>FileTransferManager.Service.Installer.msi</name>
+					<UpgradeCode>EA7E3971-36F4-4262-9EC9-2A33754166C2</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\FTM\FileTransferManager.Service\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>FileTransferManager Service</Name>
+						<Credentials>FTMServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="Tfl.FileTransferManagerService.exe.config" target="\TFL\FTM\FileTransferManager.Service" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ScheduledTaskDeploy" Description="FTM Log File Archiving Scheduled Task" Include="FTM.LogArchive.ScheduledTask.Create" Groups="FTM">
+			<ScheduledTaskDeploy Action="Install" Enabled="true">
+				<TaskName>FTM Log File Archiver</TaskName>
+				<Folder>FTP</Folder>
+				<ServiceAccount>FTMServiceAccount</ServiceAccount>
+				<Description>Scheduled Task for triggering the archiving of FTM Log Files.</Description>
+				<Triggers>
+					<Trigger>
+						<Daily Interval="1">
+							<StartDate>01/12/2017</StartDate>
+							<StartTime>23:05:00</StartTime>
+						</Daily>
+					</Trigger>
+				</Triggers>
+				<Actions>
+					<Action>
+						<Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+						<Arguments>-ExecutionPolicy ByPass Import-Module TFL.Utilities;Backup-Folder -Path $(FTM.LogPath) -TargetPath $(FTM.LogArchivePath) -DaysBeforeArchive 1 -DaysToArchive 30</Arguments>
+					</Action>
+				</Actions>
+			</ScheduledTaskDeploy>
+		</ServerRole>
+
+		<!-- FAE/OAE/RAE Roles-->
+		<ServerRole Name="TFL.EventLogDeploy" Description="FTP.EventLog.For.FAE.JourneyUsageService" Include="FTP.EventLog.For.FAE.JourneyUsageService" Groups="FAE">
+			<EventLogDeploy EventLogName="FTP">
+				<Sources>
+					<Source Name="JourneyUsageService" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.EventLogDeploy" Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" Groups="FAE">
+			<EventLogDeploy EventLogName="FTP">
+				<Sources>
+					<Source Name="FaeVoidService" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.EventLogDeploy" Description="FTP.EventLog.For.RAE.RaeService" Include="FTP.EventLog.For.RAE.RaeService" Groups="CPC,Oyster,RAE,RAECPC,RAEOyster">
+			<EventLogDeploy EventLogName="FTP">
+				<Sources>
+					<Source Name="RAE" />
+					<Source Name="RAE_CPC" />
+					<Source Name="RAE_Oyster" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="FAE Token Journey Summary folders" Include="FAE.TokenJourneySummary.Folders" Groups="FAE">
+			<CreateFolder TargetPath="\D$\tokenjourneysummary\unprocessed\"/>
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="FAE Token Journey Summary Header folders" Include="FAE.TokenJourneySummaryHeader.Folders" Groups="FAE">
+			<CreateFolder TargetPath="\D$\TFL\fae\tokenjourneysummaryheader\unprocessed\"/>
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="FAE Tap Importer Service folders" Include="FAE.TapImporter.Service.Folders" Groups="FAE,FAETapImporter">
+			<!-- TODO This can probably be removed -->
+			<CreateFolder TargetPath="\D$\TFL\fae\tapqueue\"/>
+			<CreateFolder TargetPath="\D$\TFL\fae\tapqueue\inbox"/>
+			<CreateFolder TargetPath="\D$\TFL\fae\tapqueue\error"/>
+			<CreateFolder TargetPath="\D$\TFL\fae\tapqueue\done"/>
+			<CreateFolder TargetPath="\D$\TFL\fae\tapqueue\processing"/>
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="OAE Tap Importer Service folders" Include="OAE.TapImporter.Service.Folders" Groups="OAE,OAETapImporter">
+			<CreateFolder TargetPath="\D$\TFL\oae\tapqueue\"/>
+			<CreateFolder TargetPath="\D$\TFL\oae\tapqueue\inbox"/>
+			<CreateFolder TargetPath="\D$\TFL\oae\tapqueue\error"/>
+			<CreateFolder TargetPath="\D$\TFL\oae\tapqueue\done"/>
+			<CreateFolder TargetPath="\D$\TFL\oae\tapqueue\processing"/>
+		</ServerRole>
+		<ServerRole Name="TFL.FileShare" Include="TJS.FileShare" Description="Create FileShare For TJS Services" Groups="Oyster,FAE">
+			<FileShare>
+				<ShareName>tjs</ShareName>
+				<FolderToShare>D$\tokenjourneysummary\unprocessed</FolderToShare>
+				<Users>
+					<User name="FTMServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+					<User name="OyBOServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+					<User name="FAEServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+				</Users>
+			</FileShare>
+		</ServerRole>
+		<ServerRole Name="TFL.FileShare" Include="TJS.CPC.FileShare" Description="Create FileShare For TJS Services CPC" Groups="CPC,FAE">
+			<FileShare>
+				<ShareName>tjs_CPC</ShareName>
+				<FolderToShare>D$\tokenjourneysummary_CPC\unprocessed</FolderToShare>
+				<Users>
+					<User name="FTMServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+					<User name="OyBOServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+					<User name="FAEServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+				</Users>
+			</FileShare>
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileSystem" Description="RAE Incoming TJSH Folders" Include="RAE.Service.Folders" Groups="Oyster,RAE,RAEOyster">
+			<CreateFolder TargetPath="\D$\TFL\rae\"/>
+			<CreateFolder TargetPath="\D$\TFL\rae\inbox"/>
+			<CreateFolder TargetPath="\D$\TFL\rae\error"/>
+			<CreateFolder TargetPath="\D$\TFL\rae\done"/>
+			<CreateFolder TargetPath="\D$\TFL\rae\processing"/>
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileSystem" Description="RAE CPC Incoming TJSH Folders" Include="RAE.CPC.Service.Folders" Groups="CPC,RAE,RAECPC">
+			<CreateFolder TargetPath="\D$\TFL\rae_cpc\"/>
+			<CreateFolder TargetPath="\D$\TFL\rae_cpc\inbox"/>
+			<CreateFolder TargetPath="\D$\TFL\rae_cpc\error"/>
+			<CreateFolder TargetPath="\D$\TFL\rae_cpc\done"/>
+			<CreateFolder TargetPath="\D$\TFL\rae_cpc\processing"/>
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileSystem" Description="RAE RSP Output Folder" Include="RAE.Service.RSP.Folders" Groups="Oyster,RAE,RAEOyster">
+			<CreateFolder TargetPath="\D$\TFL\rsp\"/>
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileSystem" Description="RAE_CPC RSP Output Folder" Include="RAE.CPC.Service.RSP.Folders" Groups="CPC,RAE,RAECPC">
+			<CreateFolder TargetPath="\D$\TFL\rsp_cpc\"/>
+		</ServerRole>
+
+		<!-- TODO This should be OAE.TapQueue.FileShare -->
+		<ServerRole Name="TFL.FileShare" Include="FAE.TapQueue.FileShare" Description="Create FileShare For FAE Tap Queue" Groups="Oyster,OAE,OAETapImporter">
+			<FileShare>
+				<ShareName>Taps</ShareName>
+				<FolderToShare>D$\TFL\fae\tapqueue\inbox</FolderToShare>
+				<Users>
+					<User name="FTMServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+					<User name="OyBOServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+					<User name="FAEServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+				</Users>
+			</FileShare>
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileShare" Include="RAE.RSP.FileShare" Description="Create FileShare For outgoing RSP files" Groups="RAE">
+			<FileShare>
+				<ShareName>RAEOutgoing</ShareName>
+				<FolderToShare>D$\TFL\rsp\final</FolderToShare>
+				<Users>
+					<User name="RAEServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+				</Users>
+			</FileShare>
+		</ServerRole>
+
+		<ServerRole Name="TFL.WebDeploy" Description="FAE Journey Usage Service" Include="FAE.JourneyUsage.Service" Groups="FAE">
+			<WebDeploy Name="JourneyUsageService" RegistryKey="Software\TfL\FT\FAE\CIS" AssemblyToVersionFrom="JourneyUsageService.Contracts.dll">
+				<AppPool>
+					<Name>FAEServices</Name>
+					<ServiceAccount>FAEServiceAccount</ServiceAccount>
+					<RecycleLogEvent>Time,Requests,Schedule,Memory,IsapiUnhealthy,ConfigChange,PrivateMemory</RecycleLogEvent>
+				</AppPool>
+				<Site>
+					<Name>JourneyUsageService</Name>
+					<Port>8704</Port>
+					<PhysicalPath>D:\TfL\FAE\JourneyUsageService</PhysicalPath>
+					<!--<ApplicationPool>FAEServices</ApplicationPool>-->
+				</Site>
+				<Package>
+					<Name>JourneyUsageService</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint>V2/JourneyUsageService.svc</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.WebDeploy" Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" Groups="FAE">
+			<WebDeploy Name="JourneyUsageService" RegistryKey="Software\TfL\FT\FAE\CIS" AssemblyToVersionFrom="Tfl.Ft.Fae.JourneyUsage.ApiService.dll">
+				<AppPool>
+					<Name>JourneyUsageApiService</Name>
+					<ServiceAccount>FAEServiceAccount</ServiceAccount>
+					<RecycleLogEvent>Time,Requests,Schedule,Memory,IsapiUnhealthy,ConfigChange,PrivateMemory</RecycleLogEvent>
+				</AppPool>
+				<Site>
+					<Name>JourneyUsageApiService</Name>
+					<Port>8705</Port>
+					<PhysicalPath>D:\TfL\FAE\JourneyUsageApiService</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>Tfl.Ft.Fae.JourneyUsage.ApiService</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint>api/intradayjourneys/GetJourneysByTravelToken?id=1234567890</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.WebDeploy" Description="FAE OysterManualCorrectionsReceiver ApiService" Include="OysterManualCorrectionsReceiver.Api" Groups="FAE">
+			<WebDeploy Name="OysterManualCorrectionsReceiverApiService" RegistryKey="Software\TfL\FT\FAE\CIS" AssemblyToVersionFrom="OysterManualCorrectionsReceiver.Api.dll">
+				<AppPool>
+					<Name>OysterManualCorrectionsReceiverApi</Name>
+					<ServiceAccount>FAEServiceAccount</ServiceAccount>
+					<RecycleLogEvent>Time,Requests,Schedule,Memory,IsapiUnhealthy,ConfigChange,PrivateMemory</RecycleLogEvent>
+				</AppPool>
+				<Site>
+					<Name>OysterManualCorrectionsReceiverApi</Name>
+					<Port>8755</Port>
+					<PhysicalPath>D:\TfL\FAE\OysterManualCorrectionsReceiverApi</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>OysterManualCorrectionsReceiver.Api</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint>IsAlive</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.WebDeploy" Description="FAE VoidService" Include="FAE.Void.Service" Groups="FAE">
+			<WebDeploy Name="FaeVoidService" RegistryKey="Software\TfL\FT\FAE\CIS" AssemblyToVersionFrom="Tfl.Ft.Fae.Voids.Api.dll">
+				<AppPool>
+					<Name>FAEServices</Name>
+					<ServiceAccount>FAEServiceAccount</ServiceAccount>
+					<RecycleLogEvent>Time,Requests,Schedule,Memory,IsapiUnhealthy,ConfigChange,PrivateMemory</RecycleLogEvent>
+				</AppPool>
+				<Site>
+					<Name>FaeVoidsService</Name>
+					<Port>8740</Port>
+					<PhysicalPath>D:\TfL\FAE\VoidsService</PhysicalPath>
+					<Authentication>Windows</Authentication>
+					<Authentication>Anonymous</Authentication>
+				</Site>
+				<Package>
+					<Name>Tfl.Ft.Fae.Voids.Api</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint TestIdentity="OyBOServiceAccount">IsAlive</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.MsiDeploy" Description="FAE Engine Controller Util" Include="FAE.EngineControllerUtil.Install" Groups="Oyster,CPC,OAE,FAE,OAEController,FAEController,FAEControllerStateless">
+			<MsiDeploy Name="WixEngineControllerUtilInstaller">
+				<MSI>
+					<name>WixEngineControllerUtilInstaller.msi</name>
+					<UpgradeCode>A93BFEE8-6AA8-4FDD-8BD1-55173851C283</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\FAE\Controller" />
+					</parameters>
+				</MSI>
+				<Configs>
+					<config name="EngineControllerUtil.exe.config" target="\TFL\FAE\Controller" />
+				</Configs>
+			</MsiDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.ScheduledTaskDeploy" Description="FAE EOD Task Schedule Installer" Include="FAE.EOD.ScheduledTask.Create" Groups="FAE">
+			<ScheduledTaskDeploy Action="Install">
+				<TaskName>EndofDayProcess</TaskName>
+				<Folder>FTP</Folder>
+				<ServiceAccount>FAEServiceAccount</ServiceAccount>
+				<Description>Scheduled Task for triggering End of Day runs.  Do Not Use.</Description>
+				<Triggers>
+					<Trigger>
+						<Daily Interval="1">
+							<StartDate>25/05/2016</StartDate>
+							<StartTime>00:00:00</StartTime>
+						</Daily>
+					</Trigger>
+				</Triggers>
+				<Actions>
+					<Action>
+						<Command>D:\TFL\FAE\Controller\Tfl.Ft.Fae.TravelDayRevisionExporter.exe</Command>
+						<Arguments />
+					</Action>
+				</Actions>
+			</ScheduledTaskDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.MsiDeploy" Description="FAE Travel Day Revision Exporter" Include="FAE.TravelDayRevisonExporter.Install" Groups="FAE">
+			<MsiDeploy Name="WixTravelDayRevisionExporterInstaller">
+				<MSI>
+					<name>WixTravelDayRevisionExporterInstaller.msi</name>
+					<UpgradeCode>FB8F182D-3DE6-41FC-A7AB-E3239C2DE372</UpgradeCode>
+					<parameters>
+						<usernameparameter name="SERVICEACCOUNT" credential="FAEServiceAccount" />
+						<passwordparameter name="SERVICEPASSWORD"  credential="FAEServiceAccount" />
+						<parameter name="INSTALLLOCATION" value="D:\TFL\FAE\Controller" />
+					</parameters>
+				</MSI>
+				<Configs>
+					<config name="Tfl.FT.Fae.TravelDayRevisionExporter.exe.config" target="\TFL\FAE\Controller" />
+				</Configs>
+			</MsiDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.EventLogDeploy" Description="FTP EventLog For FAE TapImporter" Include="FTP.EventLog.For.FAE.TapImporter" Groups="CPC,Oyster,FAE,OAE,FAETapImporter,OAETapImporter">
+			<EventLogDeploy EventLogName="FTP">
+				<Sources>
+					<Source Name="TapImporterService" />
+					<Source Name="TapImporterService_CPC" />
+					<Source Name="TapImporterService_Oyster" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.EventLogDeploy" Description="FTP.EventLog.For.FAE.Controller" Include="FTP.EventLog.For.FAE.Controller" Groups="CPC,Oyster,FAE,OAE,OAEController,FAEController,FAEControllerStateless">
+			<EventLogDeploy EventLogName="FTP">
+				<Sources>
+					<Source Name="Controller" />
+					<Source Name="Controller_CPC" />
+					<Source Name="Controller_Oyster" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.EventLogDeploy" Description="Pipeline EventLog sources" Include="FTP.EventLog.For.FAE.Pipeline" Groups="CPC,Oyster,FAE,OAE,FAEPipeline,OAEPipeline,FAEPipelineLegacy">
+			<EventLogDeploy EventLogName="FAE">
+				<Sources>
+					<Source Name="Pipeline" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.EventLogDeploy" Description="Disruptr EventLog sources" Include="FTP.EventLog.For.FAE.Disruptr" Groups="FAE,FAEDisruptr">
+			<EventLogDeploy EventLogName="FAE">
+				<Sources>
+					<Source Name="Tfl.Ft.Fae.Disruptr" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy" Description="FAE Controller" Include="FAE.Engine.Controller.CPC.Stateful" Groups="FAE,FAEControllerLegacy">
+			<ServiceDeploy Name="WixEngineControllerHostInstaller">
+				<MSI>
+					<name>WixEngineControllerHostInstaller.msi</name>
+					<UpgradeCode>1DD88866-15E9-484F-947B-5E041477FC14</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\FAE\Controller\" />
+						<parameter name="SERVICENAME1" value="FAE EngineControllerHost Service (Legacy)" />
+						<parameter name="MEDIATYPE" value="CPC" />
+						<parameter name="PIPELINEMODE" value="Stateful" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>FAE EngineControllerHost Service (Legacy)</Name>
+						<Credentials>FAEServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="EngineControllerHost.exe.config" target="\TFL\FAE\Controller" />
+					<!--<config name="Tfl.Ft.Fae.OysterTapImporter.exe.config" target="\TFL\FAE\Controller" />-->
+					<!--Tfl.Ft.Fae.OysterTapImporter is a standalone utlity - Find in nuget-->
+					<config name="appSettings.config" target="\TFL\FAE\Controller" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.ServiceDeploy" Description="FAE Controller" Include="FAE.Engine.Controller.CPC.Stateless" Groups="CPC,FAE,FAEController">
+			<ServiceDeploy Name="WixEngineControllerHostInstallerCPC">
+				<MSI>
+					<name>WixEngineControllerHostInstallerCPC.msi</name>
+					<UpgradeCode>E0DF47F9-0863-4968-82E6-FF9C32A6B763</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\FAE\Controller_CPC\" />
+						<parameter name="SERVICENAME1" value="FAE EngineControllerHost Service (CPC)" />
+						<parameter name="MEDIATYPE" value="CPC" />
+						<parameter name="PIPELINEMODE" value="Stateless" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>FAE EngineControllerHost Service (CPC)</Name>
+						<Credentials>FAEServiceAccount</Credentials>
+						<ClusterInfo>
+							<ResourceName>FAE EngineControllerHost Service (CPC)</ResourceName>
+						</ClusterInfo>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="EngineControllerHost.exe.config" target="\TFL\FAE\Controller_CPC" />
+					<config name="appSettings.config" target="\TFL\FAE\Controller_CPC" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.ServiceDeploy" Description="FAE Controller" Include="FAE.Engine.Controller.Oyster.Stateless" Groups="Oyster,OAE,OAEController">
+			<ServiceDeploy Name="WixEngineControllerHostInstaller">
+				<MSI>
+					<name>WixEngineControllerHostInstaller.msi</name>
+					<UpgradeCode>1DD88866-15E9-484F-947B-5E041477FC14</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\FAE\Controller\" />
+						<parameter name="SERVICENAME1" value="FAE EngineControllerHost Service (Oyster)" />
+						<parameter name="MEDIATYPE" value="Oyster" />
+						<parameter name="PIPELINEMODE" value="Stateless" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>FAE EngineControllerHost Service (Oyster)</Name>
+						<Credentials>FAEServiceAccount</Credentials>
+						<ClusterInfo>
+							<ResourceName>FAE EngineControllerHost Service (Oyster)</ResourceName>
+						</ClusterInfo>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="EngineControllerHost.exe.config" target="\TFL\FAE\Controller" />
+					<config name="appSettings.config" target="\TFL\FAE\Controller" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.ServiceDeploy" Description="FAE Disruptr" Include="FAE.Engine.Disruptr" Groups="FAE,FAEDisruptr">
+			<ServiceDeploy Name="WixDisruptrInstaller">
+				<MSI>
+					<name>WixDisruptrInstaller.msi</name>
+					<UpgradeCode>6DB0C706-5E69-4A6A-BAE4-C8D4D1EC679E</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\FAE\Disruptr\" />
+						<parameter name="SERVICENAME1" value="FAE Disruptr Service" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>FAE Disruptr Service</Name>
+						<Credentials>FAEServiceAccount</Credentials>
+						<ClusterInfo>
+							<ResourceName>FAE Disruptr Service</ResourceName>
+						</ClusterInfo>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="Tfl.Ft.Fae.Disruptr.exe.config" target="\TFL\FAE\Disruptr" />
+					<config name="appSettings.config" target="\TFL\FAE\Disruptr" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.ServiceDeploy" Description="FAE Pipeline Engine" Include="FAE.Engine.Service.CPC.Stateless" Groups="CPC,FAE,FAEPipeline">
+			<ServiceDeploy Name="WixPipelineHostInstaller">
+				<MSI>
+					<name>WixPipelineHostInstaller.msi</name>
+					<UpgradeCode>94F841FF-5BF2-4F66-9E47-2BC19B14C89A</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\FAE\PipelineHost\" />
+						<parameter name="SERVICENAME1" value="FAE PipelineHost Service" />
+						<parameter name="MEDIATYPE" value="CPC" />
+						<parameter name="PIPELINEMODE" value="Stateless" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>FAE PipelineHost Service</Name>
+						<Credentials>FAEServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="PipelineHost.exe.config" target="\TFL\FAE\PipelineHost" />
+					<config name="pipelineOperations.config" target="\TFL\FAE\PipelineHost" />
+					<config name="Loaders.config" target="\TFL\FAE\PipelineHost" />
+					<config name="log4net.config" target="\TFL\FAE\PipelineHost" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.ServiceDeploy" Description="FAE Pipeline Engine" Include="FAE.Engine.Service.CPC.Stateful" Groups="FAE,FAEPipelineLegacy">
+			<ServiceDeploy Name="WixPipelineHostInstaller">
+				<MSI>
+					<name>WixPipelineHostInstaller.msi</name>
+					<UpgradeCode>94F841FF-5BF2-4F66-9E47-2BC19B14C89A</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\FAE\PipelineHost\" />
+						<parameter name="SERVICENAME1" value="FAE PipelineHost Service" />
+						<parameter name="MEDIATYPE" value="CPC" />
+						<parameter name="PIPELINEMODE" value="Stateful" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>FAE PipelineHost Service</Name>
+						<Credentials>FAEServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="PipelineHost.exe.config" target="\TFL\FAE\PipelineHost" />
+					<config name="pipelineOperations.config" target="\TFL\FAE\PipelineHost" />
+					<config name="Loaders.config" target="\TFL\FAE\PipelineHost" />
+					<config name="log4net.config" target="\TFL\FAE\PipelineHost" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.ServiceDeploy" Description="FAE Pipeline Engine" Include="FAE.Engine.Service.Oyster.Stateless" Groups="Oyster,OAE,OAEPipeline">
+			<ServiceDeploy Name="WixPipelineHostInstaller">
+				<MSI>
+					<name>WixPipelineHostInstaller.msi</name>
+					<UpgradeCode>94F841FF-5BF2-4F66-9E47-2BC19B14C89A</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\FAE\PipelineHost\" />
+						<parameter name="SERVICENAME1" value="FAE PipelineHost Service" />
+						<parameter name="MEDIATYPE" value="Oyster" />
+						<parameter name="PIPELINEMODE" value="Stateless" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>FAE PipelineHost Service</Name>
+						<Credentials>FAEServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="PipelineHost.exe.config" target="\TFL\FAE\PipelineHost" />
+					<config name="pipelineOperations.config" target="\TFL\FAE\PipelineHost" />
+					<config name="Loaders.config" target="\TFL\FAE\PipelineHost" />
+					<config name="log4net.config" target="\TFL\FAE\PipelineHost" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.ServiceDeploy" Description="FAE Oyster Tap Importer" Include="FAE.TapImporter.Service.Oyster" Groups="Oyster,OAE,OAETapImporter">
+			<ServiceDeploy Name="WixFaeTapImporterServiceInstaller">
+				<MSI>
+					<name>WixFaeTapImporterServiceInstaller.msi</name>
+					<UpgradeCode>DE22F145-5DA5-4AE8-9A51-998DF820583B</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\FAE\TapImporter\" />
+						<parameter name="SERVICENAME1" value="FAE (Oyster) TapImporter Service" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>FAE (Oyster) TapImporter Service</Name>
+						<Credentials>FAEServiceAccount</Credentials>
+						<ClusterInfo>
+							<ResourceName>FAE (Oyster) TapImporter Service</ResourceName>
+						</ClusterInfo>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="TapImporterService.exe.config" target="\TFL\FAE\TapImporter"/>
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy" Description="FAE CPC Tap Importer" Include="FAE.TapImporter.Service.CPC" Groups="CPC,FAE,FAETapImporter">
+			<ServiceDeploy Name="WixFaeTapImporterServiceInstallerCPC">
+				<MSI>
+					<name>WixFaeTapImporterServiceInstallerCPC.msi</name>
+					<UpgradeCode>0EF639F3-A23C-4023-B1EF-9927CA69D034</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\FAE\TapImporter_CPC\" />
+						<parameter name="SERVICENAME1" value="FAE (CPC) TapImporter Service" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>FAE (CPC) TapImporter Service</Name>
+						<Credentials>FAEServiceAccount</Credentials>
+						<ClusterInfo>
+							<ResourceName>FAE (CPC) TapImporter Service</ResourceName>
+						</ClusterInfo>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="TapImporterService.exe.config" target="\TFL\FAE\TapImporter_CPC"/>
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<!-- RAE Roles-->
+		<ServerRole Name="TFL.ServiceDeploy" Description="RAE Service Installer" Include="RAE.Service.Install" Groups="Oyster,RAE,RAEOyster">
+			<ServiceDeploy Name="WixRaeServiceInstaller">
+				<MSI>
+					<name>WixRaeServiceInstaller.msi</name>
+					<UpgradeCode>6CA26871-C6C0-45E5-9536-C3DB9AA6AB4B</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\RAE\" />
+						<parameter name="SERVICENAME1" value="RAE (Oyster)" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>RAE (Oyster)</Name>
+						<Credentials>RAEServiceAccount</Credentials>
+						<ClusterInfo>
+							<ResourceName>Revenue Apportionment Engine (Oyster)</ResourceName>
+						</ClusterInfo>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="RAE.exe.config" target="\TFL\RAE" />
+					<config name="RaeConnectionstrings.config" target="\TFL\RAE\" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy" Description="RAE CPC Service Installer" Include="RAE.CPC.Service.Install" Groups="CPC,RAE,RAECPC">
+			<ServiceDeploy Name="WixRaeCpcServiceInstaller">
+				<MSI>
+					<name>WixRaeCpcServiceInstaller.msi</name>
+					<UpgradeCode>95666C4B-D806-49D4-802C-9DAEB58FCF16</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\RAE_CPC\" />
+						<parameter name="SERVICENAME1" value="RAE (CPC)" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>RAE (CPC)</Name>
+						<Credentials>RAEServiceAccount</Credentials>
+						<ClusterInfo>
+							<ResourceName>Revenue Apportionment Engine (CPC)</ResourceName>
+						</ClusterInfo>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="RAE.exe.config" target="\TFL\RAE_CPC" />
+					<config name="RaeConnectionstrings.config" target="\TFL\RAE_CPC\" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<!-- PARE roles -->
+		<ServerRole Name="TFL.WebDeploy" Description="Pare.TravelTokenService" Include="PARE.TravelToken.Service" Groups="PARE">
+			<WebDeploy Name="TravelTokenService" RegistryKey="Software\TfL\FT\PARE\CIS" AssemblyToVersionFrom="Pare.TravelTokenService.dll">
+				<AppPool>
+					<Name>TravelTokenService</Name>
+					<ServiceAccount>PAREServiceAccount</ServiceAccount>
+				</AppPool>
+				<Site>
+					<Name>Pare.TravelTokenService</Name>
+					<Port>8706</Port>
+					<PhysicalPath>D:\TFL\PaRE\TravelTokenService</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>Pare.TravelTokenService</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint>v3/TravelTokenService.svc</EndPoint>
+					<EndPoint>v2/BillingSummaryService.svc</EndPoint>
+					<EndPoint>DirectPaymentService.svc</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.WebDeploy" Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" Groups="PARE">
+			<WebDeploy Name="CSCSupportService" RegistryKey="Software\TfL\FT\PARE\CIS" AssemblyToVersionFrom="Pare.CSCSupportService.dll">
+				<AppPool>
+					<Name>PARECSCSupportService</Name>
+					<ServiceAccount>PAREServiceAccount</ServiceAccount>
+				</AppPool>
+				<Site>
+					<Name>Pare.CSCSupportService</Name>
+					<Port>8722</Port>
+					<PhysicalPath>D:\TFL\PaRE\CSCSupportService</PhysicalPath>
+					<!--<ApplicationPool>PARECSCSupportService</ApplicationPool>-->
+				</Site>
+				<Package>
+					<Name>CSCSupportService</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint>CSCSupportService.svc</EndPoint>
+					<EndPoint>DenyListService.svc</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="PARE File System" Include="PARE.FileSystem" Groups="PARE">
+			<CreateFolder TargetPath="\D$\TapFileProcessor" />
+			<CreateFolder TargetPath="\D$\TapFileProcessor\Unprocessed" />
+			<CreateFolder TargetPath="\D$\TapFileProcessor\Loading" />
+			<CreateFolder TargetPath="\D$\TapFileProcessor\Processed" />
+			<CreateFolder TargetPath="\D$\TapFileProcessor\Failed" />
+			<CreateFolder TargetPath="\D$\TapFileProcessor\Invalid" />
+			<CreateFolder TargetPath="\D$\PareResponseFiles" />
+			<CreateFolder TargetPath="\D$\PareResponseFiles\Unprocessed" />
+			<CreateFolder TargetPath="\D$\PareResponseFiles\Loading" />
+			<CreateFolder TargetPath="\D$\PareResponseFiles\Processed" />
+			<CreateFolder TargetPath="\D$\PareResponseFiles\Failed" />
+			<CreateFolder TargetPath="\D$\PareResponseFiles\Invalid" />
+			<CreateFolder TargetPath="\D$\TapResultFile" />
+			<CreateFolder TargetPath="\D$\StatusList" />
+			<CreateFolder TargetPath="\D$\SettlementResponseFiles" />
+			<CreateFolder TargetPath="\D$\SettlementResponseFiles\Failed" />
+			<CreateFolder TargetPath="\D$\SettlementResponseFiles\Invalid" />
+			<CreateFolder TargetPath="\D$\SettlementResponseFiles\Unprocessed" />
+			<CreateFolder TargetPath="\D$\SettlementResponseFiles\Processed" />
+			<CreateFolder TargetPath="\D$\RefundFiles" />
+			<CreateFolder TargetPath="\D$\RefundFiles\Failed" />
+			<CreateFolder TargetPath="\D$\RefundFiles\Invalid" />
+			<CreateFolder TargetPath="\D$\RefundFiles\Unprocessed" />
+			<CreateFolder TargetPath="\D$\RefundFiles\Processed" />
+			<CreateFolder TargetPath="\D$\RefundFiles\Response" />
+			<CreateFolder TargetPath="\D$\SettlementValidationResult" />
+			<CreateFolder TargetPath="\D$\SettlementValidationResult\Failed" />
+			<CreateFolder TargetPath="\D$\SettlementValidationResult\Invalid" />
+			<CreateFolder TargetPath="\D$\SettlementValidationResult\Unprocessed" />
+			<CreateFolder TargetPath="\D$\SettlementValidationResult\Processed" />
+			<CreateFolder TargetPath="\D$\RequestCardPayment" />
+			<CreateFolder TargetPath="\D$\TdrFileProcessor" />
+			<CreateFolder TargetPath="\D$\TdrFileProcessor\Unprocessed" />
+			<CreateFolder TargetPath="\D$\TdrFileProcessor\Loading" />
+			<CreateFolder TargetPath="\D$\TdrFileProcessor\Processed" />
+			<CreateFolder TargetPath="\D$\TdrFileProcessor\Failed" />
+			<CreateFolder TargetPath="\D$\TdrFileProcessor\Invalid" />
+			<CreateFolder TargetPath="\D$\RevenueStatusListFiles" />
+			<CreateFolder TargetPath="\D$\RevenueStatusListFiles\Unprocessed" />
+			<CreateFolder TargetPath="\D$\RevenueStatusListFiles\Loading" />
+			<CreateFolder TargetPath="\D$\RevenueStatusListFiles\Processed" />
+			<CreateFolder TargetPath="\D$\RevenueStatusListFiles\Failed" />
+			<CreateFolder TargetPath="\D$\RevenueStatusListFiles\Invalid" />
+			<CreateFolder TargetPath="\D$\RevenueStatusListFiles\Response" />
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="PARE PreProduction File System" Include="PARE.PreProduction.FileSystem" Groups="PARE">
+			<CreateFolder TargetPath="\D$\OysterTapImporter" />
+			<CreateFolder TargetPath="\D$\OysterTapImporter\Unprocessed" />
+			<CreateFolder TargetPath="\D$\OysterTapImporter\Loading" />
+			<CreateFolder TargetPath="\D$\OysterTapImporter\Processed" />
+			<CreateFolder TargetPath="\D$\OysterTapImporter\Failed" />
+			<CreateFolder TargetPath="\D$\OysterTapImporter\Invalid" />
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="PARE Distributor Mock File System" Include="PARE.DistributorMock.FileSystem" Groups="PARE">
+			<CreateFolder TargetPath="\D$\Distributor" />
+			<CreateFolder TargetPath="\D$\Distributor\ContactlessTap\" />
+			<CreateFolder TargetPath="\D$\Distributor\ContactlessTap\Unprocessed" />
+			<CreateFolder TargetPath="\D$\Distributor\ContactlessTap\Loading" />
+			<CreateFolder TargetPath="\D$\Distributor\ContactlessTap\Processed" />
+			<CreateFolder TargetPath="\D$\Distributor\ContactlessTap\Failed" />
+			<CreateFolder TargetPath="\D$\Distributor\TJSH\" />
+			<CreateFolder TargetPath="\D$\Distributor\TJSH\Unprocessed" />
+			<CreateFolder TargetPath="\D$\Distributor\TJSH\Loading" />
+			<CreateFolder TargetPath="\D$\Distributor\TJSH\Processed" />
+			<CreateFolder TargetPath="\D$\Distributor\TJSH\Failed" />
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileSystem" Description="Certificates for Pare's SSB" Include="ServiceBroker.Certificates" Groups="PARE,Notifications,Database">
+			<!-- Use a seperate location to pare pcs certs-->
+			<CreateFolder TargetPath="\D$\SSB Certs Pare Notifications\" />
+			<CopyItem Source="Pare.Database\Notifications\Certificates\" Target="\D$\SSB Certs Pare Notifications\" Recurse="true" Filter="*.cert" Replace="false" />
+			<CopyItem Source="Pare.Database\Authorisations\Certificates\" Target="\D$\SSB Certs\" Recurse="true" Filter="*.cert" Replace="false" />
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="PARE Request Card Payment File System" Include="PARE.CardPayment.FileSystem" Groups="PARE">
+			<CreateFolder TargetPath="\D$\RequestCardPayment" />
+		</ServerRole>
+
+		<ServerRole Name="TFL.WebDeploy" Description="PARE MasterData Mock Service" Include="PARE.MasterDataMock.Service" Groups="PARE,MasterData">
+			<WebDeploy Name="MasterDataMockWebApi" RegistryKey="Software\TfL\PARE\CIS"  AssemblyToVersionFrom="MasterDataMockWebApi.dll">
+				<AppPool>
+					<Name>PAREMasterDataMockService</Name>
+					<ServiceAccount>PAREServiceAccount</ServiceAccount>
+				</AppPool>
+				<Site>
+					<!-- name and port are exactly the same as the old cscwebservice, this is so we can reuse the load balancing setup in production environments and NOT have to delete the old website in IIS-->
+					<Name>PARE.MasterDataMockService</Name>
+					<Port>8730</Port>
+					<PhysicalPath>D:\TFL\PARE\PAREMasterDataMockService</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>MasterDataMockWebApi</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint>api/Settings</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.WebDeploy" Description="PARE Dashboard"  Include="PARE.Dashboard.Web" Groups="PARE">
+			<WebDeploy Name="Pare.Dashboard.Web" RegistryKey="Software\TfL\PARE\PAREDashboard"  AssemblyToVersionFrom="Pare.Dashboard.Web.dll">
+				<AppPool>
+					<Name>PAREDashboard</Name>
+					<ServiceAccount>PAREServiceAccount</ServiceAccount>
+					<IdleTimeout>0</IdleTimeout>
+					<RecycleLogEvent>Time,Requests,Schedule,Memory,IsapiUnhealthy,ConfigChange,PrivateMemory</RecycleLogEvent>
+				</AppPool>
+				<Site>
+					<Name>PAREDashboard</Name>
+					<Port>8710</Port>
+					<PhysicalPath>D:\TFL\PARE\PAREDashboard</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>PARE.Dashboard.Web</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint/>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy" Description="PARE Time Machine Service Installer" Include="TimeMachineServiceInstaller" Groups="PARE">
+			<ServiceDeploy Name="TimeMachineServiceInstaller">
+				<MSI>
+					<name>TimeMachineServiceInstaller.msi</name>
+					<UpgradeCode>746A20DB-ADC2-44D3-BBFF-545E601D49DF</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\PARE\TimeMachineService\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>TimeServer.exe</Name>
+						<Credentials>PAREServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="TimeServer.exe.config" target="\TFL\PARE\TimeMachineService" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.ServiceDeploy" Description="PARE Fae Mock Service Installer" Include="PareFaeMockServiceInstaller" Groups="PARE">
+			<ServiceDeploy Name="PareFaeMockServiceInstaller">
+				<MSI>
+					<name>PareFaeMockServiceInstaller.msi</name>
+					<UpgradeCode>B3401BA1-77DA-474E-A0EF-AB1550399241</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\PARE\FAEMockService\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="AutomaticDelayed">
+						<Name>FAEMockService.exe</Name>
+						<Credentials>PAREServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="FAEMockService.exe.config" target="\TFL\PARE\FAEMockService" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.ServiceDeploy" Description="PARE Pcs Mock Service Installer" Include="ParePcsMockServiceInstaller" Groups="PARE">
+			<ServiceDeploy Name="ParePcsMockServiceInstaller">
+				<MSI>
+					<name>ParePcsMockServiceInstaller.msi</name>
+					<UpgradeCode>52816AC9-66AC-4EB6-8CAA-616DE97E6F67</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\PARE\PCSMockService\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="AutomaticDelayed">
+						<Name>PCSMockService.exe</Name>
+						<Credentials>PAREServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="PCSMockService.exe.config" target="\TFL\PARE\PCSMockService" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy" Description="PARE Oyster Tap Importer Service" Include="PareOysterTapImporterService" Groups="PARE">
+			<ServiceDeploy Name="PareOysterTapImporterService">
+				<MSI>
+					<name>PareOysterTapImporterService.msi</name>
+					<UpgradeCode>72F066D2-7409-4795-A5C9-D1998AC92129</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\PARE\OysterTapImporterService\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>OysterTapImporterService.exe</Name>
+						<Credentials>PAREServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="OysterTapImporterService.exe.config" target="\TFL\PARE\OysterTapImporterService" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<!-- PARE MSI Roles-->
+		<ServerRole Name="TFL.MsiDeploy" Description="PARE Pre-Production Risk Engine Installer" Include="PreProductionPareRiskEngineInstaller" Groups="PARE">
+			<MsiDeploy Name="PreProductionPareRiskEngineInstaller">
+				<MSI>
+					<name>PreProductionPareRiskEngineInstaller.msi</name>
+					<UpgradeCode>4C573992-6E39-4542-858B-4DF7018E93C4</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\PARE\RiskAssessment.Service\" />
+					</parameters>
+				</MSI>
+			</MsiDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.MsiDeploy" Description="PARE Status List Maintenance Application" Include="PareStatusListMaintenance.Application.Installer" Groups="PARE">
+			<MsiDeploy Name="PareStatusListMaintenance.Application.Installer">
+				<MSI>
+					<name>PareStatusListMaintenanceApplicationInstaller.msi</name>
+					<UpgradeCode>81E8EC62-F555-4699-ADDB-C2C5AE0768C4</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\PARE\StatusListMaintenance\" />
+					</parameters>
+				</MSI>
+				<Configs>
+					<config name="StatusListMaintenance.exe.config" target="\TFL\PARE\StatusListMaintenance" />
+				</Configs>
+			</MsiDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.MsiDeploy" Description="PARE VerifyTapData Application Installer" Include="PareVerifyTapData.Application.Installer" Groups="PARE">
+			<MsiDeploy Name="PareVerifyTapData.Application.Installer">
+				<MSI>
+					<name>PareVerifyTapDataApplicationInstaller.msi</name>
+					<UpgradeCode>5C745A50-CCFE-49C7-ACCC-DA3CA968DF45</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\PARE\VerifyTapData\" />
+					</parameters>
+				</MSI>
+				<Configs>
+					<config name="VerifyTapData.exe.config" target="\TFL\PARE\VerifyTapData" />
+				</Configs>
+			</MsiDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.MsiDeploy" Description="PARE Settlement Installer" Include="PareSettlement.Installer" Groups="PARE">
+			<MsiDeploy Name="PareSettlement.Installer">
+				<MSI>
+					<name>PareSettlementConsoleApplicationInstaller.msi</name>
+					<UpgradeCode>DE09C321-80AA-4C26-B795-EA3EFEECFE7B</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\PARE\Settlement\" />
+					</parameters>
+				</MSI>
+				<Configs>
+					<config name="Settlement.exe.config" target="\TFL\PARE\Settlement" />
+				</Configs>
+			</MsiDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.MsiDeploy" Description="PARE Full Status List Application Installer" Include="PareFullStatusList.Application.Installer" Groups="PARE">
+			<MsiDeploy Name="PareFullStatusList.Application.Installer">
+				<MSI>
+					<name>PareFullStatusListApplicationInstaller.msi</name>
+					<UpgradeCode>E6B4416B-51F8-45CC-8269-6C12CA6A77BA</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\PARE\PareRequestFullStatusList\" />
+					</parameters>
+				</MSI>
+				<Configs>
+					<config name="Pare.RequestFullStatusList.exe.config" target="\TFL\PARE\PareRequestFullStatusList" />
+				</Configs>
+			</MsiDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.MsiDeploy" Description="PARE Authorisation Gateway Utilily Installer" Include="PareAuthorisationGateway.Util.Installer" Groups="PARE">
+			<MsiDeploy Name="PareAuthorisationGateway.Util.Installer">
+				<MSI>
+					<name>PareAuthorisationGatewayUtilInstaller.msi</name>
+					<UpgradeCode>662E90F7-F41A-40FB-BB13-380591A5C004</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\PARE\AuthorisationGatewayUtil\" />
+					</parameters>
+				</MSI>
+				<Configs>
+					<config name="AuthorisationGatewayUtil.exe.config" target="\TFL\PARE\AuthorisationGatewayUtil" />
+				</Configs>
+			</MsiDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.MsiDeploy" Description="PARE Post-Deployment Utility Installer" Include="ParePostDeployment.Util.Installer" Groups="PARE">
+			<MsiDeploy Name="ParePostDeployment.Util.Installer">
+				<MSI>
+					<name>ParePostDeploymentUtilInstaller.msi</name>
+					<UpgradeCode>9AD9E05A-1C4E-4C14-865A-606B8FC031C1</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\PARE\PostDeploymentUtil\" />
+					</parameters>
+				</MSI>
+				<Configs>
+					<config name="PostDeploymentUtil.exe.config" target="\TFL\PARE\PostDeploymentUtil" />
+				</Configs>
+			</MsiDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.MsiDeploy" Description="PARE Cpc Tap Player Installer" Include="CpcTapPlayer.Installer" Groups="PARE">
+			<MsiDeploy Name="CpcTapPlayer.Installer">
+				<MSI>
+					<name>CpcTapPlayerInstaller.msi</name>
+					<UpgradeCode>CFA52893-4122-4EBC-9DCE-7641F6C0915D</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\PARE\CpcTapPlayer\" />
+					</parameters>
+				</MSI>
+				<Configs>
+					<config name="Pare.CpcTapPlayer.exe.config" target="\TFL\PARE\CpcTapPlayer" />
+				</Configs>
+			</MsiDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.MsiDeploy" Description="PARE ChargeCalculationPersist Installer" Include="PareChargeCalculationPersist.Application.Installer" Groups="PARE">
+			<MsiDeploy Name="PareChargeCalculationPersist.Application.Installer">
+				<MSI>
+					<name>PareChargeCalculationPersistInstaller.msi</name>
+					<UpgradeCode>9DB666A9-7272-4607-9560-920788AD57F7</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\PARE\ChargeCalculationPersist\" />
+					</parameters>
+				</MSI>
+				<Configs>
+					<config name="ChargeCalculationPersist.exe.config" target="\TFL\PARE\ChargeCalculationPersist" />
+				</Configs>
+			</MsiDeploy>
+		</ServerRole>
+
+		<!--Scheduled Tasks-->
+		<!--By default these will be created as disabled. However, if they already exist and enabled, the deployment process will note the initial state and re-apply it accordingly after deployment-->
+		<ServerRole Name="TFL.ScheduledTaskDeploy" Description="PARE Request Full StatusList Scheduled Task Installer" Include="PARERequestFullStatusList.ScheduledTask.Create" Groups="PARE">
+			<ScheduledTaskDeploy Action="Install">
+				<TaskName>Full status list generation</TaskName>
+				<Folder>FTP</Folder>
+				<ServiceAccount>PAREServiceAccount</ServiceAccount>
+				<Description>Generates full status list for EMVDP2 for reconciliation</Description>
+				<Triggers>
+					<Trigger>
+						<Daily Interval="1">
+							<StartDate>01/01/2017</StartDate>
+							<StartTime>05:00:00</StartTime>
+						</Daily>
+					</Trigger>
+				</Triggers>
+				<Actions>
+					<Action>
+						<Command>D:\TFL\PARE\PareRequestFullStatusList\Pare.RequestFullStatusList.exe</Command>
+					</Action>
+				</Actions>
+			</ScheduledTaskDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ScheduledTaskDeploy" Description="PARE Settlement file generation for AMEX" Include="PARESettlementFile.Amex.ScheduledTask.Create" Groups="PARE">
+			<ScheduledTaskDeploy Action="Install">
+				<TaskName>PARE_SettlementFile_Generation_for_amex</TaskName>
+				<Folder>FTP</Folder>
+				<ServiceAccount>PAREServiceAccount</ServiceAccount>
+				<Description>Settlement file for Amex</Description>
+				<!--No Triggers-->
+				<Triggers />
+				<Actions>
+					<Action>
+						<Command>D:\TFL\PARE\Settlement\Settlement.exe</Command>
+						<Arguments>run -a amex</Arguments>
+					</Action>
+				</Actions>
+			</ScheduledTaskDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ScheduledTaskDeploy" Description="PARE Settlement file generation for Barclays" Include="PARESettlementFile.Barclays.ScheduledTask.Create" Groups="PARE">
+			<ScheduledTaskDeploy Action="Install">
+				<TaskName>PARE_SettlementFile_Generation_for_barclays</TaskName>
+				<Folder>FTP</Folder>
+				<ServiceAccount>PAREServiceAccount</ServiceAccount>
+				<Description>Settlement file for Barclays</Description>
+				<!--No Triggers-->
+				<Triggers />
+				<Actions>
+					<Action>
+						<Command>D:\TFL\PARE\Settlement\Settlement.exe</Command>
+						<Arguments>run -a barclays</Arguments>
+					</Action>
+				</Actions>
+			</ScheduledTaskDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ScheduledTaskDeploy" Description="PARE Verify TAP Data Scheduled Task Installer" Include="PareVerifyTapData.ScheduledTask.Create" Groups="PARE">
+			<ScheduledTaskDeploy Action="Install">
+				<TaskName>Verify Tap Data</TaskName>
+				<Folder>FTP</Folder>
+				<ServiceAccount>PAREServiceAccount</ServiceAccount>
+				<Description>Checks tap inconsistancy and updates [internal].[LastTapInconsistencyCheck] and [internal].[LastTapSequenceNumber]</Description>
+				<Triggers>
+					<Trigger>
+						<Daily Interval="1">
+							<StartDate>01/01/2017</StartDate>
+							<StartTime>06:30:00</StartTime>
+						</Daily>
+					</Trigger>
+				</Triggers>
+				<Actions>
+					<Action>
+						<Command>D:\TFL\PARE\VerifyTapData\VerifyTapData.exe</Command>
+					</Action>
+				</Actions>
+			</ScheduledTaskDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ScheduledTaskDeploy" Description="PARE Status List Maintenance Application Scheduler" Include="PareStatusListMaintenanceApplication.ScheduledTask.Create" Groups="PARE">
+			<ScheduledTaskDeploy Action="Install">
+				<TaskName>Status List Maintenance</TaskName>
+				<Folder>FTP</Folder>
+				<ServiceAccount>PAREServiceAccount</ServiceAccount>
+				<Description>Expired CPC cards are removed from the Status List, performing housekeeping</Description>
+				<Triggers>
+					<Trigger>
+						<Daily Interval="1">
+							<StartDate>25/05/2016</StartDate>
+							<StartTime>04:00:00</StartTime>
+						</Daily>
+					</Trigger>
+				</Triggers>
+				<Actions>
+					<Action>
+						<Command>D:\TFL\PARE\StatusListMaintenance\StatusListMaintenance.exe</Command>
+						<Arguments />
+					</Action>
+				</Actions>
+			</ScheduledTaskDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ScheduledTaskDeploy" Description="PARE ChargeCalculation Persist Scheduler" Include="PareChargeCalculationPersist.ScheduledTask.Create"  Groups="PARE">
+			<ScheduledTaskDeploy Action="Install">
+				<TaskName>PARE End of Day Process</TaskName>
+				<Folder>FTP</Folder>
+				<ServiceAccount>PAREServiceAccount</ServiceAccount>
+				<Description/>
+				<Triggers />
+				<Actions>
+					<Action>
+						<Command>D:\TFL\PARE\ChargeCalculationPersist\ChargeCalculationPersist.exe</Command>
+						<Arguments />
+					</Action>
+				</Actions>
+			</ScheduledTaskDeploy>
+		</ServerRole>
+
+		<!-- MasterData Roles -->
+		<ServerRole Name="TFL.EventLogDeploy" Description="FTP.EventLog.For.MasterData.WebApi" Include="FTP.EventLog.For.MasterData.WebApi" Groups="MasterData">
+			<EventLogDeploy EventLogName="FTP">
+				<Sources>
+					<Source Name="MasterData.WebApi" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.WebDeploy" Description="Deployment of MasterData Website" Include="MasterData.Website" Groups="MasterData">
+			<WebDeploy Name="MasterDataWebsite" RegistryKey="Software\Tfl\MasterData\Website">
+				<AppPool>
+					<Name>MasterDataWebUi</Name>
+					<ServiceAccount>MasterDataServiceAccount</ServiceAccount>
+				</AppPool>
+				<Site>
+					<Name>MasterDataWebsite</Name>
+					<Port>81</Port>
+					<PhysicalPath>D:\Tfl\MasterData\Website</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>MasterData.Website</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint/>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.WebDeploy" Description="Deployment of MasterData WebApi" Include="MasterData.Api" Groups="MasterData">
+			<WebDeploy Name="MasterData Web API" RegistryKey="Software\Tfl\MasterData\WebApi">
+				<AppPool>
+					<Name>MasterDataWebApi</Name>
+					<ServiceAccount>MasterDataServiceAccount</ServiceAccount>
+				</AppPool>
+				<Site>
+					<Name>MasterDataApi</Name>
+					<Port>8734</Port>
+					<PhysicalPath>D:\Tfl\MasterData\WebApi</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>MasterData.WebApi</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint>Status</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="Projection Store Updater" Include="MasterData.EventReplay.Scripts" Groups="MasterData">
+			<CreateFolder TargetPath="\D$\TFL\MasterData-Scripts" />
+			<CreateFolder TargetPath="\D$\TFL\MasterData-Scaffolding\Scripts" />
+			<CreateFolder TargetPath="\D$\TFL\MasterData-Scaffolding\Configuration" />
+			<CreateFolder TargetPath="\D$\TFL\MasterData-Scaffolding\EventReplayTools" />
+			<CopyItem Source="Powershell Scripts" Target="\D$\TFL\MasterData-Scaffolding\Scripts" Recurse="true" Filter="*.*" Replace="true" />
+			<CopyItem Source="Configuration" Target="\D$\TFL\MasterData-Scaffolding\Configuration" Recurse="true" Filter="*.*" Replace="true" />
+		</ServerRole>
+
+		<ServerRole Name="TFL.MsiDeploy" Description="Event replay tool installer" Include="MasterData.EventReplayTool.Install" Groups="MasterData">
+			<MsiDeploy Name="Event replay tool installer" Action="Install">
+				<MSI>
+					<name>MasterData.EventReplayTool.Installer.msi</name>
+					<UpgradeCode>D5CE0BF8-8D56-4CA8-B573-19063D041B28</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\MasterData-Scaffolding" />
+					</parameters>
+				</MSI>
+				<Configs>
+					<config name="MasterData.EventReplayTool.exe.config" target="\TFL\MasterData-Scaffolding" />
+				</Configs>
+				<TestInfo DisableTests="true" />
+			</MsiDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.MsiDeploy" Description="MasterData deploy assets installer" Include="MasterData.DeployAssets.Install" Groups="MasterData">
+			<MsiDeploy Name="MasterData deploy assets installer" Action="Install">
+				<MSI>
+					<name>MasterData.DeployAssets.Installer.msi</name>
+					<UpgradeCode>EC6C0C77-D19D-4A63-ADBD-9F626E8D1E84</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\MasterData-Scaffolding" />
+					</parameters>
+				</MSI>
+				<TestInfo DisableTests="true" />
+			</MsiDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy" Description="MasterData MJT service" Include="MasterData.MJTService.Install" Groups="MasterData">
+			<ServiceDeploy Name="MasterData.MaximumJourneyTimeService.Installer">
+				<MSI>
+					<name>MasterData.MaximumJourneyTimeService.Installer.msi</name>
+					<UpgradeCode>6E1C610A-12EF-4B20-A203-2B075D07F7FC</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\MasterData\MaximumJourneyTimeService\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>MasterData.MaximumJourneyTimeService.exe</Name>
+						<Credentials>MasterDataServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="MasterData.MaximumJourneyTimeService.exe.config" target="\TFL\MasterData\MaximumJourneyTimeService"/>
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy" Description="MasterData Fares service" Include="MasterData.FaresService.Install" Groups="MasterData">
+			<ServiceDeploy Name="MasterData.FareService.Installer">
+				<MSI>
+					<name>MasterData.FareService.Installer.msi</name>
+					<UpgradeCode>7EE088F7-C627-4097-83CA-D87DEE7B2F43</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\MasterData\FareService\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="AutomaticDelayed">
+						<Name>MasterData.FareService.exe</Name>
+						<Credentials>MasterDataServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="MasterData.FareService.exe.config" target="\TFL\MasterData\FareService" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileSystem" Description="MasterData Partial Migration tool" Include="MasterData.PartialMigration.Scripts" Groups="MasterData">
+			<CreateFolder TargetPath="\D$\TFL\MasterData-Scripts" />
+			<CreateFolder TargetPath="\D$\TFL\MasterData-Scaffolding\Scripts" />
+			<CreateFolder TargetPath="\D$\TFL\MasterData-Scaffolding\Configuration" />
+			<CreateFolder TargetPath="\D$\TFL\MasterData-Scaffolding\PartialMigration" />
+			<CopyItem Source="Powershell Scripts" Target="\D$\TFL\MasterData-Scaffolding\Scripts" Recurse="true" Filter="*.*" Replace="true" />
+			<CopyItem Source="Configuration" Target="\D$\TFL\MasterData-Scaffolding\Configuration" Recurse="true" Filter="*.*" Replace="true" />
+		</ServerRole>
+
+		<ServerRole Name="TFL.MsiDeploy" Description="MasterData Partial Migration" Include="MasterData.PartialMigration.Install" Groups="MasterData">
+			<MsiDeploy Name="Partial migration tool installer" Action="Install">
+				<MSI>
+					<name>MasterData.PartialMigration.Installer.msi</name>
+					<UpgradeCode>E01CD5B2-0C09-49C8-A2B3-31E6BD2760E8</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\MasterData-Scaffolding" />
+					</parameters>
+				</MSI>
+				<Configs>
+					<config name="MasterData.PartialMigration.exe.config" target="\TFL\MasterData-Scaffolding" />
+				</Configs>
+				<TestInfo DisableTests="true" />
+			</MsiDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy" Description="MasterData WebApi service" Include="MasterData.WebApiService.Install" Groups="MasterData">
+			<ServiceDeploy Name="MasterData.WebApiService.Installer">
+				<MSI>
+					<name>MasterData.WebApiService.Installer.msi</name>
+					<UpgradeCode>CFC637C1-8EBC-4732-B228-6F0D32E0ACC8</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\MasterData\WebApiService\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>MasterData.WebApiService.exe</Name>
+						<Credentials>MasterDataServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="MasterData.WebApiService.exe.config" target="\TFL\MasterData\WebApiService" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<!-- TJS Distributor-->
+		<ServerRole Name="TFL.EventLogDeploy" Description="FTP.EventLog.For.Internal.TJSDistributor" Include="FTP.EventLog.For.Internal.TJSDistributor" Groups="Oyster,TJSDistributor,TJSDistributorOyster">
+			<EventLogDeploy EventLogName="FTP">
+				<Sources>
+					<Source Name="FasterData.TJSHE" />
+					<Source Name="FasterData.MessageBroker" />
+					<Source Name="FasterData.FileSystemMonitor" />
+					<Source Name="FasterData.FilePurger" />
+					<Source Name="FasterData.TJSHE.CPC" />
+					<Source Name="FasterData.MessageBroker.CPC" />
+					<Source Name="FasterData.FileSystemMonitor.CPC" />
+					<Source Name="FasterData.FilePurger.CPC" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.EventLogDeploy" Description="FTP.EventLog.For.Internal.TJSApi" Include="FTP.EventLog.For.Internal.TJSApi" Groups="Oyster,TJSDistributor,TJSDistributorOyster">
+			<EventLogDeploy EventLogName="FTP">
+				<Sources>
+					<Source Name="FasterData.TJSApi" />
+          <Source Name="FasterData.TJSApi.CPC" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileSystem" Description="TJS Distributor Production File System" Include="TJSDistributor.Production.CreateFolders" Groups="TJSDistributor" >
+			<CreateFolder TargetPath="\E$\MBFS\TJSDistributor\" />
+			<CreateFolder TargetPath="\E$\MBFS\TJSDistributor\input\" />
+			<CreateFolder TargetPath="\E$\MBFS\TJSDistributor\output\" />
+		</ServerRole>
+
+		<ServerRole Name="TFL.ScheduledTaskDeploy" Description="TJS Distributor File Purge Scheduler" Include="TJSDistributor.FilePurger.ScheduledTask.Create" Groups="Oyster,TJSDistributor,TJSDistributorOyster">
+			<ScheduledTaskDeploy Action="Install">
+				<TaskName>TJSDistributorFilePurgeSchedulerCreate</TaskName>
+				<Folder>FTP</Folder>
+				<ServiceAccount>MasterDataServiceAccount</ServiceAccount>
+				<Description/>
+				<Triggers>
+					<Trigger>
+						<Daily Interval="1">
+							<StartDate>01/09/2016</StartDate>
+							<StartTime>05:30:00</StartTime>
+						</Daily>
+					</Trigger>
+				</Triggers>
+				<Actions>
+					<Action>
+						<Command>D:\TFL\TJSDistributor\FilePurger\FasterData.FilePurger.exe</Command>
+					</Action>
+				</Actions>
+			</ScheduledTaskDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ScheduledTaskDeploy" Description="TJS Distributor File Purger CPC Scheduler" Include="TJSDistributor.FilePurger.CPC.ScheduledTask.Create" Groups="CPC,TJSDistributor,TJSDistributorCPC">
+			<ScheduledTaskDeploy Action="Install">
+				<TaskName>TJSDistributorFilePurgerCPCSchedulerCreate</TaskName>
+				<Folder>FTP</Folder>
+				<ServiceAccount>MasterDataServiceAccountCPC</ServiceAccount>
+				<Description/>
+				<Triggers>
+					<Trigger>
+						<Daily Interval="1">
+							<StartDate>01/09/2016</StartDate>
+							<StartTime>05:30:00</StartTime>
+						</Daily>
+					</Trigger>
+				</Triggers>
+				<Actions>
+					<Action>
+						<Command>D:\TFL\TJSDistributor.CPC\FilePurger\FasterData.FilePurger.exe</Command>
+					</Action>
+				</Actions>
+			</ScheduledTaskDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy" Description="TJSDistributor JulianService installer" Include="TJSDistributor.JulianService.Install" Groups="Oyster,TJSDistributor,TJSDistributorOyster">
+			<ServiceDeploy Name="TJSDistributor.JulianService.Installer">
+				<MSI>
+					<name>FasterData.JulianMessageBroker.Installer.msi</name>
+					<UpgradeCode>9774A21D-D42B-415E-A544-0EA50B315307</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\TJSDistributor\JulianService\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>FasterData.Julian.exe</Name>
+						<Credentials>MasterDataServiceAccount</Credentials>
+						<ClusterInfo>
+							<ResourceName>Julian Message Broker (Oyster)</ResourceName>
+							<!--TODO: Change this-->
+						</ClusterInfo>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="FasterData.Julian.exe.config" target="\TFL\TJSDistributor\JulianService"/>
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy" Description="TJSDistributor TJSHExtractor installer" Include="TJSDistributor.TJSHExtractor.Install" Groups="Oyster,TJSDistributor,TJSDistributorOyster">
+			<ServiceDeploy Name="TJSDistributor.TJSHExtractor.Installer">
+				<MSI>
+					<name>FasterData.TJSHExtractor.Installer.msi</name>
+					<UpgradeCode>149FCC6F-42D3-44B3-BBEA-D328DCEE1419</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\TJSDistributor\TJSHExtractor\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>FasterData.TJSHExtractor.exe</Name>
+						<Credentials>MasterDataServiceAccount</Credentials>
+						<ClusterInfo>
+							<ResourceName>TJSH Extractor (Oyster)</ResourceName>
+							<!--TODO: Change this-->
+						</ClusterInfo>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="FasterData.TJSHExtractor.exe.config" target="\TFL\TJSDistributor\TJSHExtractor"/>
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<!-- TJS Distributor for CPC -->
+		<ServerRole Name="TFL.ServiceDeploy" Description="TJSDistributor JulianService CPC installer" Include="TJSDistributor.JulianService.CPC.Install" Groups="CPC,TJSDistributor,TJSDistributorCPC">
+			<ServiceDeploy Name="TJSDistributor.JulianService.CPC.Installer">
+				<MSI>
+					<name>FasterData.JulianMessageBroker.CPC.Installer.msi</name>
+					<UpgradeCode>1C13A40B-5C5E-4C3E-950A-8CEF22D83F0E</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\TJSDistributor.CPC\JulianService\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>FasterData.Julian.CPC.exe</Name>
+						<Credentials>MasterDataServiceAccountCPC</Credentials>
+						<ClusterInfo>
+							<ResourceName>Julian Message Broker (CPC)</ResourceName>
+						</ClusterInfo>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="FasterData.Julian.exe.config" target="\TFL\TJSDistributor.CPC\JulianService"/>
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy" Description="TJSDistributor TJSHExtractor CPC installer" Include="TJSDistributor.TJSHExtractor.CPC.Install" Groups="CPC,TJSDistributor,TJSDistributorCPC">
+			<ServiceDeploy Name="TJSDistributor.TJSHExtractor.CPC.Installer">
+				<MSI>
+					<name>FasterData.TJSHExtractor.CPC.Installer.msi</name>
+					<UpgradeCode>53EBFD13-589E-4EE4-A33D-CA6CB54D2AAA</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\TJSDistributor.CPC\TJSHExtractor\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>FasterData.TJSHExtractor.CPC.exe</Name>
+						<Credentials>MasterDataServiceAccountCPC</Credentials>
+						<ClusterInfo>
+							<ResourceName>TJSH Extractor (CPC)</ResourceName>
+						</ClusterInfo>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="FasterData.TJSHExtractor.exe.config" target="\TFL\TJSDistributor.CPC\TJSHExtractor"/>
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.MsiDeploy" Description="TJS Distributor File Purger Install" Include="TJSDistributor.FilePurger.Install" Groups="Oyster,TJSDistributor,TJSDistributorOyster">
+			<MsiDeploy Name="TJSDistributor.FilePurger.Installer">
+				<MSI>
+					<name>FasterData.FilePurger.Installer.msi</name>
+					<UpgradeCode>E1EAB4DC-D2E4-4132-A451-584EB54C20D4</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\TJSDistributor\FilePurger\" />
+					</parameters>
+				</MSI>
+				<Configs>
+					<config name="FasterData.FilePurger.exe.config" target="\TFL\TJSDistributor\FilePurger" />
+				</Configs>
+			</MsiDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.MsiDeploy" Description="TJS Distributor File Purger CPC Install" Include="TJSDistributor.FilePurger.CPC.Install" Groups="CPC,TJSDistributor,TJSDistributorCPC">
+			<MsiDeploy Name="TJSDistributor.FilePurger.CPC.Installer">
+				<MSI>
+					<name>FasterData.FilePurger.CPC.Installer.msi</name>
+					<UpgradeCode>3ED5BC65-AFF0-47BC-8A85-439BC7CC67FC</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\TJSDistributor.CPC\FilePurger\" />
+					</parameters>
+				</MSI>
+				<Configs>
+					<config name="FasterData.FilePurger.exe.config" target="\TFL\TJSDistributor.CPC\FilePurger" />
+				</Configs>
+			</MsiDeploy>
+		</ServerRole>
+
+    <ServerRole Name="TFL.ScheduledTaskDeploy" Description="TJSDistributor CPC Contactless Tap Processed File Cleaner" Include="TJSDistributor.CPC.Tap.ProcessedFileCleanup.ScheduledTask" Groups="CPC,TJSDistributor,TJSDistributorCPC">
+      <ScheduledTaskDeploy Action="Install" Enabled="true">
+        <TaskName>TJSDistributor CPC Processed File Cleaner</TaskName>
+        <Folder>FTP</Folder>
+        <ServiceAccount>MasterDataServiceAccountCPC</ServiceAccount>
+        <Description>Cleanup of processed file directories by removing all on a scheduled basis.</Description>
+        <Triggers>
+          <Trigger>
+            <Daily Interval="1">
+              <StartDate>01/01/2019</StartDate>
+              <StartTime>00:05:00</StartTime>
+              <RepeatEvery>02:00:00</RepeatEvery>
+            </Daily>
+          </Trigger>
+        </Triggers>
+        <Actions>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+            <Arguments>ExecutionPolicy ByPass Import-Module TFL.Utilities;Remove-AllFiles -TargetPath $(Distributor_Tap_Input_ProcessedFolder)</Arguments>
+          </Action>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+            <Arguments>ExecutionPolicy ByPass Import-Module TFL.Utilities;Remove-AllFiles -TargetPath $(Distributor_Tap_Output_ProcessedFolder)</Arguments>
+          </Action>
+        </Actions>
+      </ScheduledTaskDeploy>
+    </ServerRole>
+
+    <ServerRole Name="TFL.ScheduledTaskDeploy" Description="TJSDistributor CPC TJS Processed File Cleaner" Include="TJSDistributor.CPC.TJS.ProcessedFileCleanup.ScheduledTask" Groups="CPC,TJSDistributor,TJSDistributorCPC">
+      <ScheduledTaskDeploy Action="Install" Enabled="true">
+        <TaskName>TJSDistributor CPC Processed File Cleaner</TaskName>
+        <Folder>FTP</Folder>
+        <ServiceAccount>MasterDataServiceAccountCPC</ServiceAccount>
+        <Description>Cleanup of processed file directories by removing all on a scheduled basis.</Description>
+        <Triggers>
+          <Trigger>
+            <Daily Interval="1">
+              <StartDate>01/01/2019</StartDate>
+              <StartTime>00:05:00</StartTime>
+              <RepeatEvery>02:00:00</RepeatEvery>
+            </Daily>
+          </Trigger>
+        </Triggers>
+        <Actions>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+            <Arguments>ExecutionPolicy ByPass Import-Module TFL.Utilities;Remove-AllFiles -TargetPath $(Distributor_TJS_Input_ProcessedFolder)</Arguments>
+          </Action>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+            <Arguments>ExecutionPolicy ByPass Import-Module TFL.Utilities;Remove-AllFiles -TargetPath $(Distributor_TJSH_Input_ProcessedFolder)</Arguments>
+          </Action>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+            <Arguments>ExecutionPolicy ByPass Import-Module TFL.Utilities;Remove-AllFiles -TargetPath $(Distributor_TJSHE_Output_ProcessedFolder)</Arguments>
+          </Action>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+            <Arguments>ExecutionPolicy ByPass Import-Module TFL.Utilities;Remove-AllFiles -TargetPath $(Distributor_PARE_Output_ProcessedFolder)</Arguments>
+          </Action>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+            <Arguments>ExecutionPolicy ByPass Import-Module TFL.Utilities;Remove-AllFiles -TargetPath $(Distributor_RAE_Output_ProcessedFolder)</Arguments>
+          </Action>
+        </Actions>
+      </ScheduledTaskDeploy>
+    </ServerRole>
+
+    <ServerRole Name="TFL.ScheduledTaskDeploy" Description="TJSDistributor Oyster TJS Processed File Cleaner" Include="TJSDistributor.Oyster.TJS.ProcessedFileCleanup.ScheduledTask" Groups="Oyster,TJSDistributor,TJSDistributorOyster">
+      <ScheduledTaskDeploy Action="Install" Enabled="true">
+        <TaskName>TJSDistributor Oyster Processed File Cleaner</TaskName>
+        <Folder>FTP</Folder>
+        <ServiceAccount>MasterDataServiceAccount</ServiceAccount>
+        <Description>Cleanup of processed file directories by removing all on a scheduled basis.</Description>
+        <Triggers>
+          <Trigger>
+            <Daily Interval="1">
+              <StartDate>01/01/2019</StartDate>
+              <StartTime>00:15:00</StartTime>
+              <RepeatEvery>02:00:00</RepeatEvery>
+            </Daily>
+          </Trigger>
+        </Triggers>
+        <Actions>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+            <Arguments>ExecutionPolicy ByPass Import-Module TFL.Utilities;Remove-AllFiles -TargetPath $(Distributor_TJS_Input_ProcessedFolder)</Arguments>
+          </Action>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+            <Arguments>ExecutionPolicy ByPass Import-Module TFL.Utilities;Remove-AllFiles -TargetPath $(Distributor_TJSH_Input_ProcessedFolder)</Arguments>
+          </Action>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+            <Arguments>ExecutionPolicy ByPass Import-Module TFL.Utilities;Remove-AllFiles -TargetPath $(Distributor_TJSHE_Output_ProcessedFolder)</Arguments>
+          </Action>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+            <Arguments>ExecutionPolicy ByPass Import-Module TFL.Utilities;Remove-AllFiles -TargetPath $(Distributor_OCAE_Output_ProcessedFolder)</Arguments>
+          </Action>
+          <Action>
+            <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
+            <Arguments>ExecutionPolicy ByPass Import-Module TFL.Utilities;Remove-AllFiles -TargetPath $(Distributor_RAE_Output_ProcessedFolder)</Arguments>
+          </Action>
+        </Actions>
+      </ScheduledTaskDeploy>
+    </ServerRole>
+
+		<ServerRole Name="TFL.WebDeploy" Description="TJS Api Service for Oyster" Include="FasterData.TJSApi.Service.Oyster" Groups="Oyster,TJSDistributor,TJSDistributorOyster">
+			<WebDeploy Name="TJSApi" RegistryKey="Software\TfL\TJSApi" AssemblyToVersionFrom="FasterData.TjsApi.dll">
+				<AppPool>
+					<Name>TJSApiAppPool</Name>
+					<ServiceAccount>MasterDataServiceAccount</ServiceAccount>
+					<RecycleLogEvent>Time,Requests,Schedule,Memory,IsapiUnhealthy,ConfigChange,PrivateMemory</RecycleLogEvent>
+				</AppPool>
+				<Site>
+					<Name>TJSApi</Name>
+					<Port>8745</Port>
+					<PhysicalPath>D:\TfL\TJSApi</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>FasterData.TjsApi</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint TestIdentity="MasterDataServiceAccount">IsAlive</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.WebDeploy" Description="TJS Api Service for CPC" Include="FasterData.TJSApi.Service.CPC" Groups="CPC,TJSDistributor,TJSDistributorCPC">
+			<WebDeploy Name="TJSApiCPC" RegistryKey="Software\TfL\TJSApi_CPC" AssemblyToVersionFrom="FasterData.TjsApi.dll">
+				<AppPool>
+					<Name>TJSApiCPCAppPool</Name>
+					<ServiceAccount>MasterDataServiceAccountCPC</ServiceAccount>
+					<RecycleLogEvent>Time,Requests,Schedule,Memory,IsapiUnhealthy,ConfigChange,PrivateMemory</RecycleLogEvent>
+				</AppPool>
+				<Site>
+					<Name>TJSApiCPC</Name>
+					<Port>8744</Port>
+					<PhysicalPath>D:\TfL\TJSApi_CPC</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>FasterData.TjsApi</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint TestIdentity="MasterDataServiceAccountCPC">IsAlive</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+
+		<!-- OyBO Roles -->
+		<ServerRole Name="TFL.EventLogDeploy" Description="FTP.EventLog.For.Internal.OyBO.OTFP" Include="FTP.EventLog.For.Internal.OyBO.OTFP" Groups="Oyster,OyBO,OTFP">
+			<EventLogDeploy EventLogName="FTP">
+				<Sources>
+					<Source Name="OTFP" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.EventLogDeploy" Description="FTP.EventLog.For.Internal.OyBO.AzureMobileUploader" Include="FTP.EventLog.For.Internal.OyBO.AzureMobileUploader" Groups="Oyster,OyBO">
+			<EventLogDeploy EventLogName="FTP">
+				<Sources>
+					<Source Name="AzureMobileUploader" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.EventLogDeploy" Description="FTP.EventLog.For.Internal.OyBO.FileCleanup" Include="FTP.EventLog.For.Internal.OyBO.FileCleanup" Groups="Oyster,OyBO,OTFP">
+			<EventLogDeploy EventLogName="FTP">
+				<Sources>
+					<Source Name="FileCleanup" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.EventLogDeploy" Description="FTP.EventLog.For.Internal.OyBO.OCAE" Include="FTP.EventLog.For.Internal.OyBO.OCAE" Groups="Oyster,OyBO,OCAE">
+			<EventLogDeploy EventLogName="FTP">
+				<Sources>
+					<Source Name="OCAE" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.EventLogDeploy" Description="FTP.EventLog.For.Internal.OyBO.Refunds" Include="FTP.EventLog.For.Internal.OyBO.Refunds" Groups="Oyster,OyBO,Refunds">
+			<EventLogDeploy EventLogName="FTP">
+				<Sources>
+					<Source Name="Refunds" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.EventLogDeploy" Description="FTP.EventLog.For.Internal.OyBO.FulServiceStub" Include="FTP.EventLog.For.Internal.OyBO.FulServiceStub" Groups="Oyster,OyBO">
+			<EventLogDeploy EventLogName="FTP">
+				<Sources>
+					<Source Name="FastUniversalLoadServiceStub" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.EventLogDeploy" Description="FTP.EventLog.For.Internal.OyBO.ApiStub" Include="FTP.EventLog.For.Internal.OyBO.ApiStub" Groups="Oyster,OyBO">
+			<EventLogDeploy EventLogName="FTP">
+				<Sources>
+					<Source Name="ApiStub" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.EventLogDeploy" Description="FTP.EventLog.For.Internal.OyBO.CardDiscountStore" Include="FTP.EventLog.For.Internal.OyBO.CardDiscountStore" Groups="Oyster,OyBO">
+			<EventLogDeploy EventLogName="FTP">
+				<Sources>
+					<Source Name="CardDiscountStore" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.EventLogDeploy" Description="FTP.EventLog.For.Internal.OyBO.RefundsApi" Include="FTP.EventLog.For.Internal.OyBO.RefundsApi" Groups="Oyster,OyBO,Refunds">
+			<EventLogDeploy EventLogName="FTP">
+				<Sources>
+					<Source Name="RefundsApi" />
+				</Sources>
+			</EventLogDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.FileShare" Include="OyBO.FileShare" Description="Create FileShare For OyBO Services" Groups="Oyster,OyBO,OTFP">
+			<FileShare>
+				<ShareName>OtfpShare</ShareName>
+				<FolderToShare>D$\OtfpFileStore</FolderToShare>
+				<Users>
+					<User name="FTMServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+					<User name="OyBOServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+				</Users>
+			</FileShare>
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileShare" Include="OyBO.FileShare.Functional" Description="Create FileShare For OyBO Services with Deployment Permissions" Groups="Oyster,OyBO,OTFP">
+			<FileShare>
+				<ShareName>OtfpShare</ShareName>
+				<FolderToShare>D$\OtfpFileStore</FolderToShare>
+				<Users>
+					<User name="FTMServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+					<User name="OyBOServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+					<User name="DeploymentAccount" type="ServiceAccount" permissions="CHANGE"/>
+				</Users>
+			</FileShare>
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileShare" Include="Ocae.FileShare" Description="Create FileShare For Ocae Service" Groups="Oyster,OyBO,OCAE">
+			<FileShare>
+				<ShareName>OcaeShare</ShareName>
+				<FolderToShare>D$\OcaeFileStore</FolderToShare>
+				<Users>
+					<User name="FTMServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+					<User name="FAEServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+					<User name="OyBOServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+				</Users>
+			</FileShare>
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileShare" Include="Ocae.FileShare.Functional" Description="Create FileShare For Ocae Service with Deployment Permissions" Groups="Oyster,OyBO,OCAE">
+			<FileShare>
+				<ShareName>OcaeShare</ShareName>
+				<FolderToShare>D$\OcaeFileStore</FolderToShare>
+				<Users>
+					<User name="FTMServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+					<User name="FAEServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+					<User name="OyBOServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+					<User name="DeploymentAccount" type="ServiceAccount" permissions="CHANGE"/>
+				</Users>
+			</FileShare>
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileShare" Include="Refunds.FileShare" Description="Create FileShare For Refunds Service" Groups="Oyster,OyBO,Refunds">
+			<FileShare>
+				<ShareName>RefundsShare</ShareName>
+				<FolderToShare>D$\RefundsFileStore</FolderToShare>
+				<Users>
+					<User name="OyBOServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+				</Users>
+			</FileShare>
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileShare" Include="Refunds.FileShare.Functional" Description="Create FileShare For Refunds Service with Deployment Permissions" Groups="Oyster,OyBO,Refunds">
+			<FileShare>
+				<ShareName>RefundsShare</ShareName>
+				<FolderToShare>D$\RefundsFileStore</FolderToShare>
+				<Users>
+					<User name="OyBOServiceAccount" type="ServiceAccount" permissions="CHANGE"/>
+					<User name="DeploymentAccount" type="ServiceAccount" permissions="CHANGE"/>
+				</Users>
+			</FileShare>
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileSystem" Description="OyBO File System" Include="OyBO.FileSystem" Groups="Oyster,OyBO,OTFP">
+			<CreateFolder TargetPath="\D$\OtfpFileStore\"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\Unprocessed"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\Loading"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\Processed"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\Failed"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\Invalid"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\CubicAcknowledgements"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\FAE"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\OysterOnline"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\OysterOnline\Sales"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\OysterOnline\Autoloads"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\OysterOnline\Refunds"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\OysterOnline\Replacements"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\OysterOnline\AutoloadsPerformed"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\Analytics"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\Photocard"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\Ocae"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\RefundPickups"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\ActiveCards"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\ExclusionList"/>
+			<CreateFolder TargetPath="\D$\OtfpFileStore\ExcludedCardTravelDays"/>
+		</ServerRole>
+
+		<!-- Any edits here must be applied to Ocae.FileSystem.F below (until we can parameterise this)-->
+		<ServerRole Name="TFL.FileSystem" Description="Ocae File System" Include="Ocae.FileSystem" Groups="Oyster,OyBO,OCAE">
+			<CreateFolder TargetPath="\D$\OcaeFileStore\"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\Gaps"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\Gaps\Unprocessed"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\Gaps\Loading"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\Gaps\Processed"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\Gaps\Failed"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\Tjsh"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\Tjsh\Unprocessed"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\Tjsh\Loading"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\Tjsh\Processed"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\Tjsh\Failed"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\PositiveAdjustments"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\ExcludedCardTravelDays"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\ExcludedCardTravelDays\Unprocessed"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\ExcludedCardTravelDays\Loading"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\ExcludedCardTravelDays\Processed"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\ExcludedCardTravelDays\Failed"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\ExclusionList"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\ExclusionList\Unprocessed"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\ExclusionList\Loading"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\ExclusionList\Processed"/>
+			<CreateFolder TargetPath="\D$\OcaeFileStore\ExclusionList\Failed"/>
+		</ServerRole>
+
+		<!-- Any edits here must be applied to Ocae.FileSystem above (until we can parameterise this) -->
+		<ServerRole Name="TFL.FileSystem" Description="Ocae File System" Include="Ocae.FileSystem.Share" Groups="Oyster,OyBO,OCAE">
+			<CreateFolder TargetPath="\OCAEFS\Gaps"/>
+			<CreateFolder TargetPath="\OCAEFS\Gaps\Unprocessed"/>
+			<CreateFolder TargetPath="\OCAEFS\Gaps\Loading"/>
+			<CreateFolder TargetPath="\OCAEFS\Gaps\Processed"/>
+			<CreateFolder TargetPath="\OCAEFS\Gaps\Failed"/>
+			<CreateFolder TargetPath="\OCAEFS\Tjsh"/>
+			<CreateFolder TargetPath="\OCAEFS\Tjsh\Unprocessed"/>
+			<CreateFolder TargetPath="\OCAEFS\Tjsh\Loading"/>
+			<CreateFolder TargetPath="\OCAEFS\Tjsh\Processed"/>
+			<CreateFolder TargetPath="\OCAEFS\Tjsh\Failed"/>
+			<CreateFolder TargetPath="\OCAEFS\ExcludedCardTravelDays"/>
+			<CreateFolder TargetPath="\OCAEFS\ExcludedCardTravelDays\Unprocessed"/>
+			<CreateFolder TargetPath="\OCAEFS\ExcludedCardTravelDays\Loading"/>
+			<CreateFolder TargetPath="\OCAEFS\ExcludedCardTravelDays\Processed"/>
+			<CreateFolder TargetPath="\OCAEFS\ExcludedCardTravelDays\Failed"/>
+			<CreateFolder TargetPath="\OCAEFS\ExclusionList"/>
+			<CreateFolder TargetPath="\OCAEFS\ExclusionList\Unprocessed"/>
+			<CreateFolder TargetPath="\OCAEFS\ExclusionList\Loading"/>
+			<CreateFolder TargetPath="\OCAEFS\ExclusionList\Processed"/>
+			<CreateFolder TargetPath="\OCAEFS\ExclusionList\Failed"/>
+			<!-- <CreateFolder TargetPath="\E$\PositiveAdjustments"/> Folder not required in clustered environments -->
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileSystem" Description="Ocae TestProbe File System" Include="Ocae.FileSystem.TestProbe" Groups="Oyster,OyBO,OCAE">
+			<CreateFolder TargetPath="\D$\OcaeFileStore\PositiveAdjustments\PositiveAdjustmentsArchive"/>
+		</ServerRole>
+
+		<!-- Any edits here must be applied to Refunds.FileSystem.E below (until we can parameterise this)-->
+		<!-- For non-clustered environments, e.g. VCloud  -->
+		<ServerRole Name="TFL.FileSystem" Description="Refunds File System" Include="Refunds.FileSystem" Groups="OyBO">
+			<CreateFolder TargetPath="\D$\RefundsFileStore\"/>
+			<CreateFolder TargetPath="\D$\RefundsFileStore\Oca"/>
+			<CreateFolder TargetPath="\D$\RefundsFileStore\Oca\Unprocessed"/>
+			<CreateFolder TargetPath="\D$\RefundsFileStore\Oca\Loading"/>
+			<CreateFolder TargetPath="\D$\RefundsFileStore\Oca\Processed"/>
+			<CreateFolder TargetPath="\D$\RefundsFileStore\Oca\Failed"/>
+			<CreateFolder TargetPath="\D$\RefundsFileStore\RefundPickups"/>
+			<CreateFolder TargetPath="\D$\RefundsFileStore\RefundPickups\Unprocessed"/>
+			<CreateFolder TargetPath="\D$\RefundsFileStore\RefundPickups\Loading"/>
+			<CreateFolder TargetPath="\D$\RefundsFileStore\RefundPickups\Processed"/>
+			<CreateFolder TargetPath="\D$\RefundsFileStore\RefundPickups\Failed"/>
+			<CreateFolder TargetPath="\D$\RefundsFileStore\ActiveCards\Unprocessed"/>
+			<CreateFolder TargetPath="\D$\RefundsFileStore\ActiveCards\Loading"/>
+			<CreateFolder TargetPath="\D$\RefundsFileStore\ActiveCards\Processed"/>
+			<CreateFolder TargetPath="\D$\RefundsFileStore\ActiveCards\Failed"/>
+			<CreateFolder TargetPath="\D$\RefundsFileStore\AnalyticsRefunds"/>
+			<CreateFolder TargetPath="\D$\RefundsFileStore\AnalyticsRefunds\Unprocessed"/>
+			<CreateFolder TargetPath="\D$\RefundsFileStore\AnalyticsRefunds\Loading"/>
+			<CreateFolder TargetPath="\D$\RefundsFileStore\AnalyticsRefunds\Processed"/>
+			<CreateFolder TargetPath="\D$\RefundsFileStore\AnalyticsRefunds\Failed"/>
+		</ServerRole>
+
+		<!-- Any edits here must be applied to Refunds.FileSystem above (until we can parameterise this) -->
+		<!-- For clustered environments, e.g. VCloud -->
+		<ServerRole Name="TFL.FileSystem" Description="Refunds File System" Include="Refunds.FileSystem.Share" Groups="Oyster,OyBO,Refunds">
+			<CreateFolder TargetPath="\ORMFS\Oca"/>
+			<CreateFolder TargetPath="\ORMFS\Oca\Unprocessed"/>
+			<CreateFolder TargetPath="\ORMFS\Oca\Loading"/>
+			<CreateFolder TargetPath="\ORMFS\Oca\Processed"/>
+			<CreateFolder TargetPath="\ORMFS\Oca\Failed"/>
+			<CreateFolder TargetPath="\ORMFS\RefundPickups"/>
+			<CreateFolder TargetPath="\ORMFS\RefundPickups\Unprocessed"/>
+			<CreateFolder TargetPath="\ORMFS\RefundPickups\Loading"/>
+			<CreateFolder TargetPath="\ORMFS\RefundPickups\Processed"/>
+			<CreateFolder TargetPath="\ORMFS\RefundPickups\Failed"/>
+			<CreateFolder TargetPath="\ORMFS\ActiveCards\Unprocessed"/>
+			<CreateFolder TargetPath="\ORMFS\ActiveCards\Loading"/>
+			<CreateFolder TargetPath="\ORMFS\ActiveCards\Processed"/>
+			<CreateFolder TargetPath="\ORMFS\ActiveCards\Failed"/>
+			<CreateFolder TargetPath="\ORMFS\AnalyticsRefunds"/>
+			<CreateFolder TargetPath="\ORMFS\AnalyticsRefunds\Unprocessed"/>
+			<CreateFolder TargetPath="\ORMFS\AnalyticsRefunds\Loading"/>
+			<CreateFolder TargetPath="\ORMFS\AnalyticsRefunds\Processed"/>
+			<CreateFolder TargetPath="\ORMFS\AnalyticsRefunds\Failed"/>
+		</ServerRole>
+
+		<!--By default these will be created as disabled. However, if they already exist and enabled, the deployment process will note the initial state and re-apply it accordingly after deployment-->
+		<ServerRole Name="TFL.ScheduledTaskDeploy" Description="Oyster Back Office File Cleanup Scheduler" Include="OyBO.FileCleanup.ScheduledTask.Create"  Groups="Oyster,OyBO">
+			<ScheduledTaskDeploy Action="Install">
+				<TaskName>OysterBackOfficeFileCleanupSchedulerCreate</TaskName>
+				<Folder>FTP</Folder>
+				<ServiceAccount>OyBOServiceAccount</ServiceAccount>
+				<Description/>
+				<Triggers>
+					<Trigger>
+						<Weekly Interval="1">
+							<StartDate>01/09/2016</StartDate>
+							<StartTime>05:00:00</StartTime>
+							<Days>
+								<DayOfWeek>Thursday</DayOfWeek>
+							</Days>
+						</Weekly>
+					</Trigger>
+				</Triggers>
+				<Actions>
+					<Action>
+						<Command>D:\TFL\FileCleanup\Tfl.Ft.OyBo.FileSystemCleaner.Host.exe</Command>
+						<Arguments />
+					</Action>
+				</Actions>
+			</ScheduledTaskDeploy>
+		</ServerRole>
+
+		<!--Uninstall role was added because of versioning issues with NuGet packages which resulted in dll's being deleted but not replaced. A uninstall / fresh install solves this.-->
+		<!--When each component is built in it's own directory on the build server, dll version clashes won't happen, so this role can be removed.-->
+		<ServerRole Name="TFL.ServiceDeploy" Description="Oyster Back Office TFP Service Uninstall" Include="OyBO.TFP.Uninstall" Groups="Oyster,OyBO,OTFP">
+			<ServiceDeploy Name="OyBO.TFP.Installer" Action="Uninstall">
+				<MSI>
+					<name>Tfl.Ft.OyBo.FileProcessor.Host.Installer.msi</name>
+					<UpgradeCode>A1D475D1-1602-4B09-8082-87E013709BDC</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\OTFP\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>Tfl.Ft.OyBo.FileProcessor.Host.exe</Name>
+						<Credentials>OyBOServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="Tfl.Ft.OyBo.FileProcessor.Host.exe.config" target="\TFL\OTFP" />
+				</Configs>
+				<TestInfo DisableTests="true" />
+			</ServiceDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy" Description="Oyster Back Office TFP Service" Include="OyBO.TFP.Install" Groups="Oyster,OyBO,OTFP">
+			<ServiceDeploy Name="OyBO.TFP.Installer">
+				<MSI>
+					<name>Tfl.Ft.OyBo.FileProcessor.Host.Installer.msi</name>
+					<UpgradeCode>A1D475D1-1602-4B09-8082-87E013709BDC</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\OTFP\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>OyBO FileProcessor Service</Name>
+						<Credentials>OyBOServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="Tfl.Ft.OyBo.FileProcessor.Host.exe.config" target="\TFL\OTFP"/>
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.MsiDeploy" Description="Azure Mobile Uploader Certificate Install" Include="OyBO.AzureMobileUploaderCert.Install" Groups="Oyster,OyBO">
+			<MsiDeploy Name="OyBO.AzureMobileUploaderCert.Installer">
+				<MSI>
+					<name>Tfl.Ft.OyBo.X509CertificateInstaller.msi</name>
+					<UpgradeCode>B31AF847-F42C-4CCB-8FA3-0B3E221AAABA</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\AzureTestCertificate\" />
+					</parameters>
+				</MSI>
+			</MsiDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy" Description="Oyster Back Office TFP Azure Mobile Uploader Service" Include="OyBO.AzureMobileUploader.Install" Groups="Oyster,OyBO">
+			<ServiceDeploy Name="OyBO.AzureMobileUploader.Installer">
+				<MSI>
+					<name>Tfl.Ft.OyBo.AzureMobileUploader.Host.Installer.msi</name>
+					<UpgradeCode>10B4F1BA-8502-4A73-AD9D-3C48756141A1</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\AzureMobileUploader\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>OyBO Azure Mobile Uploader Service</Name>
+						<Credentials>OyBOExternalServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="Tfl.Ft.OyBo.AzureMobileUploader.Host.exe.config" target="\TFL\AzureMobileUploader"/>
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.MsiDeploy" Description="Oyster Back Office File Cleanup Console App Install" Include="OyBO.FileCleanup.Install" Groups="Oyster,OyBO">
+			<MsiDeploy Name="OyBO.FileCleanup.Installer">
+				<MSI>
+					<name>Tfl.Ft.OyBo.FileSystemCleaner.Host.Installer.msi</name>
+					<UpgradeCode>F437A890-65F9-4101-9A4F-36995CCBE418</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\FileCleanup\" />
+					</parameters>
+				</MSI>
+				<Configs>
+					<config name="Tfl.Ft.OyBo.FileSystemCleaner.Host.exe.config" target="\TFL\FileCleanup"/>
+				</Configs>
+			</MsiDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy" Description="Oyster Charge Adjustment Engine Service Install" Include="OyBO.Ocae.Install" Groups="Oyster,OyBO,OCAE">
+			<ServiceDeploy Name="OyBO.Ocae.Installer">
+				<MSI>
+					<name>Tfl.Ft.OyBo.Ocae.Host.Installer.msi</name>
+					<UpgradeCode>A40B4AEF-8342-4217-8130-588C0F164E7B</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\OCAE\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>OyBO Oyster Charge Adjustment Engine Service</Name>
+						<Credentials>OyBOServiceAccount</Credentials>
+						<ClusterInfo>
+							<ResourceName>OyBO Oyster Charge Adjustment Engine Service</ResourceName>
+						</ClusterInfo>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="Tfl.Ft.OyBo.Ocae.Host.exe.config" target="\TFL\OCAE"/>
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy" Description="OyBO Refunds Service Install" Include="OyBO.Refunds.Install" Groups="Oyster,OyBO,Refunds">
+			<ServiceDeploy Name="OyBO.Refunds.Installer">
+				<MSI>
+					<name>Tfl.Ft.OyBo.Refunds.Host.Installer.msi</name>
+					<UpgradeCode>8EDEF21B-D7D0-4606-BCCD-CDE0B4821C22</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\Refunds\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>OyBO Refunds Service</Name>
+						<Credentials>OyBOServiceAccount</Credentials>
+						<ClusterInfo>
+							<ResourceName>OyBO Refunds Service</ResourceName>
+						</ClusterInfo>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="Tfl.Ft.OyBo.Refunds.Host.exe.config" target="\TFL\Refunds"/>
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy" Description="OYBO FUL Stub Service Install" Include="OyBO.FulStub.Install" Groups="Oyster,OyBO">
+			<ServiceDeploy Name="OyBO.FulStub.Installer">
+				<MSI>
+					<name>Tfl.Ft.OyBo.FastUniversalLoad.Service.Stub.Host.Installer.msi</name>
+					<UpgradeCode>6AFF5166-D274-414B-AC25-8FC6DF5E3D9C</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\FulServiceStub\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>OYBO FUL Stub Service</Name>
+						<Credentials>OyBOServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="Tfl.Ft.OyBo.FastUniversalLoad.Service.Stub.Host.exe.config" target="\TFL\FulServiceStub"/>
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy" Description="OyBO Api Stub Service Install" Include="OyBO.ApiStub.Install" Groups="Oyster,OyBO">
+			<ServiceDeploy Name="OyBO.ApiStub.Installer">
+				<MSI>
+					<name>Tfl.Ft.OyBo.Api.Stub.Host.Installer.msi</name>
+					<UpgradeCode>9A25F78B-2CF9-4AF8-AF67-3F2CC6790B96</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\ApiStub\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="Manual">
+						<Name>OyBO Api Stub Service</Name>
+						<Credentials>OyBOServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="Tfl.Ft.OyBo.Api.Stub.Host.exe.config" target="\TFL\ApiStub"/>
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.WebDeploy" Description="OyBO CardDiscountStore" Include="OyBO.CardDiscountStore.Service" Groups="Oyster,OyBO">
+			<WebDeploy Name="CardDiscountStore" RegistryKey="Software\TfL\CardDiscountStore" AssemblyToVersionFrom="Tfl.Ft.OyBo.CardDiscountStore.Api.dll">
+				<AppPool>
+					<Name>OyBOAppPool</Name>
+					<ServiceAccount>OyBOServiceAccount</ServiceAccount>
+					<RecycleLogEvent>Time,Requests,Schedule,Memory,IsapiUnhealthy,ConfigChange,PrivateMemory</RecycleLogEvent>
+				</AppPool>
+				<Site>
+					<Name>CardDiscountStore</Name>
+					<Port>9100</Port>
+					<PhysicalPath>D:\TfL\CardDiscountStore</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>Tfl.Ft.OyBo.CardDiscountStore.Api</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint TestIdentity="OyBOServiceAccount">IsAlive</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.WebDeploy" Description="OyBO Refund Api" Include="OyBO.Refunds.Api.Service" Groups="Oyster,OyBO,Refunds">
+			<WebDeploy Name="RefundsApi" RegistryKey="Software\TfL\RefundsApi" AssemblyToVersionFrom="Tfl.Ft.OyBo.Refunds.Api.dll">
+				<AppPool>
+					<Name>OyBOAppPool</Name>
+					<ServiceAccount>OyBOServiceAccount</ServiceAccount>
+					<RecycleLogEvent>Time,Requests,Schedule,Memory,IsapiUnhealthy,ConfigChange,PrivateMemory</RecycleLogEvent>
+				</AppPool>
+				<Site>
+					<Name>RefundsApi</Name>
+					<Port>9300</Port>
+					<PhysicalPath>D:\TfL\RefundsApi</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>Tfl.Ft.OyBo.Refunds.Api</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint TestIdentity="OyBOServiceAccount">IsAlive</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.ScheduledTaskDeploy" Description="Payment Assurance Scheduled Task" Include="PaymentAssurance.ScheduledTask.Create" Groups="DBA">
+      <ScheduledTaskDeploy Action="Install" Enabled="false" >
+        <TaskName>Payment Assurance</TaskName>
+        <Folder>FTP</Folder>
+        <ServiceAccount>PaymentAssuranceServiceAccount</ServiceAccount>
+        <Description/>
+        <Triggers>
+          <Trigger>
+            <Daily Interval="1">
+              <StartDate>01/02/2019</StartDate>
+              <StartTime>00:45:00</StartTime>
+            </Daily>
+          </Trigger>
+        </Triggers>
+        <Actions>
+			<Action>
+				<Command>PowerShell</Command>
+				<Arguments>-ExecutionPolicy Bypass -file D:\TFL\PaymentAssurance\sql2excel\sql2excel.ps1</Arguments>
+			</Action>
+        </Actions>
+      </ScheduledTaskDeploy>
+    </ServerRole>
+    <!--Payment Assurance -->
+
+	<ServerRole Name="TFL.FileSystem" Description="Payment Assurance Common" Include="PaymentAssurance.Common" Groups="DBA">
+		<CreateFolder TargetPath="\D$\TFL\PaymentAssurance\Logs" />
+		<CreateFolder TargetPath="\D$\TFL\PaymentAssurance\Reports" />
+		<CopyItem Source="PaymentAssurance\PaymentAssurance.Scripts\sql2excel" Target="\D$\TFL\PaymentAssurance\sql2excel" Recurse="true" Filter="*.*" Replace="true" />
+		<CopyItem Source="PaymentAssurance\PaymentAssurance.Scripts\SqlFiles" Target="\D$\TFL\PaymentAssurance\" Recurse="true" Filter="*.*" Replace="false" />
+	</ServerRole>
+
+	<ServerRole Name="TFL.FileSystem" Description="Payment Assurance Config Copy" Include="PaymentAssurance.Config.Copy" Groups="DBA">
+		<CopyItem Source="$(PaymentAssuranceConfigSource)" Target="$(PaymentAssuranceConfigTarget)"  Filter="*" Recurse="false" Replace="true" IsAbsolutePath="true" />
+
+	</ServerRole>
+	</CommonRoles>
+</configuration>

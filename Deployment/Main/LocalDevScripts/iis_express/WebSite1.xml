@@ -1,0 +1,8 @@
+<site name="WebSite1" id="1" serverAutoStart="true">
+	<application path="/">
+		<virtualDirectory path="/" physicalPath="D:\SRC\FT\CASC\CACC\Main\CSC.Support.Web" />
+	</application>
+		<bindings>
+		<binding protocol="http" bindingInformation=":8080:contactless.local" />
+	</bindings>
+</site>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--18/04/2018 This is currently being used in the following release: SSO.Release.FOAM -->
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+  <parameter name="SSO_SSOWebReference" value="10.107.200.12" />
+  <parameter name="SSO_SSOWebServiceReference" value="10.107.200.2" />
+  <!-- <parameter name="OysterWebSiteAlias" value="10.107.200.15" /> -->
+  <!-- <parameter name="OysterWebServiceAlias" value="10.107.200.6" /> -->
+  <parameter name="OyBO_TFP_AzureMobileUploaderStorageConnectionString" value="" />
+  <parameter name="OyBO_AzureUploader_AzureKeyVaultClientId" value="https://mobileapistableipp001.vault.azure.net/secrets/StorageConnectionString" />
+  <parameter name="OyBO_AzureUploader_CertificateThumbprint" value="b7de1e56-6017-45cc-a31e-4bdc4a00830a" />
+  <parameter name="OyBO_AzureUploader_KeyVaultSecretUriForAzureBlobStorage" value="5f9e1eb7956ffa79aa3ac471e1ba35cdc6c5d96c" />
+</parameters>

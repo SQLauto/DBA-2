@@ -1,0 +1,423 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="DevInt2.Internal" Environment="DevInt2" Config="DevInt2" ProductGroup="FTP">
+  <CommonRoleFile>CommonMJTDeltasRole.xml</CommonRoleFile>
+  <CommonRoleFile>CommonPareServiceDeploy.xml</CommonRoleFile>
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+
+  <PostDeploymentTestIdentity>DeploymentAccount.Internal</PostDeploymentTestIdentity>
+
+  <machine Id="TDC2BLD010" Name="TDC2BLD010" ExternalIP="10.107.203.239" DeploymentMachine="true" />
+
+  <machine Id="FTDC2CAS362" Name="FTDC2CAS362" ExternalIP="10.133.200.188" Role="CIS Server">
+    <ServerRole Description="CSC Mock Services" Include="CACC.Mock.Services" />
+    <ServerRole Description="SDM Mock SSO"  Include="SDM.Mock.SSO" />
+  </machine>
+  <machine Id="FTDC2CIS313" Name="FTDC2CIS313" ExternalIP="10.107.200.139" Role="CIS Server">
+    <!--<ServerRole Include="IISSetup.CIS" Description="IIS Setup" Groups="FAE,SDM,CASC,PARE,Notifications" />-->
+    <ServerRole Description="Pare TravelTokenService" Include="PARE.TravelToken.Service" />
+    <ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+    <ServerRole Description="FAE Journey Usage" Include="FAE.JourneyUsage.Service" />
+    <ServerRole Description="Notification Processor Service" Include="Notification.Processor.Service" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+    <ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+    <ServerRole Description="FAE VoidService" Include="FAE.Void.Service" />
+    <ServerRole Description="SDM Web Services"  Include="SDM.WebService" />
+    <ServerRole  Description="FTP.EventLog.For.MasterData.WebApi" Include="FTP.EventLog.For.MasterData.WebApi" />
+    <ServerRole Description="MasterData Api" Include="MasterData.Api" />
+
+    <!-- TJS Api -->
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSApi" />
+    <ServerRole Include="FasterData.TJSApi.Service.Oyster" Config="DevInt2_Oyster"/>
+    <ServerRole Include="FasterData.TJSApi.Service.CPC" />
+  </machine>
+  <machine Id="FTDC2CIS314" Name="FTDC2CIS314" ExternalIP="10.107.200.140" Role="CIS Server">
+    <!--<ServerRole Include="IISSetup.CIS" Description="IIS Setup" Groups="FAE,SDM,CASC,PARE,Notifications" />-->
+    <ServerRole Description="Pare TravelTokenService" Include="PARE.TravelToken.Service" />
+    <ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+    <ServerRole Description="FAE Journey Usage" Include="FAE.JourneyUsage.Service" />
+    <ServerRole Description="Notification Processor Service" Include="Notification.Processor.Service" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+    <ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+    <ServerRole Description="FAE VoidService" Include="FAE.Void.Service" />
+    <ServerRole Description="SDM Web Services"  Include="SDM.WebService" />
+    <ServerRole  Description="FTP.EventLog.For.MasterData.WebApi" Include="FTP.EventLog.For.MasterData.WebApi" />
+    <ServerRole Description="MasterData Api" Include="MasterData.Api" />
+
+    <!-- TJS Api -->
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSApi" />
+    <ServerRole Include="FasterData.TJSApi.Service.Oyster" Config="DevInt2_Oyster"/>
+    <ServerRole Include="FasterData.TJSApi.Service.CPC" />
+  </machine>
+  <machine Id="FTDC2CIS315" Name="FTDC2CIS315" ExternalIP="10.107.200.141" Role="CIS Server">
+    <!--<ServerRole Include="IISSetup.CIS" Description="IIS Setup" Groups="FAE,SDM,CASC,PARE,Notifications" />-->
+    <ServerRole Description="Pare.TravelTokenService" Include="PARE.TravelToken.Service" />
+    <ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+    <ServerRole Description="FAE Journey Usage" Include="FAE.JourneyUsage.Service" />
+    <ServerRole Description="Notification Processor Service" Include="Notification.Processor.Service" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+    <ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+    <ServerRole Description="FAE VoidService" Include="FAE.Void.Service" />
+    <ServerRole Description="SDM Web Services"  Include="SDM.WebService" />
+    <ServerRole Description="FTP.EventLog.For.MasterData.WebApi" Include="FTP.EventLog.For.MasterData.WebApi" />
+    <ServerRole Description="MasterData Api" Include="MasterData.Api" />
+
+    <!-- TJS Api -->
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSApi" />
+    <ServerRole Include="FasterData.TJSApi.Service.Oyster" Config="DevInt2_Oyster"/>
+    <ServerRole Include="FasterData.TJSApi.Service.CPC" />
+  </machine>
+  <machine Id="FTDC2CIS316" Name="FTDC2CIS316" ExternalIP="10.107.200.142" Role="CIS Server">
+    <!--<ServerRole Include="IISSetup.CIS" Description="IIS Setup" Groups="FAE,SDM,CASC,PARE,Notifications" />-->
+    <ServerRole Description="Pare TravelTokenService" Include="PARE.TravelToken.Service" />
+    <ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+    <ServerRole Description="FAE Journey Usage" Include="FAE.JourneyUsage.Service" />
+    <ServerRole Description="Notification Processor Service" Include="Notification.Processor.Service" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+    <ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+    <ServerRole Description="FAE VoidService" Include="FAE.Void.Service" />
+    <ServerRole Description="SDM Web Services"  Include="SDM.WebService" />
+    <ServerRole  Description="FTP.EventLog.For.MasterData.WebApi" Include="FTP.EventLog.For.MasterData.WebApi" />
+    <ServerRole Description="MasterData Api" Include="MasterData.Api" />
+
+    <!-- TJS Api -->
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSApi" />
+    <ServerRole Include="FasterData.TJSApi.Service.Oyster" Config="DevInt2_Oyster"/>
+    <ServerRole Include="FasterData.TJSApi.Service.CPC" />
+  </machine>
+  <machine Id="FTDC2CIS317" Name="FTDC2CIS317" ExternalIP="10.107.200.143" Role="CIS Server">
+    <!--<ServerRole Include="IISSetup.CIS" Description="IIS Setup" Groups="FAE,SDM,CASC,PARE,Notifications" />-->
+    <ServerRole Description="Pare TravelTokenService" Include="PARE.TravelToken.Service" />
+    <ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+    <ServerRole Description="FAE Journey Usage" Include="FAE.JourneyUsage.Service" />
+    <ServerRole Description="Notification Processor Service" Include="Notification.Processor.Service" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" />
+    <ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+    <ServerRole Description="FAE VoidService" Include="FAE.Void.Service" />
+    <ServerRole Description="SDM Web Services"  Include="SDM.WebService" />
+    <ServerRole  Description="FTP.EventLog.For.MasterData.WebApi" Include="FTP.EventLog.For.MasterData.WebApi" />
+    <ServerRole Description="MasterData Api" Include="MasterData.Api" />
+
+    <!-- TJS Api -->
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSApi" />
+    <ServerRole Include="FasterData.TJSApi.Service.Oyster" Config="DevInt2_Oyster"/>
+    <ServerRole Include="FasterData.TJSApi.Service.CPC" />
+  </machine>
+
+  <machine Id="FTDC2CAS311" Name="FTDC2CAS311" ExternalIP="10.107.200.137" Role="CAS Server Internal 1">
+    <!--<ServerRole Include="IISSetup.CIS" Description="IIS Setup" Groups="SDM,CASC" />-->
+    <ServerRole Description="SDM Portal"  Include="SDM.Portal" />
+
+    <!-- TJS Api -->
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSApi" />
+    <ServerRole Include="FasterData.TJSApi.Service.Oyster" Config="DevInt2_Oyster"/>
+    <ServerRole Include="FasterData.TJSApi.Service.CPC" />
+  </machine>
+  <machine Id="FTDC2CAS312" Name="FTDC2CAS312" ExternalIP="10.107.200.138" Role="CAS Server Internal 2">
+    <!--<ServerRole Include="IISSetup.CIS" Description="IIS Setup" Groups="SDM,CASC" />-->
+    <ServerRole Description="SDM Portal"  Include="SDM.Portal" />
+
+    <!-- TJS Api -->
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSApi" />
+    <ServerRole Include="FasterData.TJSApi.Service.Oyster" Config="DevInt2_Oyster"/>
+    <ServerRole Include="FasterData.TJSApi.Service.CPC" />
+  </machine>
+
+  <machine Id="FTDC2PAI345" Name="FTDC2PAI345" ExternalIP="10.107.200.171" Role="Pare Importer 1">
+    <!-- Pare Command Line Exe's -->
+    <ServerRole Description="PareFullStatusList.Application.Installer" Include="PareFullStatusList.Application.Installer" />
+    <ServerRole Description="PareStatusListMaintenance.Application.Installer" Include="PareStatusListMaintenance.Application.Installer" />
+    <ServerRole Description="PareVerifyTapData.Application.Installer" Include="PareVerifyTapData.Application.Installer" />
+    <ServerRole Description="PareAuthorisationGateway.Util.Installer" Include="PareAuthorisationGateway.Util.Installer" />
+    <ServerRole Description="PareChargeCalculationPersist.Application.Installer" Include="PareChargeCalculationPersist.Application.Installer" />
+    <ServerRole Description="ParePostDeployment.Util.Installer" Include="ParePostDeployment.Util.Installer" />
+
+    <ServerRole Description="TJS Distributor File Purger Install" Include="TJSDistributor.FilePurger.Install" />
+    <ServerRole Description="TJS Distributor File Purge Scheduler" Include="TJSDistributor.FilePurger.ScheduledTask.Create" />
+  </machine>
+
+  <!-- PARE Service Cluster -->
+  <machine Id="FTDC2PAR347" Name="FTDC2PAR347" ExternalIP="10.107.200.173" Role="PARE Cluster Server 1">
+    <ServerRole Description="PareAuthorisationGatewayServiceInstaller" Include="PareAuthorisationGatewayServiceInstaller" />
+    <ServerRole Description="PareRefundFileServiceInstaller" Include="PareRefundFileServiceInstaller" />
+    <ServerRole Description="PareRevenueFileService" Include="PareRevenueFileService" />
+    <ServerRole Description="PareSettlementValidationResultServiceInstaller" Include="PareSettlementValidationResultServiceInstaller" />
+    <ServerRole Description="PareStatusListProcessorInstaller" Include="PareStatusListProcessorInstaller" />
+    <ServerRole Description="PareTapFileServiceInstaller" Include="PareTapFileServiceInstaller" />
+    <ServerRole Description="PareTravelDayRevisionService" Include="PareTravelDayRevisionService" />
+    <ServerRole Description="SettlementFileResponseServiceInstaller" Include="SettlementFileResponseServiceInstaller" />
+    <ServerRole Description="PareDirectPaymentConfirmationServiceInstaller" Include="PareDirectPaymentConfirmationServiceInstaller" />
+    <ServerRole Description="PareRiskEngineInstaller" Include="PareRiskEngineInstaller" />
+    <ServerRole Description="PareChargeCalculationInstaller" Include="PareChargeCalculationInstaller" />
+  </machine>
+  <machine Id="FTDC2PAR348" Name="FTDC2PAR348" ExternalIP="10.107.200.174" Role="PARE Cluster Server 2">
+    <ServerRole Description="PareAuthorisationGatewayServiceInstaller" Include="PareAuthorisationGatewayServiceInstaller" />
+    <ServerRole Description="PareRefundFileServiceInstaller" Include="PareRefundFileServiceInstaller" />
+    <ServerRole Description="PareRevenueFileService" Include="PareRevenueFileService" />
+    <ServerRole Description="PareSettlementValidationResultServiceInstaller" Include="PareSettlementValidationResultServiceInstaller" />
+    <ServerRole Description="PareStatusListProcessorInstaller" Include="PareStatusListProcessorInstaller" />
+    <ServerRole Description="PareTapFileServiceInstaller" Include="PareTapFileServiceInstaller" />
+    <ServerRole Description="PareTravelDayRevisionService" Include="PareTravelDayRevisionService" />
+    <ServerRole Description="SettlementFileResponseServiceInstaller" Include="SettlementFileResponseServiceInstaller" />
+    <ServerRole Description="PareDirectPaymentConfirmationServiceInstaller" Include="PareDirectPaymentConfirmationServiceInstaller" />
+    <ServerRole Description="PareRiskEngineInstaller" Include="PareRiskEngineInstaller" />
+    <ServerRole Description="PareChargeCalculationInstaller" Include="PareChargeCalculationInstaller" />
+  </machine>
+  <machine Id="FTDC2PAR349" Name="FTDC2PAR349" ExternalIP="10.107.200.175" Role="PARE Cluster Server 3">
+    <ServerRole Description="PareAuthorisationGatewayServiceInstaller" Include="PareAuthorisationGatewayServiceInstaller" />
+    <ServerRole Description="PareRefundFileServiceInstaller" Include="PareRefundFileServiceInstaller" />
+    <ServerRole Description="PareRevenueFileService" Include="PareRevenueFileService" />
+    <ServerRole Description="PareSettlementValidationResultServiceInstaller" Include="PareSettlementValidationResultServiceInstaller" />
+    <ServerRole Description="PareStatusListProcessorInstaller" Include="PareStatusListProcessorInstaller" />
+    <ServerRole Description="PareTapFileServiceInstaller" Include="PareTapFileServiceInstaller" />
+    <ServerRole Description="PareTravelDayRevisionService" Include="PareTravelDayRevisionService" />
+    <ServerRole Description="SettlementFileResponseServiceInstaller" Include="SettlementFileResponseServiceInstaller" />
+    <ServerRole Description="PareDirectPaymentConfirmationServiceInstaller" Include="PareDirectPaymentConfirmationServiceInstaller" />
+    <ServerRole Description="PareRiskEngineInstaller" Include="PareRiskEngineInstaller" />
+    <ServerRole Description="PareChargeCalculationInstaller" Include="PareChargeCalculationInstaller" />
+  </machine>
+  <machine Id="FTDC2PAR350" Name="FTDC2PAR350" ExternalIP="10.107.200.176" Role="PARE Cluster Server 4">
+    <ServerRole Description="PareAuthorisationGatewayServiceInstaller" Include="PareAuthorisationGatewayServiceInstaller" />
+    <ServerRole Description="PareRefundFileServiceInstaller" Include="PareRefundFileServiceInstaller" />
+    <ServerRole Description="PareRevenueFileService" Include="PareRevenueFileService" />
+    <ServerRole Description="PareSettlementValidationResultServiceInstaller" Include="PareSettlementValidationResultServiceInstaller" />
+    <ServerRole Description="PareStatusListProcessorInstaller" Include="PareStatusListProcessorInstaller" />
+    <ServerRole Description="PareTapFileServiceInstaller" Include="PareTapFileServiceInstaller" />
+    <ServerRole Description="PareTravelDayRevisionService" Include="PareTravelDayRevisionService" />
+    <ServerRole Description="SettlementFileResponseServiceInstaller" Include="SettlementFileResponseServiceInstaller" />
+    <ServerRole Description="PareDirectPaymentConfirmationServiceInstaller" Include="PareDirectPaymentConfirmationServiceInstaller" />
+    <ServerRole Description="PareRiskEngineInstaller" Include="PareRiskEngineInstaller" />
+    <ServerRole Description="PareChargeCalculationInstaller" Include="PareChargeCalculationInstaller" />
+  </machine>
+  <machine Id="FTDC2PAR351" Name="FTDC2PAR351" ExternalIP="10.107.200.177" Role="PARE Cluster Server 5">
+    <ServerRole Description="PareAuthorisationGatewayServiceInstaller" Include="PareAuthorisationGatewayServiceInstaller" />
+    <ServerRole Description="PareRefundFileServiceInstaller" Include="PareRefundFileServiceInstaller" />
+    <ServerRole Description="PareRevenueFileService" Include="PareRevenueFileService" />
+    <ServerRole Description="PareSettlementValidationResultServiceInstaller" Include="PareSettlementValidationResultServiceInstaller" />
+    <ServerRole Description="PareStatusListProcessorInstaller" Include="PareStatusListProcessorInstaller" />
+    <ServerRole Description="PareTapFileServiceInstaller" Include="PareTapFileServiceInstaller" />
+    <ServerRole Description="PareTravelDayRevisionService" Include="PareTravelDayRevisionService" />
+    <ServerRole Description="SettlementFileResponseServiceInstaller" Include="SettlementFileResponseServiceInstaller" />
+    <ServerRole Description="PareDirectPaymentConfirmationServiceInstaller" Include="PareDirectPaymentConfirmationServiceInstaller" />
+    <ServerRole Description="PareRiskEngineInstaller" Include="PareRiskEngineInstaller" />
+    <ServerRole Description="PareChargeCalculationInstaller" Include="PareChargeCalculationInstaller" />
+  </machine>
+
+  <machine Id="FTDC2FAC318" Name="FTDC2FAC318" ExternalIP="10.107.200.144" Role="FAE Controller 1">
+    <ServerRole Description="FAE Controller" Include="FAE.Engine.Controller.CPC.Stateless" />
+    <ServerRole Description="FAE Token Journey Summary folders" Include="FAE.TokenJourneySummary.Folders" />
+    <ServerRole Description="FAE Engine Controller Util" Include="FAE.EngineControllerUtil.Install" />
+    <ServerRole Description="FAE Travel Day Revision Exporter" Include="FAE.TravelDayRevisonExporter.Install" />
+    <ServerRole Description="FAE EOD Task Schedule Installer" Include="FAE.EOD.ScheduledTask.Create" />
+    <!-- <ServerRole Description="FAE Disruptr" Include="FAE.Engine.Disruptr" Action="Uninstall" DisableTests="true" /> -->
+    <ServerRole Description="FAE Disruptr" Include="FAE.Engine.Disruptr" />
+  </machine>
+
+  <machine Id="FTDC2FAE320" Name="FTDC2FAE320" ExternalIP="10.107.200.146" Role="FAE Engine 1">
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateless.CPC.Stateless" />
+  </machine>
+  <machine Id="FTDC2FAE321" Name="FTDC2FAE321" ExternalIP="10.107.200.147" Role="FAE Engine 2">
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateless" />
+  </machine>
+  <machine Id="FTDC2FAE322" Name="FTDC2FAE322" ExternalIP="10.107.200.148" Role="FAE Engine 3">
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateless" />
+  </machine>
+  <machine Id="FTDC2FAE323" Name="FTDC2FAE323" ExternalIP="10.107.200.149" Role="FAE Engine 4">
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateless" />
+  </machine>
+  <machine Id="FTDC2FAE324" Name="FTDC2FAE324" ExternalIP="10.107.200.150" Role="FAE Engine 5">
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateless" />
+  </machine>
+  <machine Id="FTDC2FAE325" Name="FTDC2FAE325" ExternalIP="10.107.200.151" Role="FAE Engine 6">
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateless" />
+  </machine>
+  <machine Id="FTDC2FAE326" Name="FTDC2FAE326" ExternalIP="10.107.200.152" Role="FAE Engine 7">
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateless" />
+  </machine>
+  <machine Id="FTDC2FAE327" Name="FTDC2FAE327" ExternalIP="10.107.200.153" Role="FAE Engine 8">
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateless" />
+  </machine>
+  <machine Id="FTDC2FAE328" Name="FTDC2FAE328" ExternalIP="10.107.200.154" Role="FAE Engine 9">
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateless" />
+  </machine>
+  <machine Id="FTDC2FAE329" Name="FTDC2FAE329" ExternalIP="10.107.200.155" Role="FAE Engine 10">
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateless" />
+  </machine>
+  <machine Id="FTDC2FAE330" Name="FTDC2FAE330" ExternalIP="10.107.200.156" Role="FAE Engine 11">
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateless" />
+  </machine>
+  <machine Id="FTDC2FAE331" Name="FTDC2FAE331" ExternalIP="10.107.200.157" Role="FAE Engine 12">
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateless" />
+  </machine>
+  <machine Id="FTDC2FAE332" Name="FTDC2FAE332" ExternalIP="10.107.200.158" Role="FAE Engine 13">
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateless" />
+  </machine>
+  <machine Id="FTDC2FAE333" Name="FTDC2FAE333" ExternalIP="10.107.200.159" Role="FAE Engine 14">
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateless" />
+  </machine>
+  <machine Id="FTDC2FAE334" Name="FTDC2FAE334" ExternalIP="10.107.200.160" Role="FAE Engine 15">
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateless" />
+  </machine>
+  <machine Id="FTDC2FAE335" Name="FTDC2FAE335" ExternalIP="10.107.200.161" Role="FAE Engine 16">
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateless" />
+  </machine>
+  <machine Id="FTDC2FAE336" Name="FTDC2FAE336" ExternalIP="10.107.200.162" Role="FAE Engine 17">
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateless" />
+  </machine>
+  <machine Id="FTDC2FAE337" Name="FTDC2FAE337" ExternalIP="10.107.200.163" Role="FAE Engine 18">
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateless" />
+  </machine>
+
+  <machine Id="FTDC2FTM338" Name="FTDC2FTM338"  ExternalIP="10.107.200.164" Role="File Transfer Manager Server">
+    <ServerRole Description="FTM EventLog Entry" Include="FTP.EventLog.For.Internal.FTM" />
+    <ServerRole Description="FTM Service" Include="FTM.Service" Config="DevInt2" />
+  </machine>
+  <machine Id="FTDC2SAS354" Name="FTDC2SAS354"  ExternalIP="10.107.200.180" Role="Notifications Send Mail Server">
+    <ServerRole Description="SendEmail Notifications File System" Include="SendEmail.FileSystem" />
+    <ServerRole Description="Send Email Installer" Include="SendEmail.Installer" />
+
+    <!--Notifications File Processor and Schedule Tasks-->
+    <ServerRole Description="Notifications File Processor File System" Include="Notifications.FileProcessor.FileSystem" />
+    <ServerRole  Description="Notifications File Processor" Include="Notifications.FileProcessor.Installer" />
+
+    <ServerRole Include="PaymentCardExpiryExtractTool.Install" />
+    <ServerRole Include="PaymentCardExpiryExtractTool.ScheduledTask.Create" />
+  </machine>
+
+  <machine Id="FTDC2SDM358" Name="FTDC2SDM358"  ExternalIP="10.107.200.184" >
+    <!-- SDM Controller service -->
+    <ServerRole  Description="CSC.SDM.ControllerService" Include="CSC.SDM.ControllerService.Installer" />
+  </machine>
+
+  <!-- MasterData MJT Deployment Roles -->
+  <machine Id="FTDC2MDS340" Name="FTDC2MDS340" ExternalIP="10.107.200.166" Role="MasterData Application 1">
+    <PreDeployRole Include="MasterData.MJTService.Service.Stop" />
+    <PreDeployRole Include="MasterData.Fares.Service.Stop" />
+    <ServerRole Description="Copy MJT Files"  Include="MasterData.MJTService.Assets.Last13Weeks" />
+    <ServerRole Description="Copy Fares Files" Include="MasterData.FareService.Assets.Last13Weeks" />
+    <ServerRole Description="MasterData MJT service" Include="MasterData.MJTService.Install" />
+    <ServerRole Description="MasterData Fares service" Include="MasterData.FaresService.Install" />
+  </machine>
+  <machine Id="FTDC2MDS341" Name="FTDC2MDS341" ExternalIP="10.107.200.167" Role="MasterData Application 2">
+    <PreDeployRole Include="MasterData.MJTService.Service.Stop" />
+    <PreDeployRole Include="MasterData.Fares.Service.Stop" />
+    <ServerRole Description="Copy MJT Files"  Include="MasterData.MJTService.Assets.Last13Weeks" />
+    <ServerRole Description="Copy Fares Files" Include="MasterData.FareService.Assets.Last13Weeks" />
+    <ServerRole Description="MasterData MJT service" Include="MasterData.MJTService.Install" />
+    <ServerRole Description="MasterData Fares service" Include="MasterData.FaresService.Install" />
+  </machine>
+  <machine Id="FTDC2MDS342" Name="FTDC2MDS342" ExternalIP="10.107.200.168" Role="MasterData Application 3" >
+    <PreDeployRole Include="MasterData.MJTService.Service.Stop" />
+    <PreDeployRole Include="MasterData.Fares.Service.Stop" />
+    <ServerRole Description="Copy MJT Files"  Include="MasterData.MJTService.Assets.Last13Weeks" />
+    <ServerRole Description="Copy Fares Files" Include="MasterData.FareService.Assets.Last13Weeks" />
+    <ServerRole Description="MasterData MJT service" Include="MasterData.MJTService.Install" />
+    <ServerRole Description="MasterData Fares service" Include="MasterData.FaresService.Install" />
+  </machine>
+  <machine Id="FTDC2MDS343" Name="FTDC2MDS343" ExternalIP="10.107.200.169" Role="MasterData Application 4" >
+    <PreDeployRole Include="MasterData.MJTService.Service.Stop" />
+    <PreDeployRole Include="MasterData.Fares.Service.Stop" />
+    <ServerRole Description="Copy MJT Files"  Include="MasterData.MJTService.Assets.Last13Weeks" />
+    <ServerRole Description="Copy Fares Files" Include="MasterData.FareService.Assets.Last13Weeks" />
+    <ServerRole Description="MasterData MJT service" Include="MasterData.MJTService.Install" />
+    <ServerRole Description="MasterData Fares service" Include="MasterData.FaresService.Install" />
+  </machine>
+  <machine Id="FTDC2MDS344" Name="FTDC2MDS344" ExternalIP="10.107.200.170" Role="MasterData Application 5" >
+    <PreDeployRole Include="MasterData.MJTService.Service.Stop" />
+    <PreDeployRole Include="MasterData.Fares.Service.Stop" />
+    <ServerRole Description="Copy MJT Files"  Include="MasterData.MJTService.Assets.Last13Weeks" />
+    <ServerRole Description="Copy Fares Files" Include="MasterData.FareService.Assets.Last13Weeks" />
+    <ServerRole Description="MasterData MJT service" Include="MasterData.MJTService.Install" />
+    <ServerRole Description="MasterData Fares service" Include="MasterData.FaresService.Install" />
+  </machine>
+
+  <!--OyBO Deployment Roles-->
+  <!--OTFP Server-->
+  <machine Id="FTDC2OTP366" Name="FTDC2OTP366" ExternalIP="10.107.200.217">
+    <ServerRole Description="OyBO File System" Include="OyBO.FileSystem" />
+    <ServerRole Description="Create FileShare For OyBO Services" Include="OyBO.FileShare"/>
+
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.OTFP" />
+
+    <ServerRole Description="Stop OyBO Services" Include="StopOyBOServices" />
+    <ServerRole Description="Oyster Back Office TFP Service" Include="OyBO.TFP.Install" />
+
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.FileCleanup" />
+    <ServerRole Description="Oyster Back Office File Cleanup Console App Install" Include="OyBO.FileCleanup.Install" />
+    <ServerRole Description="Oyster Back Office File Cleanup Scheduler" Include="OyBO.FileCleanup.ScheduledTask.Create" />
+
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.AzureMobileUploader" />
+    <ServerRole Description="Stop OyBO AzureMobileUploader Service" Include="StopOyBOAzureMobileUploaderService" />
+    <ServerRole Description="Oyster Back Office TFP Azure Mobile Uploader Service" Include="OyBO.AzureMobileUploader.Install" />
+  </machine>
+
+  <!--SFTP Server -->
+  <machine Id="FTDC2FTP369" Name="FTDC2FTP369"  ExternalIP="10.107.200.218" >
+    <ServerRole Description="FTM OYBO File System" Include="OYBO.FTM.Filesystem" />
+  </machine>
+
+  <!--FTM Server -->
+  <machine Id="FTDC2FTM368" Name="FTDC2FTM368"  ExternalIP="10.107.200.215">
+    <PreDeployRole Description="Stop FTM Service" Include="StopFTMService" />
+    <ServerRole Description="FTM EventLog Entry" Include="FTP.EventLog.For.Internal.FTM" />
+    <ServerRole Description="FTM Service (FTP-OyBo)" Include="FTM.Service" Config="DevInt_OYBO" />
+  </machine>
+
+  <!--OCAE Server -->
+  <machine Id="FTDC2OCA370" Name="FTDC2OCA370"  ExternalIP="10.107.200.121">
+    <PreDeployRole Description="Stop Ocae Service" Include="StopOcaeService" />
+    <PreDeployRole Description="Stop Refunds Service" Include="StopRefundsService" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.OCAE" />
+    <ServerRole Description="Ocae File System" Include="Ocae.FileSystem" />
+    <ServerRole Description="Create FileShare For Ocae Service" Include="Ocae.FileShare"/>
+
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.Refunds" />
+    <ServerRole Description="Refunds File System" Include="Refunds.FileSystem" />
+    <ServerRole Description="Create FileShare For Refunds Service" Include="Refunds.FileShare"/>
+    <!--Uninstall role was added because of versioning issues with NuGet packages which resulted in dlls being deleted but not replaced. A uninstall / fresh install solves this.-->
+    <!--When each component is built in it's own directory on the build server, dll version clashes won't happen, so this role can be removed.-->
+    <ServerRole Description="OyBO Refunds Service Install" Include="OyBO.Refunds.Install" Action="Reinstall"/>
+    <ServerRole Description="Oyster Charge Adjustment Engine Service Install" Include="OyBO.Ocae.Install"/>
+  </machine>
+
+  <!-- TJS Distributor High Memory CLuster -->
+  <machine Id="FTDC2HMEMC01N01" Name="FTDC2HMEMC01N01" ExternalIP="" Role="TJS Distributor High Memory Cluster 1 Node 1">
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSDistributor" />
+    <ServerRole Description="TJS Distributor Message Broker service" Include="TJSDistributor.JulianService.Install" Config="DevInt2_Oyster"/>
+    <ServerRole Description="TJS Distributor Message Broker CPC service" Include="TJSDistributor.JulianService.CPC.Install" />
+    <ServerRole Description="TJS Distributor TJSHExtractor service" Include="TJSDistributor.TJSHExtractor.Install" Config="DevInt2_Oyster"/>
+    <ServerRole Description="TJS Distributor TJSHExtractor CPC service" Include="TJSDistributor.TJSHExtractor.CPC.Install" />
+  </machine>
+  <machine Id="FTDC2HMEMC01N02" Name="FTDC2HMEMC01N02" ExternalIP="" Role="TJS Distributor High Memory Cluster 1 Node 2">
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSDistributor" />
+    <ServerRole Description="TJS Distributor Message Broker service" Include="TJSDistributor.JulianService.Install" Config="DevInt2_Oyster"/>
+    <ServerRole Description="TJS Distributor Message Broker CPC service" Include="TJSDistributor.JulianService.CPC.Install" />
+    <ServerRole Description="TJS Distributor TJSHExtractor service" Include="TJSDistributor.TJSHExtractor.Install" Config="DevInt2_Oyster"/>
+    <ServerRole Description="TJS Distributor TJSHExtractor CPC service" Include="TJSDistributor.TJSHExtractor.CPC.Install" />
+  </machine>
+  <machine Id="FTDC2HMEMC01N03" Name="FTDC2HMEMC01N03" ExternalIP="" Role="TJS Distributor High Memory Cluster 1 Node 3">
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSDistributor" />
+    <ServerRole Description="TJS Distributor Message Broker service" Include="TJSDistributor.JulianService.Install" Config="DevInt2_Oyster"/>
+    <ServerRole Description="TJS Distributor Message Broker CPC service" Include="TJSDistributor.JulianService.CPC.Install" />
+    <ServerRole Description="TJS Distributor TJSHExtractor service" Include="TJSDistributor.TJSHExtractor.Install" Config="DevInt2_Oyster"/>
+    <ServerRole Description="TJS Distributor TJSHExtractor CPC service" Include="TJSDistributor.TJSHExtractor.CPC.Install" />
+  </machine>
+</configuration>
+

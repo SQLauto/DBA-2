@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+  <!-- Base Data -->
+  <parameter name="BaseData_DatabaseConnectionString" value="Data Source=tdc2faec03V01\VINS001;Initial Catalog=BaseData_Publish_FAE;integrated security=SSPI;Connect Timeout=200;"/>    
+  <parameter name="PARE_DatabaseConnectionString" value="Data Source=TDC2FAEC03V02\VINS002;Initial Catalog=PaRE;Persist Security Info=True;Integrated Security=SSPI;"/>
+  
+  <parameter name="TJSDatabaseName" value="TJS"/>
+</parameters>
+
+  
+  
+
+  

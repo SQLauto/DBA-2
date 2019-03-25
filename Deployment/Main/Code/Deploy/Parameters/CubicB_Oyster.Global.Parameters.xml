@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+  <!-- Base Data -->
+  <parameter name="BaseData_DatabaseConnectionString" value="Data Source=FTDC5SQL001;Initial Catalog=BaseData_Publish_v28_0;Persist Security Info=True;Integrated Security=SSPI;Connect Timeout=200;"/>
+  <parameter name="PARE_DatabaseConnectionString" value="Data Source=FBDC5SQL001.btest.fpsstagingint.local\Inst2;Initial Catalog=PARE;Persist Security Info=True;Integrated Security=SSPI"/>
+  
+  <parameter name="TJSDatabaseName" value="TJS"/>
+</parameters>

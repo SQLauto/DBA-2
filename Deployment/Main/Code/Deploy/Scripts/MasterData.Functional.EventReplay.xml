@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="MasterData.Functional.EventReplay" Environment="TestRig"  Config="TestRig.MasterData" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonMJTDeltasRole.xml</CommonRoleFile>
+
+  <machine Id="3" Name="TS-CAS1" ExternalIP="">
+    <ServerRole Include="IISSetup.CAS" Description="Setting up IIS for Deployment" Groups="MasterData" />
+    <ServerRole Description="MasterData Website" Include="MasterData.Website" />
+    
+    <PostDeployRole Description="Start MasterData Website" Include="MasterData.Website.Start" />
+  </machine>
+  <machine Id="2" Name="TS-CIS1" ExternalIP="">
+    <ServerRole Include="IISSetup.CIS" Description="Setting up IIS for Deployment" Groups="MasterData" />
+    <ServerRole  Description="FTP.EventLog.For.MasterData.WebApi" Include="FTP.EventLog.For.MasterData.WebApi" />
+    <ServerRole Description="MasterData Api" Include="MasterData.Api" />
+    
+    <PostDeployRole Description="Start MasterData API" Include="MasterData.Api.Start" />
+  </machine>
+  <machine Id="5" Name="TS-SAS1" ExternalIP="">
+    <PreDeployRole Include="MasterData.MJTService.Service.Stop" />
+    <PreDeployRole Include="MasterData.Fares.Service.Stop" />
+    
+    <ServerRole Description="Copy MJT Files"  Include="MasterData.MJTService.Assets.Last13Weeks" />
+    <ServerRole Description="Copy Fares Files" Include="MasterData.FareService.Assets.Last13Weeks" />
+    <ServerRole Description="MasterData MJT service" Include="MasterData.MJTService.Install" />
+    <ServerRole Description="MasterData Fares service" Include="MasterData.FaresService.Install" />
+  </machine>
+  
+  <machine Id="1" Name="TS-DB1" ExternalIP="" DeploymentMachine="true">
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices1" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices2" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices3" />
+    <PreDeployRole Description="CheckSqlAgentServiceInst1" Include="CheckSqlAgentServiceInst1" />
+	  <PreDeployRole Description="CheckSqlAgentServiceInst2" Include="CheckSqlAgentServiceInst2" />
+
+    <!--<ServerRole Description="MasterData Event Replay Tools" Include="MasterData.EventReplay.Tools" />-->
+    <ServerRole Description="MasterData Event Replay Scripts" Include="MasterData.EventReplay.Scripts" />
+    <ServerRole Description="Event replay tool installer" Include="MasterData.EventReplayTool.Install" />
+	
+    <ServerRole Description="MasterData deploy assets installer" Include="MasterData.DeployAssets.Install" />
+
+    <!-- Copy MasterData backup Files -->
+    
+    <DatabaseRole Description="MasterData Logging Database deployment" Include="MasterData.DB.Logging" DatabaseInstance="Inst2" />
+    
+    <DatabaseRole Description="System Deployment Schema" Include="System.Deployment.Schema" DatabaseInstance="INST3" />
+    <DatabaseRole Description="Dba.System" Include="Dba.System" DatabaseInstance="INST3" />
+    
+    <DatabaseRole Description="MasterData.ProjectionStore.CreateEmptyDb" Include="MasterData.ProjectionStore.CreateEmptyDb" DatabaseInstance="INST3" />
+    
+  </machine>
+</configuration>

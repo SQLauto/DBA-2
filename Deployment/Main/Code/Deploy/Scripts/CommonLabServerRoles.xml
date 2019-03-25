@@ -1,0 +1,844 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/CommonRoles">
+	<CommonRoles>
+		<!-- CSC Roles-->
+	  <ServerRole Name="TFL.WebDeploy" Description="SDM Portal"  Include="SDM.Portal.Rig" Groups="SDM">
+	    <WebDeploy Name="SDM.Portal" RegistryKey="Software\TfL\SDM\SDMPortal" AssemblyToVersionFrom="CSC.SDM.Domain.dll">
+	      <AppPool>
+	        <Name>SDMPortal</Name>
+	        <ServiceAccount>SDMServiceAccount</ServiceAccount>
+	        <IdleTimeout>0</IdleTimeout>
+	        <RecycleLogEvent>Time,Requests,Schedule,Memory,IsapiUnhealthy,ConfigChange,PrivateMemory</RecycleLogEvent>
+	      </AppPool>
+	      <Site>
+	        <Name>SDM.Portal</Name>
+	        <Port>8081</Port>
+	        <PhysicalPath>D:\TFL\SDM\SDMPortal</PhysicalPath>
+	      </Site>
+	      <Package>
+	        <Name>CSC.SDM.Web</Name>
+	      </Package>
+	      <TestInfo>
+	        <EndPoint/>
+	      </TestInfo>
+	    </WebDeploy>
+	  </ServerRole>
+
+	  <ServerRole Name="TFL.WebDeploy" Description="CACC Portal" Include="CACC.Portal" Groups="CASC">
+			<WebDeploy Name="CSC Web" RegistryKey="Software\TfL\CASC\CustomerPortal" AssemblyToVersionFrom="TfL.CSC.Web.dll">
+				<AppPool>
+					<Name>CSCPortal</Name>
+					<ServiceAccount>NetworkService</ServiceAccount>
+					<IdleTimeout>0</IdleTimeout>
+					<RecycleLogEvent>Time,Requests,Schedule,Memory,IsapiUnhealthy,ConfigChange,PrivateMemory</RecycleLogEvent>
+				</AppPool>
+				<Site>
+					<Name>Default Web Site</Name>
+					<Port>80</Port>
+					<PhysicalPath>D:\TFL\CACC\CSCPortal</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>CSC Web</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint/>
+					<!--Just browse the root-->
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.WebDeploy" Description="CACC Selenium Fixture (under main web site)" Include="CACC.Selenium.Main" Groups="CASC">
+			<WebDeploy Name="CSC.Web.Selenium.Fixture" RegistryKey="Software\TfL\CASC" AssemblyToVersionFrom="CSC.Selenium.Fixture.dll">
+				<AppPool>
+					<Name>Default Web Site</Name>
+					<ServiceAccount>ApplicationPoolIdentity</ServiceAccount>
+				</AppPool>
+				<Site>
+					<Name>Default Web Site</Name>
+					<Port>80</Port>
+					<PhysicalPath>D:\TFL\CACC\CSCPortal</PhysicalPath>
+					<Application>
+						<Name>Selenium</Name>
+						<PhysicalPath>D:\TFL\CACC\CSCPortal\Selenium</PhysicalPath>
+					</Application>
+				</Site>
+				<Package>
+					<Name>CSC.Selenium.Fixture</Name>
+				</Package>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.WebDeploy" Description="CACC Selenium Fixture (under support web site)" Include="CACC.Selenium.Support" Groups="CASC">
+			<WebDeploy Name="CSC.Support.Selenium.Fixture" RegistryKey="Software\TfL\CASC" AssemblyToVersionFrom="CSC.Selenium.Fixture.dll">
+				<AppPool>
+					<Name>CSCSupport</Name>
+					<ServiceAccount>ApplicationPoolIdentity</ServiceAccount>
+				</AppPool>
+				<Site>
+					<Name>CSCSupport</Name>
+					<Port>8080</Port>
+					<PhysicalPath>D:\tfl\CACC\CSCSupport</PhysicalPath>
+					<Application>
+						<Name>Selenium</Name>
+						<PhysicalPath>D:\tfl\CACC\CSCSupport\Selenium</PhysicalPath>
+					</Application>
+				</Site>
+				<Package>
+					<Name>CSC.Selenium.Fixture</Name>
+				</Package>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.WebDeploy" Description="CACC Testing Site" Include="CACC.Testing" Groups="CASC">
+			<WebDeploy Name="CSC Web Testing" RegistryKey="Software\TfL\CASC">
+				<AppPool>
+					<Name>TestingSitePool</Name>
+					<ServiceAccount>ApplicationPoolIdentity</ServiceAccount>
+				</AppPool>
+				<Site>
+					<Name>TestingSite</Name>
+					<Port>8181</Port>
+					<PhysicalPath>D:\TFL\CACC\Logging</PhysicalPath>
+					<DirectoryBrowsingEnabled>true</DirectoryBrowsingEnabled>
+					<VirtualDirectory>
+						<Name>Email</Name>
+						<PhysicalPath>D:\TFL\CACC\EmailQueue</PhysicalPath>
+					</VirtualDirectory>
+				</Site>
+				<TestInfo>
+					<EndPoint>email</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.WebDeploy" Description="SDM Mock FaeApi"  Include="SDM.Mock.FaeApi" Groups="SDM">
+			<WebDeploy Name="SDM.Mock.FaeApi" RegistryKey="Software\TfL\SDM\MockFaeApi"  AssemblyToVersionFrom="CSC.SDM.MockFaeApi.dll">
+				<AppPool>
+					<Name>SDM</Name>
+					<ServiceAccount>SDMServiceAccount</ServiceAccount>
+				</AppPool>
+				<Site>
+					<Name>SDM.Mock.FaeApi</Name>
+					<Port>9191</Port>
+					<PhysicalPath>D:\tfl\SDM\MockFaeApi</PhysicalPath>
+				</Site>
+				<Package>
+					<Name>CSC.SDM.MockFaeApi</Name>
+				</Package>
+				<TestInfo>
+					<EndPoint>IsAlive/Web</EndPoint>
+				</TestInfo>
+			</WebDeploy>
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="CACC File System" Include="CACC.FileSystem" Groups="CASC">
+			<CreateFolder TargetPath="\D$\TFL\CACC\emailqueue" />
+			<CreateFolder TargetPath="\D$\TFL\CACC\Logging" />
+		</ServerRole>
+
+		<!--RSP roles -->
+		<ServerRole Name="TFL.SsisDeploy" Description="RSP SSIS Package" Include="RSP.RSPSSIS.Inst1" Groups="RSP,Database">
+			<SsisDeploy Name="RSPSSIS">
+				<SSISEnvironment>RspAllocation</SSISEnvironment>
+				<SSISFolder>RSP</SSISFolder>
+				<DatabaseInstance>Inst1</DatabaseInstance>
+				<DeployMode>WIZ</DeployMode>
+				<Project>
+					<Name>RSPSSIS</Name>
+					<SsisFile>RSPSSIS.ispac</SsisFile>
+					<Type>ISPAC</Type>
+					<Packages>
+						<Package Name="RSP.dtsx" />
+					</Packages>
+					<parameters>
+						<parameter name="DestinationFolderPath" value="D:\TFL\RSP\Final\" type="string" description="Final folder location." />
+						<parameter name="ReportingRWConnectionString" value="$(RSP_ReportingRWDatabaseConnectionString)" type="string" description="Reporting database" />
+						<parameter name="FAEConnectionString" value="$(RSP_FAEDatabaseConnectionString)" type="string" description="FAE database" />
+						<parameter name="TempFolderPath" value="D:\TFL\RSP\Temp\" type="string" description="Email FilePath Location - for FileSystemEmailGateway only" />
+					</parameters>
+				</Project>
+				<TestInfo SqlUserName="tfsbuild" SqlPassword="LMTF$Bu1ld" />
+			</SsisDeploy>
+		</ServerRole>
+
+		<!--Projection Store File Systems -->
+    <!--Cubic Environments-->
+		<ServerRole Name="TFL.FileSystem" Description="MasterData.ProjectionStore file system" Groups="Always" Include="MasterData.ProjectionStoreRestore.FileSystem.CubicA">
+			<CreateFolder TargetPath="\\FADC5SQL001.atest.fpsstagingint.local\G$\Program Files\Microsoft SQL Server\MSSQL11.INST1\MSSQL\Backup\MasterData\" IsAbsolutePath="true" />
+			<CopyItem Source="DatabaseScripts\MasterData_ProjectionStore.bak" Target="\\FADC5SQL001.atest.fpsstagingint.local\G$\Program Files\Microsoft SQL Server\MSSQL11.INST1\MSSQL\Backup\MasterData\MasterData_ProjectionStore.bak" Filter="*" Recurse="false" Replace="true" IsAbsolutePath="true" />
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileSystem" Description="MasterData.ProjectionStore file system" Groups="Always" Include="MasterData.ProjectionStoreRestore.FileSystem.CubicB">
+			<CreateFolder TargetPath="\\FBDC5SQL001.btest.fpsstagingint.local\G$\Program Files\Microsoft SQL Server\MSSQL11.INST1\MSSQL\Backup\MasterData\" IsAbsolutePath="true" />
+			<CopyItem Source="DatabaseScripts\MasterData_ProjectionStore.bak" Target="\\FBDC5SQL001.btest.fpsstagingint.local\G$\Program Files\Microsoft SQL Server\MSSQL11.INST1\MSSQL\Backup\MasterData\MasterData_ProjectionStore.bak" Filter="*" Recurse="false" Replace="true" IsAbsolutePath="true" />
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileSystem" Description="MasterData.ProjectionStore file system" Groups="Always" Include="MasterData.ProjectionStoreRestore.FileSystem.CubicC">
+			<CreateFolder TargetPath="FCDC5SQL001.ctest.fpsstagingint.local\G$\Program Files\Microsoft SQL Server\MSSQL11.INST1\MSSQL\Backup\MasterData\" IsAbsolutePath="true" />
+			<CopyItem Source="DatabaseScripts\MasterData_ProjectionStore.bak" Target="\\FCDC5SQL001.ctest.fpsstagingint.local\G$\Program Files\Microsoft SQL Server\MSSQL11.INST1\MSSQL\Backup\MasterData\MasterData_ProjectionStore.bak" Filter="*" Recurse="false" Replace="true" IsAbsolutePath="true" />
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileSystem" Description="MasterData.ProjectionStore file system" Groups="Always" Include="MasterData.ProjectionStoreRestore.FileSystem.CubicD">
+			<CreateFolder TargetPath="\\FDDC5SQL001.dtest.fpsstagingint.local\G$\Program Files\Microsoft SQL Server\MSSQL11.INST1\MSSQL\Backup\MasterData\" IsAbsolutePath="true" />
+			<CopyItem Source="DatabaseScripts\MasterData_ProjectionStore.bak" Target="\\FDDC5SQL001.dtest.fpsstagingint.local\G$\Program Files\Microsoft SQL Server\MSSQL11.INST1\MSSQL\Backup\MasterData\MasterData_ProjectionStore.bak" Filter="*" Recurse="false" Replace="true" IsAbsolutePath="true" />
+		</ServerRole>
+    
+    <!--DEVINT2-->
+    <ServerRole Name="TFL.FileSystem" Description="MasterData.ProjectionStore file system" Groups="MasterData" Include="MasterData.ProjectionStoreRestore.FileSystem.DevInt2">
+      <CreateFolder TargetPath="\\TDC2FAEC04N01\D$\TFL\ProjectionStoreRestoreSource\" IsAbsolutePath="true" />
+      <CreateFolder TargetPath="\\TDC2FAEC04N02\D$\TFL\ProjectionStoreRestoreSource\" IsAbsolutePath="true" />
+      <CopyItem Source="DatabaseScripts\MasterData_ProjectionStore.bak" Target="\\TDC2FAEC04N01\D$\TFL\ProjectionStoreRestoreSource\MasterData_ProjectionStore.bak" Filter="*" Recurse="false" Replace="true" IsAbsolutePath="true" />
+      <CopyItem Source="DatabaseScripts\MasterData_ProjectionStore.bak" Target="\\TDC2FAEC04N02\D$\TFL\ProjectionStoreRestoreSource\MasterData_ProjectionStore.bak" Filter="*" Recurse="false" Replace="true" IsAbsolutePath="true" />
+    </ServerRole>
+    <ServerRole Name="TFL.FileSystem" Description="MasterData.FaresProjectionStore file system" Groups="MasterData" Include="MasterData.FaresProjectionStoreRestore.FileSystem.DevInt2">
+      <CreateFolder TargetPath="\\TDC2FAEC04N01\D$\TFL\FaresDBRestoreSource\" IsAbsolutePath="true" />
+      <CreateFolder TargetPath="\\TDC2FAEC04N02\D$\TFL\FaresDBRestoreSource\" IsAbsolutePath="true" />
+      <CopyItem Source="DatabaseScripts\Fares_ProjectionStore.bak" Target="\\TDC2FAEC04N01\D$\TFL\FaresDBRestoreSource\Fares_ProjectionStore.bak" Filter="*" Recurse="false" Replace="true" IsAbsolutePath="true" />
+      <CopyItem Source="DatabaseScripts\Fares_ProjectionStore.bak" Target="\\TDC2FAEC04N02\D$\TFL\FaresDBRestoreSource\Fares_ProjectionStore.bak" Filter="*" Recurse="false" Replace="true" IsAbsolutePath="true" />
+    </ServerRole>
+
+    <!--DEVINT1 TO BE REMOVED-->
+		<ServerRole Name="TFL.FileSystem" Description="MasterData.ProjectionStore.TDC2FAEC01N01" Groups="Always" Include="MasterData.ProjectionStoreRestore.FileSystem.DevInt.Node1">
+			<CreateFolder TargetPath="\\TDC2FAEC01N01\tfl\ProjectionStoreRestoreSource\" IsAbsolutePath="true" />
+			<CopyItem Source="DatabaseScripts\MasterData_ProjectionStore.bak" Target="\\TDC2FAEC01N01\tfl\ProjectionStoreRestoreSource\MasterData_ProjectionStore.bak" Filter="*" Recurse="false" Replace="true" IsAbsolutePath="true" />
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="MasterData.FaresProjectionStore.TDC2FAEC01N01" Groups="Always" Include="MasterData.FaresProjectionStoreRestore.FileSystem.DevInt.Node1">
+			<CreateFolder TargetPath="\\TDC2FAEC01N01\tfl\FaresDBRestoreSource\" IsAbsolutePath="true" />
+			<CopyItem Source="DatabaseScripts\Fares_ProjectionStore.bak" Target="\\TDC2FAEC01N01\tfl\FaresDBRestoreSource\Fares_ProjectionStore.bak" Filter="*" Recurse="false" Replace="true" IsAbsolutePath="true" />
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="MasterData.ProjectionStore.TDC2FAEC01N02" Groups="Always" Include="MasterData.ProjectionStoreRestore.FileSystem.DevInt.Node2">
+			<CreateFolder TargetPath="\\TDC2FAEC01N02\tfl\ProjectionStoreRestoreSource\" IsAbsolutePath="true" />
+			<CopyItem Source="DatabaseScripts\MasterData_ProjectionStore.bak" Target="\\TDC2FAEC01N02\tfl\ProjectionStoreRestoreSource\MasterData_ProjectionStore.bak" Filter="*" Recurse="false" Replace="true" IsAbsolutePath="true" />
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="MasterData.FaresProjectionStore.TDC2FAEC01N02" Groups="Always" Include="MasterData.FaresProjectionStoreRestore.FileSystem.DevInt.Node2">
+			<CreateFolder TargetPath="\\TDC2FAEC01N02\tfl\FaresDBRestoreSource\" IsAbsolutePath="true" />
+			<CopyItem Source="DatabaseScripts\Fares_ProjectionStore.bak" Target="\\TDC2FAEC01N02\tfl\FaresDBRestoreSource\Fares_ProjectionStore.bak" Filter="*" Recurse="false" Replace="true" IsAbsolutePath="true" />
+		</ServerRole>
+		
+    <ServerRole Name="TFL.FileSystem" Description="MasterData.ProjectionStore.TDC2SQL005" Groups="Always" Include="MasterData.ProjectionStoreRestore.FileSystem.TDC2SQL005">
+			<CreateFolder TargetPath="\\TDC2SQL005\d$\tfl\Masterdata\ProjectionStoreDBRestoreSource\" IsAbsolutePath="true" />
+			<CreateFolder TargetPath="\\TDC2SQL005\d$\tfl\Masterdata\FaresDBRestoreSource\" IsAbsolutePath="true" />
+			<CreateFolder TargetPath="\\TDC2SQL005\d$\tfl\Masterdata\EventStoreDBRestoreSource\" IsAbsolutePath="true" />
+			<CopyItem Source="DatabaseScripts\MasterData_ProjectionStore.bak" Target="\\TDC2SQL005\d$\tfl\Masterdata\ProjectionStoreDBRestoreSource\MasterData_ProjectionStore.bak" Filter="*" Recurse="false" Replace="true" IsAbsolutePath="true" />
+			<CopyItem Source="DatabaseScripts\Fares_ProjectionStore.bak" Target="\\TDC2SQL005\d$\tfl\Masterdata\FaresDBRestoreSource\Fares_ProjectionStore.bak" Filter="*" Recurse="false" Replace="true" IsAbsolutePath="true" />
+			<CopyItem Source="DatabaseScripts\MasterData_eventstore.bak" Target="\\TDC2SQL005\d$\tfl\Masterdata\EventStoreDBRestoreSource\MasterData_eventstore.bak" Filter="*" Recurse="false" Replace="true" IsAbsolutePath="true" />
+		</ServerRole>
+
+		<!-- FTM Functional -->
+		<!-- Need this empty machine here so the functional tests can identify the win server -->
+		<ServerRole Name="TFL.FileSystem" Description="Windows File System for FTM Tests" Groups="FTM" Include="FTMTests.FileSystem.Windows">
+			<CreateFolder TargetPath="\d$\tfl" />
+			<CreateFolder TargetPath="\d$\tfl\ftm" />
+			<CreateFolder TargetPath="\D$\tfl\ftm\TargetFiles" />
+			<CreateFolder TargetPath="\D$\tfl\ftm\SourceFiles" />
+			<CreateFolder TargetPath="\D$\tfl\ftm\win2win\TargetFiles" />
+			<CreateFolder TargetPath="\D$\tfl\ftm\win2win\SourceFiles" />
+		</ServerRole>
+		<ServerRole Name="TFL.FileSystem" Description="SFTP File System for FTM Tests" Groups="FTM" Include="FTMTests.FileSystem.SFTP">
+			<CreateFolder TargetPath="\D$\tfl\SharedFolders\SFTPClient1\SFTPtoSFTPSource" />
+			<CreateFolder TargetPath="\D$\tfl\SharedFolders\SFTPClient2\SFTPToSFTPTarget" />
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileSystem" Description="OyBO Functional Rig Test File System" Include="OyBO.TestFileSystem" Groups="OyBO">
+			<CreateFolder TargetPath="\D$\PartitionTest\"/>
+			<CreateFolder TargetPath="\D$\PartitionTest\LogFiles"/>
+			<CreateFolder TargetPath="\D$\PartitionTest\LUN01"/>
+			<CreateFolder TargetPath="\D$\PartitionTest\LUN02"/>
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileSystem" Description="FAE Functional Rig Test File System" Include="FAE.DeployFunctionalRigAdminUtils" Groups="FAE">
+			<CreateFolder TargetPath="\D$\FunctionalRigAdminUtils\"/>
+			<CopyItem Source="FunctionalRigAdminUtils\" Target="\D$\FunctionalRigAdminUtils" Filter="*.*" Recurse="true" Replace="true" />
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileSystem" Description="RAE Functional Rig Test File System" Include="RAE.DeployFunctionalRigAdminUtils" Groups="RAE">
+			<CreateFolder TargetPath="\D$\FunctionalRigAdminUtils\"/>
+			<CopyItem Source="FunctionalRigAdminUtils\" Target="\D$\FunctionalRigAdminUtils" Filter="*.*" Recurse="true" Replace="true" />
+		</ServerRole>
+
+		<!-- TJS Distributor -->
+		<ServerRole Name="TFL.FileSystem" Description="TJS Distributor Functional Rig Test File System" Include="TJSDistributor.Functional.CreateFolders" Groups="TJSDistributor" >
+			<CreateFolder TargetPath="\D$\TJSDistributor\input\" />
+			<CreateFolder TargetPath="\D$\TJSDistributor\output\" />
+		</ServerRole>
+
+		<ServerRole Name="TFL.FileSystem" Description="TJS Distributor Functional Rig Test File System CPC" Include="TJSDistributor.Functional.CPC.CreateFolders" Groups="TJSDistributor" >
+			<CreateFolder TargetPath="\D$\TJSDistributor.CPC\input\" />
+			<CreateFolder TargetPath="\D$\TJSDistributor.CPC\output\" />
+		</ServerRole>
+
+		<!-- OyBO DataGen Test Oyster File Generator -->
+		<ServerRole Name="TFL.MsiDeploy" Description="OyBO DataGen Oyster File Generator Console App Install" Include="OyBO.DataGen.Install" Groups="OyBO">
+			<MsiDeploy Name="OyBO.DataGen.Installer">
+				<MSI>
+					<name>Tfl.Ft.OyBo.DataGen.Host.Installer.msi</name>
+					<UpgradeCode>93B763BB-10AA-4FE5-9021-17A223B4DA22</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="d:\tfl\DataGen\" />
+					</parameters>
+				</MSI>
+				<Configs>
+					<config name="Tfl.Ft.OyBo.DataGen.Host.exe.config" target="\tfl\DataGen"/>
+				</Configs>
+			</MsiDeploy>
+		</ServerRole>
+
+		<ServerRole Name="TFL.ServiceDeploy" Description="FasterData Mock Service Jus Host Installer" Include="FasterData.Mock.Jus.Host.Install" Groups="TJSDistributor">
+			<ServiceDeploy Name="FasterData.Mock.Jus.Host.Installer">
+				<MSI>
+					<name>FasterData.Mock.Jus.Host.Installer.msi</name>
+					<UpgradeCode>a14617e4-1ed9-410e-af28-7718c7be5629</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\TJSDistributor\JusMockService" />
+					</parameters>
+				</MSI>
+				<Services>
+				  <Service StartUpType="AutomaticDelayed">
+						<Name>FasterData Mock Service for Jus</Name>
+						<Credentials>MasterDataServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="FasterData.Mock.Jus.Host.exe.config" target="\TFL\TJSDistributor\JusMockService"/>
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+    <!-- FAE Functional Roles-->
+
+	<!-- FAE MasterData Stub -->
+    <ServerRole Name="TFL.ServiceDeploy" Description="FAE MasterData Stub Installer" Include="FAE.MasterData.Stub.Install" Groups="FAE">
+      <ServiceDeploy Name="WixFaeMasterDataStubInstaller">
+        <MSI>
+          <name>WixMasterDataStubServiceInstaller.msi</name>
+          <UpgradeCode>F74125F7-FE52-4065-BD48-75AC45412804</UpgradeCode>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\FAEMasterData\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service StartUpType="AutomaticDelayed">
+            <Name>Tfl.Ft.Fae.MasterData.Stub.exe</Name>
+            <Credentials>FAEServiceAccount</Credentials>
+            </Service>
+        </Services>
+        <Configs>
+          <config name="Tfl.Ft.Fae.MasterData.Stub.exe.config" target="\tfl\FAEMasterData" />
+          </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+
+	<!-- RAE MasterData Stub -->
+    <ServerRole Name="TFL.ServiceDeploy" Description="RAE MasterData Stub Installer" Include="RAE.MasterData.Stub.Install" Groups="RAE">
+      <ServiceDeploy Name="WixRaeMasterDataStubInstaller">
+        <MSI>
+          <name>WixMasterDataStub.msi</name>
+          <UpgradeCode>1AFCDB86-4DFC-4162-8682-9BE6520CC474</UpgradeCode>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\RAEMasterData\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service StartUpType="Manual">
+            <Name>RAE.MasterData.Stub.exe</Name>
+            <Credentials>RAEServiceAccount</Credentials>
+            </Service>
+        </Services>
+        <Configs>
+          <config name="RAE.MasterData.Stub.exe.config" target="\tfl\RAEMasterData" />
+          <config name="RaeConnectionstrings.config" target="\tfl\RAEMasterData\" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+
+    <!-- RAE Roles with AUTOSTART-->
+		<ServerRole Name="TFL.ServiceDeploy" Description="RAE Service Installer With Autostart" Include="RAE.Service.Install.WithAutostart" Groups="RAE">
+			<ServiceDeploy Name="WixRaeServiceInstaller">
+				<MSI>
+					<name>WixRaeServiceInstaller.msi</name>
+					<UpgradeCode>6CA26871-C6C0-45E5-9536-C3DB9AA6AB4B</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\RAE\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="AutomaticDelayed">
+            <Name>RAE (Oyster)</Name>
+            <Credentials>RAEServiceAccount</Credentials>
+          </Service>
+				</Services>
+				<Configs>
+					<config name="RAE.exe.config" target="\TFL\RAE" />
+					<config name="RaeConnectionstrings.config" target="\TFL\RAE\" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+		<!-- RAE_CPC Roles with AUTOSTART-->
+		<ServerRole Name="TFL.ServiceDeploy" Description="RAE CPC Service Installer With Autostart" Include="RAE.CPC.Service.Install.WithAutostart" Groups="RAE">
+			<ServiceDeploy Name="WixRaeCpcServiceInstaller">
+				<MSI>
+					<name>WixRaeCpcServiceInstaller.msi</name>
+					<UpgradeCode>95666C4B-D806-49D4-802C-9DAEB58FCF16</UpgradeCode>
+					<parameters>
+						<parameter name="INSTALLLOCATION" value="D:\TFL\RAE_CPC\" />
+					</parameters>
+				</MSI>
+				<Services>
+					<Service StartUpType="AutomaticDelayed">
+						<Name>RAE (CPC)</Name>
+						<Credentials>RAEServiceAccount</Credentials>
+					</Service>
+				</Services>
+				<Configs>
+					<config name="RAE.exe.config" target="\TFL\RAE_CPC" />
+					<config name="RaeConnectionstrings.config" target="\TFL\RAE_CPC\" />
+				</Configs>
+			</ServiceDeploy>
+		</ServerRole>
+
+    <ServerRole Name="TFL.ServiceDeploy" Description="FAE Controller" Include="FAE.Engine.Controller.CPCOyster.Stateless" Groups="FAE,FAEController">
+      <ServiceDeploy Name="WixEngineControllerHostInstaller">
+        <MSI>
+          <name>WixEngineControllerHostInstaller.msi</name>
+          <UpgradeCode>1DD88866-15E9-484F-947B-5E041477FC14</UpgradeCode>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\FAE\Controller\" />
+            <parameter name="MEDIATYPE" value="CPC,Oyster" />
+            <parameter name="PIPELINEMODE" value="Stateless" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service StartUpType="Manual">
+            <Name>FAE EngineControllerHost Service</Name>
+            <Credentials>FAEServiceAccount</Credentials>
+            </Service>
+        </Services>
+        <Configs>
+          <config name="EngineControllerHost.exe.config" target="\tfl\FAE\Controller" />
+          <config name="appSettings.config" target="\tfl\FAE\Controller" />
+          </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+
+    <ServerRole Name="TFL.ServiceDeploy" Description="FAE Pipeline Engine" Include="FAE.Engine.Service.CPCOyster.Stateless" Groups="FAE,FAEPipeline">
+      <ServiceDeploy Name="WixPipelineHostInstaller" Action="Reinstall">
+        <MSI>
+          <name>WixPipelineHostInstaller.msi</name>
+          <UpgradeCode>94F841FF-5BF2-4F66-9E47-2BC19B14C89A</UpgradeCode>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\FAE\PipelineHost\" />
+            <parameter name="SERVICENAME1" value="FAE PipelineHost Service" />
+            <parameter name="MEDIATYPE" value="CPC,Oyster" />
+            <parameter name="PIPELINEMODE" value="Stateless" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service StartUpType="Manual">
+            <Name>FAE PipelineHost Service</Name>
+            <CurrentName>PipelineHost.exe</CurrentName>
+            <Credentials>FAEServiceAccount</Credentials>
+            </Service>
+        </Services>
+        <Configs>
+          <config name="PipelineHost.exe.config" target="\tfl\FAE\PipelineHost" />
+          <config name="pipelineOperations.config" target="\tfl\FAE\PipelineHost" />
+          <config name="Loaders.config" target="\tfl\FAE\PipelineHost" />
+          <config name="log4net.config" target="\tfl\FAE\PipelineHost" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+
+    <ServerRole Name="TFL.ServiceDeploy" Description="FAE Controller" Include="FAE.Engine.Controller.CPCOyster.Stateful" Groups="FAE,FAEController">
+      <ServiceDeploy Name="WixEngineControllerHostInstaller">
+        <MSI>
+          <name>WixEngineControllerHostInstaller.msi</name>
+          <UpgradeCode>1DD88866-15E9-484F-947B-5E041477FC14</UpgradeCode>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\FAE\Controller\" />
+            <parameter name="MEDIATYPE" value="CPC,Oyster" />
+            <parameter name="PIPELINEMODE" value="Stateful" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service StartUpType="Manual">
+            <Name>FAE EngineControllerHost Service</Name>
+            <Credentials>FAEServiceAccount</Credentials>
+            </Service>
+        </Services>
+        <Configs>
+          <config name="EngineControllerHost.exe.config" target="\tfl\FAE\Controller" />
+          <config name="appSettings.config" target="\tfl\FAE\Controller" />
+          </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+
+    <ServerRole Name="TFL.ServiceDeploy" Description="FAE Pipeline Engine" Include="FAE.Engine.Service.CPCOyster.Stateful" Groups="FAE,FAEPipeline">
+      <ServiceDeploy Name="WixPipelineHostInstaller" Action="Reinstall">
+        <MSI>
+          <name>WixPipelineHostInstaller.msi</name>
+          <UpgradeCode>94F841FF-5BF2-4F66-9E47-2BC19B14C89A</UpgradeCode>
+          <parameters>
+            <parameter name="INSTALLLOCATION" value="d:\tfl\FAE\PipelineHost\" />
+            <parameter name="SERVICENAME1" value="FAE PipelineHost Service" />
+            <parameter name="MEDIATYPE" value="CPC,Oyster" />
+            <parameter name="PIPELINEMODE" value="Stateful" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service StartUpType="Manual">
+            <Name>FAE PipelineHost Service</Name>
+            <CurrentName>PipelineHost.exe</CurrentName>
+            <Credentials>FAEServiceAccount</Credentials>
+            </Service>
+        </Services>
+        <Configs>
+          <config name="PipelineHost.exe.config" target="\tfl\FAE\PipelineHost" />
+          <config name="pipelineOperations.config" target="\tfl\FAE\PipelineHost" />
+          <config name="Loaders.config" target="\tfl\FAE\PipelineHost" />
+          <config name="log4net.config" target="\tfl\FAE\PipelineHost" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+
+	<!--FTM Test Roles-->
+	<ServerRole Name="TFL.FileSystem" Description="FTM SFTP Testing File System" Include="FTM.Testing.Filesystem.SFTP" Groups="FTM">
+      <CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\FTM\SFTP2Win\Outbound" />
+	  <CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\FTM\Win2SFTP\Inbound" />
+	  <CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\FTM\SFTP2WinAllowOverride\Outbound" />
+    </ServerRole>
+
+	<ServerRole Name="TFL.FileSystem" Description="FTM Windows Testing File System" Include="FTM.Testing.Filesystem.Win" Groups="FTM">
+	  <CreateFolder TargetPath="\D$\FTMFiles\SFTP2Win\Target" />
+	  <CreateFolder TargetPath="\D$\FTMFiles\Win2Win\Target" />
+	  <CreateFolder TargetPath="\D$\FTMFiles\Win2Win\Source" />
+	  <CreateFolder TargetPath="\D$\FTMFiles\Win2SFTP\Source" />
+	  <CreateFolder TargetPath="\D$\FTMFiles\Win2WinNoArchive\Target" />
+	  <CreateFolder TargetPath="\D$\FTMFiles\Win2WinNoArchive\Source" />
+	  <CreateFolder TargetPath="\D$\FTMFiles\Win2WinWithMonitor\Target" />
+	  <CreateFolder TargetPath="\D$\FTMFiles\Win2WinWithMonitor\Source" />
+	  <CreateFolder TargetPath="\D$\FTMFiles\Win2WinActivePeriod\Target" />
+	  <CreateFolder TargetPath="\D$\FTMFiles\Win2WinActivePeriod\Source" />
+	  <CreateFolder TargetPath="\D$\FTMFiles\SFTP2WinAllowOverride\Target" />
+    </ServerRole>
+
+	<ServerRole Name="TFL.FileSystem" Description="FTM PaymentAssurance Windows File System" Include="FTM.PaymentAssurance.Filesystem.Win" Groups="FTM">
+	  <CreateFolder TargetPath="\D$\PaymentAssurance\SFTP2Win\Target" />
+	  <CreateFolder TargetPath="\D$\PaymentAssurance\Win2Win\ResultFiles" />
+	  <CreateFolder TargetPath="\D$\PaymentAssurance\Win2Win\SqlFiles" />
+	  <CreateFolder TargetPath="\D$\PaymentAssurance\Win2Win\ScriptFiles" />
+    </ServerRole>
+
+	<ServerRole Name="TFL.FileSystem" Description="FTM PaymentAssurance Windows File System" Include="FTM.PaymentAssurance.Filesystem.SFTP" Groups="FTM">
+	  <CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\PaymentAssurance\Outbound" />
+	  <CreateFolder TargetPath="\D$\Tfl\SharedFolders\SFTPClient1\PaymentAssurance\Inbound" />
+    </ServerRole>
+
+    <!--Pre-Deploy roles-->
+    <!-- SQL pre deploy roles -->
+    <PreDeployRole Name="TFL.PreDeploy" Include="CheckSqlServices1" Description="Check Sql Services 1" Groups="SSIS,Database">
+      <WindowsServicePreDeploy ServiceName="MSSQL$INST1" State="Running" Action="Fix" />
+    </PreDeployRole>
+    <PreDeployRole Name="TFL.PreDeploy" Include="CheckSqlServices2" Description="Check Sql Services 2" Groups="SSIS,Database">
+      <WindowsServicePreDeploy ServiceName="MSSQL$INST2" State="Running" Action="Fix" />
+    </PreDeployRole>
+    <PreDeployRole Name="TFL.PreDeploy" Include="CheckSqlServices3" Description="Check Sql Services 3" Groups="SSIS,Database">
+      <WindowsServicePreDeploy ServiceName="MSSQL$INST3" State="Running" Action="Fix" />
+    </PreDeployRole>
+    <PreDeployRole Name="TFL.PreDeploy" Include="CheckSqlIntegrationService" Description="CheckSqlIntegrationService" Groups="Always">
+      <WindowsServicePreDeploy ServiceName="MsDtsServer110" State="Running" Action="Fix" />
+    </PreDeployRole>
+    <PreDeployRole Name="TFL.PreDeploy" Include="CheckSqlAgentServiceInst1" Description="CheckSqlAgentServiceInst1" Groups="Always">
+      <WindowsServicePreDeploy ServiceName="SQLAgent$INST1" State="Running" Action="Fix" />
+    </PreDeployRole>
+    <PreDeployRole Name="TFL.PreDeploy" Include="CheckSqlAgentServiceInst2" Description="CheckSqlAgentServiceInst2" Groups="Always">
+      <WindowsServicePreDeploy ServiceName="SQLAgent$INST2" State="Running" Action="Fix" />
+    </PreDeployRole>
+    <PreDeployRole Name="TFL.PreDeploy" Include="CheckSqlAgentServiceInst3" Description="CheckSqlAgentServiceInst3" Groups="Always">
+      <WindowsServicePreDeploy ServiceName="SQLAgent$INST3" State="Running" Action="Fix" />
+    </PreDeployRole>
+
+		<!-- TJSDistributor -->
+		<PreDeployRole Name="TFL.PreDeploy" Include="TJSDistributor.JulianService.Stop" Description="TJSDistributor.JulianService.Stop" Groups="TJSDistributor">
+			<WindowsServicePreDeploy ServiceName="FasterData.Julian.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Include="TJSDistributor.JulianService.CPC.Stop" Description="TJSDistributor.JulianService.CPC.Stop" Groups="TJSDistributor">
+			<WindowsServicePreDeploy ServiceName="FasterData.Julian.CPC.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+
+		<PreDeployRole Name="TFL.PreDeploy" Include="TJSDistributor.TJSHExtractor.Stop" Description="TJSDistributor.TJSHExtractor.Stop" Groups="TJSDistributor">
+			<WindowsServicePreDeploy ServiceName="FasterData.TJSHExtractor.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Include="TJSDistributor.TJSHExtractor.CPC.Stop" Description="TJSDistributor.TJSHExtractor.CPC.Stop" Groups="TJSDistributor">
+			<WindowsServicePreDeploy ServiceName="FasterData.TJSHExtractor.CPC.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Include="FasterData.Mock.Jus.Host.Stop" Description="FasterData.Mock.Jus.Host.Stop" Groups="TJSDistributor">
+			<WindowsServicePreDeploy ServiceName="FasterData Mock Service for Jus" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+
+		<!--OyBO-->
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop OyBO Services" Include="StopOyBOServices" Groups="OyBO">
+			<WindowsServicePreDeploy ServiceName="OyBO FileProcessor Service" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop OyBO AzureMobileUploader Service" Include="StopOyBOAzureMobileUploaderService" Groups="OyBO">
+			<WindowsServicePreDeploy ServiceName="OyBO Azure Mobile Uploader Service" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop Ocae Service" Include="StopOcaeService" Groups="OyBO">
+			<WindowsServicePreDeploy ServiceName="OyBO Oyster Charge Adjustment Engine Service" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop OyBO Refunds Service" Include="StopRefundsService" Groups="OyBO">
+			<WindowsServicePreDeploy ServiceName="OyBO Refunds Service" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop OyBO FUL Stub Service" Include="StopFulStubService" Groups="OyBO">
+			<WindowsServicePreDeploy ServiceName="OYBO FUL Stub Service" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop OyBO Api Stub Service" Include="StopApiStubService" Groups="OyBO">
+			<WindowsServicePreDeploy ServiceName="OyBO Api Stub Service" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Include="MasterData.MJTService.Service.Stop" Description="MasterData.MJTService.Service.Stop" Groups="MasterData">
+			<WindowsServicePreDeploy ServiceName="MasterData.MaximumJourneyTimeService.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Include="MasterData.Fares.Service.Stop" Description="MasterData.Fares.Service.Stop" Groups="MasterData">
+			<WindowsServicePreDeploy ServiceName="MasterData.FareService.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop Pare Pre Production Services" Include="StopParePreProduction.Services.FAEMock" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="FaeMockService.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop Pare Pre Production Services" Include="StopParePreProduction.Services.OysterTap" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="OysterTapImporterService.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop FAE Legacy Engine Controller" Include="StopFaeController" Groups="FAE,FAEController">
+			<WindowsServicePreDeploy ServiceName="FAE EngineControllerHost Service (Legacy)" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop Oyster Engine Controller" Include="StopOaeController" Groups="OAE,OAEController">
+			<WindowsServicePreDeploy ServiceName="FAE EngineControllerHost Service (Oyster)" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop CPC FAE Engine Controller" Include="StopFaeController.CPC" Groups="FAE,FAEControllerStateless">
+			<WindowsServicePreDeploy ServiceName="FAE EngineControllerHost Service (CPC)" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop FAE Engine" Include="StopFaeEngine" Groups="FAE,FAEPipeline">
+			<WindowsServicePreDeploy ServiceName="FAE PipelineHost Service" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop OAE Engine" Include="StopOaeEngine" Groups="OAE,OAEPipeline">
+			<WindowsServicePreDeploy ServiceName="FAE PipelineHost Service" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="StopRaeService" Include="StopRaeService" Groups="OAE,RAE">
+			<WindowsServicePreDeploy ServiceName="RAE (Oyster)" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop RAE Cpc Service" Include="StopRaeCpcService" Groups="FAE,RAECPC">
+			<WindowsServicePreDeploy ServiceName="RAE (CPC)" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop FAE Oyster Tap Importer" Include="StopTapImporter" Groups="OAE,OAETapImporter">
+			<WindowsServicePreDeploy ServiceName="FAE (Oyster) TapImporter Service" State="Stopped" Action="Fix"/>
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop FAE CPC Tap Importer" Include="Stop.Tap.Importer.CPC" Groups="FAE,FAETapImporter">
+			<WindowsServicePreDeploy ServiceName="FAE (CPC) TapImporter Service" State="Stopped" Action="Fix"/>
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="StopFaeDisruptr" Include="StopFaeDisruptr" Groups="FAE">
+			<WindowsServicePreDeploy ServiceName="FAE Disruptr Service" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="StopFTMService" Include="StopFTMService" Groups="FTM">
+			<WindowsServicePreDeploy ServiceName="FileTransferManager Service" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="StopSDMControllerService" Include="StopSDMControllerService" Groups="SDM">
+			<WindowsServicePreDeploy ServiceName="ControllerService" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="StopSendMailService" Include="StopSendMailService" Groups="Notifications">
+			<WindowsServicePreDeploy ServiceName="SendEmailService.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="StopFileProcessorService" Include="StopFileProcessorService" Groups="Notifications">
+			<WindowsServicePreDeploy ServiceName="Tfl.Ft.Notifications.FileProcessor.WindowsService.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+
+		<!--The system services below are required to be started prior to the pare perf counter service run - first set up in Farringdon  -->
+		<PreDeployRole Name="TFL.PreDeploy" Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv" Groups="FAE,PARE">
+			<WindowsServicePreDeploy ServiceName="wmiApSrv" State="Running" Action="Fix" />
+		</PreDeployRole>
+
+		<PreDeployRole Name="TFL.PreDeploy" Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc" Groups="FAE,PARE">
+			<WindowsServicePreDeploy ServiceName="AeLookupSvc" State="Running" Action="Fix" />
+		</PreDeployRole>
+
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop Pare Services" Include="StopPareServices.IDRA" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="IDRAService.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop Pare Services" Include="StopPareServices.StatusList" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="Pare.StatusListService.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop Pare Services" Include="StopPareServices.AuthGateway" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="AuthorisationGatewayService.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop Pare Services" Include="StopPareServices.TapFileProcessor" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="TapFileProcessorService.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop Pare Services" Include="StopPareServices.SettlementFileResponse" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="SettlementFileResponseService.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop Pare Services" Include="StopPareServices.SettlementValidationResult" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="Pare.SettlementValidationResultFileProcessingService.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop Pare Services" Include="StopPareServices.RefundFile" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="RefundFileService.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop Pare Services" Include="StopPareServices.RevenueStatusList" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="RevenueStatusListFileService.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop Pare Services" Include="StopPareServices.TDR" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="TravelDayRevisionService.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop Pare Services" Include="StopPareServices.EodController" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="EodControllerService.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Stop Pare Services" Include="StopPareServices.DirectPayment" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="Pare.DirectPaymentService.exe" State="Stopped" Action="Fix" />
+		</PreDeployRole>
+
+		<PreDeployRole Name="TFL.PreDeploy" Description="Pare Services Stopped" Include="PareServicesStopped.IDRA" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="IDRAService.exe" State="Stopped" Action="Fail" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Pare Services Stopped" Include="PareServicesStopped.StatusList" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="Pare.StatusListService.exe" State="Stopped" Action="Fail" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Pare Services Stopped" Include="PareServicesStopped.AuthGateway" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="AuthorisationGatewayService.exe" State="Stopped" Action="Fail" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Pare Services Stopped" Include="PareServicesStopped.TapFileProcessor" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="TapFileProcessorService.exe" State="Stopped" Action="Fail" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Pare Services Stopped" Include="PareServicesStopped.SettlementFileResponse" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="SettlementFileResponseService.exe" State="Stopped" Action="Fail" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Pare Services Stopped" Include="PareServicesStopped.SettlementValidationResult" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="Pare.SettlementValidationResultFileProcessingService.exe" State="Stopped" Action="Fail" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Pare Services Stopped" Include="PareServicesStopped.RefundFile" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="RefundFileService.exe" State="Stopped" Action="Fail" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Pare Services Stopped" Include="PareServicesStopped.RevenueStatusList" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="RevenueStatusListFileService.exe" State="Stopped" Action="Fail" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Pare Services Stopped" Include="PareServicesStopped.TDR" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="TravelDayRevisionService.exe" State="Stopped" Action="Fail" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Pare Services Stopped" Include="PareServicesStopped.EodController" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="EodControllerService.exe" State="Stopped" Action="Fail" />
+		</PreDeployRole>
+		<PreDeployRole Name="TFL.PreDeploy" Description="Pare Services Stopped" Include="PareServicesStopped.DirectPayment" Groups="PARE">
+			<WindowsServicePreDeploy ServiceName="Pare.DirectPaymentService.exe" State="Stopped" Action="Fail" />
+		</PreDeployRole>
+
+		<!--Post Deploy Roles-->
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start FAE Controller" Include="StartFaeController" Groups="FAE,FAEController">
+			<WindowsServicePostDeploy ServiceName="FAE EngineControllerHost Service (Legacy)" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start OAE (Oyster) Stateless Controller" Include="StartOaeController" Groups="OAE,OAEController">
+			<WindowsServicePostDeploy ServiceName="FAE EngineControllerHost Service (Oyster)" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start FAE (CPC) Stateless Controller" Include="StartFAE.EngineController.Stateless.CPC" Groups="FAE,FAEControllerStateless">
+			<WindowsServicePostDeploy ServiceName="FAE EngineControllerHost Service (CPC)" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start FAE Engine" Include="StartFaeEngine" Groups="FAE">
+			<WindowsServicePostDeploy ServiceName="FAE PipelineHost Service" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start OAE Engine" Include="StartOaeEngine" Groups="OAE,OAEPipeline">
+			<WindowsServicePostDeploy ServiceName="FAE PipelineHost Service" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="StartFaeDisruptr" Include="StartFaeDisruptr" Groups="FAE">
+			<WindowsServicePostDeploy ServiceName="FAE Disruptr Service" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start FAE Oyster Tap Importer" Include="StartFaeTapImporter" Groups="OAE,OAETapImporter">
+			<WindowsServicePostDeploy ServiceName="FAE (Oyster) TapImporter Service" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start FAE CPC Tap Importer" Include="StartFaeTapImporter.CPC" Groups="FAE,FAETapImporter">
+			<WindowsServicePostDeploy ServiceName="FAE (CPC) TapImporter Service" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start RAE service" Include="StartRaeService" Groups="RAE">
+			<WindowsServicePostDeploy ServiceName="RAE (Oyster)" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start RAE CPC service" Include="StartRaeCpcService" Groups="RAE">
+			<WindowsServicePostDeploy ServiceName="RAE (CPC)" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start Integration AppFabric Cluster" Include="AppFabric.Integration.Start" Groups="Always">
+			<AppFabricPostDeploy PortNumber="22233" State="Up" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start MasterData Fares Service" Include="MasterData.Services.Fares.Start" Groups="MasterData">
+			<WindowsServicePostDeploy ServiceName="MasterData.FareService.exe" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start MasterData MJT Services" Include="MasterData.Services.MJT.Start" Groups="MasterData">
+			<WindowsServicePostDeploy ServiceName="MasterData.MaximumJourneyTimeService.exe" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start MasterData API" Include="MasterData.Api.Start" Groups="MasterData">
+			<WebServicePostDeploy PortNumber="8734" WebServicePath="status" Timeout="30" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start MasterData Website" Include="MasterData.Website.Start" Groups="MasterData">
+			<WebServicePostDeploy PortNumber="81" WebServicePath="" Timeout="30" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start FTM Service" Include="StartFTMService" Groups="FTM">
+			<WindowsServicePostDeploy ServiceName="FileTransferManager Service" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start Oyster Back Office Services" Include="StartOyBOServices" Groups="OyBO">
+			<WindowsServicePostDeploy ServiceName="OyBO FileProcessor Service" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start Oyster Back Office AzureMobileUploader Service" Include="StartOyBOAzureMobileUploaderService" Groups="OyBO">
+			<WindowsServicePostDeploy ServiceName="OyBO Azure Mobile Uploader Service" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start Oyster Charge Adjustment Engine Service" Include="StartOyboOCAEService" Groups="OyBO">
+			<WindowsServicePostDeploy ServiceName="OyBO Oyster Charge Adjustment Engine Service" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start OyBO Refunds Service" Include="StartOyboRefundsService" Groups="OyBO">
+			<WindowsServicePostDeploy ServiceName="OyBO Refunds Service" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start OYBO FUL Stub Service" Include="StartOyboFulStubService" Groups="OyBO">
+			<WindowsServicePostDeploy ServiceName="OYBO FUL Stub Service" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start OyBO Api Stub Service" Include="StartOyboApiStubService" Groups="OyBO">
+			<WindowsServicePostDeploy ServiceName="OyBO Api Stub Service" State="Running" Action="Fix" />
+		</PostDeployRole>
+
+		<!-- TJSDistributor -->
+		<PostDeployRole Name="TFL.PostDeploy" Include="TJSDistributor.JulianService.Start" Description="TJSDistributor.JulianService.Start" Groups="TJSDistributor">
+			<WindowsServicePostDeploy ServiceName="FasterData.Julian.exe" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Include="TJSDistributor.TJSHExtractor.Start" Description="TJSDistributor.TJSHExtractor.Start" Groups="TJSDistributor">
+			<WindowsServicePostDeploy ServiceName="FasterData.TJSHExtractor.exe" State="Running" Action="Fix" />
+		</PostDeployRole>
+
+		<PostDeployRole Name="TFL.PostDeploy" Include="TJSDistributor.JulianService.CPC.Start" Description="TJSDistributor.JulianService.CPC.Start" Groups="TJSDistributor">
+			<WindowsServicePostDeploy ServiceName="FasterData.Julian.CPC.exe" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Include="TJSDistributor.TJSHExtractor.CPC.Start" Description="TJSDistributor.TJSHExtractor.CPC.Start" Groups="TJSDistributor">
+			<WindowsServicePostDeploy ServiceName="FasterData.TJSHExtractor.CPC.exe" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Include="FasterData.Mock.Jus.Host.Start" Description="FasterData.Mock.Jus.Host.Start" Groups="TJSDistributor">
+			<WindowsServicePostDeploy ServiceName="FasterData Mock Service for Jus" State="Running" Action="Fix" />
+		</PostDeployRole>
+
+		<!--Pare services post deploy-->
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start Pare Services" Include="StartPareServices.StatusList" Groups="PARE">
+			<WindowsServicePostDeploy ServiceName="Pare.StatusListService.exe" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start Pare Services" Include="StartPareServices.AuthGateway" Groups="PARE">
+			<WindowsServicePostDeploy ServiceName="AuthorisationGatewayService.exe" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start Pare Services" Include="StartPareServices.TapFileProcessor" Groups="PARE">
+			<WindowsServicePostDeploy ServiceName="TapFileProcessorService.exe" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start Pare Services" Include="StartPareServices.SettlementFileResponse" Groups="PARE">
+			<WindowsServicePostDeploy ServiceName="SettlementFileResponseService.exe" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start Pare Services" Include="StartPareServices.SettlementValidationResult" Groups="PARE">
+			<WindowsServicePostDeploy ServiceName="Pare.SettlementValidationResultFileProcessingService.exe" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start Pare Services" Include="StartPareServices.RefundFile" Groups="PARE">
+			<WindowsServicePostDeploy ServiceName="RefundFileService.exe" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start Pare Services" Include="StartPareServices.RevenueStatusList" Groups="PARE">
+			<WindowsServicePostDeploy ServiceName="RevenueStatusListFileService.exe" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start Pare Services" Include="StartPareServices.TDR" Groups="PARE">
+			<WindowsServicePostDeploy ServiceName="TravelDayRevisionService.exe" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start Pare Services" Include="StartPareServices.DirectPayment" Groups="PARE">
+			<WindowsServicePostDeploy ServiceName="Pare.DirectPaymentService.exe" State="Running" Action="Fix" />
+		</PostDeployRole>
+		<PostDeployRole Name="TFL.PostDeploy" Description="Start Pare Services" Include="StartPareServices.TimeMachine" Groups="PARE">
+			<WindowsServicePostDeploy ServiceName="TimeServer.exe" State="Running" Action="Fix" />
+		</PostDeployRole>
+
+	</CommonRoles>
+</configuration>

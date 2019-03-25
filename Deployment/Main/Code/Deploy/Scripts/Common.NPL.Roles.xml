@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/CommonRoles">
+  <CommonRoles>
+    <!-- IIS Setup roles -->
+    <ServerRole Name="TFL.IISSetup" Include="IISSetup.CAS" Description="IIS" Groups="NPL" />
+    <ServerRole Name="TFL.StateServiceSetup" Include="StateServiceSetup" Description="ASP.NET State Service Configuration" Groups="NPL" />
+
+    <ServerRole Name="TFL.WebDeploy" Description="NPL Website" Include="NPL.WebSite" Groups="NPL">
+      <WebDeploy Name="TFL.NPL.WebApp" RegistryKey="Software\TfL\NPL\WebApp" AssemblyToVersionFrom="TFL.NPL.WebApp.dll">
+        <AppPool>
+          <Name>NPLAppPool</Name>
+          <ServiceAccount>NPLServiceAccount</ServiceAccount>
+        </AppPool>
+        <Site>
+          <Name>NPL</Name>
+          <Port>8787</Port>
+          <PhysicalPath>D:\NPL\WebSite</PhysicalPath>
+        </Site>
+        <Package>
+          <Name>TFL.NPL.WebApp</Name>
+        </Package>
+        <TestInfo>
+          <EndPoint TestIdentity="DeploymentAccount" Authentication="Windows">timesheet</EndPoint>
+        </TestInfo>
+      </WebDeploy>
+    </ServerRole>
+
+    <ServerRole Name="TFL.WebDeploy" Description="NPL WebApi" Include="NPL.WebAPI" Groups="NPL">
+      <WebDeploy Name="TFL.NPL.WebAPI" RegistryKey="Software\TfL\NPL\WebAPI" AssemblyToVersionFrom="TFL.NPL.WebAPI.dll">
+        <AppPool>
+          <Name>NPLAppPool</Name>
+          <ServiceAccount>NPLServiceAccount</ServiceAccount>
+        </AppPool>
+        <Site>
+          <Name>NPL</Name>
+          <Port>8787</Port>
+          <PhysicalPath>D:\NPL\WebSite</PhysicalPath>
+          <Application>
+            <Name>_api</Name>
+            <PhysicalPath>D:\NPL\_api</PhysicalPath>
+          </Application>
+        </Site>
+        <Package>
+          <Name>TFL.NPL.WebAPI</Name>
+        </Package>
+        <TestInfo>
+          <EndPoint TestIdentity="DeploymentAccount" Authentication="Windows">_api/sysusers/current</EndPoint>
+        </TestInfo>
+      </WebDeploy>
+    </ServerRole>
+
+    <!--File System Roles-->
+    <ServerRole Name="TFL.FileSystem" Description="NPL File System" Include="NPL.FileSystem" Groups="NPL">
+      <CreateFolder TargetPath="\d$\NPL\data" />
+      <CreateFolder TargetPath="\d$\NPL\data\adjustmentLogs" />
+      <CreateFolder TargetPath="\d$\NPL\data\tempextract" />
+      <CreateFolder TargetPath="\d$\NPL\logs" />
+      <CreateFolder TargetPath="\d$\NPL\maildrop" />
+      <CreateFolder TargetPath="\d$\NPL\powershell" />
+      <CreateFolder TargetPath="\d$\NPL\_api" />
+      <CreateFolder TargetPath="\d$\NPL\WebSite" />
+    </ServerRole>
+    
+	<!-- DATABASE ROLES -->
+    <PreDeployRole Name="TFL.PreDeploy" Include="CheckSqlServices1" Description="Check Sql Services 1" Groups="SSIS,Database">
+      <WindowsServicePreDeploy ServiceName="MSSQL$INST1" State="Running" Action="Fix" />
+    </PreDeployRole>
+    <PreDeployRole Name="TFL.PreDeploy" Include="CheckSqlServices2" Description="Check Sql Services 2" Groups="SSIS,Database">
+      <WindowsServicePreDeploy ServiceName="MSSQL$INST2" State="Running" Action="Fix" />
+    </PreDeployRole>
+    <PreDeployRole Name="TFL.PreDeploy" Include="CheckSqlServices3" Description="Check Sql Services 3" Groups="SSIS,Database">
+      <WindowsServicePreDeploy ServiceName="MSSQL$INST3" State="Running" Action="Fix" />
+    </PreDeployRole>
+    <PreDeployRole Name="TFL.PreDeploy" Include="CheckSqlIntegrationService" Description="CheckSqlIntegrationService" Groups="Always">
+      <WindowsServicePreDeploy ServiceName="MsDtsServer110" State="Running" Action="Fix" />
+    </PreDeployRole>
+    <PreDeployRole Name="TFL.PreDeploy" Include="CheckSqlAgentServiceInst1" Description="CheckSqlAgentServiceInst1" Groups="Always">
+      <WindowsServicePreDeploy ServiceName="SQLAgent$INST1" State="Running" Action="Fix" />
+    </PreDeployRole>
+	 
+    <DatabaseRole Name="FromConfig" Description="NPL Database Baseline Role" Include="NPL.Database.Baseline" Groups="Database">
+      <TargetDatabase>NPL</TargetDatabase>
+      <DatabaseInstance>Inst1</DatabaseInstance>
+      <BaselineDeployment>NPL.Database\Scripts\Baseline\Baseline.sql</BaselineDeployment>
+      <PatchDeployment></PatchDeployment>
+    </DatabaseRole>
+
+    <DatabaseRole Name="FromConfig" Description="NPL Database Incremental Patching" Include="NPL.Database.Patching" Groups="Database">
+      <TargetDatabase>NPL</TargetDatabase>
+      <DatabaseInstance>Inst1</DatabaseInstance>
+      <PatchDeploymentFolder>NPL.Database\Scripts\Patching</PatchDeploymentFolder>
+      <PatchFolderFormatStartsWith>B???_R????_</PatchFolderFormatStartsWith>
+      <UpgradeScriptName>Patching.sql</UpgradeScriptName>
+      <PreValidationScriptName>PreValidation.sql</PreValidationScriptName>
+      <PostValidationScriptName>PostValidation.sql</PostValidationScriptName>
+      <DetermineIfDatabaseIsAtThisPatchLevelScriptName>DetermineIfDatabaseIsAtThisPatchLevel.sql</DetermineIfDatabaseIsAtThisPatchLevelScriptName>
+      <TestInfo Ignore="true" />
+    </DatabaseRole>
+  </CommonRoles>
+</configuration>

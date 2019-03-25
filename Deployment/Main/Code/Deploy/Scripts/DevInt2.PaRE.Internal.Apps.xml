@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="DevInt2.PaRE.Internal.Apps" Environment="DevInt2" Config="DevInt2" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonPareServiceDeploy.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <PostDeploymentTestIdentity>DeploymentAccount.Internal</PostDeploymentTestIdentity>
+
+  <machine Id="0" Name="FTDC2MGT360" ExternalIP="10.107.200.186" DeploymentMachine="true"  />
+
+  <machine Id="1" Name="FTDC2CIS313" ExternalIP="10.107.200.139" Role="CIS Server 1">
+    <ServerRole Description="Travel Token Service" Include="PARE.TravelToken.Service" />
+    <ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+  </machine>
+  <machine Id="2" Name="FTDC2CIS314" ExternalIP="10.107.200.140" Role="CIS Server 2">
+    <ServerRole Description="Travel Token Service" Include="PARE.TravelToken.Service" />
+    <ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+  </machine>
+  <machine Id="3" Name="FTDC2CIS315" ExternalIP="10.107.200.141" Role="CIS Server 3">
+    <ServerRole Description="Travel Token Service" Include="PARE.TravelToken.Service" />
+    <ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+  </machine>
+  <machine Id="4" Name="FTDC2CIS316" ExternalIP="10.107.200.142" Role="CIS Server 4">
+    <ServerRole Description="Travel Token Service" Include="PARE.TravelToken.Service" />
+    <ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+  </machine>
+  <machine Id="5" Name="FTDC2CIS317" ExternalIP="10.107.200.143" Role="CIS Server 5">
+    <ServerRole Description="Travel Token Service" Include="PARE.TravelToken.Service" />
+    <ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+  </machine>
+
+  <machine Id="6" Name="FTDC2PAI345" ExternalIP="10.107.200.171" Role="PARE Server 1">
+    <PreDeployRole Include="StopParePreProduction.Services.FAEMock" />
+    <PreDeployRole Include="StopParePreProduction.Services.OysterTap" />
+
+    <!-- Preprod services-->
+    <ServerRole Description="PARE Distributor Mock File System" Include="PARE.DistributorMock.FileSystem"  />
+    <ServerRole Description="PareOysterTapImporterService" Include="PareOysterTapImporterService" />
+    <ServerRole Description="PareFaeMockServiceInstaller" Include="PareFaeMockServiceInstaller" />
+    <ServerRole Description="ParePcsMockServiceInstaller" Include="ParePcsMockServiceInstaller" />
+    <!-- Pare Command Line Exe's -->
+    <ServerRole Description="PareFullStatusList.Application.Installer" Include="PareFullStatusList.Application.Installer" />
+    <ServerRole Description="PareStatusListMaintenance.Application.Installer" Include="PareStatusListMaintenance.Application.Installer" />
+    <ServerRole Description="PareVerifyTapData.Application.Installer" Include="PareVerifyTapData.Application.Installer" />
+	  <ServerRole Include="PareSettlement.Installer" />
+    <ServerRole Description="PareAuthorisationGateway.Util.Installer" Include="PareAuthorisationGateway.Util.Installer" />
+    <ServerRole Description="CpcTapPlayer.Installer" Include="CpcTapPlayer.Installer" />
+    <ServerRole Description="PareChargeCalculationPersist.Application.Installer" Include="PareChargeCalculationPersist.Application.Installer" />
+    <ServerRole Description="ParePostDeployment.Util.Installer" Include="ParePostDeployment.Util.Installer" />
+    <!-- PaRE Scheduled Tasks -->
+    <ServerRole Include="PareStatusListMaintenanceApplication.ScheduledTask.Create" />
+    <ServerRole Include="PareChargeCalculationPersist.ScheduledTask.Create" />
+    <ServerRole Include="PARESettlementFile.Amex.ScheduledTask.Create" />
+    <ServerRole Include="PARESettlementFile.Barclays.ScheduledTask.Create" />
+  </machine>
+
+  <!-- PARE Service Cluster -->
+  <machine Id="7" Name="FTDC2PAR347" ExternalIP="10.107.200.173" Role="PARE Cluster Server 1">
+    <ServerRole Description="PareAuthorisationGatewayServiceInstaller" Include="PareAuthorisationGatewayServiceInstaller" />
+    <ServerRole Description="PareRefundFileServiceInstaller" Include="PareRefundFileServiceInstaller" />
+    <ServerRole Description="PareRevenueFileService" Include="PareRevenueFileService" />
+    <ServerRole Description="PareSettlementValidationResultServiceInstaller" Include="PareSettlementValidationResultServiceInstaller" />
+    <ServerRole Description="PareStatusListProcessorInstaller" Include="PareStatusListProcessorInstaller" />
+    <ServerRole Description="PareTapFileServiceInstaller" Include="PareTapFileServiceInstaller" />
+    <ServerRole Description="PareTravelDayRevisionService" Include="PareTravelDayRevisionService" />
+    <ServerRole Description="SettlementFileResponseServiceInstaller" Include="SettlementFileResponseServiceInstaller" />
+    <ServerRole Description="PareDirectPaymentConfirmationServiceInstaller" Include="PareDirectPaymentConfirmationServiceInstaller" />
+    <ServerRole Description="PareRiskEngineInstaller" Include="PareRiskEngineInstaller" />
+    <ServerRole Description="PareChargeCalculationInstaller" Include="PareChargeCalculationInstaller" />
+  </machine>
+  <machine Id="8" Name="FTDC2PAR348" ExternalIP="10.107.200.174" Role="PARE Cluster Server 2">
+    <ServerRole Description="PareAuthorisationGatewayServiceInstaller" Include="PareAuthorisationGatewayServiceInstaller" />
+    <ServerRole Description="PareRefundFileServiceInstaller" Include="PareRefundFileServiceInstaller" />
+    <ServerRole Description="PareRevenueFileService" Include="PareRevenueFileService" />
+    <ServerRole Description="PareSettlementValidationResultServiceInstaller" Include="PareSettlementValidationResultServiceInstaller" />
+    <ServerRole Description="PareStatusListProcessorInstaller" Include="PareStatusListProcessorInstaller" />
+    <ServerRole Description="PareTapFileServiceInstaller" Include="PareTapFileServiceInstaller" />
+    <ServerRole Description="PareTravelDayRevisionService" Include="PareTravelDayRevisionService" />
+    <ServerRole Description="SettlementFileResponseServiceInstaller" Include="SettlementFileResponseServiceInstaller" />
+    <ServerRole Description="PareDirectPaymentConfirmationServiceInstaller" Include="PareDirectPaymentConfirmationServiceInstaller" />
+    <ServerRole Description="PareRiskEngineInstaller" Include="PareRiskEngineInstaller" />
+    <ServerRole Description="PareChargeCalculationInstaller" Include="PareChargeCalculationInstaller" />
+  </machine>
+  <machine Id="9" Name="FTDC2PAR349" ExternalIP="110.107.200.175" Role="PARE Cluster Server 3">
+    <ServerRole Description="PareAuthorisationGatewayServiceInstaller" Include="PareAuthorisationGatewayServiceInstaller" />
+    <ServerRole Description="PareRefundFileServiceInstaller" Include="PareRefundFileServiceInstaller" />
+    <ServerRole Description="PareRevenueFileService" Include="PareRevenueFileService" />
+    <ServerRole Description="PareSettlementValidationResultServiceInstaller" Include="PareSettlementValidationResultServiceInstaller" />
+    <ServerRole Description="PareStatusListProcessorInstaller" Include="PareStatusListProcessorInstaller" />
+    <ServerRole Description="PareTapFileServiceInstaller" Include="PareTapFileServiceInstaller" />
+    <ServerRole Description="PareTravelDayRevisionService" Include="PareTravelDayRevisionService" />
+    <ServerRole Description="SettlementFileResponseServiceInstaller" Include="SettlementFileResponseServiceInstaller" />
+    <ServerRole Description="PareDirectPaymentConfirmationServiceInstaller" Include="PareDirectPaymentConfirmationServiceInstaller" />
+    <ServerRole Description="PareRiskEngineInstaller" Include="PareRiskEngineInstaller" />
+    <ServerRole Description="PareChargeCalculationInstaller" Include="PareChargeCalculationInstaller" />
+  </machine>
+  <machine Id="10" Name="FTDC2PAR350" ExternalIP="10.107.200.176" Role="PARE Cluster Server 4">
+    <ServerRole Description="PareAuthorisationGatewayServiceInstaller" Include="PareAuthorisationGatewayServiceInstaller" />
+    <ServerRole Description="PareRefundFileServiceInstaller" Include="PareRefundFileServiceInstaller" />
+    <ServerRole Description="PareRevenueFileService" Include="PareRevenueFileService" />
+    <ServerRole Description="PareSettlementValidationResultServiceInstaller" Include="PareSettlementValidationResultServiceInstaller" />
+    <ServerRole Description="PareStatusListProcessorInstaller" Include="PareStatusListProcessorInstaller" />
+    <ServerRole Description="PareTapFileServiceInstaller" Include="PareTapFileServiceInstaller" />
+    <ServerRole Description="PareTravelDayRevisionService" Include="PareTravelDayRevisionService" />
+    <ServerRole Description="SettlementFileResponseServiceInstaller" Include="SettlementFileResponseServiceInstaller" />
+    <ServerRole Description="PareDirectPaymentConfirmationServiceInstaller" Include="PareDirectPaymentConfirmationServiceInstaller" />
+    <ServerRole Description="PareRiskEngineInstaller" Include="PareRiskEngineInstaller" />
+    <ServerRole Description="PareChargeCalculationInstaller" Include="PareChargeCalculationInstaller" />
+  </machine>
+  <machine Id="11" Name="FTDC2PAR351" ExternalIP="10.107.200.177" Role="PARE Cluster Server 5">
+    <ServerRole Description="PareAuthorisationGatewayServiceInstaller" Include="PareAuthorisationGatewayServiceInstaller" />
+    <ServerRole Description="PareRefundFileServiceInstaller" Include="PareRefundFileServiceInstaller" />
+    <ServerRole Description="PareRevenueFileService" Include="PareRevenueFileService" />
+    <ServerRole Description="PareSettlementValidationResultServiceInstaller" Include="PareSettlementValidationResultServiceInstaller" />
+    <ServerRole Description="PareStatusListProcessorInstaller" Include="PareStatusListProcessorInstaller" />
+    <ServerRole Description="PareTapFileServiceInstaller" Include="PareTapFileServiceInstaller" />
+    <ServerRole Description="PareTravelDayRevisionService" Include="PareTravelDayRevisionService" />
+    <ServerRole Description="SettlementFileResponseServiceInstaller" Include="SettlementFileResponseServiceInstaller" />
+    <ServerRole Description="PareDirectPaymentConfirmationServiceInstaller" Include="PareDirectPaymentConfirmationServiceInstaller" />
+    <ServerRole Description="PareRiskEngineInstaller" Include="PareRiskEngineInstaller" />
+    <ServerRole Description="PareChargeCalculationInstaller" Include="PareChargeCalculationInstaller" />
+  </machine>
+
+</configuration>

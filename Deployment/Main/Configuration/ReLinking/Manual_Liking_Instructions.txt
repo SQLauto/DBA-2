@@ -1,0 +1,34 @@
+ALSO SEE 
+
+http://10.107.197.124/mediawiki/index.php?title=FTP-SSO_Linking
+
+
+
+
+1. Get latest linking package from TFS of
+
+    $/Deployment/Main/Configuration/ReLinking/Deployment/*
+	
+	To:
+	
+	D:\Deployment\*
+	
+	
+2. Open a DOS Prompt to execute from this folder with appropriate parameters
+	
+Example (Integration Link Script)
+	
+> cd D:\Deployment\Scripts\
+
+> powershell .\LinkSSOFTPRigs.VC.2015.ps1 -vAppName 'MS.Int04' -SSOWebSiteAlias '10.107.200.14' -SSOWebServiceAlias '10.107.200.4' -OysterWebSiteAlias '10.107.200.17' -OysterWebServiceAlias '10.107.200.8'  -AzureUploader_StorageConnStr '' -AzureUploader_KeyVaultSecretUri 'https://mobileapistableipp001.vault.azure.net/secrets/StorageConnectionString' -AzureUploader_AzureKeyVaultClientId 'b7de1e56-6017-45cc-a31e-4bdc4a00830a' -AzureUploader_CertificateThumbprint '5F9E1EB7956FFA79AA3AC471E1BA35CDC6C5D96C'
+
+Examples (Functionals, note it's in a different folder)
+
+> cd D:\Deployment\PostDeploymentScripts\
+
+> powershell .\CASC.Functional.AutoLink.2015.ps1 -RigName '###'
+> powershell .\FixUp_NotificationFunctionalRig.2015.ps1 -NotifRig '###'
+> powershell .\FixUp_SDMFunctionalRig.2015.ps1 -SDMRig '###'
+> powershell .\UpdateConfigForSSOFunctionalRig.2015.ps1 -TargetRig '###'
+
+

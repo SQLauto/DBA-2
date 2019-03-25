@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="DevInt2.PaymentAssurance.Internal.App" Environment="DevInt2" Config="DevInt2" ProductGroup="FTP">
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+    <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+
+   <PostDeploymentTestIdentity>DeploymentAccount.Internal</PostDeploymentTestIdentity>
+   
+<machine Id="FTDC2MGT360" Name="FTDC2MGT360" ExternalIP="10.107.200.186" DeploymentMachine="true"  />
+
+  
+  <machine Id="FTDC2FTM338" Name="FTDC2FTM338" ExternalIP="10.107.200.164">
+    <!--<ServerRole Description="Payment Assurance File System" Include="PaymentAssurance.FileSystem" /> -->
+	<ServerRole Include="FTM.PaymentAssurance.FileSystem" />
+	<ServerRole Include="FTM.LogArchive.ScheduledTask.Create" />
+	<!-- PaymentAssurance Scheduled Task-->
+	<ServerRole Include="PaymentAssurance.Common" />
+  <ServerRole Include="PaymentAssurance.Config.Copy" />
+	<ServerRole Include="PaymentAssurance.ScheduledTask.Create" />
+  </machine>
+   
+</configuration>
+

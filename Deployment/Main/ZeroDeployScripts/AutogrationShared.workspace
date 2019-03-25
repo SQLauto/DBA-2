@@ -1,0 +1,14 @@
+$/CACC/Main: \cacc\Main
+$/Common/Main: \common\Main
+$/CommonServices/Messaging/Core: \CommonServices\Messaging\Core
+$/CommonServices/Messaging/MessageBusTracking: \CommonServices\Messaging\MessageBusTracking
+$/CommonServices/Messaging/MessageCountMonitor: \CommonServices\Messaging\MessageCountMonitor
+$/CommonServices/Messaging/Tests: \CommonServices\Messaging\Tests
+$/Deployment/Main: \Deployment\Main
+$/FAE/Main: \fae\Main
+$/Integration/Main: \integration\Main
+$/Notifications/Main: \Notifications\Main
+$/PaRE/Main: \PARE\Main
+$/SDM/Main: \sdm\Main
+$/MasterData/Main: \MasterData\Main
+$/SingleSignOn/Main-Chiltern: \SingleSignOn\Main

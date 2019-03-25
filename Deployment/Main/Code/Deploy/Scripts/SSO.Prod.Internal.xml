@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="SSO.Production.Internal.SiteA" Environment="SSOProd" Config="SSO.Prod" ProductGroup="SSO">
+	<CommonRoleFile>SSO.CommonInternalServerRoles.xml</CommonRoleFile>
+	<machine Id="9" Name="ZDC2APF002" ExternalIP="10.108.69.2" Role="App Fabric Server 2" DeploymentMachine="true" />
+	<machine Id="11" Name="ZDC2SSA001"	ExternalIP="10.108.69.11">
+	<ServerRole Description="SSO.EventLog.For.Internal" Include="SSO.EventLogDeploy.Internal" />
+	<ServerRole Description="Customer Change NotificationWorker" Include="Customer.Change.NotificationWorker" />
+    <ServerRole Description="Customer Change NotificationWorker Oyster" Include="Customer.Change.NotificationWorker.Oyster" Config="SSO.Notification.Oyster.Prod" />
+    <ServerRole Description="Customer Change NotificationWorker Tavel Alerts" Include="Customer.Change.NotificationWorker.TravelAlerts" Config="SSO.Notification.TravelAlerts.Prod" />
+		<ServerRole Description="Customer Change QueueManager" Include="Customer.Change.QueueManager" />
+	</machine>
+	<machine Id="12" Name="ZDC2SSA002"	ExternalIP="10.108.69.12">
+		<!--<ServerRole Include="IISSetup.SSO" />-->
+		<ServerRole Description="SSO.EventLog.For.Internal" Include="SSO.EventLogDeploy.Internal" />
+		<ServerRole Description="Customer Services" Include="Customer.Services" />
+		<ServerRole Description="SingleSignOn Services" Include="SingleSignOn.Services" />
+		<ServerRole Description="SSO Validation Service" Include="Validation.Service" />
+	</machine>
+	<machine Id="13" Name="ZDC2SSA003"	ExternalIP="10.108.69.13">
+		<!--<ServerRole Include="IISSetup.SSO" />-->
+		<ServerRole Description="Customer Services" Include="Customer.Services" />
+		<ServerRole Description="SingleSignOn Services" Include="SingleSignOn.Services" />
+		<ServerRole Description="SSO Validation Service" Include="Validation.Service" />
+	</machine>
+	<machine Id="14" Name="ZDC2SSA004"	ExternalIP="10.108.69.4">
+		<!--<ServerRole Include="IISSetup.SSO" />-->
+		<ServerRole Description="SSO.EventLog.For.Internal" Include="SSO.EventLogDeploy.Internal" />
+		<ServerRole Description="Customer Services" Include="Customer.Services" />
+		<ServerRole Description="SingleSignOn Services" Include="SingleSignOn.Services" />
+		<ServerRole Description="SSO Validation Service" Include="Validation.Service" />
+	</machine>
+	<machine Id="15" Name="ZDC2SSA005"	ExternalIP="10.108.69.5">
+		<!--<ServerRole Include="IISSetup.SSO" />-->
+		<ServerRole Description="Customer Services" Include="Customer.Services" />
+		<ServerRole Description="SingleSignOn Services" Include="SingleSignOn.Services" />
+		<ServerRole Description="SSO Validation Service" Include="Validation.Service" />
+	</machine>
+	<machine Id="16" Name="ZDC2SSA006"	ExternalIP="10.108.69.6">
+		<!--<ServerRole Include="IISSetup.SSO" />-->
+		<ServerRole Description="SSO.EventLog.For.Internal" Include="SSO.EventLogDeploy.Internal" />
+		<ServerRole Description="Customer Services" Include="Customer.Services" />
+		<ServerRole Description="SingleSignOn Services" Include="SingleSignOn.Services" />
+		<ServerRole Description="SSO Validation Service" Include="Validation.Service" />
+	</machine>
+	<machine Id="17" Name="ZDC2SSA007"	ExternalIP="10.108.69.7">
+		<!--<ServerRole Include="IISSetup.SSO" />-->
+		<ServerRole Description="Customer Services" Include="Customer.Services" />
+		<ServerRole Description="SingleSignOn Services" Include="SingleSignOn.Services" />
+		<ServerRole Description="SSO Validation Service" Include="Validation.Service" />
+	</machine>
+	<machine Id="18" Name="ZDC2SSA008"	ExternalIP="10.108.69.8">
+		<!--<ServerRole Include="IISSetup.SSO" />-->
+		<ServerRole Description="SSO.EventLog.For.Internal" Include="SSO.EventLogDeploy.Internal" />
+		<ServerRole Description="Customer Services" Include="Customer.Services" />
+		<ServerRole Description="SingleSignOn Services" Include="SingleSignOn.Services" />
+		<ServerRole Description="SSO Validation Service" Include="Validation.Service" />
+	</machine>
+</configuration>

@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="MasterData.Functional.ForFAE" Environment="TestRig"  Config="TestRig.MasterData" ProductGroup="FTP">
+	<CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+	<CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+	<CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+	<CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+	<CommonRoleFile>CommonMJTDeltasRole.xml</CommonRoleFile>
+
+	<machine Id="3" Name="TS-CAS1" ExternalIP="">
+		<ServerRole Include="IISSetup.CAS" Description="Setting up IIS for Deployment" Groups="MasterData" />
+		<ServerRole Description="Deployment of MasterData Website" Include="MasterData.Website" />
+	</machine>
+	<machine Id="5" Name="TS-SAS1" ExternalIP="">
+		<PreDeployRole Include="MasterData.MJTService.Service.Stop" />
+		<PreDeployRole Include="MasterData.Fares.Service.Stop" />
+
+		<ServerRole Description="Copy MJT Files"  Include="MasterData.MJTService.Assets.Full" />
+		<ServerRole Description="Copy Fares Files" Include="MasterData.FareService.Assets.Full" />
+
+		<ServerRole Description="MasterData MJT service" Include="MasterData.MJTService.Install" />
+		<ServerRole Description="MasterData Fares service" Include="MasterData.FaresService.Install" />
+
+		<PostDeployRole Description="Start MasterData MJT Services" Include="MasterData.Services.MJT.Start" />
+		<PostDeployRole Description="Start MasterData Fares Services" Include="MasterData.Services.Fares.Start" />
+	</machine>
+	
+	<machine Id="2" Name="TS-CIS1" ExternalIP="">
+		<ServerRole Include="IISSetup.CIS" Description="Setting up IIS for Deployment" Groups="MasterData" />
+		<ServerRole  Description="FTP.EventLog.For.MasterData.WebApi" Include="FTP.EventLog.For.MasterData.WebApi" />
+		<ServerRole Description="MasterData Api" Include="MasterData.Api" />
+		<PostDeployRole Description="Start MasterData API" Include="MasterData.Api.Start" />
+	</machine>
+	
+	<machine Id="1" Name="TS-DB1" ExternalIP="" DeploymentMachine="true">
+		<PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices1" />
+		<PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices2" />
+		<PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices3" />
+		<PreDeployRole Description="CheckSqlAgentServiceInst1" Include="CheckSqlAgentServiceInst1" />
+		<PreDeployRole Description="CheckSqlAgentServiceInst1" Include="CheckSqlAgentServiceInst2" />
+		<ServerRole Include="SQL.Extension.Events.Folder" Description="SQL Extension Events Output Folder Creation" />
+
+		<!-- Copy MasterData backup Files -->
+		<ServerRole Description="MasterData.ProjectionStore file system" Include="MasterData.ProjectionStoreRestore.FileSystem.INT" />
+		
+		<DatabaseRole Description="System Deployment Schema"  Include="System.Deployment.Schema" DatabaseInstance="Inst3" />
+		<DatabaseRole Description="Dba.System" Include="Dba.System" DatabaseInstance="Inst3" />
+		<DatabaseRole Description="MasterData.ProjectionStore.Restore" Include="MasterData.ProjectionStore.Restore" DatabaseInstance="Inst3" />
+		<DatabaseRole Description="MasterData execute script for FAE" Include="MasterData.ForFAE.PostDeployScript" DatabaseInstance="Inst3" />
+		<DatabaseRole Include="SQL.Extension.Events" Description="SQL Extension Events Deployment Role" TargetDatabase="Master" DatabaseInstance="Inst3"/>
+	</machine>
+</configuration>

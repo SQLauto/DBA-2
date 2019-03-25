@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="SSO.Azure" Environment="SSO.Azure" Config="SSO.Azure" ProductGroup="SSO">
+
+  <CommonRoleFile>SSO.CommonServerRoles.Azure.xml</CommonRoleFile>
+
+  <machine Id="1" Name="localhost"  ExternalIP="" DeploymentMachine="true">
+    <ServerRole Description="SSO.EventLog.For.Internal" Include="SSO.EventLogDeploy.Internal" />
+    <ServerRole Include="IISSetup" Description="IIS" Groups="SSO" />
+    <ServerRole Description="SSO Website" Include="SSO.Website" />
+    <ServerRole Description="ServicesFacade Role" Include="Service.Facade.Functional" />
+    <!--<ServerRole Description="Search Service Test" Include="Search.Service.Test" />-->
+    <ServerRole Description="Customer Services" Include="Customer.Services" />
+    <ServerRole Description="SingleSignOn Services" Include="SingleSignOn.Services" />
+    <ServerRole Description="SSO Validation Service" Include="Validation.Service" />
+    <ServerRole Description="FTP Notifications Stub" Include="FtpNotifications.Stub" />
+    <ServerRole Description="Customer Change NotificationWorker" Include="Customer.Change.NotificationWorker" />
+    <ServerRole Description="Customer Change NotificationWorker Oyster" Include="Customer.Change.NotificationWorker.Oyster" />
+    <ServerRole Description="Customer Change NotificationWorker Travel Alerts" Include="Customer.Change.NotificationWorker.TravelAlerts" />
+    <ServerRole Description="Customer Change QueueManager" Include="Customer.Change.QueueManager" />
+    <ServerRole Description="Marketing Preferences Exporter" Include="Customer.Change.MarketingPreferences.Exporter" />
+
+    <!--<ServerRole Description="SSO File System" Groups="SSO" Include="SSO.FileSystem.Cdrive" />-->
+
+    <DatabaseRole Description="SSO Depoyment Schema" Include="SSO.DBDeploymentSchema.Functional" />
+    <DatabaseRole Description="SSO Database" Include="SSO.Database" />
+    
+   </machine>
+</configuration>

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/CommonRoles">
+  <CommonRoles>
+  	 <DatabaseRole Name="FromConfig" Description="SSO Baseline Database" Include="SSO.Baseline.Database" Groups="SSO,Database">
+      <TargetDatabase>SingleSignOn</TargetDatabase>
+      <DatabaseInstance>Inst3</DatabaseInstance>
+      <BaselineDeployment>SSO.DatabaseArtifacts\Dev\Baseline\SSO.RigBaseline.sql</BaselineDeployment>
+      <PatchDeployment></PatchDeployment>
+    </DatabaseRole>
+  </CommonRoles>
+</configuration>

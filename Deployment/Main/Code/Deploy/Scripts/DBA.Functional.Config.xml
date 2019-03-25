@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="DBATestRig" Environment="TSRig" Config="TSRig" ProductGroup="FTP">
+
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+
+  <machine Id="1" Name="TS-DB1" ExternalIP="" Role="FTP Database Server" DeploymentMachine="true">
+
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices1" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices2" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices3" />
+    <PreDeployRole Description="CheckSqlAgentServiceInst1" Include="CheckSqlAgentServiceInst1" />
+    <PreDeployRole Description="CheckSqlAgentServiceInst2" Include="CheckSqlAgentServiceInst2" />
+    <PreDeployRole Description="CheckSqlAgentServiceInst3" Include="CheckSqlAgentServiceInst3" />
+
+    <DatabaseRole Description="BaselineData Database" Include="BaselineData.Baseline.Database" DatabaseInstance="Inst1" TargetDatabase="BaselineData" />
+    <DatabaseRole Description="BaselineData Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="BaselineData" />
+    <DatabaseRole Description="BaselineData Database" Include="BaselineData.Database" DatabaseInstance="Inst1" TargetDatabase="BaselineData" />
+
+    <DatabaseRole Description="BaselineData Database" Include="BaselineData.Baseline.Database" DatabaseInstance="Inst2" TargetDatabase="BaselineData" />
+    <DatabaseRole Description="BaselineData Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst2" TargetDatabase="BaselineData" />
+    <DatabaseRole Description="BaselineData Database" Include="BaselineData.Database" DatabaseInstance="Inst2" TargetDatabase="BaselineData" />
+
+    <DatabaseRole Description="BaselineData Database" Include="BaselineData.Baseline.Database" DatabaseInstance="Inst3" TargetDatabase="BaselineData" />
+    <DatabaseRole Description="BaselineData Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="BaselineData" />
+    <DatabaseRole Description="BaselineData Database" Include="BaselineData.Database" DatabaseInstance="Inst3" TargetDatabase="BaselineData" />
+
+	<!-- PARE DB -->
+	<DatabaseRole Description='PARE Baseline' Include="PARE.Baseline.Database" DatabaseInstance="Inst2" TargetDatabase="PARE" />
+    <DatabaseRole Description="PARE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst2" TargetDatabase="PARE"/>
+    <DatabaseRole Description="PARE Main Schema" Include="PARE.Database" DatabaseInstance="Inst2" />
+	<DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst2" TargetDatabase="PARE" />
+	<DatabaseRole Description="Pare Partitioning" Include="Pare.Partitioning" DatabaseInstance="Inst2" />
+	
+    <DatabaseRole Description="FAE Baseline" Include="FAE.Baseline.Database" />
+    <DatabaseRole Description="FAE Deployment Schema" Include="Deployment.Schema" TargetDatabase="FAE" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="FAE Database" Include="FAE.Database" DatabaseInstance="Inst1" />
+	<DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="FAE" />
+	<DatabaseRole Description="FAE Partitioning" Include="FAE.Partitioning" DatabaseInstance="Inst1" />
+	
+	<!-- Travel Store db -->
+	<DatabaseRole Description='TravelStore Baseline' Include="TravelStore.Baseline.Database" DatabaseInstance="Inst1" />
+	<DatabaseRole Description="TravelStore Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="TravelStore" />
+    <DatabaseRole Description="TravelStore Database" Include="TravelStore.Database" DatabaseInstance="Inst1"  />
+	<DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="TravelStore"  />
+	<DatabaseRole Description="TravelStore Partitioning" Include="TravelStore.Partitioning" DatabaseInstance="Inst1"  />
+	
+	<!-- OTFP DB-->
+    <DatabaseRole Description="OTFP Database" Include="OTFP.Baseline.Database"  DatabaseInstance="Inst3" TargetDatabase="OTFP" />
+    <DatabaseRole Description="OTFP Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="OTFP" />
+    <DatabaseRole Description="OTFP Database" Include="OTFP.Database" DatabaseInstance="Inst3" TargetDatabase="OTFP" />
+    <DatabaseRole Description="OTFP Database" Include="OTFP.PreProd.Database" DatabaseInstance="Inst3" TargetDatabase="OTFP" />
+    <DatabaseRole Description="OTFP Database" Include="OTFP.Functional.Database" DatabaseInstance="Inst3" TargetDatabase="OTFP" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst3" TargetDatabase="OTFP" />
+    <DatabaseRole Description="OTFP Partitioning" Include="OTFP.Partitioning" DatabaseInstance="Inst3" TargetDatabase="OTFP"  />
+	
+	
+	<!-- OCAE DB-->
+    <DatabaseRole Description="OCAE Database" Include="OCAE.Baseline.Database"  DatabaseInstance="Inst3" TargetDatabase="OCAE" />
+    <DatabaseRole Description="OCAE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="OCAE" />
+    <DatabaseRole Description="OCAE Database" Include="OCAE.Database" DatabaseInstance="Inst3" TargetDatabase="OCAE" />
+    <DatabaseRole Description="OCAE Functional Schema" Include="OCAE.Functional.Database" DatabaseInstance="Inst3" TargetDatabase="OCAE" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst3" TargetDatabase="OCAE" />
+    <DatabaseRole Description="OCAE Partitioning" Include="OCAE.Partitioning" DatabaseInstance="Inst3" TargetDatabase="OCAE"  />
+	
+	<!-- Refunds DB-->
+    <DatabaseRole Description="Refunds Database" Include="Refunds.Baseline.Database"  DatabaseInstance="Inst3" TargetDatabase="RefundManager" />
+    <DatabaseRole Description="Refunds Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="RefundManager" />
+    <DatabaseRole Description="Refunds Database" Include="Refunds.Database" DatabaseInstance="Inst3" TargetDatabase="RefundManager" />
+    <DatabaseRole Description="Refunds Functional Schema" Include="Refunds.Functional.Database" DatabaseInstance="Inst3" TargetDatabase="RefundManager" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst3" TargetDatabase="RefundManager" />
+    <DatabaseRole Description="Refunds Partitioning" Include="Refunds.Partitioning" DatabaseInstance="Inst3" TargetDatabase="RefundManager"  />
+	
+  </machine>
+  
+
+</configuration>

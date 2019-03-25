@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/CommonRoles">
+  <CommonRoles>  
+   <!-- New Pare Roles-->
+    <ServerRole Name="TFL.ServiceDeploy" Description="PareAuthorisationGatewayServiceInstaller" Include="PareAuthorisationGatewayServiceInstaller" Groups="PARE">
+      <ServiceDeploy Name="PareAuthorisationGatewayServiceInstaller">
+        <MSI>
+          <id>B6A6C29A-C102-47C6-B00D-1247F0A01B60</id>
+          <name>PareAuthorisationGatewayServiceInstaller.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\AuthorisationGatewayService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>AuthorisationGatewayService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+            <StartUpType>Automatic</StartUpType>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Authorisation.GatewayService.exe.config" target="\tfl\PARE\AuthorisationGatewayService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+   
+    <ServerRole Name="TFL.ServiceDeploy" Description="PareRefundFileServiceInstaller" Include="PareRefundFileServiceInstaller" Groups="PARE">
+      <ServiceDeploy Name="PareRefundFileServiceInstaller">
+        <MSI>
+          <id>21193E20-00F1-4795-BA1E-37B8DF94C756</id>
+          <name>PareRefundFileServiceInstaller.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\RefundFileService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>RefundFileService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+            <StartUpType>Automatic</StartUpType>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="RefundFileService.exe.config" target="\tfl\PARE\RefundFileService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="PareRevenueFileService" Include="PareRevenueFileService" Groups="PARE">
+      <ServiceDeploy Name="PareRevenueFileService">
+        <MSI>
+          <id>F5EE1A78-5A36-4A65-A139-A75251AE2E4D</id>
+          <name>PareRevenueFileService.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\RevenueStatusListFileService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>RevenueStatusListFileService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+            <StartUpType>Automatic</StartUpType>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="RevenueStatusListFileService.exe.config" target="\tfl\PARE\RevenueStatusListFileService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="PareSettlementValidationResultServiceInstaller" Include="PareSettlementValidationResultServiceInstaller" Groups="PARE">
+      <ServiceDeploy Name="PareSettlementValidationResultServiceInstaller">
+        <MSI>
+          <id>B044554C-D6BD-4D76-A634-B44F35597CE3</id>
+          <name>PareSettlementValidationResultServiceInstaller.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\Pare.SettlementValidationResultFileProcessingService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>Pare.SettlementValidationResultFileProcessingService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+            <StartUpType>Automatic</StartUpType>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Pare.SettlementValidationResultFileProcessingService.exe.config" target="\tfl\PARE\Pare.SettlementValidationResultFileProcessingService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="PareStatusListProcessorInstaller" Include="PareStatusListProcessorInstaller" Groups="PARE">
+      <ServiceDeploy Name="PareStatusListProcessorInstaller">
+        <MSI>
+          <id>C58010D3-C6F3-40EE-9DB9-CAFA993E2B3F</id>
+          <name>PareStatusListProcessorInstaller.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\Pare.StatusListService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>Pare.StatusListService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+            <StartUpType>Automatic</StartUpType>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Pare.StatusListService.exe.config" target="\tfl\PARE\Pare.StatusListService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="PareTapFileServiceInstaller" Include="PareTapFileServiceInstaller" Groups="PARE">
+      <ServiceDeploy Name="PareTapFileServiceInstaller">
+        <MSI>
+          <id>78DA0AD1-E73E-4596-BDEC-8AE327C8F72F</id>
+          <name>PareTapFileProcessor.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\TapFileProcessorService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>TapFileProcessorService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+            <StartUpType>Automatic</StartUpType>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="TapFileProcessorService.exe.config" target="\tfl\PARE\TapFileProcessorService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="PareTravelDayRevisionService" Include="PareTravelDayRevisionService" Groups="PARE">
+      <ServiceDeploy Name="PareTravelDayRevisionService">
+        <MSI>
+          <id>04DEAA4C-47A5-41A4-B709-B78060CAADFE</id>
+          <name>PareTravelDayRevisionService.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\TravelDayRevisionService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>TravelDayRevisionService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+            <StartUpType>Automatic</StartUpType>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="TravelDayRevisionService.exe.config" target="\tfl\PARE\TravelDayRevisionService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="SettlementFileResponseServiceInstaller" Include="SettlementFileResponseServiceInstaller" Groups="PARE">
+      <ServiceDeploy Name="SettlementFileResponseServiceInstaller">
+        <MSI>
+          <id>690FC18C-B49C-48FC-BB77-0C0F3ACBFD7F</id>
+          <name>SettlementFileResponseServiceInstaller.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\SettlementFileResponseService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>SettlementFileResponseService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+            <StartUpType>Automatic</StartUpType>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="SettlementFileResponseService.exe.config" target="\tfl\PARE\SettlementFileResponseService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="PareStatusListFileResponseServiceInstaller" Include="PareStatusListFileResponseServiceInstaller" Groups="PARE">
+      <ServiceDeploy Name="PareStatusListFileResponseServiceInstaller">
+        <MSI>
+          <id>1B1FBA0A-6B50-42C3-9D7C-E1937A68E851</id>
+          <name>PareStatusListFileResponseServiceInstaller.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\ResponseFileProcessorService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>ResponseFileProcessorService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+            <StartUpType>Automatic</StartUpType>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="ResponseFileProcessorService.exe.config" target="\tfl\PARE\ResponseFileProcessorService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+    <ServerRole Name="TFL.ServiceDeploy" Description="PareDirectPaymentConfirmationServiceInstaller" Include="PareDirectPaymentConfirmationServiceInstaller" Groups="PARE">
+      <ServiceDeploy Name="PareDirectPaymentConfirmationServiceInstaller">
+        <MSI>
+          <id>3BDA80DB-01FC-4347-A132-D6811B6CC4CD</id>
+          <name>PareDirectPaymentConfirmationServiceInstaller.msi</name>
+		  <parameters>
+			<parameter name="INSTALLLOCATION" value="d:\tfl\PARE\Pare.DirectPaymentService\" />
+          </parameters>
+        </MSI>
+        <Services>
+          <Service>
+            <Name>Pare.DirectPaymentService.exe</Name>
+            <Credentials>PAREServiceAccount</Credentials>
+            <StartUpType>Automatic</StartUpType>
+          </Service>
+        </Services>
+        <Configs>
+          <config name="Pare.DirectPaymentService.exe.config" target="\tfl\PARE\Pare.DirectPaymentService" />
+        </Configs>
+      </ServiceDeploy>
+    </ServerRole>
+  </CommonRoles>
+</configuration>

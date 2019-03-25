@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="MasterData.Main.SandBox.DB" Environment="MasterData.SandBox.DB"  Config="SandBox.MasterData" ProductGroup="FTP">
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonMJTDeltasRole.xml</CommonRoleFile>
+
+  <PostDeploymentTestIdentity>DeploymentAccount.Internal</PostDeploymentTestIdentity>
+  <machine Id="1" Name="FTDC2MGT360" ExternalIP="10.107.200.186" DeploymentMachine="true" />
+
+  <machine Id="3" Name="TDC2SQL005" ExternalIP="10.107.25.194" Role="Database Server 1">
+    <ServerRole Description="MasterData.ProjectionStore.TDC2SQL005" Include="MasterData.ProjectionStoreRestore.FileSystem.TDC2SQL005" />
+    <DatabaseRole Description="System Deployment Schema"  Include="System.Deployment.Schema" DatabaseInstance="INST02" />
+    <DatabaseRole Description="Dba.System" Include="Dba.System" DatabaseInstance="INST02" />
+    <DatabaseRole Description="MasterData.ProjectionStore.Restore" Include="MasterData.ProjectionStore.Restore" DatabaseInstance="INST02" />
+    <DatabaseRole Description="MasterData EventStore Database deployment" Include="MasterData.EventStore.Restore" DatabaseInstance="INST02" />
+    <DatabaseRole Description="MasterData Logging Database deployment" Include="MasterData.DB.Logging" DatabaseInstance="INST02" />
+
+
+    <DatabaseRole Description="MasterData.Sandbox.ProjectionStore.Permissions" Include="MasterData.Sandbox.ProjectionStore.Permissions" DatabaseInstance="INST02" />
+    <DatabaseRole Description="MasterData.Sandbox.EventStore.Permissions" Include="MasterData.Sandbox.EventStore.Permissions" DatabaseInstance="INST02" />
+  </machine>
+</configuration>

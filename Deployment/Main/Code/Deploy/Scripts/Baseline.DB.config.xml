@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="Deployment Baseline - Database" Environment="Baseline" Config="Baseline" ProductGroup="DeploymentBaseline">
+
+  <CommonRoleFile>Baseline.CommonRoles.xml</CommonRoleFile>
+
+  <machine Id="2" Name="TS-DB1" ExternalIP="" DeploymentMachine="true">
+    <PreDeployRole Include="CheckSqlServices1" Description="CheckSqlServices" />
+    <PreDeployRole Include="CheckSqlServices2" Description="CheckSqlServices" />
+    <PreDeployRole Include="CheckSqlServices3" Description="CheckSqlServices" />
+    <PreDeployRole Include="CheckSqlIntegrationService" Description="CheckSqlIntegrationService" />
+    <PreDeployRole Include="CheckSqlAgentServiceInst1" Description="CheckSqlAgentServiceInst1" />
+    <PreDeployRole Include="CheckSqlAgentServiceInst2" Description="CheckSqlAgentServiceInst2" />
+    <PreDeployRole Include="CheckSqlAgentServiceInst3" Description="CheckSqlAgentServiceInst3" />
+    <ServerRole Include="SSISSetup.Notifications" Description="Configures SSIS for Notifications deployment" SSISDBInstance="Inst1" />
+    <!--<ServerRole Include="Simple.SISS.Package" />-->
+    <ServerRole Include="SQL.Extension.Events.Folder" Description="SQL Extension Events Output Folder Creation" />
+    <DatabaseRole Include="Simple.Database.Baseline.Inst1" Description="Simple Database Baseline Inst1" />
+    <DatabaseRole Include="Simple.Database.Deployment.Schema" Description="Simple Database Deployment Schema" />
+    <DatabaseRole Include="Simple.Database" Description="Simple Database" />
+    <DatabaseRole Include="Simple.Database.Baseline.Inst2" Description="Simple Database Baseline Inst2" />
+    <DatabaseRole Include="Simple.Database.Inst2.Install" Description="Simple Database Inst2 Install" />
+    <DatabaseRole Include="Simple.Database.Inst2.Disable.SqlCache" Description="Simple Database Inst2 Disable SqlCache" />
+    <DatabaseRole Include="Simple.Database.Deployment.Schema" Description="Database Deployment Schema" />
+    <DatabaseRole Include="SQL.Extension.Events" Description="SQL Extension Events Deployment Role" />
+  </machine>
+ </configuration>

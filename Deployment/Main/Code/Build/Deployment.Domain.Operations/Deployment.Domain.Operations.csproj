@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{08D6BC41-2923-4791-8C56-9B7E2965CAC2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Deployment.Domain.Operations</RootNamespace>
+    <AssemblyName>Deployment.Domain.Operations</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Collections.Immutable.1.4.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CommonRoleInfo.cs" />
+    <Compile Include="DeploymentFileParser.cs" />
+    <Compile Include="DeploymentOperationParameters.cs" />
+    <Compile Include="DeploymentOperator\AppFabricTestOperator.cs" />
+    <Compile Include="DeploymentOperator\ServiceBrokerTestOperator.cs" />
+    <Compile Include="DeploymentOperator\StateServiceOperator.cs" />
+    <Compile Include="DeploymentOperator\UniversalCustomTestOperator.cs" />
+    <Compile Include="DeploymentOperator\UniversalValidationOperator.cs" />
+    <Compile Include="DeploymentValidation.cs" />
+    <Compile Include="DomainModelFactory\WindowsServicePreDeployFactory.cs" />
+    <Compile Include="DomainOperatorFactory.cs" />
+    <Compile Include="Interfaces\PathBuilder\IBasePathBuilder.cs" />
+    <Compile Include="Interfaces\PathBuilder\ICIBasePathBuilder.cs" />
+    <Compile Include="Interfaces\IDeploymentFilterService.cs" />
+    <Compile Include="Interfaces\IDeploymentManifestService.cs" />
+    <Compile Include="Interfaces\IDeploymentOperator.cs" />
+    <Compile Include="Interfaces\PathBuilder\IDeploymentPathBuilder.cs" />
+    <Compile Include="Interfaces\IDeploymentService.cs" />
+    <Compile Include="Interfaces\IDomainOperatorFactory.cs" />
+    <Compile Include="Interfaces\PathBuilder\IPackagePathBuilder.cs" />
+    <Compile Include="Interfaces\IPatchScriptParameterService.cs" />
+    <Compile Include="Interfaces\PathBuilder\IRootPathBuilder.cs" />
+    <Compile Include="Packaging\ExternalFileIncludePackageRole.cs" />
+    <Compile Include="Services\PathBuilder\PackagePathBuilder.cs" />
+    <Compile Include="Services\PathBuilder\DeploymentPathBuilder.cs" />
+    <Compile Include="Services\PathBuilder\CIBasePathBuilder.cs" />
+    <Compile Include="Services\PathBuilder\BasePathBuilder.cs" />
+    <Compile Include="Services\DeploymentFilterService.cs" />
+    <Compile Include="Services\DeploymentService.cs" />
+    <Compile Include="DeploymentOperator\MsiInstallerOperatorHelper.cs" />
+    <Compile Include="DeploymentOperator\FileSystemDeployOperator.cs" />
+    <Compile Include="DeploymentOperator\MasterDataDeltasOperator.cs" />
+    <Compile Include="DeploymentOperator\MsiDeployOperator.cs" />
+    <Compile Include="DeploymentOperator\ScheduledTaskDeployOperator.cs" />
+    <Compile Include="DeploymentOperator\ServiceDeployOperator.cs" />
+    <Compile Include="DeploymentOperator\SmtpDeployOperator.cs" />
+    <Compile Include="DeploymentOperator\SsisDeployOperator.cs" />
+    <Compile Include="DeploymentOperator\UniversalPackageOperator.cs" />
+    <Compile Include="DeploymentOperator\WebDeployOperator.cs" />
+    <Compile Include="DomainModelBuilder.cs" />
+    <Compile Include="DomainModelFactoryBuilder.cs" />
+    <Compile Include="DomainModelFactory\AppFabricPostDeployFactory.cs" />
+    <Compile Include="DomainModelFactory\AppFabricTestFactory.cs" />
+    <Compile Include="DomainModelFactory\AspNetStateServiceDeployFactory.cs" />
+    <Compile Include="DomainModelFactory\BaseRoleFactory.cs" />
+    <Compile Include="DomainModelFactory\FileSystemDeployFactory.cs" />
+    <Compile Include="DomainModelFactory\IisSetupDeployFactory.cs" />
+    <Compile Include="DomainModelFactory\MasterDataDeltasFactory.cs" />
+    <Compile Include="DomainModelFactory\DatabaseDeployFactory.cs" />
+    <Compile Include="DomainModelFactory\DeploymentFileParseResult.cs" />
+    <Compile Include="DomainModelFactory\EventLogDeployFactory.cs" />
+    <Compile Include="DomainModelFactory\FileParseResult.cs" />
+    <Compile Include="DomainModelFactory\FileShareDeployFactory.cs" />
+    <Compile Include="DomainModelFactory\IncludeFileParseResult.cs" />
+    <Compile Include="DomainModelFactory\MachineParseResult.cs" />
+    <Compile Include="DomainModelFactory\MsiDeployFactory.cs" />
+    <Compile Include="DomainModelFactory\ParseElement.cs" />
+    <Compile Include="DomainModelFactory\PreRequisiteDeployFactory.cs" />
+    <Compile Include="DomainModelFactory\ScheduledTaskDeployFactory.cs" />
+    <Compile Include="DomainModelFactory\ServiceBrokerTestFactory.cs" />
+    <Compile Include="DomainModelFactory\SmtpDeployFactory.cs" />
+    <Compile Include="DomainModelFactory\SsisDeployFactory.cs" />
+    <Compile Include="DomainModelFactory\SsisSetupFactory.cs" />
+    <Compile Include="DomainModelFactory\WebDeployFactory.cs" />
+    <Compile Include="DomainModelFactory\WebServicePostDeployFactory.cs" />
+    <Compile Include="DomainModelFactory\WindowsServicePostDeployFactory.cs" />
+    <Compile Include="DomainModelFactory\XmlParserBase.cs" />
+    <Compile Include="DomainModelValidator.cs" />
+    <Compile Include="DeploymentOperator\DatabaseDeployOperator.cs" />
+    <Compile Include="DeploymentOperator\EventLogDeployOperator.cs" />
+    <Compile Include="DeploymentOperator\FileShareDeployOperator.cs" />
+    <Compile Include="Interfaces\IDomainModelFactory.cs" />
+    <Compile Include="Interfaces\IDomainModelFactoryBuilder.cs" />
+    <Compile Include="Interfaces\IDomainModelValidator.cs" />
+    <Compile Include="Interfaces\IPackageRole.cs" />
+    <Compile Include="Interfaces\IPackageRoleInfo.cs" />
+    <Compile Include="Interfaces\IPackagingService.cs" />
+    <Compile Include="Interfaces\IParameterService.cs" />
+    <Compile Include="Interfaces\IRigManifestService.cs" />
+    <Compile Include="Interfaces\IServiceAccountsManager.cs" />
+    <Compile Include="Packaging\PackageRoleCommand.cs" />
+    <Compile Include="Packaging\PackageRoleInfo.cs" />
+    <Compile Include="Packaging\FileIncludeInPackagingXmlReader.cs" />
+    <Compile Include="Packaging\PackagingFileConfig.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DomainModelFactory\ServiceDeployFactory.cs" />
+    <Compile Include="ServiceAccountsManager.cs" />
+    <Compile Include="Services\ConfigurationParameterService.cs" />
+    <Compile Include="Services\ConfigurationTransformationService.cs" />
+    <Compile Include="Services\DeploymentManifestService.cs" />
+    <Compile Include="Services\PackagingService.cs" />
+    <Compile Include="Services\ParameterService.cs" />
+    <Compile Include="Services\PatchScriptParameterService.cs" />
+    <Compile Include="Services\PostDeploymentService.cs" />
+    <Compile Include="Services\RigManifestService.cs" />
+    <Compile Include="Services\PathBuilder\RootPathBuilder.cs" />
+    <Compile Include="WindowsServiceController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PowerShellModules\Tfl.PowerShell.Common\Tfl.PowerShell.Common.csproj">
+      <Project>{51ADA052-8164-43B2-A1EC-BEB3C11DC2AE}</Project>
+      <Name>Tfl.PowerShell.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Deployment.Schemas\Deployment.Schemas.csproj">
+      <Project>{a1b8134b-b0ed-4526-9025-e48b2250b8bf}</Project>
+      <Name>Deployment.Schemas</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Deployment.Common\Deployment.Common.csproj">
+      <Project>{c69cab01-3acd-46d0-96cf-f05b4962a262}</Project>
+      <Name>Deployment.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Deployment.Domain\Deployment.Domain.csproj">
+      <Project>{4F43C615-A37D-49C9-8C20-E5D889039391}</Project>
+      <Name>Deployment.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Deployment.Domain.Operations.nuspec" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  -->
+  <Target Name="AfterBuild" Condition="$(BuildingInsideVisualStudio) == 'True'">
+    <CreateItem Include="$(ProjectDir)..\..\DeploymentBaseLine\Deployment\Parameters\*.*">
+      <Output TaskParameter="Include" ItemName="ParameterFilesToCopy" />
+    </CreateItem>
+    <Copy SourceFiles="@(ParameterFilesToCopy)" DestinationFiles="@(ParameterFilesToCopy->'$(ProjectDir)..\..\Deploy\Parameters\%(Filename)%(Extension)')" />
+  </Target>
+  <!--<Target Name="AfterBuild">
+    <CreateItem Include="$(ProjectDir)..\..\DeploymentBaseLine\Deployment\Parameters\*.*">
+      <Output TaskParameter="Include" ItemName="ParameterFilesToCopy" />
+    </CreateItem>
+    <Copy SourceFiles="@(ParameterFilesToCopy)" DestinationFiles="@(ParameterFilesToCopy->'$(ProjectDir)..\..\Deploy\Parameters\%(Filename)%(Extension)')" />
+  </Target>-->
+</Project>

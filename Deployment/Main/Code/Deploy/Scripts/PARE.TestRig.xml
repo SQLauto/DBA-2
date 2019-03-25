@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="PARE.TestRig" Environment="TestRig" Config="TestRig.PARE" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonPareServiceDeploy.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+
+  <machine Id="0" Name="TS-DB1" ExternalIP="" DeploymentMachine="true">
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices1" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices2" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices3" />
+    <PreDeployRole Description="CheckSqlAgentServiceInst1" Include="CheckSqlAgentServiceInst1" />
+
+    <!-- Notifications DB -->
+    <DatabaseRole Description='Notification Baseline' Include="Notification.Baseline.Database" />
+    <DatabaseRole Description="Notification Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="Notification" />
+    <DatabaseRole Description="Notification Database" Include="Notification.DB" DatabaseInstance="Inst3" />
+    <!-- NOTIFICATIONS BROKER: PARE <-> Notification -->
+    <DatabaseRole Description="Pare.Notifications.Transport.Notifications" Include="Pare.Notifications.Transport.Notifications" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="Pare.Notifications.Dialog.Notifications" Include="Pare.Notifications.Dialog.Notifications" DatabaseInstance="Inst3" />
+
+    <!-- PARE DB -->
+    <DatabaseRole Description='PARE Baseline' Include="PARE.Baseline.Database" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="PARE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst2" TargetDatabase="PARE" />
+    <DatabaseRole Description="PARE Main Schema" Include="PARE.Database" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst2" TargetDatabase="PARE" />
+    <DatabaseRole Description="Pare Partitioning" Include="Pare.Partitioning" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="PARE Pre Production Schema" Include="PARE.PreProduction.Schema" DatabaseInstance="Inst2" />
+
+    <!-- AUTHORISATION BROKER: PARE <-> PCS  -->
+    <DatabaseRole Description="Pare.Authorisation.Transport.Pare" Include="Pare.Authorisation.Transport.Pare" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="PARE PCS Common.PARE Schema" Include="PARE.PCS.Common.PARE" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Pcs Pare Schema" Include="Pcs.Pare" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Pare.Authorisations.Dialog.Pare" Include="Pare.Authorisations.Dialog.Pare" DatabaseInstance="Inst2" />
+    <!-- NOTIFICATIONS BROKER: PARE <-> Notification -->
+    <DatabaseRole Description="Notifications Common" Include="Notifications.Common" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Notifications Pare" Include="Notifications.Pare" DatabaseInstance="Inst2" />
+
+    <DatabaseRole Description="Pare.Notifications.Transport.Pare" Include="Pare.Notifications.Transport.Pare" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Pare.Notifications.Dialog.Pare" Include="Pare.Notifications.Dialog.Pare" DatabaseInstance="Inst2" />
+
+  </machine>
+
+  <machine Id="1" Name="TS-DB2" ExternalIP="" Role="PCS Database Server">
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices1" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices2" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices3" />
+
+    <!-- PCS DB -->
+    <DatabaseRole Description='PCS Baseline' Include="PCS.Baseline.Database" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Deployment Schema for PCS" Include="Deployment.Schema" DatabaseInstance="Inst2" TargetDatabase="PCS" />
+    <DatabaseRole Description="Pcs.Authorisation.Transport.Pcs" Include="Pcs.Authorisation.Transport.Pcs" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="PARE PCS Common for PCS DB" Include="PARE.PCS.Common.PCS" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="PCS Mock" Include="Pcs.Mock" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Pcs.Authorisation.Dialog.Pcs" Include="Pcs.Authorisation.Dialog.Pcs" DatabaseInstance="Inst2" />
+
+  </machine>
+
+  <machine Id="2" Name="TS-CAS1"  ExternalIP="">
+  </machine>
+
+  <machine Id="3" Name="TS-CIS1"  ExternalIP="">
+    <ServerRole Include="IISSetup.CIS" Description="IIS" Groups="PARE" />
+    <ServerRole Description="Pare TravelTokenService" Include="PARE.TravelToken.Service" />
+    <ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+    <ServerRole Description="PARE Dashboard" Include="PARE.Dashboard.Web" />
+  </machine>
+
+  <machine Id="4" Name="TS-PARE1"  ExternalIP="">
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc"/>
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv"/>
+
+    <!-- Pare Preprod Services-->
+    <PreDeployRole Include="StopParePreProduction.Services.FAEMock" />
+    <PreDeployRole Include="StopParePreProduction.Services.OysterTap" />
+    <PreDeployRole Include="StopPareServices.IDRA" />
+    <PreDeployRole Include="StopPareServices.StatusList" />
+    <PreDeployRole Include="StopPareServices.AuthGateway" />
+    <PreDeployRole Include="StopPareServices.TapFileProcessor" />
+    <PreDeployRole Include="StopPareServices.SettlementFileResponse" />
+    <PreDeployRole Include="StopPareServices.SettlementValidationResult" />
+    <PreDeployRole Include="StopPareServices.RefundFile" />
+    <PreDeployRole Include="StopPareServices.RevenueStatusList" />
+    <PreDeployRole Include="StopPareServices.TDR" />
+    <PreDeployRole Include="StopPareServices.EodController" />
+    <PreDeployRole Include="StopPareServices.DirectPayment" />
+
+    <ServerRole Description="PARE PreProduction File System" Include="PARE.PreProduction.FileSystem"  />
+    <ServerRole Description="PARE File Staging Area Folders" Include="PARE.FileSystem" />
+    <ServerRole Description="PARE Distributor Mock File System" Include="PARE.DistributorMock.FileSystem"  />
+
+    <ServerRole Description="PareFaeMockServiceInstaller" Include="PareFaeMockServiceInstaller"  />
+	  <ServerRole Description="ParePcsMockServiceInstaller" Include="ParePcsMockServiceInstaller"  />
+    <ServerRole Description="PareOysterTapImporterService" Include="PareOysterTapImporterService"  />
+    <ServerRole Description="TimeMachineServiceInstaller" Include="TimeMachineServiceInstaller"  />
+    <ServerRole Description="PreProductionPareRiskEngineInstaller" Include="PreProductionPareRiskEngineInstaller" />
+
+    <!-- Pare Services -->
+    <ServerRole Description="PareAuthorisationGatewayServiceInstaller" Include="PareAuthorisationGatewayServiceInstaller" StartUpType="AutomaticDelayed"  />
+    <ServerRole Description="PareRefundFileServiceInstaller" Include="PareRefundFileServiceInstaller" StartUpType="AutomaticDelayed"  />
+    <ServerRole Description="PareRevenueFileService" Include="PareRevenueFileService" StartUpType="AutomaticDelayed"  />
+    <ServerRole Description="PareSettlementValidationResultServiceInstaller" Include="PareSettlementValidationResultServiceInstaller" StartUpType="AutomaticDelayed"  />
+    <ServerRole Description="PareStatusListProcessorInstaller" Include="PareStatusListProcessorInstaller" StartUpType="AutomaticDelayed"  />
+    <ServerRole Description="PareTapFileServiceInstaller" Include="PareTapFileServiceInstaller" StartUpType="AutomaticDelayed"  />
+    <ServerRole Description="PareTravelDayRevisionService" Include="PareTravelDayRevisionService" StartUpType="AutomaticDelayed"  />
+    <ServerRole Description="SettlementFileResponseServiceInstaller" Include="SettlementFileResponseServiceInstaller" StartUpType="AutomaticDelayed"  />
+    <ServerRole Description="PareDirectPaymentConfirmationServiceInstaller" Include="PareDirectPaymentConfirmationServiceInstaller" StartUpType="AutomaticDelayed"  />
+    <ServerRole Description="PareRiskEngineInstaller" Include="PareRiskEngineInstaller"  />
+    <ServerRole Description="PareChargeCalculationInstaller" Include="PareChargeCalculationInstaller"  />
+
+    <!-- Pare Command Line Exe's -->
+    <ServerRole Description="PareFullStatusList.Application.Installer" Include="PareFullStatusList.Application.Installer" />
+    <ServerRole Description="PareStatusListMaintenance.Application.Installer" Include="PareStatusListMaintenance.Application.Installer" />
+    <ServerRole Description="PareVerifyTapData.Application.Installer" Include="PareVerifyTapData.Application.Installer" />
+  	<ServerRole Include="PareSettlement.Installer" />
+    <ServerRole Description="PareAuthorisationGateway.Util.Installer" Include="PareAuthorisationGateway.Util.Installer" />
+    <ServerRole Description="PareChargeCalculationPersist.Application.Installer" Include="PareChargeCalculationPersist.Application.Installer" />
+    <ServerRole Description="ParePostDeployment.Util.Installer" Include="ParePostDeployment.Util.Installer" />
+
+    <!-- Pare Scheduled Tasks -->
+	<ServerRole Include="PARERequestFullStatusList.ScheduledTask.Create" />
+	<ServerRole Include="PareVerifyTapData.ScheduledTask.Create" />
+    <ServerRole Include="PareStatusListMaintenanceApplication.ScheduledTask.Create" />
+    <ServerRole Include="PARESettlementFile.Amex.ScheduledTask.Create" />
+    <ServerRole Include="PARESettlementFile.Barclays.ScheduledTask.Create" />
+    <ServerRole Include="PareChargeCalculationPersist.ScheduledTask.Create" />
+
+    <PostDeployRole Include="StartPareServices.TimeMachine" />
+    <PostDeployRole Include="StartPareServices.StatusList" />
+    <PostDeployRole Include="StartPareServices.AuthGateway" />
+    <PostDeployRole Include="StartPareServices.TapFileProcessor" />
+    <PostDeployRole Include="StartPareServices.SettlementFileResponse" />
+    <PostDeployRole Include="StartPareServices.SettlementValidationResult" />
+    <PostDeployRole Include="StartPareServices.RefundFile" />
+    <PostDeployRole Include="StartPareServices.RevenueStatusList" />
+    <PostDeployRole Include="StartPareServices.TDR" />
+    <PostDeployRole Include="StartPareServices.DirectPayment" />
+  </machine>
+  <CustomTests>
+    <ServiceBrokerTest Name="Pare Pcs Server Sql Service Broker Test" Groups="PARE">
+      <Sql>
+        <ConnectionInfo UserName="tfsbuild" Password="LMTF$Bu1ld" />
+        <DatabaseServer>TS-DB1</DatabaseServer>
+        <DatabaseInstance>Inst2</DatabaseInstance>
+        <TargetDatabase>Pare</TargetDatabase>
+        <SqlScript>
+          DECLARE @ConversationHandle uniqueidentifier;
+          DECLARE @StatusTime datetime=GETDATE();
+          DECLARE @Token nvarchar(26)='0123456789ABCDEF';
+          --Send the message
+          Exec [$TargetDatabase].[dbo].[SendStatusListUpdateRequest]
+          1,
+          'Correction',
+          @Token,
+          '0113',
+          '001',
+          1,
+          @StatusTime,
+          2,
+          @StatusTime,
+          @ConversationHandle=@ConversationHandle output;
+        </SqlScript>
+      </Sql>
+      <Sql>
+        <ConnectionInfo UserName="tfsbuild" Password="LMTF$Bu1ld" />
+        <DatabaseServer>TS-DB2</DatabaseServer>
+        <DatabaseInstance>Inst2</DatabaseInstance>
+        <TargetDatabase>Pcs</TargetDatabase>
+        <SqlScript>
+          WAITFOR DELAY '00:00:15';
+
+          IF (select count(*) from $TargetDatabase.DBO.PCSMockLog WHERE Message like '%0123456789ABCDEF%')=0
+          THROW 51000, 'Message not found in PCSMockLog', 1;
+          --clear down ready for next test
+          delete from $TargetDatabase.DBO.PCSMockLog WHERE Message like '%0123456789ABCDEF%'
+        </SqlScript>
+      </Sql>
+    </ServiceBrokerTest>
+    <ServiceBrokerTest Name="Pare Notification Sql Service Broker Test" Groups="PARE,Notifications">
+      <Sql>
+        <ConnectionInfo UserName="tfsbuild" Password="LMTF$Bu1ld" />
+        <DatabaseServer>TS-DB1</DatabaseServer>
+        <DatabaseInstance>Inst3</DatabaseInstance>
+        <TargetDatabase>Notification</TargetDatabase>
+        <SqlScript>
+          -- Turn off internal activation
+          ALTER QUEUE [dbo].[http://tfl.gov.uk/Ft/Notification/Queue/Email] WITH STATUS=ON ,
+          RETENTION=OFF , ACTIVATION (  STATUS=OFF , PROCEDURE_NAME=[dbo].[Email_Activation] , MAX_QUEUE_READERS=10 , EXECUTE AS N'dbo'  ), POISON_MESSAGE_HANDLING (STATUS=ON)
+
+        </SqlScript>
+      </Sql>
+      <Sql>
+        <ConnectionInfo UserName="tfsbuild" Password="LMTF$Bu1ld" />
+        <DatabaseServer>TS-DB1</DatabaseServer>
+        <DatabaseInstance>Inst2</DatabaseInstance>
+        <TargetDatabase>Pare</TargetDatabase>
+        <SqlScript>
+          -- Send a message
+          Declare @ConversationHandle1 UniqueIdentifier
+          exec SsbSendOnConversation
+          'http://tfl.gov.uk/Ft/Pare/CustomerNotification/Service/Pare',
+          'http://tfl.gov.uk/Ft/Notification/Service/Email',
+          'http://tfl.gov.uk/Ft/Notification/Contract/Email',
+          'http://tfl.gov.uk/Ft/Notification/Message/Email',
+          '&lt;Notifications xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+          &lt;Notification&gt;
+          &lt;NotificationCode&gt;f8aee325-a6c9-4e94-9b46-bba98c93755a&lt;/NotificationCode&gt;
+          &lt;SendTo&gt;
+          &lt;CardHolder&gt;
+          &lt;PanToken&gt;99999999999999999999999&lt;/PanToken&gt;
+          &lt;PaymentCardExpiryDate&gt;0113&lt;/PaymentCardExpiryDate&gt;
+          &lt;/CardHolder&gt;
+          &lt;/SendTo&gt;
+          &lt;TemplateContentTags&gt;
+          &lt;PaymentAmount&gt;9999&lt;/PaymentAmount&gt;
+          &lt;PaymentTransactionDateTime&gt;2013-11-28T12:11:04.5030783+00:00&lt;/PaymentTransactionDateTime&gt;
+          &lt;PaymentCardPanToken&gt;12345678912345678912345678&lt;/PaymentCardPanToken&gt;
+          &lt;PaymentCardExpiryDate&gt;0113&lt;/PaymentCardExpiryDate&gt;
+          &lt;PaymentCardLast4Digits&gt;1234&lt;/PaymentCardLast4Digits&gt;
+          &lt;PaymentCardType&gt;Visa&lt;/PaymentCardType&gt;
+          &lt;DebtAmount&gt;1&lt;/DebtAmount&gt;
+          &lt;DebtDate&gt;2013-11-29T12:11:04.5030783+00:00&lt;/DebtDate&gt;
+          &lt;DebtIndicator&gt;Y&lt;/DebtIndicator&gt;
+          &lt;AuthorisationAmount&gt;2&lt;/AuthorisationAmount&gt;
+          &lt;/TemplateContentTags&gt;
+          &lt;/Notification&gt;
+          &lt;/Notifications&gt;',
+          @ConversationHandle=@ConversationHandle1 OUT
+        </SqlScript>
+      </Sql>
+      <Sql>
+        <ConnectionInfo UserName="tfsbuild" Password="LMTF$Bu1ld" />
+        <DatabaseServer>TS-DB1</DatabaseServer>
+        <DatabaseInstance>Inst3</DatabaseInstance>
+        <TargetDatabase>Notification</TargetDatabase>
+        <SqlScript>
+          -- Check for the message
+          WAITFOR DELAY '00:00:15';
+          DECLARE @test int
+          SET @test=(SELECT count(*)
+          FROM [Notification].[dbo].[http://tfl.gov.uk/Ft/Notification/Queue/Email]
+          WHERE  CAST(message_body AS NVARCHAR(MAX)) Like '%&lt;PanToken&gt;99999999999999999999999%')
+
+          -- Remove it (doesnt work )
+          --DELETE FROM [Notification].[dbo].[http://tfl.gov.uk/Ft/Notification/Queue/Email]
+          --WHERE  CAST(message_body AS NVARCHAR(MAX)) Like '%&lt;PanToken&gt;99999999999999999999999%')
+
+          -- Turn on activation VERY IMPORTANT, missing this will leave the database in a non functional state
+          ALTER QUEUE [dbo].[http://tfl.gov.uk/Ft/Notification/Queue/Email] WITH STATUS=ON ,
+          RETENTION=OFF , ACTIVATION (  STATUS=ON , PROCEDURE_NAME=[dbo].[Email_Activation] , MAX_QUEUE_READERS=10 , EXECUTE AS N'dbo'  ), POISON_MESSAGE_HANDLING (STATUS=ON)
+
+          IF @test=0
+          THROW 51000, 'Message not found in http://tfl.gov.uk/Ft/Notification/Queue/Email', 1;
+
+        </SqlScript>
+      </Sql>
+    </ServiceBrokerTest>
+  </CustomTests>
+</configuration>

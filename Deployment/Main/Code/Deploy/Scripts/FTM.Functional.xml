@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="FTM.Functional" Environment="TestRig" Config="TestRig.FTM" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+ 
+	<machine Id="1" Name="TS-WIN1"  ExternalIP="" DeploymentMachine="true">
+    <ServerRole Description="Windows File System for FTM Tests" Include="FTMTests.FileSystem.Windows" />
+	</machine>
+  <machine Id="2" Name="TS-SFTP1"  ExternalIP="" >
+    <ServerRole Description="SFTP File System for FTM Tests" Include="FTMTests.FileSystem.SFTP" /> 
+  </machine>
+  <machine Id="3" Name="TS-FTM1"  ExternalIP="">
+	 <PreDeployRole Description="StopFTMService" Include="StopFTMService"/>
+    <ServerRole Description="FTM Service" Include="FTM.Service" StartUpType="AutomaticDelayed" />
+  </machine>
+</configuration>

@@ -1,0 +1,71 @@
+﻿
+
+#environment1 {
+    
+}
+
+#environment2 {
+    margin-left: 10px;
+    
+}
+
+.environmentMetricContainer {
+    float: left;
+    border: 1px solid black;
+}
+
+.environmentMetricContainer .topRow select {
+    color: #000;
+}
+.environmentMetricContainer .topRow select, .environmentMetricContainer .topRow input, .environmentStartTimeContainer, .environmentEndTimeContainer, .environmentTitle  {
+    height: 45px;
+}
+.environmentTitle, .environmentContainer, .environmentStartTimeContainer, .environmentEndTimeContainer {
+    float: left;
+    color: #000;
+}
+
+.environmentMetricContainer .topRow {
+    padding: 0;
+    margin: 0;
+    clear: right;
+    float: left;
+}
+.environmentMetricContainer .bottomRow {
+    padding: 0;
+    margin: 0;
+    float:right;
+    clear: left;
+}
+
+.databaseOfInterestContainer {
+    padding: 0 5px 0 5px;
+    margin: 0;
+    float: left;
+}
+
+.environmentTitle {
+    padding: 5px 10px 0 10px;
+}
+
+#updatePreferencesContainer {
+    float: left;
+    margin-left: 10px;
+    margin-top: 35px;
+}
+
+#updatePreferencesButton {
+    height: 45px;
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: 1em;
+}
+ 
+#userConfigurationsContainer {
+    clear: both;
+}
+
+#dialog-validate-Input {
+    display: none;
+    width: 800px;
+}

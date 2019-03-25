@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2F617014-55C2-4AF8-A814-5F0D332D400E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TFL.Utilities</RootNamespace>
+    <AssemblyName>TFL.Utilities</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\PowerShellCommonAssemblyInfo.cs">
+      <Link>Properties\PowerShellCommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Commands\ConvertToStringCommand.cs" />
+    <Compile Include="Commands\GetConditionalValueCommand.cs" />
+    <Compile Include="Commands\NewShortGuidCommand.cs" />
+    <Compile Include="Commands\GetGacAssemblyCommand.cs" />
+    <Compile Include="Commands\NewMappedDriveCommand.cs" />
+    <Compile Include="Commands\ProtectAccountsFileCommand.cs" />
+    <Compile Include="Commands\ProtectPasswordCommand.cs" />
+    <Compile Include="Commands\RemoveMappedDriveCommand.cs" />
+    <Compile Include="Commands\UnprotectAccountsFileCommand.cs" />
+    <Compile Include="Commands\UnprotectPasswordCommand.cs" />
+    <Compile Include="GAC\AssemblyCacheFlags.cs" />
+    <Compile Include="GAC\AssemblyCacheUninstallDisposition.cs" />
+    <Compile Include="GAC\AssemblyCommitFlags.cs" />
+    <Compile Include="GAC\AssemblyCompareFlags.cs" />
+    <Compile Include="GAC\AssemblyInfoStruct.cs" />
+    <Compile Include="GAC\AssemblyNameDisplayFlags.cs" />
+    <Compile Include="GAC\AssemblyNameExtensions.cs" />
+    <Compile Include="GAC\AssemblyNameProperty.cs" />
+    <Compile Include="GAC\CreateAssemblyNameObjectFlags.cs" />
+    <Compile Include="GAC\FusionApi.cs" />
+    <Compile Include="GAC\FusionInstallReference.cs" />
+    <Compile Include="GAC\GlobalAssemblyCache.cs" />
+    <Compile Include="GAC\IAssemblyCache.cs" />
+    <Compile Include="GAC\IAssemblyEnum.cs" />
+    <Compile Include="GAC\IAssemblyName.cs" />
+    <Compile Include="GAC\IInstallReference.cs" />
+    <Compile Include="GAC\IInstallReferenceEnum.cs" />
+    <Compile Include="GAC\InstallReference.cs" />
+    <Compile Include="GAC\InstallReferenceGuid.cs" />
+    <Compile Include="GAC\InstallReferenceType.cs" />
+    <Compile Include="GAC\NativeMethods.cs" />
+    <Compile Include="GAC\QueryAssemblyInfoFlags.cs" />
+    <Compile Include="GAC\UninstallResult.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Build\Deployment.Common\Deployment.Common.csproj">
+      <Project>{C69CAB01-3ACD-46D0-96CF-F05B4962A262}</Project>
+      <Name>Deployment.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Build\Deployment.Domain.Operations\Deployment.Domain.Operations.csproj">
+      <Project>{08D6BC41-2923-4791-8C56-9B7E2965CAC2}</Project>
+      <Name>Deployment.Domain.Operations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tfl.PowerShell.Common\Tfl.PowerShell.Common.csproj">
+      <Project>{51ADA052-8164-43B2-A1EC-BEB3C11DC2AE}</Project>
+      <Name>Tfl.PowerShell.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Deploy\Scripts\Modules\TFL.Utilities\TFL.Utilities.psd1">
+      <Link>TFL.Utilities.psd1</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Deploy\Scripts\Modules\TFL.Utilities\TFL.Utilities.psm1">
+      <Link>TFL.Utilities.psm1</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="app.config" />
+    <None Include="Tfl.Utilities.Module.nuspec" />
+    <None Include="UpdateManifest.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="PostBuildMacros">
+    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
+      <Output TaskParameter="Assemblies" ItemName="Targets" />
+    </GetAssemblyIdentity>
+    <ItemGroup>
+      <VersionNumber Include="@(Targets->'%(Version)')" />
+    </ItemGroup>
+  </Target>
+  <PropertyGroup>
+    <PostBuildEventDependsOn>
+      $(PostBuildEventDependsOn);
+      PostBuildMacros;
+    </PostBuildEventDependsOn>
+    <PostBuildEvent>cmd /x /c mkdir "$(SolutionDir)Deploy\Scripts\Modules\Tfl.Utilities\lib"
+xcopy $(TargetDir)*.dll $(SolutionDir)Deploy\Scripts\Modules\TFL.Utilities\lib /y
+if $(ConfigurationName) == Release cmd /x /c powershell -ExecutionPolicy Unrestricted .\UpdateManifest.ps1 -Path $(SolutionDir)Deploy\Scripts\Modules\Tfl.Utilities -Version @(VersionNumber)</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

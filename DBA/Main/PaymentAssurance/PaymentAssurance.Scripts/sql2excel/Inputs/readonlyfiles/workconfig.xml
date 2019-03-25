@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!-- ===============================================================================-->
+<!-- =========================Version 1.1==============================-->
+<!-- =========================Modified Date:14-11-2018==============================-->
+<!-- ===============================================================================-->
+<tfl>
+  <sql2excel>
+    <logging>
+		<tables>
+			<table tablename="execution" schemaname="assurance" createsql="execution.sql" insertsql="execution_InsertData.sql" updatesql="execution_UpdateData.sql"/>
+			<table tablename="reports" schemaname="assurance" createsql="reports.sql" insertsql="reports_InsertData.sql" selectsql="reports_selectData.sql" selectsql2="reports_selectData2.sql" updatesql="reports_UpdateData.sql"/>
+			<table tablename="results" schemaname="assurance" createsql="results.sql" insertsql="results_InsertData.sql"/>
+		</tables>
+	</logging>
+  </sql2excel>
+</tfl>

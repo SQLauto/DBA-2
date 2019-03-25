@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DeploymentGroups>
+  <Group>Web</Group>
+  <Group>Database</Group>
+  <Group>SSIS</Group>
+  <Group>Win</Group>
+  <Group>Servicebus</Group>
+</DeploymentGroups>

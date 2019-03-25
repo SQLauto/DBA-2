@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="DevInt2.DBA.Database" Environment="DevInt2" Config="DevInt2" ProductGroup="FTP">
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+
+   <PostDeploymentTestIdentity>DeploymentAccount.Internal</PostDeploymentTestIdentity>
+   
+  <machine Id="FTDC2MGT360" Name="FTDC2MGT360" ExternalIP="10.107.200.186" DeploymentMachine="true"  />
+
+ 
+
+  <machine Id="TDC2FAEC04V01" Name="TDC2FAEC04V01" ExternalIP="10.107.200.196" Role="SQL Volume">
+   
+	<!-- BaselineData DB-->
+	<DatabaseRole Description="BaselineData Deployment Schema" Include="Deployment.Schema" DatabaseInstance="VINS001" TargetDatabase="BaselineData" />
+    <DatabaseRole Description="BaselineData Database" Include="BaselineData.Database" DatabaseInstance="VINS001" TargetDatabase="BaselineData" />
+
+  </machine>
+
+
+
+  <machine Id="TDC2FAEC04V02" Name="TDC2FAEC04V02" ExternalIP="10.107.200.197">
+    <!--TDC2FAEC04V02/VINS002 : AlwaysOnPare-->
+
+   	<!-- BaselineData DB-->
+	<DatabaseRole Description="BaselineData Deployment Schema" Include="Deployment.Schema" DatabaseInstance="VINS002" TargetDatabase="BaselineData" />
+    <DatabaseRole Description="BaselineData Database" Include="BaselineData.Database" DatabaseInstance="VINS002" TargetDatabase="BaselineData" />
+  </machine>
+
+
+
+
+   <machine Id="TDC2FAEC04V03" Name="TDC2FAEC04V03" ExternalIP="10.107.200.198">
+    <!--TDC2FAEC04V03/VINS003 : AlwaysOnCS-->
+   
+    <!-- BaselineData DB-->
+	<DatabaseRole Description="BaselineData Deployment Schema" Include="Deployment.Schema" DatabaseInstance="VINS003" TargetDatabase="BaselineData" />
+    <DatabaseRole Description="BaselineData Database" Include="BaselineData.Database" DatabaseInstance="VINS003" TargetDatabase="BaselineData" />
+  </machine>
+  
+  
+  <machine Id="TDC2SQL005" Name="TDC2SQL005" ExternalIP="10.107.25.194">
+    
+    <!-- BaselineData DB-->
+	<DatabaseRole Description="BaselineData Deployment Schema" DatabaseInstance="" Include="Deployment.Schema" IsDefaultDatabaseInstance="true" TargetDatabase="BaselineData" />
+    <DatabaseRole Description="BaselineData Database" DatabaseInstance="" Include="BaselineData.Database" IsDefaultDatabaseInstance="true" TargetDatabase="BaselineData" />
+
+	
+  </machine>
+   
+</configuration>

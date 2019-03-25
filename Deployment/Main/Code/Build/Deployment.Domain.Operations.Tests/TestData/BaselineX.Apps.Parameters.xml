@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+  <parameter name="Baseline_TestValueA" value="aSettingX"/>
+  <parameter name="Baseline_TestValueB" value="bSettingX"/>
+  <parameter name="Baseline_TestValueC">
+    <value>cSettingX</value>
+  </parameter>
+  <parameter name="Baseline_SimpleDBConnectionString" value="data source=TS-DB1\Inst1;initial catalog=SimpleDBX;"/>
+  <parameter name="exampleParameter" value="exampleParamValue"/>
+  <parameter name="Baseline_WebServiceEndpoint" value="http://TS-CIS1:8702/SimpleServiceX.svc"/>
+  <!--Log4Net Child Parameter-->
+  <parameter name="Baseline_Log4Net_Settings" EncodeValue="false">
+    <value>
+      <![CDATA[
+      <log4net>
+        <appender name="EventLogAppender" type="log4net.Appender.EventLogAppender">
+          <param name="LogName" value="Application" />
+          <param name="ApplicationName" value="Simple Console App" />
+          <layout type="log4net.Layout.PatternLayout">
+            <conversionPattern value="%date [%thread] %-5level %logger - %message%newline" />
+          </layout>
+          <filter type="log4net.Filter.LevelRangeFilter">
+            <levelMin value="INFO" />
+            <levelMax value="FATAL" />
+          </filter>
+        </appender>
+      </log4net>]]>
+    </value>
+  </parameter>
+</parameters>

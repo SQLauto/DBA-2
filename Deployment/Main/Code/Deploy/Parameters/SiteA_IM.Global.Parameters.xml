@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+  <parameter name="PARE_SettlementResponseService_BaseDirectory" value="\\FPDC2PARC01SRP\SettlementResponseFiles" />
+  <parameter name="PARE_RefundFileService_BaseDirectory" value="\\FPDC2PARC01RFP\RefundFiles" />
+  <parameter name="PARE_RevenueFileService_BaseDirectory" value="\\FPDC2PARC01RFP\RevenueStatusListFiles" />
+  
+  <parameter name="Notifications_FileProcessor_UnprocessedDirectory" value="\\FPDC2SAS001\EmailNotification\NotificationFileProcessor\Unprocessed"/>
+  
+  <parameter name="Analytics_DisruptionsFolder" value ="\\fpdc2sqlc01n03\RefundsData\Disruptions"/>
+  <parameter name="Analytics_ApprovedRefundAuthorisations_Folder" value ="\\fpdc2sqlc01n03\RefundsData\ApprovedRefundAuthorisations"/>
+  <parameter name="Analytics_RefundAuthorisations_Folder" value ="\\fpdc2sqlc01n03\RefundsData\RefundAuthorisations"/>
+  <parameter name="Analytics_PareSettlementFolder" value ="\\fpdc2sqlc01n03\RefundsData\PareSettlementFiles"/>
+  <parameter name="Analytics_DenyListingFolder" value ="\\fpdc2sqlc01n03\RefundsData\DenyListing"/>
+  <parameter name="Analytics_NotificationsFolder" value ="\\fpdc2sqlc01n03\RefundsData\Notifications"/>
+  <parameter name="Analytics_OpenDataStationCountTapFolder" value ="\\fpdc2sqlc01n03\RefundsData\OpenData\StationCountTapFile\Final"/>
+  <parameter name="Analytics_OpenDataStationODCountFolder" value ="\\fpdc2sqlc01n03\RefundsData\OpenData\StationOdCountFile\Final"/>
+</parameters>
+

@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="TestRig.TJSDistributor" Environment="TestRig"  Config="TestRig.TJSDistributor" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+
+  <machine Id="5" Name="TS-OYBO1" ExternalIP="">
+    <PreDeployRole Include="TJSDistributor.JulianService.Stop" />
+    <PreDeployRole Include="TJSDistributor.JulianService.CPC.Stop" />
+
+    <PreDeployRole Include="TJSDistributor.TJSHExtractor.Stop" />
+    <PreDeployRole Include="TJSDistributor.TJSHExtractor.CPC.Stop" />
+
+    <PreDeployRole Include="FasterData.Mock.Jus.Host.Stop" />
+
+    <ServerRole Include="TJSDistributor.Functional.CreateFolders" />
+    <ServerRole Include="TJSDistributor.Functional.CPC.CreateFolders" />
+
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSDistributor" />
+
+  	<!--<ServerRole Description="TJSDistributor JulianService uninstall" Include="TJSDistributor.JulianService.Uninstall"/>-->
+    <!--<ServerRole Description="TJSDistributor TJSHExtractor uninstall" Include="TJSDistributor.TJSHExtractor.Uninstall"/>-->
+
+    <ServerRole Description="TJS Distributor Message Broker service" Include="TJSDistributor.JulianService.Install" StartUpType="AutomaticDelayed" Config="TestRig_Oyster"/>
+	<ServerRole Description="TJS Distributor TJSHExtractor service" Include="TJSDistributor.TJSHExtractor.Install" StartUpType="AutomaticDelayed" Config="TestRig_Oyster" />
+    <ServerRole Description="TJS Distributor Message Broker CPC service" Include="TJSDistributor.JulianService.CPC.Install" StartUpType="AutomaticDelayed" />
+    <ServerRole Description="TJS Distributor TJSHExtractor CPC service" Include="TJSDistributor.TJSHExtractor.CPC.Install" StartUpType="AutomaticDelayed" />
+
+    <!--<ServerRole Description="TJS Distributor File Purger Uninstall" Include="TJSDistributor.FilePurger.Uninstall" />-->
+    <ServerRole Description="TJS Distributor File Purger Install" Include="TJSDistributor.FilePurger.Install" Config="TestRig_Oyster" />
+    <ServerRole Description="TJS Distributor File Purge Scheduler" Include="TJSDistributor.FilePurger.ScheduledTask.Create" Config="TestRig_Oyster" />
+
+    <ServerRole Description="TJS Distributor File Purger CPC Install" Include="TJSDistributor.FilePurger.CPC.Install" />
+    <ServerRole Description="TJS Distributor File Purger CPC Scheduler" Include="TJSDistributor.FilePurger.CPC.ScheduledTask.Create" />
+
+    <ServerRole Description="FasterData.Mock.Jus.Host Service" Include="FasterData.Mock.Jus.Host.Install" StartUpType="AutomaticDelayed" />
+
+    <PostDeployRole Include="TJSDistributor.JulianService.Start" />
+    <PostDeployRole Include="TJSDistributor.JulianService.CPC.Start" />
+
+    <PostDeployRole Include="TJSDistributor.TJSHExtractor.Start" />
+    <PostDeployRole Include="TJSDistributor.TJSHExtractor.CPC.Start" />
+
+    <PostDeployRole Include="FasterData.Mock.Jus.Host.Start" />
+  </machine>
+
+  <machine Id="1" Name="TS-DB1" ExternalIP="" DeploymentMachine="true">
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices1" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices2" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices3" />
+    <PreDeployRole Description="CheckSqlAgentServiceInst1" Include="CheckSqlAgentServiceInst1" />
+    <ServerRole Include="SQL.Extension.Events.Folder" Description="SQL Extension Events Output Folder Creation" />
+
+    <!--<DatabaseRole Description="Dba.System" Include="Dba.System" DatabaseInstance="Inst1" />-->
+    <DatabaseRole Include="SQL.Extension.Events" Description="SQL Extension Events Deployment Role" TargetDatabase="Master" DatabaseInstance="Inst1"/>
+
+	<DatabaseRole Description='TJS Baseline' Include="TJS.Baseline.Database" DatabaseInstance="Inst1" TargetDatabase="TJS" />
+    <DatabaseRole Description="TJS Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="TJS" />
+    <DatabaseRole Description="TJS Main Schema" Include="TJS.Database" DatabaseInstance="Inst1" TargetDatabase="TJS" />
+	<DatabaseRole Description="TJS Functional" Include="TJS.DB.Functional" DatabaseInstance="Inst1" TargetDatabase="TJS" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="TJS" />
+    <DatabaseRole Description="TJS Partitioning" Include="TJS.Partitioning" DatabaseInstance="Inst1" TargetDatabase="TJS" />
+
+    <DatabaseRole Description='TJS Baseline' Include="TJS.Baseline.Database" DatabaseInstance="Inst1" TargetDatabase="TJS_CPC" Config="TestRig_CPC" />
+    <DatabaseRole Description="TJS Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="TJS_CPC" Config="TestRig_CPC" />
+    <DatabaseRole Description="TJS Main Schema" Include="TJS.Database" DatabaseInstance="Inst1" TargetDatabase="TJS_CPC" Config="TestRig_CPC" />
+	<DatabaseRole Description="TJS Functional" Include="TJS.DB.Functional" DatabaseInstance="Inst1" TargetDatabase="TJS_CPC" Config="TestRig_CPC" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="TJS_CPC" Config="TestRig_CPC" />
+    <DatabaseRole Description="TJS Partitioning" Include="TJS.Partitioning" DatabaseInstance="Inst1" TargetDatabase="TJS_CPC" Config="TestRig_CPC" />
+  </machine>
+
+  <machine Id="4" Name="TS-CIS1" ExternalIP="" Role="FTP IIS Server" >
+    <ServerRole Include="IISSetup.CIS" Description="IIS" />
+
+	<!-- Configure the TJS Api to be hosted and run under IIS -->
+	<ServerRole Description="TJS Api EventLog Entry" Include="FTP.EventLog.For.Internal.TJSApi" />
+
+	<ServerRole Include="FasterData.TJSApi.Service.Oyster" Config="TestRig_Oyster" />
+	<ServerRole Include="FasterData.TJSApi.Service.CPC" />
+  </machine>
+
+</configuration>

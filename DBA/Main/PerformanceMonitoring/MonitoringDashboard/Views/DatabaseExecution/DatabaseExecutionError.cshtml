@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "DatabaseExecutionError";
+}
+@model List<string>
+
+
+<h2>DatabaseExecutionError</h2>
+<p>There was a problem with the database</p>
+<div>
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li>@Html.DisplayFor(i => item)</li>
+        }
+    </ul>
+</div>
+<p>Check the URL for spelling errors or missing criteria</p>

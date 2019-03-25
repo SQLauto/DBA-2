@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+  <!-- Base Data -->
+  <parameter name="BaseData_DatabaseConnectionString" value="Data Source=FTDC5SQL001;Initial Catalog=BaseData_Publish_v28_0;Persist Security Info=True;Integrated Security=SSPI;Connect Timeout=200;"/>
+
+  <!-- Notifications -->
+  <parameter name="Notifications_Services_EfDatabaseConnectionString" value="Server=FCDC5SQL001.ctest.fpsstagingint.local\inst3;initial catalog=Notification;Integrated Security=SSPI" />
+  <parameter name="Notifications_InternalApiUrl" value="http://FCDC5CIS001.ctest.fpsstagingint.local:8724/api/" />
+
+  <!--RSP-->
+  <parameter name ="RSP_ReportingRWDatabaseConnectionString" value="Data Source=FCDC5SQL001.ctest.fpsstagingint.local\Inst1;Initial Catalog=ReportingRW;Integrated Security=SSPI;Provider=SQLNCLI11.1;Auto Translate=False;"/>
+  <parameter name ="RSP_FAEDatabaseConnectionString" value="Data Source=FCDC5SQL001.ctest.fpsstagingint.local\Inst1;Initial Catalog=FAE;Integrated Security=SSPI;Provider=SQLNCLI11.1;Auto Translate=False;"/>
+
+  <!-- SQL parameters named to ensure backward compatibility with the old system-->
+  <parameter name="PareEndpoint" value="TCP://FCDC5SQL001.ctest.fpsstagingint.local:4024"/>
+  <parameter name="PcsEndpoint" value="TCP://10.33.50.128:4024"/>
+  <!-- Notifications service broker endpoint -->
+  <parameter name="NotificationsEndpoint" value="TCP://FCDC5SQL001.ctest.fpsstagingint.local:4023"/>
+  <!-- FAE/RSP variables -->
+  <parameter name="FAEDatabaseName" value="FAE"/>
+  <parameter name="RSPDatabaseName" value="ReportingRW"/>
+  <parameter name="PareSchemaName" value="dbo"/>
+  <parameter name="PareDatabaseServer" value="FCDC5SQL001.ctest.fpsstagingint.local\INST2"/>
+  <parameter name="FaeDatabaseServer" value="FCDC5SQL001.ctest.fpsstagingint.local\INST1"/>
+  <!-- Notifications Extract scripts ReportingRW database name -->
+  <parameter name="ReportingRWDatabaseName" value="ReportingRW"/>
+
+  <!-- SQL parameters named to ensure backward compatibility with the old system-->
+  <parameter name="TJSDatabaseName" value="TJS_CPC"/>
+  <parameter name="TJSDatabaseServer" value="FCDC5SQL001.ctest.fpsstagingint.local\Inst1"/>
+  <parameter name="MDServiceAccount" value="ctest\zsvcMasterData_c" />
+  <parameter name="RAEServiceAccount" value="ctest\zsvcRAE_c" />
+  <parameter name="FAEServiceAccount" value="ctest\zsvcFAE_c" />
+  <parameter name="OYBOServiceAccount" value="ctest\zsvcOYBO_c" />
+  <parameter name="PAREServiceAccount" value="ctest\zsvcPARE_c" />
+
+  <!-- SSO -->
+  <parameter name="SSO_Website_BaseUrl" value="http://c-sso.prestige.test/" />
+  <parameter name="SSO_Website_LoginPostUrl" value="Login" />
+  <parameter name="SSO_Website_LoginErrorUrl" value="http://c-cas.prestige.test:8081" />
+
+  <parameter name="SSO_Service_BaseUrl" value="http://FCDC5SCAS001.ctest.fpsstagingint.local:8081/" />
+  <parameter name="SSO_Service_Username" value="username" />
+  <parameter name="SSO_Service_Password" value="password" />
+
+  <parameter name="SSO_ShowTestAccounts" value="false" />
+</parameters>

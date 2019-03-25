@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+
+  <parameter name="FTM_OneLondonSFTPPassword" value ="Test1234"/>
+
+  <parameter name="PARE_SettlementResponseService_BaseDirectory" value="\\TS-PARE1\d$\SettlementResponseFiles" />
+  <parameter name="FTM_OneLondon_SettleInbound" value ="SFTPClient1@TS-SFTP1:22/IM/inbound/settle"/>
+
+  <parameter name="FTM_RSP_Folder" value ="\\TS-DB1\D$\tfl\RSP\Final"/>
+  <parameter name="FTM_OneLondon_RSPInbound" value ="SFTPClient1@TS-SFTP1:22/IM/inbound/rsp"/>
+  
+  <parameter name="Analytics_DisruptionsFolder" value ="\\TS-DB2\D$\tfl\RefundsData\Disruptions"/>
+  <parameter name="FTM_OneLondon_DisruptionsOutbound" value ="SFTPClient1@TS-SFTP1:22/IM/outbound/disruptions"/>
+
+  <parameter name="Analytics_ApprovedRefundAuthorisations_Folder" value ="\\TS-DB2\D$\tfl\RefundsData\ApprovedRefundAuthorisations"/>
+  <parameter name="FTM_OneLondon_RefundsOutbound" value ="SFTPClient1@TS-SFTP1:22/IM/outbound/refunds"/>
+  
+  <parameter name="Analytics_RefundAuthorisations_Folder" value ="\\TS-DB2\D$\tfl\RefundsData\RefundAuthorisations"/>
+  <parameter name="FTM_OneLondon_RefundAuthorisationsInbound" value ="SFTPClient1@TS-SFTP1:22/IM/inbound/refunds"/>
+
+  <parameter name="Analytics_PareSettlementFolder" value ="\\TS-DB2\D$\tfl\RefundsData\PareSettlementFiles"/>
+  <parameter name="PARE_RefundFileService_BaseDirectory" value="\\TS-PARE1\d$\RefundFiles" />
+  
+  <parameter name="Analytics_DenyListingFolder" value ="\\TS-DB2\D$\tfl\RefundsData\DenyListing"/>
+  <parameter name="PARE_RevenueFileService_BaseDirectory" value="\\TS-PARE1\d$\RevenueStatusListFiles" />
+  
+  <parameter name="Analytics_NotificationsFolder" value ="\\TS-DB2\D$\tfl\RefundsData\Notifications"/>
+  <parameter name="Notifications_FileProcessor_UnprocessedDirectory" value="\\TS-SAS1\d$\tfl\Notifications\EmailNotification\NotificationFileProcessor\Unprocessed"/>
+  
+</parameters>-->
+
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+  <parameter name="PARE_SettlementResponseService_BaseDirectory" value="\\TS-PARE1\d$\SettlementResponseFiles" />
+  <parameter name="PARE_RefundFileService_BaseDirectory" value="\\TS-PARE1\d$\RefundFiles" />
+  <parameter name="PARE_RevenueFileService_BaseDirectory" value="\\TS-PARE1\d$\RevenueStatusListFiles" />
+
+  <parameter name="Notifications_FileProcessor_UnprocessedDirectory" value="\\TS-SAS1\d$\tfl\Notifications\EmailNotification\NotificationFileProcessor\Unprocessed"/>
+  
+  <parameter name="Analytics_DisruptionsFolder" value ="\\TS-DB2\D$\tfl\RefundsData\Disruptions"/>
+  <parameter name="Analytics_ApprovedRefundAuthorisations_Folder" value ="\\TS-DB2\D$\tfl\RefundsData\ApprovedRefundAuthorisations"/>
+  <parameter name="Analytics_RefundAuthorisations_Folder" value ="\\TS-DB2\D$\tfl\RefundsData\RefundAuthorisations"/>
+  <parameter name="Analytics_PareSettlementFolder" value ="\\TS-DB2\D$\tfl\RefundsData\PareSettlementFiles"/>
+  <parameter name="Analytics_DenyListingFolder" value ="\\TS-DB2\D$\tfl\RefundsData\DenyListing"/>
+  <parameter name="Analytics_NotificationsFolder" value ="\\TS-DB2\D$\tfl\RefundsData\Notifications"/>
+</parameters>

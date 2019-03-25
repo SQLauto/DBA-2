@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters xmlns="http://tfl.gov.uk/DeploymentConfig">
+  <parameter name="Baseline_TESTValueA" value="aSetting"/>
+  <!-- Note the case of TEST to check parameter update is case insensitive-->
+  <parameter name="Baseline_TestValueB" value="&lt;&quot;bsetting&quot;&gt;"/>
+  <!-- test xml escaping-->
+  <parameter name="Baseline_TestValueC" value="" />
+  <!--to test null values-->
+  <parameter name="Baseline_WebServiceEndpoint" value="http://TS-CIS1:8702/SimpleService.svc"/>
+  <parameter name="Baseline_SbusMainConnectionString" value="Endpoint=sb://TS-OYBO1.faelab.tfl.local/FTPServiceBus;StsEndpoint=https://TS-OYBO1.faelab.tfl.local:9355/FTPServiceBus;RuntimePort=9354;ManagementPort=9355"/>
+
+  <parameter name="exampleParameter" value="baselinerules"/>
+  <parameter name="Baseline_WebsiteURL_Lookup" value="http://#_BaselineWebIP_#/baseline/websiteurl/lookup"/>
+  <parameter name="ParameterValueLookup_URL" value="http://#_BaselineWebIP_#/baseline/apps/parameters/ParameterValueLookup_URL/"/>
+
+  <parameter name="Baseline_ExternalFileIncludePath" value="C:\Windows\System32\drivers\etc" />
+  <parameter name="Baseline_ExternalFileIncludeFileName" value="lmhosts.sam" />
+  <parameter name="Baseline_NestedValueTest" EncodeValue="false">
+    <value>
+      <![CDATA[
+  <system.net>
+    <defaultProxy useDefaultCredentials="true">
+      <proxy scriptLocation="http://proxy.tfl:8083/proxy.pac" />
+    </defaultProxy>
+  </system.net>]]>
+    </value>
+  </parameter>
+
+  <parameter name="Baseline_SimpleDBConnectionString" value="data source=TS-DB1\Inst1;initial catalog=SimpleDB;"/>
+  <parameter name="Baseline_LogPath1" value="'\\TS-CAS1\{DriveLetter}$\TfL\Baseline\Simple Web Site\Logs'" />
+  <parameter name="Baseline_ArchivePath1" value="'\\TS-CAS1\{DriveLetter}$\TfL\LogArchives'" />
+
+</parameters>

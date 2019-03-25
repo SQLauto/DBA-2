@@ -1,0 +1,605 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns="http://tfl.gov.uk/DeploymentConfig" Id="1" Name="Integration.TSRig.VC" Environment="TSRig" Config="TSRig" ProductGroup="FTP">
+  <CommonRoleFile>CommonServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonPareServiceDeploy.xml</CommonRoleFile>
+  <CommonRoleFile>CommonMJTDeltasRole.xml</CommonRoleFile>
+  <CommonRoleFile>CommonDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>SSO.CommonInternalServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>SSO.CommonExternalServerRoles.xml</CommonRoleFile>
+  <CommonRoleFile>SSO.CommonLabDatabaseRoles.xml</CommonRoleFile>
+  <CommonRoleFile>SSO.CommonDatabaseRoles.xml</CommonRoleFile>
+
+  <machine Id="TS-DB1" Name="TS-DB1" ExternalIP="" Role="FTP Database Server" DeploymentMachine="true">
+    <PreDeployRole Include="CheckSqlServices1" />
+    <PreDeployRole Include="CheckSqlServices2" />
+    <PreDeployRole Include="CheckSqlServices3" />
+    <PreDeployRole Include="CheckSqlAgentServiceInst1" />
+    <PreDeployRole Include="CheckSqlAgentServiceInst2" />
+    <PreDeployRole Include="CheckSqlAgentServiceInst3" />
+
+    <!-- Setting up SMTP for Emails -->
+    <ServerRole Description="SMTP Server role" Include="SMTP.Notifications" />
+    <!-- RSP SSIS -->
+    <ServerRole Description="Configures SSIS for RSP deployment" SSISDBInstance="Inst1" Include="SSISSetup.RSP" />
+    <ServerRole Description="RSP File System" Include="RSP.FileSystem" />
+    <ServerRole Description="RSP SSIS Packages" Include="RSP.RSPSSIS.Inst1" />
+    <!-- Copy MasterData backup Files -->
+    <ServerRole Description="MasterData.ProjectionStore file system" Include="MasterData.ProjectionStoreRestore.FileSystem.INT" />
+    <!-- SQL Extension Events -->
+    <ServerRole Include="SQL.Extension.Events.Folder" />
+    <DatabaseRole Include="SQL.Extension.Events" TargetDatabase="Master" DatabaseInstance="Inst1" />
+    <DatabaseRole Include="SQL.Extension.Events" TargetDatabase="Master" DatabaseInstance="Inst2" />
+    <DatabaseRole Include="SQL.Extension.Events" TargetDatabase="Master" DatabaseInstance="Inst3" />
+
+    <!-- Notifications DB -->
+    <DatabaseRole Description="Notification Baseline" Include="Notification.Baseline.Database" />
+    <DatabaseRole Description="Notification Deployment Schema" Include="Deployment.Schema" TargetDatabase="Notification" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="Notification Database" Include="Notification.DB" DatabaseInstance="Inst3" />
+    <!-- NOTIFICATIONS BROKER: PARE <-> Notification -->
+    <DatabaseRole Description="Notifications Common" Include="Notifications.Common" TargetDatabase="Notification" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="Notifications Mock" Include="Notifications.Mock" TargetDatabase="Notification" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="Pare.Notifications.Transport.Notifications" Include="Pare.Notifications.Transport.Notifications" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="Pare.Notifications.Dialog.Notifications" Include="Pare.Notifications.Dialog.Notifications" DatabaseInstance="Inst3" />
+    <!-- Disruptr DB -->
+    <DatabaseRole Description="Disruptr Baseline" Include="Disruptr.Baseline.Database" DatabaseInstance="Inst1" TargetDatabase="Disruptr" />
+    <DatabaseRole Description="Disruptr Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="Disruptr" />
+    <DatabaseRole Description="Disruptr Database" Include="Disruptr.Database" DatabaseInstance="Inst1" />
+    <!-- FAE DB -->
+    <DatabaseRole Description="FAE Baseline" Include="FAE.Baseline.Database" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="FAE Deployment Schema" Include="Deployment.Schema" TargetDatabase="FAE" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="FAE LinkedServer PreProd" Include="FAE.LinkedServer.PreProd" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="FAE Database" Include="FAE.Database" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="Config Database" Include="Config.Database" DatabaseInstance="Inst1" TargetDatabase="FAE" />
+    <DatabaseRole Description="FAE Config Database" Include="FAE_Config.Database" DatabaseInstance="Inst1" TargetDatabase="FAE" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="FAE" />
+    <DatabaseRole Description="FAE Partitioning" Include="FAE.Partitioning" DatabaseInstance="Inst1" />
+    <!-- Reporting DB -->
+    <DatabaseRole Description="RSP Baseline" Include="RSP.Baseline.Database" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="RSP Fix Collation Patch" Include="RSP.FixCollation.Patch" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="RSP Deployment Schema" Include="Deployment.Schema" TargetDatabase="ReportingRW" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="RSP Database" Include="RSP.DB" DatabaseInstance="Inst1" />
+    <!-- Travel Store db -->
+    <DatabaseRole Description="TravelStore Baseline" Include="TravelStore.Baseline.Database" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="TravelStore Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="TravelStore" />
+    <DatabaseRole Description="TravelStore Database" Include="TravelStore.Database" DatabaseInstance="Inst1" />
+    <DatabaseRole Description="Config Database" Include="Config.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore" />
+    <DatabaseRole Description="TravelStore Config Database" Include="TravelStore_Config.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="TravelStore" />
+    <DatabaseRole Description="TravelStore Partitioning" Include="TravelStore.Partitioning" DatabaseInstance="Inst1" />
+    <!-- Travel Store CPC db -->
+    <DatabaseRole Description="TravelStore CPC Baseline" Include="TravelStore.Baseline.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC" />
+    <DatabaseRole Description="TravelStore Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC" />
+    <DatabaseRole Description="TravelStore CPC Database" Include="TravelStore.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC" />
+    <DatabaseRole Description="Config Database" Include="Config.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC" />
+    <DatabaseRole Description="TravelStore Config Database" Include="TravelStore_Config.Database" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC" />
+    <DatabaseRole Description="TravelStore CPC Partitioning" Include="TravelStore.Partitioning" DatabaseInstance="Inst1" TargetDatabase="TravelStore_CPC" />
+    <!-- RAE(Oyster) Database -->
+    <DatabaseRole Description="RAE Baseline" Include="RAE.Baseline.Database" DatabaseInstance="Inst1" TargetDatabase="RAE" />
+    <DatabaseRole Description="RAE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="RAE" />
+    <DatabaseRole Description="RAE Database" Include="RAE.Database" DatabaseInstance="Inst1" TargetDatabase="RAE" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="RAE" />
+    <DatabaseRole Description="RAE Partitioning" Include="RAE.Partitioning" DatabaseInstance="Inst1" TargetDatabase="RAE" />
+    <!-- RAE(CPC) Database -->
+    <DatabaseRole Description="RAE Baseline" Include="RAE.Baseline.Database" DatabaseInstance="Inst1" TargetDatabase="RAE_CPC" />
+    <DatabaseRole Description="RAE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst1" TargetDatabase="RAE_CPC" />
+    <DatabaseRole Description="RAE Database" Include="RAE.Database" DatabaseInstance="Inst1" TargetDatabase="RAE_CPC" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst1" TargetDatabase="RAE_CPC" />
+    <DatabaseRole Description="RAE Partitioning" Include="RAE.Partitioning" DatabaseInstance="Inst1" TargetDatabase="RAE_CPC" />
+    <!-- PARE DB -->
+    <DatabaseRole Description="PARE Baseline" Include="PARE.Baseline.Database" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="PARE Deployment Schema" Include="Deployment.Schema" TargetDatabase="PARE" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="PARE Main Schema" Include="PARE.Database" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" TargetDatabase="PARE" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Pare Partitioning" Include="Pare.Partitioning" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="PARE Pre Production Schema" Include="PARE.PreProduction.Schema" DatabaseInstance="Inst2" />
+    <!-- AUTHORISATION BROKER: PARE <-> PCS  -->
+    <DatabaseRole Description="Pare.Authorisation.Transport.Pare" Include="Pare.Authorisation.Transport.Pare" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="PARE PCS Common.PARE Schema" Include="PARE.PCS.Common.PARE" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Pcs Pare Schema" Include="Pcs.Pare" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Pare.Authorisations.Dialog.Pare" Include="Pare.Authorisations.Dialog.Pare" DatabaseInstance="Inst2" />
+    <!-- NOTIFICATIONS BROKER: PARE <-> Notification -->
+    <DatabaseRole Description="Pare.Notifications.Common" Include="Notifications.Common" TargetDatabase="PARE" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Pare.Notifications" Include="Notifications.Pare" TargetDatabase="PARE" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Pare.Notifications.Transport.Pare" Include="Pare.Notifications.Transport.Pare" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Pare.Notifications.Dialog.Pare" Include="Pare.Notifications.Dialog.Pare" DatabaseInstance="Inst2" />
+    <!-- CS DB -->
+    <DatabaseRole Description="CASC Baseline" Include="CASC.Baseline.Database" />
+    <DatabaseRole Description="CSC Deployment Schema" Include="Deployment.Schema" TargetDatabase="CS" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="CSC Database" Include="CSC.Database" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="PaymentCardExpiryExtract CSC DB Credentials" Include="PaymentCardExpiryExtract.CSC.DB" DatabaseInstance="Inst3" />
+    <!-- SDM DB -->
+    <DatabaseRole Description="SDM Baseline" Include="SDM.Baseline" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="SDM Deployment Schema" Include="Deployment.Schema" TargetDatabase="SDM" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="SDM Database" Include="SDM.Database" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="SDM ServerObjects" Include="SDM.ServerObjects" DatabaseInstance="Inst3" />
+    <!-- MasterData Projection Store - Restore -->
+    <DatabaseRole Description="System Deployment Schema" Include="System.Deployment.Schema" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="Dba.System" Include="Dba.System" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="MasterData.ProjectionStore.Restore" Include="MasterData.ProjectionStore.Restore" DatabaseInstance="Inst3" />
+    <!-- TJS Store for TJS Distributor -->
+    <DatabaseRole Include="TJS.Baseline.Database" DatabaseInstance="Inst3" Config="TSRig_Oyster"/>
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="TJS" Config="TSRig_Oyster" />
+    <DatabaseRole Include="TJS.Database" TargetDatabase="TJS" DatabaseInstance="Inst3" Config="TSRig_Oyster" />
+    <DatabaseRole Include="Common.Partitioning" DatabaseInstance="Inst3" TargetDatabase="TJS" Config="TSRig_Oyster" />
+    <DatabaseRole Include="TJS.Partitioning" TargetDatabase="TJS" DatabaseInstance="Inst3" Config="TSRig_Oyster" />
+    <!-- TJS Store for TJS Distributor CPC -->
+    <DatabaseRole Description="TJS Baseline" Include="TJS.Baseline.Database" DatabaseInstance="Inst3" TargetDatabase="TJS_CPC" />
+    <DatabaseRole Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="TJS_CPC" />
+    <DatabaseRole Include="TJS.Database" DatabaseInstance="Inst3"/>
+    <DatabaseRole Include="Common.Partitioning" DatabaseInstance="Inst3" TargetDatabase="TJS_CPC" />
+    <DatabaseRole Include="TJS.Partitioning" DatabaseInstance="Inst3"/>
+    <!-- OTFP DB-->
+    <DatabaseRole Description="OTFP Baseline Database" Include="OTFP.Baseline.Database" DatabaseInstance="Inst3" TargetDatabase="OTFP" />
+    <DatabaseRole Description="OTFP Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="OTFP" />
+    <DatabaseRole Description="OTFP Database" Include="OTFP.Database" DatabaseInstance="Inst3" TargetDatabase="OTFP" />
+    <DatabaseRole Description="OTFP Database" Include="OTFP.PreProd.Database" DatabaseInstance="Inst3" TargetDatabase="OTFP" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst3" TargetDatabase="OTFP" />
+    <DatabaseRole Description="OTFP Partitioning" Include="OTFP.Partitioning" DatabaseInstance="Inst3" TargetDatabase="OTFP" />
+    <!-- OCAE DB-->
+    <DatabaseRole Description="OCAE Database" Include="OCAE.Baseline.Database" DatabaseInstance="Inst3" TargetDatabase="OCAE" />
+    <DatabaseRole Description="OCAE Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="OCAE" />
+    <DatabaseRole Description="OCAE Database" Include="OCAE.Database" DatabaseInstance="Inst3" TargetDatabase="OCAE" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst3" TargetDatabase="OCAE" />
+    <DatabaseRole Description="OCAE Partitioning" Include="OCAE.Partitioning" DatabaseInstance="Inst3" TargetDatabase="OCAE" />
+    <!-- Refunds DB-->
+    <DatabaseRole Description="Refunds Database" Include="Refunds.Baseline.Database" DatabaseInstance="Inst3" TargetDatabase="RefundManager" />
+    <DatabaseRole Description="Refunds Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst3" TargetDatabase="RefundManager" />
+    <DatabaseRole Description="Refunds Database" Include="Refunds.Database" DatabaseInstance="Inst3" TargetDatabase="RefundManager" />
+    <DatabaseRole Description="Common Partitioning" Include="Common.Partitioning" DatabaseInstance="Inst3" TargetDatabase="RefundManager" />
+    <DatabaseRole Description="Refunds Partitioning" Include="Refunds.Partitioning" DatabaseInstance="Inst3" TargetDatabase="RefundManager" />
+    <!-- TapIdAllocator DB-->
+    <DatabaseRole Description="TapIdAllocator Database" Include="TapIdAllocator.Baseline.Database" DatabaseInstance="Inst2" TargetDatabase="TapIdAllocator" />
+    <DatabaseRole Description="TapIdAllocator Deployment Schema" Include="Deployment.Schema" DatabaseInstance="Inst2" TargetDatabase="TapIdAllocator" />
+    <DatabaseRole Description="TapIdAllocator Database" Include="TapIdAllocator.Database" DatabaseInstance="Inst2" TargetDatabase="TapIdAllocator" />
+    <!-- Post Deploy Roles-->
+    <PostDeployRole Description="Start AppFabric Cluster" Include="AppFabric.Integration.Start" />
+  </machine>
+  <!-- Need to deploy PARE db before the PCS db, due to linked server synonyms-->
+  <machine Id="TS-DB2" Name="TS-DB2" ExternalIP="" Role="PCS Database Server">
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices1" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices2" />
+    <PreDeployRole Description="CheckSqlServices" Include="CheckSqlServices3" />
+    <ServerRole Description="FTM Analytics File System" Include="Analytics.Filesystem" />
+    <!--SSO is part of Integration Rig on VCloud only-->
+    <!--<ServerRole Description="IISSetup" Include="IISSetup.SSO" />-->
+    <ServerRole Description="SSO File System" Include="SSO.FileSystem" />
+    <ServerRole Description="SSO.EventLog.For.External" Include="SSO.EventLogDeploy.External" />
+    <ServerRole Description="SSO.EventLog.For.Internal" Include="SSO.EventLogDeploy.Internal" />
+    <ServerRole Description="Customer Services" Include="Customer.Services" />
+    <ServerRole Description="SingleSignOn Services" Include="SingleSignOn.Services" />
+    <ServerRole Description="SSO Validation Service" Include="Validation.Service" />
+    <ServerRole Description="SSO Website" Include="SSO.Website" />
+    <ServerRole Description="Services Facade Role" Include="Service.Facade.Role" />
+    <!-- PCS DB -->
+    <DatabaseRole Description="PCS Baseline" Include="PCS.Baseline.Database" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Deployment Schema for PCS" Include="Deployment.Schema" DatabaseInstance="Inst2" TargetDatabase="PCS" />
+    <DatabaseRole Description="Pcs.Authorisation.Transport.Pcs" Include="Pcs.Authorisation.Transport.Pcs" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="PARE PCS Common for PCS DB" Include="PARE.PCS.Common.PCS" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="PCS Mock" Include="Pcs.Mock" DatabaseInstance="Inst2" />
+    <DatabaseRole Description="Pcs.Authorisation.Dialog.Pcs" Include="Pcs.Authorisation.Dialog.Pcs" DatabaseInstance="Inst2" />
+    <!-- SSO -->
+    <DatabaseRole Description="SSO Baseline" Include="SSO.Baseline.Database" />
+    <DatabaseRole Description="SSO Deployment Schema" Include="SSO.DBDeploymentSchema" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="SSO Database" Include="SSO.Database" DatabaseInstance="Inst3" />
+    <DatabaseRole Description="SSO Database Dev" Include="SSO.Database.Dev" DatabaseInstance="Inst3" />
+    <!-- Post Deploy Roles for SSO AppFabric Instance-->
+    <PostDeployRole Description="Start AppFabric Cluster" Include="AppFabric.Integration.Start" />
+  </machine>
+
+  <machine Id="TS-OYBO1" Name="TS-OYBO1" ExternalIP="">
+    <PreDeployRole Include="StopFTMService" />
+    <PreDeployRole Include="StopOyBOServices" />
+    <PreDeployRole Include="TJSDistributor.JulianService.Stop" />
+    <PreDeployRole Include="TJSDistributor.TJSHExtractor.Stop" />
+    <PreDeployRole Include="TJSDistributor.JulianService.CPC.Stop" />
+    <PreDeployRole Include="TJSDistributor.TJSHExtractor.CPC.Stop" />
+    <PreDeployRole Description="Stop Ocae Service" Include="StopOcaeService" />
+    <PreDeployRole Description="Stop Refunds Service" Include="StopRefundsService" />
+    <PreDeployRole Description="Stop OyBO FUL Stub Service" Include="StopFulStubService" />
+    <PreDeployRole Description="Stop OyBO AzureMobileUploader Service" Include="StopOyBOAzureMobileUploaderService" />
+
+    <ServerRole Include="FTP.EventLog.For.Internal.TJSDistributor" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.OTFP" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.FileCleanup" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.OCAE" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.Refunds" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.AzureMobileUploader" />
+    <ServerRole Description="FTM EventLog Entry" Include="FTP.EventLog.For.Internal.FTM" />
+    <ServerRole Include="TJSDistributor.Functional.CreateFolders" />
+    <ServerRole Include="TJSDistributor.Functional.CPC.CreateFolders" />
+    <ServerRole Description="Ocae File System" Include="Ocae.FileSystem" />
+    <ServerRole Description="Refunds File System" Include="Refunds.FileSystem" />
+    <ServerRole Description="OyBO File System" Include="OyBO.FileSystem" />
+    <ServerRole Description="Create FileShare For Ocae Service" Include="Ocae.FileShare" />
+    <ServerRole Description="Create FileShare For Refunds Service" Include="Refunds.FileShare" />
+    <ServerRole Description="Create FileShare For OyBO Services" Include="OyBO.FileShare" />
+    <ServerRole Description="Oyster Back Office TFP Service" Include="OyBO.TFP.Install" />
+    <ServerRole Description="TJS Distributor Message Broker service" Include="TJSDistributor.JulianService.Install" StartUpType="AutomaticDelayed" Config="TSRig_Oyster"/>
+    <ServerRole Description="TJS Distributor Message Broker CPC service" Include="TJSDistributor.JulianService.CPC.Install" StartUpType="AutomaticDelayed" />
+    <ServerRole Description="TJS Distributor TJSHExtractor service" Include="TJSDistributor.TJSHExtractor.Install" StartUpType="AutomaticDelayed" Config="TSRig_Oyster"/>
+    <ServerRole Description="TJS Distributor TJSHExtractor CPC service" Include="TJSDistributor.TJSHExtractor.CPC.Install" StartUpType="AutomaticDelayed" />
+    <ServerRole Description="TJS Distributor File Purger Install" Include="TJSDistributor.FilePurger.Install" Config="TSRig_Oyster" />
+    <ServerRole Description="TJS Distributor File Purger CPC Install" Include="TJSDistributor.FilePurger.CPC.Install" />
+    <ServerRole Description="Oyster Back Office File Cleanup Console App Install" Include="OyBO.FileCleanup.Install" />
+    <!--Uninstall role was added because of versioning issues with NuGet packages which resulted in dlls being deleted but not replaced. A uninstall / fresh install solves this.-->
+    <!--When each component is built in it's own directory on the build server, dll version clashes won't happen, so this role can be removed.-->
+    <ServerRole Description="OyBO Refunds Service Install" Include="OyBO.Refunds.Install" Action="Reinstall" />
+    <ServerRole Description="Oyster Charge Adjustment Engine Service Install" Include="OyBO.Ocae.Install" />
+    <ServerRole Description="OYBO FUL Stub Service Install" Include="OyBO.FulStub.Install" />
+    <ServerRole Description="OyBO FTM Service (FTP-OyBO)" Include="FTM.Service" Config="TSRig_OyBO" />
+    <ServerRole Description="TJS Distributor File Purge Scheduler" Include="TJSDistributor.FilePurger.ScheduledTask.Create" Config="TSRig_Oyster"/>
+    <ServerRole Description="TJS Distributor File Purger CPC Scheduler" Include="TJSDistributor.FilePurger.CPC.ScheduledTask.Create" />
+    <ServerRole Description="Oyster Back Office File Clean Up Scheduler" Include="OyBO.FileCleanup.ScheduledTask.Create" />
+
+    <ServerRole Description="Oyster Back Office TFP Azure Mobile Uploader Cert Install" Include="OyBO.AzureMobileUploaderCert.Install" />
+    <ServerRole Description="Oyster Back Office TFP Azure Mobile Uploader Service" Include="OyBO.AzureMobileUploader.Install" />
+    <PostDeployRole Include="TJSDistributor.JulianService.Start" />
+    <PostDeployRole Include="TJSDistributor.JulianService.CPC.Start" />
+    <PostDeployRole Include="TJSDistributor.TJSHExtractor.Start" />
+    <PostDeployRole Include="TJSDistributor.TJSHExtractor.CPC.Start" />
+    <PostDeployRole Include="StartFTMService" />
+  </machine>
+  <!-- Due to the dependency between FAE Pipeline and MJT services, we need to deploy TS-SAS1 before the FAE Servers-->
+  <machine Id="TS-SAS1" Name="TS-SAS1" ExternalIP="">
+    <PreDeployRole Description="StopSendMailService" Include="StopSendMailService" />
+    <PreDeployRole Description="StopFileProcessorService" Include="StopFileProcessorService" />
+    <PreDeployRole Include="MasterData.MJTService.Service.Stop" />
+    <PreDeployRole Include="MasterData.Fares.Service.Stop" />
+    <PreDeployRole Description="StopSDMControllerService" Include="StopSDMControllerService" />
+    <!--MasterData MJT Service and Assets-->
+    <ServerRole Description="Copy MJT Files" Include="MasterData.MJTService.Assets.Last13Weeks" />
+    <ServerRole Description="MasterData MJT service" Include="MasterData.MJTService.Install" StartUpType="AutomaticDelayed" />
+    <!--MasterData Fares Service and Assets-->
+    <ServerRole Description="Copy Fares Files" Include="MasterData.FareService.Assets.Last13Weeks" />
+    <ServerRole Description="MasterData Fares service" Include="MasterData.FaresService.Install" StartUpType="AutomaticDelayed" />
+    <!-- SDM Controller service -->
+    <ServerRole Description="CSC.SDM.ControllerService" Include="CSC.SDM.ControllerService.Installer" StartUpType="AutomaticDelayed" />
+    <!-- Notifications-->
+    <ServerRole Description="SendEmail Notifications File System" Include="SendEmail.FileSystem" />
+    <ServerRole Description="Send Email Installer" Include="SendEmail.Installer" StartUpType="AutomaticDelayed" />
+    <ServerRole Description="Notifications File Processor File System" Include="Notifications.FileProcessor.FileSystem" />
+    <ServerRole Description="Notifications File Processor" Include="Notifications.FileProcessor.Installer" StartUpType="AutomaticDelayed" />
+    <ServerRole Include="PaymentCardExpiryExtractTool.Install" />
+    <ServerRole Include="PaymentCardExpiryExtractTool.ScheduledTask.Create" />
+    <!--- Post Deploy Roles -->
+    <PostDeployRole Description="Start MasterData MJT Services" Include="MasterData.Services.MJT.Start" />
+    <PostDeployRole Description="Start MasterData Fares Services" Include="MasterData.Services.Fares.Start" />
+  </machine>
+  <machine Id="TS-CAS1" Name="TS-CAS1" ExternalIP="" Role="CAS Server 1">
+    <!--<ServerRole Description="IISSetup" Include="IISSetup.CAS" />-->
+    <ServerRole Description="FTP.EventLog.For.External.CASC" Include="FTP.EventLog.For.External.CASC" />
+    <ServerRole Description="TJS Api EventLog Entry" Include="FTP.EventLog.For.Internal.TJSApi" />
+    <ServerRole Description="CACC File System" Include="CACC.FileSystem" />
+    <ServerRole Description="CSC Mock Services" Include="CACC.Mock.Services" />
+    <ServerRole Description="CSC External Token Status Service" Include="CACC.External.TokenStatus.Service" />
+    <ServerRole Description="CSC External Authorisation Service" Include="CACC.External.Authorisation.Service" />
+    <ServerRole Description="CSC External Customer Service" Include="CACC.External.Customer.Service" />
+    <ServerRole Description="Notification Processor External Service" Include="Notification.Processor.ExternalService" />
+    <ServerRole Include="SDM.Portal.Rig" />
+    <ServerRole Include="FasterData.TJSApi.Service.Oyster" Config="TSRig_Oyster" />
+    <ServerRole Include="FasterData.TJSApi.Service.CPC" />
+  </machine>
+  <machine Id="TS-CIS1" Name="TS-CIS1" ExternalIP="" Role="CIS Server 1">
+    <!--<ServerRole Description="IISSetup" Include="IISSetup.CIS" />-->
+    <ServerRole Description="FTP.EventLog.For.FAE.JourneyUsageService" Include="FTP.EventLog.For.FAE.JourneyUsageService" />
+    <ServerRole Description="SSO.EventLog.For.Internal" Include="SSO.EventLogDeploy.Internal" />
+    <ServerRole Description="FTP.EventLog.For.MasterData.WebApi" Include="FTP.EventLog.For.MasterData.WebApi" />
+    <ServerRole Description="FTP.EventLog.For.FAE.VoidService" Include="FTP.EventLog.For.FAE.VoidService" />
+    <ServerRole Description="OyBO EventLog Entry" Include="FTP.EventLog.For.Internal.OyBO.RefundsApi" />
+    <ServerRole Description="SSO File System" Include="SSO.FileSystem" />
+    <ServerRole Description="Pare.TravelTokenService" Include="PARE.TravelToken.Service" />
+    <ServerRole Description="Pare CSC Support Service" Include="PARE.CSCSupport.Service" />
+    <ServerRole Description="PARE Dashboard" Include="PARE.Dashboard.Web" />
+    <ServerRole Description="Journey Usage" Include="FAE.JourneyUsage.Service" Config="TSRig_CPC" />
+    <ServerRole Description="Notification Processor Service" Include="Notification.Processor.Service" />
+    <ServerRole Description="FAE JourneyUsage ApiService" Include="Tfl.Ft.Fae.JourneyUsage.ApiService" Config="TSRig_Legacy" />
+    <ServerRole Description="FAE VoidService" Include="FAE.Void.Service" Config="TSRig_Oyster" />
+    <ServerRole Description="FAE Oyster ManualCorrections ApiService" Include="OysterManualCorrectionsReceiver.Api" Config="TSRig_Oyster" />
+    <ServerRole Description="SDM Web Services" Include="SDM.WebService" />
+    <ServerRole Description="MasterData Api" Include="MasterData.Api" /><!--SSO-->
+    <ServerRole Description="Customer Change NotificationWorker" Include="Customer.Change.NotificationWorker" />
+    <ServerRole Description="Customer Change NotificationWorker Oyster" Include="Customer.Change.NotificationWorker.Oyster" Config="SSO.TSRig.Notification.Oyster" />
+    <ServerRole Description="Customer Change QueueManager" Include="Customer.Change.QueueManager" />
+    <!--RefundsAPI-->
+    <ServerRole Description="OyBO Refund Api" Include="OyBO.Refunds.Api.Service" />
+
+    <PostDeployRole Description="Start MasterData API" Include="MasterData.Api.Start" />
+  </machine>
+
+  <!--CPC Controller and Pipeline-->
+  <machine Id="TS-FAE1" Name="TS-FAE1" ExternalIP="" Role="FAE Controller">
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc" />
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv" />
+    <PreDeployRole Description="StopFaeEngine" Include="StopFaeEngine" />
+    <PreDeployRole Description="StopFaeController" Include="StopFaeController" />
+    <PreDeployRole Description="StopFTMService" Include="StopFTMService" />
+    <PreDeployRole Description="StopFaeDisruptr" Include="StopFaeDisruptr" />
+
+    <ServerRole Include="FTP.EventLog.For.RAE.RaeService" />
+    <ServerRole Include="FTP.EventLog.For.FAE.TapImporter" />
+    <ServerRole Include="FTP.EventLog.For.FAE.Controller" />
+    <ServerRole Include="FTP.EventLog.For.FAE.Disruptr" />
+    <ServerRole Include="FTP.EventLog.For.Internal.FTM" />
+
+    <ServerRole Description="FAE Token Journey Summary Header folders" Include="FAE.TokenJourneySummaryHeader.Folders" />
+    <ServerRole Description="Create FileShare For FAE Tap Queue" Include="FAE.TapQueue.FileShare" />
+
+    <!-- Oyster TapImporter -->
+    <ServerRole Description="FAE Tap Importer Service folders" Include="FAE.TapImporter.Service.Folders" />
+    <ServerRole Description="FAE Tap Importer" Include="FAE.TapImporter.Service.Oyster" StartUpType="AutomaticDelayed" Config="TSRig_Oyster" />
+    <ServerRole Description="FAE Engine Controller Util" Include="FAE.EngineControllerUtil.Install" Config="TSRig_Legacy" />
+    <ServerRole Description="FAE Travel Day Revision Exporter" Include="FAE.TravelDayRevisonExporter.Install" Config="TSRig_Legacy"/>
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service.CPC.Stateful" StartUpType="AutomaticDelayed" Config="TSRig_Legacy" />
+    <ServerRole Description="FAE Disruptr" Include="FAE.Engine.Disruptr" />
+    <ServerRole Description="FAE Controller" Include="FAE.Engine.Controller.CPC.Stateful" StartUpType="AutomaticDelayed" Config="TSRig_Legacy" />
+    <ServerRole Description="FAE EOD Task Schedule Installer" Include="FAE.EOD.ScheduledTask.Create" />
+    <!-- We put this here because we dont want to create a new machine in the lab just to host this service-->
+    <ServerRole Description="FTM Service (FTP-IM)" Include="FTM.Service" Config="TSRig_IM" />
+
+    <PostDeployRole Include="StartFaeController" />
+    <PostDeployRole Include="StartFaeDisruptr" />
+    <PostDeployRole Include="StartFaeEngine" />
+    <PostDeployRole Include="StartFTMService" />
+  </machine>
+  <!-- CPC Pipeline -->
+  <machine Id="TS-FAE2" Name="TS-FAE2" ExternalIP="" Role="FAE Engine 1">
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc" />
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv" />
+    <PreDeployRole Include="StopFaeEngine" />
+
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Description="FAE Token Journey Summary Header folders" Include="FAE.TokenJourneySummaryHeader.Folders" />
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service.CPC.Stateful" StartUpType="AutomaticDelayed" Config="TSRig_Legacy" />
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+  <!--Oyster Controller and Engine 1-->
+  <machine Id="TS-FAE3" Name="TS-FAE3" ExternalIP="" Role="FAE Engine 2">
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc" />
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv" />
+    <PreDeployRole Include="StopOaeEngine" />
+    <PreDeployRole Include="StopOaeController" />
+
+    <ServerRole Include="FTP.EventLog.For.RAE.RaeService" />
+    <ServerRole Include="FTP.EventLog.For.FAE.TapImporter" />
+    <ServerRole Include="FTP.EventLog.For.FAE.Controller" />
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+    <ServerRole Description="FTP.EventLog.For.RAE.RaeService" Include="FTP.EventLog.For.RAE.RaeService" Config="TSRig_Oyster" />
+    <ServerRole Description="RAE CPC RSP Output Folder" Include="RAE.CPC.Service.RSP.Folders" Config="TSRig_CPC" />
+    <ServerRole Description="RAE RSP Output Folder" Include="RAE.Service.RSP.Folders" Config="TSRig_Oyster" />
+
+    <ServerRole Description="FAE Controller" Include="FAE.Engine.Controller.Oyster.Stateless" StartUpType="AutomaticDelayed" Config="TSRig_Oyster" />
+    <ServerRole Description="FAE Engine Controller Util" Include="FAE.EngineControllerUtil.Install" Config="TSRig_Oyster" />
+    <ServerRole Description="FAE Engine" Include="FAE.Engine.Service.Oyster.Stateless" StartUpType="AutomaticDelayed" Config="TSRig_Oyster" />
+    <!--Oyster RAE -->
+    <ServerRole Description="RAE Service Installer" Include="RAE.Service.Install" Config="TSRig_Oyster" />
+    <!--CPC RAE -->
+    <ServerRole Description="RAE CPC Service Installer" Include="RAE.CPC.Service.Install" Config="TSRig_CPC" />
+    <PostDeployRole Include="StartOaeController" />
+    <PostDeployRole Include="StartOaeEngine" />
+    <PostDeployRole Include="StartRaeService" />
+    <PostDeployRole Include="StartRaeCpcService" />
+  </machine>
+  <!--CPC (Stateless) Controller and Engine-->
+  <machine Id="TS-FAE4" Name="TS-FAE4" ExternalIP="" Role="FAE Engine 3">
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc" />
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv" />
+    <PreDeployRole Include="StopFaeEngine" />
+    <PreDeployRole Include="Stop.Tap.Importer.CPC" />
+
+    <ServerRole Include="FTP.EventLog.For.RAE.RaeService" />
+    <ServerRole Include="FTP.EventLog.For.FAE.TapImporter" />
+    <ServerRole Include="FTP.EventLog.For.FAE.Controller" />
+    <ServerRole Include="FTP.EventLog.For.FAE.Pipeline" />
+
+    <ServerRole Include="FAE.TapImporter.Service.CPC" StartUpType="AutomaticDelayed" Config="TSRig_CPC" />
+    <ServerRole Include="FAE.Engine.Controller.CPC.Stateless" StartUpType="AutomaticDelayed" Config="TSRig_CPC" />
+    <ServerRole Include="FAE.EngineControllerUtil.Install" Config="TSRig_CPC" />
+    <ServerRole Include="FAE.Engine.Service.CPC.Stateless" StartUpType="AutomaticDelayed" Config="TSRig_CPC" />
+    <PostDeployRole Include="StartFaeTapImporter.CPC" />
+    <PostDeployRole Include="StartFAE.EngineController.Stateless.CPC" />
+    <PostDeployRole Include="StartFaeEngine" />
+  </machine>
+  <machine Id="TS-PARE1" Name="TS-PARE1" ExternalIP="" Role="PARE Services 1">
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.AeLookupSvc" />
+    <PreDeployRole Description="Start Application Exp. System Service" Include="StartApplicationExpService.wmiApSrv" />
+    <PreDeployRole Include="StopPareServices.IDRA" />
+    <PreDeployRole Include="StopPareServices.StatusList" />
+    <PreDeployRole Include="StopPareServices.AuthGateway" />
+    <PreDeployRole Include="StopPareServices.TapFileProcessor" />
+    <PreDeployRole Include="StopPareServices.SettlementFileResponse" />
+    <PreDeployRole Include="StopPareServices.SettlementValidationResult" />
+    <PreDeployRole Include="StopPareServices.RefundFile" />
+    <PreDeployRole Include="StopPareServices.RevenueStatusList" />
+    <PreDeployRole Include="StopPareServices.TDR" />
+    <PreDeployRole Include="StopPareServices.EodController" />
+    <PreDeployRole Include="StopPareServices.DirectPayment" />
+
+    <ServerRole Description="PARE PreProduction File System" Include="PARE.PreProduction.FileSystem" />
+    <ServerRole Description="PARE File Staging Area Folders" Include="PARE.FileSystem" />
+
+    <ServerRole Description="PareOysterTapImporterService" Include="PareOysterTapImporterService" />
+    <ServerRole Description="ParePcsMockServiceInstaller" Include="ParePcsMockServiceInstaller" />
+    <ServerRole Description="PreProductionPareRiskEngineInstaller" Include="PreProductionPareRiskEngineInstaller" />
+    <!-- Pare Services -->
+    <ServerRole Description="PareAuthorisationGatewayServiceInstaller" Include="PareAuthorisationGatewayServiceInstaller" StartUpType="AutomaticDelayed" />
+    <ServerRole Description="PareRefundFileServiceInstaller" Include="PareRefundFileServiceInstaller" StartUpType="AutomaticDelayed" />
+    <ServerRole Description="PareRevenueFileService" Include="PareRevenueFileService" StartUpType="AutomaticDelayed" />
+    <ServerRole Description="PareSettlementValidationResultServiceInstaller" Include="PareSettlementValidationResultServiceInstaller" StartUpType="AutomaticDelayed" />
+    <ServerRole Description="PareStatusListProcessorInstaller" Include="PareStatusListProcessorInstaller" StartUpType="AutomaticDelayed" />
+    <ServerRole Description="PareTapFileServiceInstaller" Include="PareTapFileServiceInstaller" StartUpType="AutomaticDelayed" />
+    <ServerRole Description="PareTravelDayRevisionService" Include="PareTravelDayRevisionService" StartUpType="AutomaticDelayed" />
+    <ServerRole Description="SettlementFileResponseServiceInstaller" Include="SettlementFileResponseServiceInstaller" StartUpType="AutomaticDelayed" />
+    <ServerRole Description="PareDirectPaymentConfirmationServiceInstaller" Include="PareDirectPaymentConfirmationServiceInstaller" StartUpType="AutomaticDelayed" />
+    <ServerRole Description="PareRiskEngineInstaller" Include="PareRiskEngineInstaller" />
+    <ServerRole Description="PareChargeCalculationInstaller" Include="PareChargeCalculationInstaller" />
+    <!-- Pare Command Line Exe's -->
+    <ServerRole Description="PareFullStatusList.Application.Installer" Include="PareFullStatusList.Application.Installer" />
+    <ServerRole Description="PareStatusListMaintenance.Application.Installer" Include="PareStatusListMaintenance.Application.Installer" />
+    <ServerRole Description="PareVerifyTapData.Application.Installer" Include="PareVerifyTapData.Application.Installer" />
+  	<ServerRole Include="PareSettlement.Installer" />
+    <ServerRole Description="PareAuthorisationGateway.Util.Installer" Include="PareAuthorisationGateway.Util.Installer" />
+    <ServerRole Description="PareChargeCalculationPersist.Application.Installer" Include="PareChargeCalculationPersist.Application.Installer" />
+    <ServerRole Description="ParePostDeployment.Util.Installer" Include="ParePostDeployment.Util.Installer" />
+    <!-- Pare Scheduled Tasks -->
+    <ServerRole Include="PARERequestFullStatusList.ScheduledTask.Create" />
+	<ServerRole Include="PareVerifyTapData.ScheduledTask.Create" />
+    <ServerRole Include="PareStatusListMaintenanceApplication.ScheduledTask.Create" />
+    <ServerRole Include="PARESettlementFile.Amex.ScheduledTask.Create" />
+    <ServerRole Include="PARESettlementFile.Barclays.ScheduledTask.Create" />
+    <ServerRole Include="PareChargeCalculationPersist.ScheduledTask.Create" />
+
+    <PostDeployRole Include="StartPareServices.StatusList" />
+    <PostDeployRole Include="StartPareServices.AuthGateway" />
+    <PostDeployRole Include="StartPareServices.TapFileProcessor" />
+    <PostDeployRole Include="StartPareServices.SettlementFileResponse" />
+    <PostDeployRole Include="StartPareServices.SettlementValidationResult" />
+    <PostDeployRole Include="StartPareServices.RefundFile" />
+    <PostDeployRole Include="StartPareServices.RevenueStatusList" />
+    <PostDeployRole Include="StartPareServices.TDR" />
+    <PostDeployRole Include="StartPareServices.DirectPayment" />
+  </machine>
+  <machine Id="TS-SFTP1" Name="TS-SFTP1" ExternalIP="" Role="SFTP Server">
+    <ServerRole Description="PCS File System" Include="PCS.Filesystem" />
+    <ServerRole Description="FTM IM File System" Include="IM.Filesystem" />
+    <ServerRole Description="FTM IM File System" Include="OYBO.FTM.Filesystem" />
+    <ServerRole Description="FTM OOL File System" Include="OYBO.FTM.OOL.Filesystem" />
+  </machine>
+  <machine Id="TS-FTM1" Name="TS-FTM1" ExternalIP="" Role="File Transfer Manager Server">
+    <PreDeployRole Description="Stop FTM Service" Include="StopFTMService" />
+    <ServerRole Description="FTM Service (FTP-PCS)" Include="FTM.Service" Config="TSRig" />
+    <PostDeployRole Description="Start FTM Service" Include="StartFTMService" />
+  </machine>
+  <CustomTests>
+    <ServiceBrokerTest Name="Pare Pcs Server Sql Service Broker Test" Groups="PARE">
+      <Sql>
+        <ConnectionInfo UserName="tfsbuild" Password="LMTF$Bu1ld" />
+        <DatabaseServer>TS-DB1</DatabaseServer>
+        <DatabaseInstance>Inst2</DatabaseInstance>
+        <TargetDatabase>Pare</TargetDatabase>
+        <SqlScript>
+          DECLARE @ConversationHandle uniqueidentifier;
+          DECLARE @StatusTime datetime = GETDATE();
+          DECLARE @Token nvarchar(26) = '0123456789ABCDEF';
+          --Send the message
+          Exec [$TargetDatabase].[dbo].[SendStatusListUpdateRequest]
+          1,
+          'Correction',
+          @Token,
+          '0113',
+          '001',
+          1,
+          @StatusTime,
+          2,
+          @StatusTime,
+          @ConversationHandle = @ConversationHandle output;
+				</SqlScript>
+      </Sql>
+      <Sql>
+        <ConnectionInfo UserName="tfsbuild" Password="LMTF$Bu1ld" />
+        <DatabaseServer>TS-DB2</DatabaseServer>
+        <DatabaseInstance>Inst2</DatabaseInstance>
+        <TargetDatabase>Pcs</TargetDatabase>
+        <SqlScript>
+          WAITFOR DELAY '00:00:15';
+
+          IF (select count(*) from $TargetDatabase.DBO.PCSMockLog WHERE Message like '%0123456789ABCDEF%') = 0
+          THROW 51000, 'Message not found in PCSMockLog', 1;
+          --clear down ready for next test
+          delete from $TargetDatabase.DBO.PCSMockLog WHERE Message like '%0123456789ABCDEF%'
+				</SqlScript>
+      </Sql>
+    </ServiceBrokerTest>
+    <ServiceBrokerTest Name="Pare Notification Sql Service Broker Test" Groups="PARE,Notifications">
+      <Sql>
+        <ConnectionInfo UserName="tfsbuild" Password="LMTF$Bu1ld" />
+        <DatabaseServer>TS-DB1</DatabaseServer>
+        <DatabaseInstance>Inst3</DatabaseInstance>
+        <TargetDatabase>Notification</TargetDatabase>
+        <SqlScript>
+          -- Turn off internal activation
+          ALTER QUEUE [dbo].[http://tfl.gov.uk/Ft/Notification/Queue/Email] WITH STATUS = ON ,
+          RETENTION = OFF , ACTIVATION (  STATUS = OFF , PROCEDURE_NAME = [dbo].[Email_Activation] , MAX_QUEUE_READERS = 10 , EXECUTE AS N'dbo'  ), POISON_MESSAGE_HANDLING (STATUS = ON)
+
+				</SqlScript>
+      </Sql>
+      <Sql>
+        <ConnectionInfo UserName="tfsbuild" Password="LMTF$Bu1ld" />
+        <DatabaseServer>TS-DB1</DatabaseServer>
+        <DatabaseInstance>Inst2</DatabaseInstance>
+        <TargetDatabase>Pare</TargetDatabase>
+        <SqlScript>
+          -- Send a message
+          Declare @ConversationHandle1 UniqueIdentifier
+          exec SsbSendOnConversation
+          'http://tfl.gov.uk/Ft/Pare/CustomerNotification/Service/Pare',
+          'http://tfl.gov.uk/Ft/Notification/Service/Email',
+          'http://tfl.gov.uk/Ft/Notification/Contract/Email',
+          'http://tfl.gov.uk/Ft/Notification/Message/Email',
+          '&lt;Notifications xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+          &lt;Notification&gt;
+          &lt;NotificationCode&gt;f8aee325-a6c9-4e94-9b46-bba98c93755a&lt;/NotificationCode&gt;
+          &lt;SendTo&gt;
+          &lt;CardHolder&gt;
+          &lt;PanToken&gt;99999999999999999999999&lt;/PanToken&gt;
+          &lt;PaymentCardExpiryDate&gt;0113&lt;/PaymentCardExpiryDate&gt;
+          &lt;/CardHolder&gt;
+          &lt;/SendTo&gt;
+          &lt;TemplateContentTags&gt;
+          &lt;PaymentAmount&gt;9999&lt;/PaymentAmount&gt;
+          &lt;PaymentTransactionDateTime&gt;2013-11-28T12:11:04.5030783+00:00&lt;/PaymentTransactionDateTime&gt;
+          &lt;PaymentCardPanToken&gt;12345678912345678912345678&lt;/PaymentCardPanToken&gt;
+          &lt;PaymentCardExpiryDate&gt;0113&lt;/PaymentCardExpiryDate&gt;
+          &lt;PaymentCardLast4Digits&gt;1234&lt;/PaymentCardLast4Digits&gt;
+          &lt;PaymentCardType&gt;Visa&lt;/PaymentCardType&gt;
+          &lt;DebtAmount&gt;1&lt;/DebtAmount&gt;
+          &lt;DebtDate&gt;2013-11-29T12:11:04.5030783+00:00&lt;/DebtDate&gt;
+          &lt;DebtIndicator&gt;Y&lt;/DebtIndicator&gt;
+          &lt;AuthorisationAmount&gt;2&lt;/AuthorisationAmount&gt;
+          &lt;/TemplateContentTags&gt;
+          &lt;/Notification&gt;
+          &lt;/Notifications&gt;',
+          @ConversationHandle = @ConversationHandle1 OUT
+				</SqlScript>
+      </Sql>
+      <Sql>
+        <ConnectionInfo UserName="tfsbuild" Password="LMTF$Bu1ld" />
+        <DatabaseServer>TS-DB1</DatabaseServer>
+        <DatabaseInstance>Inst3</DatabaseInstance>
+        <TargetDatabase>Notification</TargetDatabase>
+        <SqlScript>
+          -- Check for the message
+          WAITFOR DELAY '00:00:15';
+          DECLARE @test int
+          SET @test = (SELECT count(*)
+          FROM [Notification].[dbo].[http://tfl.gov.uk/Ft/Notification/Queue/Email]
+          WHERE  CAST(message_body AS NVARCHAR(MAX)) Like '%&lt;PanToken&gt;99999999999999999999999%')
+
+          -- Remove it (doesnt work )
+          --DELETE FROM [Notification].[dbo].[http://tfl.gov.uk/Ft/Notification/Queue/Email]
+          --WHERE  CAST(message_body AS NVARCHAR(MAX)) Like '%&lt;PanToken&gt;99999999999999999999999%')
+
+          -- Turn on activation VERY IMPORTANT, missing this will leave the database in a non functional state
+          ALTER QUEUE [dbo].[http://tfl.gov.uk/Ft/Notification/Queue/Email] WITH STATUS = ON ,
+          RETENTION = OFF , ACTIVATION (  STATUS = ON , PROCEDURE_NAME = [dbo].[Email_Activation] , MAX_QUEUE_READERS = 10 , EXECUTE AS N'dbo'  ), POISON_MESSAGE_HANDLING (STATUS = ON)
+
+          IF @test=0
+          THROW 51000, 'Message not found in http://tfl.gov.uk/Ft/Notification/Queue/Email', 1;
+
+				</SqlScript>
+      </Sql>
+    </ServiceBrokerTest>
+    <AppFabricTest Name="FAEIntraday App Fabric Test" Groups="FAE">
+      <TestInfo Account="DeploymentAccount" />
+      <HostName>TS-DB1</HostName>
+      <CacheName>FAEIntraday</CacheName>
+    </AppFabricTest>
+    <AppFabricTest Name="SSO App Fabric Test" Groups="SSO">
+      <TestInfo Account="DeploymentAccount" />
+      <HostName>TS-DB2</HostName>
+      <CacheName>SSO</CacheName>
+    </AppFabricTest>
+  </CustomTests>
+</configuration>

@@ -1,0 +1,17 @@
+﻿CREATE ENDPOINT PcsEndpoint
+AUTHORIZATION PcsEndpointLogin
+STATE = STARTED 
+AS TCP
+(
+	LISTENER_PORT = 4022
+)
+FOR SERVICE_BROKER
+(
+	AUTHENTICATION = CERTIFICATE PcsEndPointCertPrivate,
+	ENCRYPTION = DISABLED
+)
+GO
+
+
+print 'Setting Endpoint permissions...'
+GRANT CONNECT ON ENDPOINT::PcsEndpoint to PareEndpointLogin;

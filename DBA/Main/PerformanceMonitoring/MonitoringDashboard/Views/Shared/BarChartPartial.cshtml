@@ -1,0 +1,79 @@
+﻿@using System.Text
+@using MonitoringDashboard.Helpers
+@model Dto.DatabaseScalarMetricSet
+@{
+    ViewBag.Title = "BarChartPartial";
+
+    StringBuilder builder = BarChartBuilder.BuildBarChart(Model);
+    string barChartData = builder.ToString();
+}
+
+<script src="\assets/js/Chart.js"></script>
+
+<div class="barChart">
+    <canvas id="canvas" width="2000" height="900"></canvas>
+</div>
+
+<input type="hidden" id="dbOfInterest" value="@Model.DatabaseName"/>
+<input type="hidden" id="environmentOfInterest" value="@Model.EnvironmentName" />
+<input type="hidden" id="startDate" value="@Model.Start" />
+<input type="hidden" id="endDate" value="@Model.End" />
+
+<script type="text/javascript">
+    @Html.Raw(barChartData)
+
+    $(function() {
+        var ctx = document.getElementById("canvas").getContext("2d");
+        window.myBar = new Chart(ctx, {
+            type: 'bar',
+            data: barChartData,
+            options: {
+                responsive: true,
+            }
+        });
+    });
+
+    function DatabaseExecutionPreferences(sqlOfInterest) {
+        this.SqlOfInterest = sqlOfInterest;
+        this.DatabaseOfInterest = $("#dbOfInterest").val();
+        this.EnvironmentOfInterest = $("#environmentOfInterest").val();
+        this.StartDate = $("#startDate").val();
+        this.EndDate = $("#endDate").val();
+    }
+
+    document.getElementById("canvas").onclick = function (evt) {
+        var activePoint = window.myBar.lastActive[0];
+        if (activePoint !== undefined) {
+            var datasetIndex = activePoint._datasetIndex;
+            var index = activePoint._index;
+            var title = activePoint._view.label;
+            var metric = activePoint._view.datasetLabel;
+            var dataValue = activePoint._yScale.data.datasets[datasetIndex].data[index];
+            RedirectToDatabaseExecution(title, dataValue, metric);
+        }
+    };
+
+    function RedirectToDatabaseExecution(title, dataValue, metric) {
+        var dbExecutionPreferences = new DatabaseExecutionPreferences(title);
+        var dbExecutionPreferencesJson = JSON.stringify(dbExecutionPreferences);
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetExecutionDetailsRedirect", "BarChart")',
+            data: dbExecutionPreferencesJson,
+            contentType: "application/json; charset=utf-8",
+            datatype: 'json',
+            error: function (response) {
+                alert("Error: " + response.responseText);
+            },
+            success: function (response) {
+                if (response.IsValid) {
+                    window.location = response.Url;
+                } else {
+                    alert(response.ErrorMessage);
+                }
+            }
+        }
+        );
+    }
+</script>

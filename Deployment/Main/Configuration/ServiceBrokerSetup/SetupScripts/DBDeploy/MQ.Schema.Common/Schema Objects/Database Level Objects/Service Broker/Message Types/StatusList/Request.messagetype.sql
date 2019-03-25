@@ -1,0 +1,2 @@
+﻿CREATE MESSAGE TYPE [http://tfl.gov.uk/Ft/Pare/StatusList/Message/StatusListUpdate/Request]
+	VALIDATION = VALID_XML WITH SCHEMA COLLECTION [http://tfl.gov.uk/Ft/Pare/StatusList/Schema/StatusListUpdate/Request/v0.1]
